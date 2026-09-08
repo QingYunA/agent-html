@@ -3,9 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>指标监控与管理看板母版 · Agent HTML</title>
+  <title>通用数据大盘与过滤表格母版 · Agent HTML</title>
   <style>
-    /* Design Tokens */
+    /* ==========================================================================
+       Agent-HTML Core Design Tokens (shadcn/ui Neutral Palette)
+       ========================================================================== */
     :root {
       --bg: #fafafa;
       --card: #ffffff;
@@ -141,6 +143,7 @@
     .badge-success { background: var(--ok-bg); color: var(--ok); border-color: var(--ok-border); }
     .badge-warning { background: var(--warn-bg); color: var(--warn); border-color: var(--warn-border); }
     .badge-danger  { background: var(--err-bg);  color: var(--err);  border-color: var(--err-border); }
+    .badge-info    { background: var(--info-bg); color: var(--info); border-color: var(--info-border); }
 
     /* Stat Cards */
     .stat-grid {
@@ -173,7 +176,7 @@
       color: var(--muted-fg);
     }
 
-    /* Main Content Card */
+    /* Main Table Card */
     .card {
       background: var(--card);
       border: 1px solid var(--border);
@@ -197,7 +200,7 @@
       align-items: center;
       gap: 10px;
       flex: 1;
-      max-width: 500px;
+      max-width: 540px;
     }
     .input-wrap {
       position: relative;
@@ -222,9 +225,7 @@
       color: var(--card-fg);
       outline: none;
     }
-    .input:focus {
-      border-color: var(--ring);
-    }
+    .input:focus { border-color: var(--ring); }
     .select {
       height: 34px;
       padding: 0 10px;
@@ -238,9 +239,7 @@
     }
 
     /* Table */
-    .table-wrap {
-      overflow-x: auto;
-    }
+    .table-wrap { overflow-x: auto; }
     table {
       width: 100%;
       border-collapse: collapse;
@@ -274,7 +273,7 @@
       color: var(--muted-fg);
     }
 
-    /* Modal */
+    /* Dialog */
     dialog {
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
@@ -304,146 +303,145 @@
 <body>
 
 <div class="container">
-  <!-- Top Navigation / Title -->
-  <div class="dashboard-header">
+  <!-- [Slot: Dashboard Header] -->
+  <header class="dashboard-header">
     <div>
-      <h1>调休额度与考勤管理看板</h1>
-      <div class="header-desc">员工：陈云青 (工号: 20491) · 部门: 基础设施架构组 · 数据实时同步</div>
+      <h1>业务监控与数据管理大盘</h1>
+      <div class="header-desc">数据源：生产服务监控网关 · 状态：实时流式采集</div>
     </div>
     <div class="header-actions">
-      <button class="btn btn-primary" onclick="document.getElementById('addModal').showModal()">
+      <button class="btn btn-primary" onclick="document.getElementById('actionModal').showModal()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        <span>新增记录</span>
+        <span>新增条目</span>
       </button>
       <button id="themeToggle" class="btn" title="切换暗黑模式">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 0 1 1-9-9Z"/></svg>
       </button>
     </div>
-  </div>
+  </header>
 
-  <!-- KPI Stat Cards -->
-  <div class="stat-grid">
+  <!-- [Slot: 4-Column KPI Stat Grid] -->
+  <section class="stat-grid">
+    <!-- Stat 1 -->
     <div class="stat-card">
       <div class="stat-head">
-        <span>可用剩余额度</span>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+        <span>全周期吞吐总量</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
       </div>
-      <div class="stat-val" style="color: var(--ok);">3.5 <span style="font-size: 14px; font-weight: normal; color: var(--muted-fg);">天</span></div>
-      <div class="stat-sub">本周期总产生：7.5 天</div>
+      <div class="stat-val">128,940</div>
+      <div class="stat-sub"><span style="color: var(--ok); font-weight: 600;">↑ +14.2%</span> 对比基准周期</div>
     </div>
 
+    <!-- Stat 2 -->
     <div class="stat-card">
       <div class="stat-head">
-        <span>已核销调休</span>
+        <span>可用健康度 / 达标率</span>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
       </div>
-      <div class="stat-val">4.0 <span style="font-size: 14px; font-weight: normal; color: var(--muted-fg);">天</span></div>
-      <div class="stat-sub">最近一次使用：2026-08-20 (1.0天)</div>
+      <div class="stat-val" style="color: var(--ok);">99.8%</div>
+      <div class="stat-sub">SLA 服务等级达标</div>
     </div>
 
+    <!-- Stat 3 -->
     <div class="stat-card">
       <div class="stat-head">
-        <span>即将过期预警</span>
+        <span>活跃告警 / 待处理</span>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
       </div>
-      <div class="stat-val" style="color: var(--warn);">1.5 <span style="font-size: 14px; font-weight: normal; color: var(--muted-fg);">天</span></div>
-      <div class="stat-sub">过期时间：本月末 (剩余 8 天)</div>
+      <div class="stat-val" style="color: var(--warn);">3 <span style="font-size: 14px; font-weight: normal; color: var(--muted-fg);">个</span></div>
+      <div class="stat-sub">2 个待确认，1 个自动恢复中</div>
     </div>
 
+    <!-- Stat 4 -->
     <div class="stat-card">
       <div class="stat-head">
-        <span>累计加班贡献</span>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+        <span>平均响应延迟 (P95)</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
       </div>
-      <div class="stat-val">60 <span style="font-size: 14px; font-weight: normal; color: var(--muted-fg);">小时</span></div>
-      <div class="stat-sub">折合总工时完成率 100%</div>
+      <div class="stat-val">42ms</div>
+      <div class="stat-sub"><span style="color: var(--ok); font-weight: 600;">↓ -8ms</span> 优化后持续平稳</div>
     </div>
-  </div>
+  </section>
 
-  <!-- Table Card -->
-  <div class="card">
+  <!-- [Slot: Data Table & Filter Card] -->
+  <section class="card">
     <div class="toolbar">
       <div class="toolbar-left">
         <div class="input-wrap">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-          <input type="text" id="searchInput" class="input" style="padding-left: 32px;" placeholder="按项目事项或日期过滤...">
+          <input type="text" id="searchInput" class="input" placeholder="输入名称、标识或关键词即时过滤...">
         </div>
         <select id="statusFilter" class="select">
-          <option value="ALL">全部状态</option>
-          <option value="已生效">已生效</option>
-          <option value="部分核销">部分核销</option>
-          <option value="已全额核销">已全额核销</option>
+          <option value="ALL">全部状态 (All)</option>
+          <option value="正常运行">正常运行</option>
+          <option value="预警注意">预警注意</option>
+          <option value="已完结">已完结</option>
         </select>
       </div>
       <div>
-        <button class="btn btn-sm" onclick="alert('已导出 CSV 报表')">
+        <button class="btn btn-sm" onclick="alert('已触发导出')">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          <span>导出数据</span>
+          <span>导出 CSV</span>
         </button>
       </div>
     </div>
 
     <div class="table-wrap">
-      <table id="recordsTable">
+      <table id="dataTable">
         <thead>
           <tr>
-            <th>加班/产生日期</th>
-            <th>对应项目与交付事项</th>
-            <th>获得额度</th>
-            <th>已核销</th>
-            <th>剩余可用</th>
-            <th>有效截止期</th>
+            <th>条目编号</th>
+            <th>业务实体 / 描述</th>
+            <th>分类模块</th>
+            <th>资源用量</th>
+            <th>更新时间</th>
             <th>当前状态</th>
             <th style="text-align: right;">操作</th>
           </tr>
         </thead>
         <tbody>
-          <tr data-status="已生效">
-            <td>2026-08-25</td>
-            <td><strong>Agent 运行框架升级支持</strong> (紧急故障跟进)</td>
-            <td>1.5 天</td>
-            <td>0.0 天</td>
-            <td><strong style="color: var(--ok);">1.5 天</strong></td>
-            <td>2026-11-25</td>
-            <td><span class="badge badge-success"><span class="badge-dot"></span>已生效</span></td>
+          <tr data-status="正常运行">
+            <td><code>ITEM-2026-001</code></td>
+            <td><strong>Core Engine API Cluster</strong> (生产主节点)</td>
+            <td>架构核心层</td>
+            <td>1.28M req/s</td>
+            <td>刚刚</td>
+            <td><span class="badge badge-success"><span class="badge-dot"></span>正常运行</span></td>
             <td style="text-align: right;">
-              <button class="btn btn-sm" onclick="alert('扣减功能')">核销</button>
+              <button class="btn btn-sm" onclick="alert('查看详情')">详情</button>
             </td>
           </tr>
-          <tr data-status="部分核销">
-            <td>2026-08-10</td>
-            <td><strong>多模型评测集群跨机房迁移</strong> (周日全天压测)</td>
-            <td>2.0 天</td>
-            <td>1.0 天</td>
-            <td><strong style="color: var(--ok);">1.0 天</strong></td>
-            <td>2026-11-10</td>
-            <td><span class="badge badge-warning"><span class="badge-dot"></span>部分核销</span></td>
+          <tr data-status="预警注意">
+            <td><code>ITEM-2026-002</code></td>
+            <td><strong>Async Queue Worker Group</strong> (延迟抖动)</td>
+            <td>消息队列</td>
+            <td>45.2K msg/s</td>
+            <td>3 分钟前</td>
+            <td><span class="badge badge-warning"><span class="badge-dot"></span>预警注意</span></td>
             <td style="text-align: right;">
-              <button class="btn btn-sm" onclick="alert('扣减功能')">核销</button>
+              <button class="btn btn-sm" onclick="alert('查看详情')">排查</button>
             </td>
           </tr>
-          <tr data-status="部分核销">
-            <td>2026-06-01</td>
-            <td><strong>大模型后训练微调流水线搭建</strong></td>
-            <td>2.0 天</td>
-            <td>1.0 天</td>
-            <td><strong style="color: var(--warn);">1.0 天</strong></td>
-            <td>2026-09-01</td>
-            <td><span class="badge badge-warning"><span class="badge-dot"></span>部分核销</span></td>
+          <tr data-status="正常运行">
+            <td><code>ITEM-2026-003</code></td>
+            <td><strong>Vector DB Cache Partition</strong> (内存命中率98%)</td>
+            <td>缓存存储</td>
+            <td>12.8 GB</td>
+            <td>12 分钟前</td>
+            <td><span class="badge badge-success"><span class="badge-dot"></span>正常运行</span></td>
             <td style="text-align: right;">
-              <button class="btn btn-sm" onclick="alert('扣减功能')">核销</button>
+              <button class="btn btn-sm" onclick="alert('查看详情')">详情</button>
             </td>
           </tr>
-          <tr data-status="已全额核销">
-            <td>2026-05-15</td>
-            <td><strong>SOP 自动化评估平台演练保障</strong></td>
-            <td>2.0 天</td>
-            <td>2.0 天</td>
-            <td><span class="text-muted">0.0 天</span></td>
-            <td>2026-08-15</td>
-            <td><span class="badge"><span class="badge-dot"></span>已全额核销</span></td>
+          <tr data-status="已完结">
+            <td><code>ITEM-2026-004</code></td>
+            <td><strong>Batch Data Ingestion Pipeline</strong> (日常离线同步)</td>
+            <td>数据同步</td>
+            <td>850 GB total</td>
+            <td>2 小时前</td>
+            <td><span class="badge"><span class="badge-dot"></span>已完结</span></td>
             <td style="text-align: right;">
-              <button class="btn btn-sm" disabled>已完结</button>
+              <button class="btn btn-sm" disabled>归档</button>
             </td>
           </tr>
         </tbody>
@@ -451,30 +449,26 @@
     </div>
 
     <div class="footer-bar">
-      <span id="footerCount">显示 4 条记录</span>
-      <span>数据源: 本地管理模型</span>
+      <span id="recordCount">显示 4 条记录</span>
+      <span>每页显示 10 条 · 纯前端即时渲染</span>
     </div>
-  </div>
+  </section>
 </div>
 
-<!-- Modal -->
-<dialog id="addModal">
-  <div class="dialog-header">新增调休额度记录</div>
+<!-- [Slot: Create / Action Dialog Modal] -->
+<dialog id="actionModal">
+  <div class="dialog-header">新增业务条目</div>
   <div class="form-item">
-    <label>产生日期</label>
-    <input type="date" class="input" style="padding-left: 10px;" value="2026-09-01">
+    <label>业务名称 / 标识</label>
+    <input type="text" class="input" style="padding-left: 10px;" placeholder="例如: Data Sync Worker">
   </div>
   <div class="form-item">
-    <label>项目及事项说明</label>
-    <input type="text" class="input" style="padding-left: 10px;" placeholder="例如: 生产发布值守">
-  </div>
-  <div class="form-item">
-    <label>调休天数</label>
-    <input type="number" step="0.5" class="input" style="padding-left: 10px;" value="1.0">
+    <label>所属分类</label>
+    <input type="text" class="input" style="padding-left: 10px;" value="默认分组">
   </div>
   <div class="dialog-actions">
-    <button class="btn" onclick="document.getElementById('addModal').close()">取消</button>
-    <button class="btn btn-primary" onclick="alert('新增成功'); document.getElementById('addModal').close()">保存</button>
+    <button class="btn" onclick="document.getElementById('actionModal').close()">取消</button>
+    <button class="btn btn-primary" onclick="alert('保存成功！'); document.getElementById('actionModal').close()">确认保存</button>
   </div>
 </dialog>
 
@@ -483,7 +477,7 @@
   const toggle = document.getElementById('themeToggle');
   const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
   if (isDark) document.documentElement.setAttribute('data-theme', 'dark');
-  toggle.addEventListener('click', () => {
+  toggle?.addEventListener('click', () => {
     const current = document.documentElement.getAttribute('data-theme') === 'dark';
     document.documentElement.setAttribute('data-theme', current ? 'light' : 'dark');
   });
@@ -491,8 +485,8 @@
   // Table Real-Time Filter
   const searchInput = document.getElementById('searchInput');
   const statusFilter = document.getElementById('statusFilter');
-  const table = document.getElementById('recordsTable');
-  const countSpan = document.getElementById('footerCount');
+  const table = document.getElementById('dataTable');
+  const countSpan = document.getElementById('recordCount');
 
   function applyFilter() {
     const q = searchInput.value.toLowerCase().trim();

@@ -3,9 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>评估分析报告母版 · Agent HTML</title>
+  <title>通用单栏文档与评估报告母版 · Agent HTML</title>
   <style>
-    /* Design Tokens */
+    /* ==========================================================================
+       Agent-HTML Core Design Tokens (shadcn/ui Neutral Palette)
+       ========================================================================== */
     :root {
       --bg: #fafafa;
       --card: #ffffff;
@@ -79,7 +81,7 @@
       margin: 0 auto;
     }
 
-    /* Top Bar */
+    /* Header */
     .report-header {
       display: flex;
       justify-content: space-between;
@@ -95,6 +97,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
+      flex-wrap: wrap;
     }
     .report-meta {
       display: flex;
@@ -114,28 +117,7 @@
       gap: 8px;
     }
 
-    /* Components */
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-sm);
-      margin-bottom: 20px;
-      overflow: hidden;
-    }
-    .card-header {
-      padding: 16px 20px;
-      border-bottom: 1px solid var(--border);
-      font-weight: 600;
-      font-size: 15px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .card-content {
-      padding: 20px;
-    }
-
+    /* Buttons & Badges */
     .btn {
       display: inline-flex;
       align-items: center;
@@ -150,6 +132,7 @@
       color: var(--card-fg);
       cursor: pointer;
       text-decoration: none;
+      transition: all 0.15s ease;
     }
     .btn:hover { background: var(--secondary); }
     .btn-primary { background: var(--primary); color: var(--primary-fg); border-color: var(--primary); }
@@ -186,11 +169,12 @@
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 14px 16px;
+      box-shadow: var(--shadow-sm);
     }
     .stat-mini-label { font-size: 12px; color: var(--muted-fg); }
     .stat-mini-val { font-size: 22px; font-weight: 700; margin-top: 4px; }
 
-    /* Summary Callout */
+    /* Executive Callout */
     .callout {
       padding: 16px 18px;
       border-radius: var(--radius);
@@ -201,9 +185,29 @@
       margin-bottom: 20px;
     }
     .callout-success { background: var(--ok-bg); border-color: var(--ok-border); }
+    .callout-warning { background: var(--warn-bg); border-color: var(--warn-border); }
     .callout-title { font-weight: 600; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; color: var(--ok); }
+    .callout-warning .callout-title { color: var(--warn); }
 
-    /* Accordion */
+    /* Card & Accordions */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    .card-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      font-weight: 600;
+      font-size: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
     details {
       border-bottom: 1px solid var(--border);
     }
@@ -218,33 +222,42 @@
       align-items: center;
       justify-content: space-between;
       user-select: none;
+      transition: background 0.15s;
     }
     summary::-webkit-details-marker { display: none; }
     summary:hover { background: var(--secondary); }
     .chevron { transition: transform 0.2s; color: var(--muted-fg); }
     details[open] .chevron { transform: rotate(180deg); }
+    
     .accordion-inner {
       padding: 0 16px 16px;
       font-size: 13px;
       color: var(--muted-fg);
       line-height: 1.6;
     }
-    .qa-box {
+    .property-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .property-box {
       background: var(--secondary);
       border-radius: var(--radius-sm);
-      padding: 12px 14px;
-      margin-top: 8px;
-      color: var(--card-fg);
+      padding: 10px 12px;
     }
-    .qa-label { font-weight: 600; font-size: 12px; color: var(--muted-fg); margin-bottom: 4px; }
+    .property-label { font-weight: 600; font-size: 11px; color: var(--muted-fg); }
+    .property-value { font-size: 13px; color: var(--card-fg); margin-top: 2px; }
 
     @media print {
       body { background: #fff; padding: 0; }
       .actions { display: none; }
       details { break-inside: avoid; }
+      details[open] { margin-bottom: 10px; }
     }
     @media (max-width: 640px) {
       .stat-row { grid-template-columns: 1fr 1fr; }
+      .property-grid { grid-template-columns: 1fr; }
       .report-header { flex-direction: column; gap: 12px; }
     }
   </style>
@@ -252,130 +265,130 @@
 <body>
 
 <div class="container">
-  <!-- Report Header -->
-  <div class="report-header">
+  <!-- [Slot: Report Header] -->
+  <header class="report-header">
     <div class="report-title-box">
       <h1>
-        <span>刘一戈 · 专家级技术面试分析报告</span>
-        <span class="badge badge-success"><span class="badge-dot"></span>强烈推荐 (Pass)</span>
+        <!-- Title Slot -->
+        <span>系统架构评估与综合审查报告</span>
+        <!-- Status Badge Slot -->
+        <span class="badge badge-success"><span class="badge-dot"></span>综合评定：通过 (Approved)</span>
       </h1>
       <div class="report-meta">
         <div class="report-meta-item">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          <span>目标岗位：资深工程架构师</span>
+          <span>评估主体：Project Alpha / 生产基线审查</span>
         </div>
         <div class="report-meta-item">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
-          <span>评估日期：2026-08-31</span>
+          <span>评估日期：2026-09-08</span>
         </div>
         <div class="report-meta-item">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          <span>面谈时长：65 分钟</span>
+          <span>版本标识：v2.4.0-RC3</span>
         </div>
       </div>
     </div>
     <div class="actions">
-      <button class="btn" onclick="window.print()">
+      <button class="btn" onclick="window.print()" title="打印或保存为 PDF">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
         <span>打印/PDF</span>
       </button>
       <button id="themeToggle" class="btn" title="切换暗黑模式">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 0 1 1-9-9Z"/></svg>
       </button>
     </div>
-  </div>
+  </header>
 
-  <!-- Score Summary -->
-  <div class="stat-row">
+  <!-- [Slot: KPI Score Overview] -->
+  <section class="stat-row">
     <div class="stat-mini">
-      <div class="stat-mini-label">综合评定分</div>
-      <div class="stat-mini-val" style="color: var(--ok);">91 <span style="font-size: 13px; font-weight: normal; color: var(--muted-fg);">/ 100</span></div>
+      <div class="stat-mini-label">综合达标得分</div>
+      <div class="stat-mini-val" style="color: var(--ok);">92.5 <span style="font-size: 13px; font-weight: normal; color: var(--muted-fg);">/ 100</span></div>
     </div>
     <div class="stat-mini">
-      <div class="stat-mini-label">工程架构深度</div>
+      <div class="stat-mini-label">架构解耦与内聚</div>
       <div class="stat-mini-val">94%</div>
     </div>
     <div class="stat-mini">
-      <div class="stat-mini-label">复杂系统排障</div>
-      <div class="stat-mini-val">88%</div>
+      <div class="stat-mini-label">性能压测通过率</div>
+      <div class="stat-mini-val">98.2%</div>
     </div>
     <div class="stat-mini">
-      <div class="stat-mini-label">沟通协作与自驱</div>
-      <div class="stat-mini-val">90%</div>
+      <div class="stat-mini-label">安全合规审查</div>
+      <div class="stat-mini-val" style="color: var(--ok);">100%</div>
     </div>
-  </div>
+  </section>
 
-  <!-- Executive Summary Callout -->
-  <div class="callout callout-success">
+  <!-- [Slot: Executive Summary Callout] -->
+  <section class="callout callout-success">
     <div class="callout-title">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-      <span>面试官核心结论与定级建议</span>
+      <span>执行摘要与上线决策结论 (Executive Summary)</span>
     </div>
-    <div>候选人底层功底扎实，对大规模高并发分布式架构与稳定性治理有深刻洞察。现场编码逻辑缜密、边界条件防御完备。具备极强的技术领导力与跨团队推进能力，建议定级 <strong>P7 / 资深技术专家</strong>，进入 HR 最终薪酬洽谈阶段。</div>
-  </div>
+    <div>经专家委员会全面审查，当前版本架构清晰度高、边界划分清晰，核心服务具备自动容灾切流能力。全链路压力测试达标且无阻断性缺陷，<strong>建议准予发布至生产环境并开启灰度放量</strong>。</div>
+  </section>
 
-  <!-- Dimension Checklist -->
-  <div class="card">
+  <!-- [Slot: Dimension Breakdown / Detailed Sections] -->
+  <section class="card">
     <div class="card-header">
-      <span>能力维度评定细项</span>
-      <span class="badge badge-info">共 4 个核心板块</span>
+      <span>评估细项与维度分解清单</span>
+      <span class="badge badge-info">共 3 个核心评估项</span>
     </div>
     <div>
+      <!-- Section 1 -->
       <details open>
         <summary>
           <div style="display: flex; align-items: center; gap: 10px;">
-            <span>1. 分布式系统架构设计与微服务拆分</span>
-            <span class="badge badge-success">卓越 (95)</span>
+            <span>1. 架构模块设计与边界清晰度</span>
+            <span class="badge badge-success">优异 (95分)</span>
           </div>
           <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
         </summary>
         <div class="accordion-inner">
-          <div class="qa-box">
-            <div class="qa-label">考察问题</div>
-            <div>面对日均数十亿级请求的电商核心交易链路，如何设计多级缓存一致性方案与容灾降级策略？</div>
-          </div>
-          <div class="qa-box" style="margin-top: 8px;">
-            <div class="qa-label">回答摘要与亮点</div>
-            <div>候选人清晰阐述了基于 Canal 监听 Binlog 异构同步缓存、引入本地 Caffeine + 分布式 Redis 两级架构，并结合布隆过滤器防御击穿穿透。容灾方面设计了动态熔断与影子降级方案，实操经验极其丰富。</div>
+          <p>核心业务链路已实现事件驱动异步化解耦，依赖关系单向流动，符合领域驱动设计标准。</p>
+          <div class="property-grid">
+            <div class="property-box">
+              <div class="property-label">关键优势</div>
+              <div class="property-value">跨模块通信全面接入统一消息总线，降低点对点强依赖。</div>
+            </div>
+            <div class="property-box">
+              <div class="property-label">持续改进点</div>
+              <div class="property-value">建议后续迭代逐步清理老旧废弃协议接口。</div>
+            </div>
           </div>
         </div>
       </details>
 
+      <!-- Section 2 -->
       <details>
         <summary>
           <div style="display: flex; align-items: center; gap: 10px;">
-            <span>2. 高并发环境下的故障排查与性能调优</span>
-            <span class="badge badge-success">良好 (88)</span>
+            <span>2. 高可用容灾与极端异常自愈</span>
+            <span class="badge badge-success">良好 (90分)</span>
           </div>
           <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
         </summary>
         <div class="accordion-inner">
-          <div class="qa-box">
-            <div class="qa-label">考察问题</div>
-            <div>曾遇到过最棘手的线上内存泄漏或 CPU 飙高问题是什么？如何一步步抓取 dump 与定位？</div>
-          </div>
-          <div class="qa-box" style="margin-top: 8px;">
-            <div class="qa-label">回答摘要与亮点</div>
-            <div>分享了 Netty 堆外内存泄漏定位案例，通过 jcmd、perf-map-agent 以及 async-profiler 捕获 Native 内存分配，手法规范。</div>
-          </div>
+          <p>已完成机房级网络割接与依赖宕机混沌测试。多级熔断器可在 200ms 内生效，未引发级联雪崩。</p>
         </div>
       </details>
 
+      <!-- Section 3 -->
       <details>
         <summary>
           <div style="display: flex; align-items: center; gap: 10px;">
-            <span>3. 团队协作、技术沉淀与自驱力</span>
-            <span class="badge badge-info">良好 (90)</span>
+            <span>3. 依赖项安全与代码质量基线</span>
+            <span class="badge badge-warning">注意项 (88分)</span>
           </div>
           <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
         </summary>
         <div class="accordion-inner">
-          <p style="padding-top: 4px;">候选人表达条理清晰、谦逊务实，有主动主导组内技术规范与效能工具开发的成功经历。</p>
+          <p>第三方组件漏洞扫描通过。静态代码分析发现 3 处潜在非空指针解引用风险，已记录待修复工单并在当前补丁包打齐防护断言。</p>
         </div>
       </details>
     </div>
-  </div>
-
+  </section>
 </div>
 
 <script>
@@ -384,7 +397,7 @@
   const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
   if (isDark) document.documentElement.setAttribute('data-theme', 'dark');
 
-  toggle.addEventListener('click', () => {
+  toggle?.addEventListener('click', () => {
     const current = document.documentElement.getAttribute('data-theme') === 'dark';
     document.documentElement.setAttribute('data-theme', current ? 'light' : 'dark');
   });

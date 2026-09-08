@@ -15,7 +15,7 @@
 **`agent-html` 的解决方案**：
 - **纯单文件自包含（100% Offline & Standalone）**：双击即可在任何浏览器本地秒开，内联纯原生 CSS 变量与微脚本，绝不依赖任何外部网络。
 - **shadcn/ui 极简中性美学**：Zinc/Slate 冷灰质感底座、1px 精致边框、状态徽章、信息高密度。
-- **三大业务母版提炼**：直接从真实业务场景（报告、看板、审查工具）中提炼出的骨架母版。
+- **四大通用布局母版**：收敛提炼为单栏长文档报告、宽屏监控大盘网格、左右双栏审查工作台、并排横向对比矩阵四大通用骨架。
 - **打通全局 Agent Skill**：无论是哪个 Agent，只要调用 `agent-html` Skill 就能直接照着标准化组件与母版组装页面。
 
 ---
@@ -26,13 +26,19 @@
 agent-html/
 ├── README.md                      # 本文档
 ├── index.html                     # 🎨 核心画廊：所有原子组件、变体及交互的展示体验站
-├── templates/                     # 📦 3 大高频业务母版（单文件，可直接双击运行）
-│   ├── report.html                # 1. 评估与分析报告母版（面试/测试/对比报告）
-│   ├── dashboard.html             # 2. 指标监控与管理看板母版（KPI卡片/搜索过滤表/状态徽章）
-│   └── inspector.html             # 3. 审查器与双栏工具母版（Master-Detail/JSON高亮/操作流）
+├── templates/ -> skills/...       # 📦 4 大通用布局母版（单文件软链，可直接双击运行）
+│   ├── report.html                # 1. 单栏文档与评估报告母版 (Document / Executive Report)
+│   ├── dashboard.html             # 2. 数据大盘与过滤表格母版 (Analytics Dashboard & Grid)
+│   ├── inspector.html             # 3. 左右双栏工作台与审查器母版 (Master-Detail Workbench)
+│   └── compare.html               # 4. 并排横向对比与评测矩阵母版 (Side-by-Side Comparison)
 └── skills/
     └── agent-html/
-        └── SKILL.md               # 🤖 供 Agent 全局调用的技能说明书与代码片段字典
+        ├── SKILL.md               # 🤖 供 Agent 全局调用的技能说明书与代码片段字典
+        ├── assets/
+        │   ├── index.html         # 画廊入口镜像软链
+        │   └── templates/         # 4 大母版物理源文件
+        └── evals/
+            └── evals.json         # 4 套覆盖各场景母版的验证基准测试集
 ```
 
 ---
@@ -42,17 +48,20 @@ agent-html/
 无需启动任何本地开发服务器，直接在 Finder 中双击或在终端中用浏览器打开：
 
 ```bash
-# 打开核心组件画廊
+# 1. 打开核心组件画廊体验站
 open index.html
 
-# 预览分析报告母版
+# 2. 预览单栏文档与评估报告母版
 open templates/report.html
 
-# 预览管理看板母版
+# 3. 预览数据大盘与过滤表格母版
 open templates/dashboard.html
 
-# 预览双栏审查工具母版
+# 4. 预览双栏工作台与审查器母版
 open templates/inspector.html
+
+# 5. 预览并排横向对比与评测矩阵母版
+open templates/compare.html
 ```
 
 ---

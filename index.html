@@ -706,10 +706,10 @@
           <div>
             <div class="template-badge">Template 01</div>
             <div class="template-title">
-              <span>评估与分析报告母版</span>
+              <span>单栏文档与评估报告母版</span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
             </div>
-            <div class="template-desc">适用于面试评估、测试比对、技术选型报告。含元信息头、摘要 Callout、折叠审查清单与标签评级。</div>
+            <div class="template-desc">适用于技术选型、架构审查、故障复盘与长文档。含元数据头、摘要 Callout、折叠手风琴与打印样式。</div>
           </div>
         </a>
 
@@ -717,10 +717,10 @@
           <div>
             <div class="template-badge">Template 02</div>
             <div class="template-title">
-              <span>指标监控与管理看板母版</span>
+              <span>数据大盘与过滤表格母版</span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
             </div>
-            <div class="template-desc">适用于调休管理、AI 用量大盘、运营报表。含 KPI 统计卡、实时搜索过滤、状态徽章与操作表。</div>
+            <div class="template-desc">适用于业务监控、资源配额管理、运营统计。含 4 列 KPI 统计卡、实时搜索/下拉双过滤与操作弹窗。</div>
           </div>
         </a>
 
@@ -731,7 +731,18 @@
               <span>双栏审查与数据工具母版</span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
             </div>
-            <div class="template-desc">适用于 JSONL 编辑器、日志回溯、Prompt 调试器。含左右分栏 Master-Detail、代码高亮与弹窗交互。</div>
+            <div class="template-desc">适用于日志查看器、Prompt 调试器、JSONL 审查工具。含左右分栏 Master-Detail、代码高亮与动态渲染。</div>
+          </div>
+        </a>
+
+        <a href="templates/compare.html" class="template-card">
+          <div>
+            <div class="template-badge">Template 04</div>
+            <div class="template-title">
+              <span>并排对比与评测矩阵母版</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+            </div>
+            <div class="template-desc">适用于模型 A/B 对比、Prompt 调优前后评测、产品定价规格矩阵。含并排双栏、结论 Callout 与量化差异表。</div>
           </div>
         </a>
       </div>
@@ -879,7 +890,7 @@
           </div>
           <div>
             <div class="callout-title">注意项</div>
-            <div>调休额度有效期将于本月底截止，请及时在系统内安排核销。</div>
+            <div>上游依赖服务计划于本周末进行机房割接，请提前验证多可用区容灾自动切流能力。</div>
           </div>
         </div>
       </section>
@@ -916,40 +927,40 @@
               <tbody>
                 <tr>
                   <td><code>TASK-2026-0801</code></td>
-                  <td>陈云青</td>
-                  <td>调休额度看板</td>
+                  <td>Core-Gateway</td>
+                  <td>网关路由集群</td>
                   <td><span class="badge badge-success"><span class="badge-dot"></span>已完成</span></td>
                   <td>320ms</td>
                   <td style="text-align: right;"><button class="btn btn-ghost btn-sm">详情</button></td>
                 </tr>
                 <tr>
                   <td><code>TASK-2026-0802</code></td>
-                  <td>刘一戈</td>
-                  <td>面试报告分析</td>
+                  <td>Engine-Worker</td>
+                  <td>异步处理管道</td>
                   <td><span class="badge badge-success"><span class="badge-dot"></span>已通过</span></td>
                   <td>580ms</td>
                   <td style="text-align: right;"><button class="btn btn-ghost btn-sm">详情</button></td>
                 </tr>
                 <tr>
                   <td><code>TASK-2026-0803</code></td>
-                  <td>王添毅</td>
-                  <td>Ops 自动化评测</td>
+                  <td>Auth-Service</td>
+                  <td>OAuth 鉴权模块</td>
                   <td><span class="badge badge-warning"><span class="badge-dot"></span>审核中</span></td>
                   <td>1.2s</td>
                   <td style="text-align: right;"><button class="btn btn-ghost btn-sm">详情</button></td>
                 </tr>
                 <tr>
                   <td><code>TASK-2026-0804</code></td>
-                  <td>系统进程</td>
-                  <td>JSONL 轨迹重放</td>
+                  <td>Data-Syncer</td>
+                  <td>离线同步流水线</td>
                   <td><span class="badge badge-info"><span class="badge-dot"></span>运行中</span></td>
                   <td>4.8s</td>
                   <td style="text-align: right;"><button class="btn btn-ghost btn-sm">详情</button></td>
                 </tr>
                 <tr>
                   <td><code>TASK-2026-0805</code></td>
-                  <td>周子扬</td>
-                  <td>权限网关排障</td>
+                  <td>Audit-Worker</td>
+                  <td>审计日志归档</td>
                   <td><span class="badge badge-danger"><span class="badge-dot"></span>异常断开</span></td>
                   <td>89ms</td>
                   <td style="text-align: right;"><button class="btn btn-ghost btn-sm">重试</button></td>
@@ -1074,16 +1085,16 @@
 
           <dialog id="demoModal">
             <div class="dialog-header">
-              <div class="dialog-title">核销调休额度确认</div>
-              <p class="text-sm text-muted" style="margin-top: 4px;">本次将从陈云青的账户中扣减 1.0 天调休额度。</p>
+              <div class="dialog-title">变更配置发布确认</div>
+              <p class="text-sm text-muted" style="margin-top: 4px;">本次操作将把所选路由策略热更新至生产集群。</p>
             </div>
             <div class="form-group">
-              <label class="form-label">事由备注</label>
-              <input type="text" class="input" value="调休核销 - 项目上线后例行轮休">
+              <label class="form-label">发布说明</label>
+              <input type="text" class="input" value="生产变更 - 路由重试超时参数优化">
             </div>
             <div class="dialog-footer">
               <button class="btn btn-outline" onclick="document.getElementById('demoModal').close()">取消</button>
-              <button class="btn btn-primary" onclick="alert('已确认核销！'); document.getElementById('demoModal').close()">确认核销</button>
+              <button class="btn btn-primary" onclick="alert('已确认发布！'); document.getElementById('demoModal').close()">确认发布</button>
             </div>
           </dialog>
         </div>

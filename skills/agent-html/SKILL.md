@@ -24,15 +24,18 @@ description: 为 AI Agent 提供基于 shadcn/ui 极简现代美学的单文件 
 
 ---
 
-## 二、场景母版与渐进式披露 (Progressive Disclosure)
+## 二、通用布局母版与渐进式披露 (Progressive Disclosure)
 
-当用户提出需求时，首先判定所属的三大业务母版之一。如果需要完整骨架参考，可直接使用 `read` 工具读取本 Skill 目录下的配套资产：
+不要从零手写完整页面。接到需求后，首先从以下 4 种**通用布局母版**中选择最贴近的骨架。需要完整实现时，可使用 `read` 工具读取本 Skill 目录下的对应母版资产：
 
-| 业务场景 | 对应母版与相对路径 | 适用场景与核心要素 |
+| 布局模式 | 对应母版路径 | 适用需求与核心结构 |
 | :--- | :--- | :--- |
-| **评估与分析报告** | `assets/templates/report.html` | 面试评估、技术比对、自动化测试报告。<br>要素：候选人/项目元数据、定级徽章、KPI评分栏、执行摘要 Callout、能力维度折叠手风琴、浏览器打印/PDF 适配。 |
-| **指标监控与数据看板** | `assets/templates/dashboard.html` | 调休管理、AI用量大盘、业务运营看板。<br>要素：4列 KPI 统计卡（数值+环比）、实时搜索与状态下拉双重过滤表格、新增/核销原生 `<dialog>` 弹窗。 |
-| **双栏审查与数据工具** | `assets/templates/inspector.html` | JSONL查看器、轨迹排障重放、Prompt调试器。<br>要素：Master-Detail 左右双栏结构、左栏列表即时过滤、右栏动态渲染详情与带一键复制的深色代码块。 |
+| **单栏文档与评估报告**<br>(Document / Report) | `assets/templates/report.html` | **技术选型、架构审查、故障复盘、面试报告、需求说明、发布日志**。<br>结构：单栏居中（860px），元数据标头、核心结论 Callout、KPI 概览栏、多章节 `<details>` 折叠手风琴、浏览器打印/PDF 样式支持。 |
+| **数据大盘与过滤表格**<br>(Dashboard & Data Grid) | `assets/templates/dashboard.html` | **资源监控、用量大盘、考勤/调休管理、订单/任务流管理**。<br>结构：宽屏网格，顶部操作栏、4 列自适应 KPI 统计卡（数值+环比趋势）、实时搜索与下拉双重过滤表格、原生 `<dialog>` 弹窗。 |
+| **左右双栏工作台与审查器**<br>(Master-Detail Workbench) | `assets/templates/inspector.html` | **日志/Trace 审查、Prompt 调试器、JSONL 编辑器、配置管理**。<br>结构：视口充满（100vh），左侧可折叠/过滤条目列表，右侧动态联动渲染选中条目详情、3 列属性网格、带一键复制的深色代码块。 |
+| **并排横向对比与评测矩阵**<br>(Side-by-Side Comparison) | `assets/templates/compare.html` | **模型 A/B 测试、Prompt 改版前后对比、架构版本 diff、产品套餐/特性矩阵**。<br>结构：并排双栏卡片（基准 vs 挑战者）、核心裁决 Callout、量化差异对照表（Delta/胜负判定标签）。 |
+
+> 💡 **组件字典查阅**：如需查看所有按钮变体、胶囊徽章、常用 SVG 图标与实时组件效果，可直接读取或打开 `assets/index.html`。
 
 ---
 
