@@ -25,10 +25,11 @@
 </p>
 
 <p>
-  <a href="#installation">Installation</a> ·
+  <a href="#installation--quick-start">Installation</a> ·
+  <a href="#the-problem">The Problem</a> ·
   <a href="#what-you-get">What You Get</a> ·
   <a href="#the-6-archetypes">The 6 Archetypes</a> ·
-  <a href="#quick-start">Quick Start</a> ·
+  <a href="#prompt-triggers">Prompt Triggers</a> ·
   <a href="#micro-css-base">Micro-CSS Base</a> ·
   <a href="#linter">Linter</a>
 </p>
@@ -40,6 +41,50 @@
 <p align="center">
   <img src="assets/screenshots/en/gallery.png" alt="agent-html Component Gallery" width="100%">
 </p>
+
+---
+
+## Installation & Quick Start
+
+### 1-Line Install via `skills` (Recommended)
+
+Install directly into your coding agent (Claude Code, Cursor, Pi, Codex, Copilot, etc.) with zero manual cloning:
+
+```bash
+# Install to current project workspace
+npx skills add QingYunA/agent-html
+
+# Or install globally across all 70+ agents on your machine
+npx skills add QingYunA/agent-html -g
+```
+
+### Try it Instantly (CLI)
+
+No build step or Node.js server required. Explore the component gallery or scaffold a template immediately:
+
+```bash
+# Open the interactive component gallery in your browser
+npx agent-html open
+
+# Extract any raw archetype directly to a file
+npx agent-html template dashboard > my-dashboard.html
+npx agent-html template kanban > my-kanban.html
+```
+
+<details>
+<summary><strong>Manual Git Symlink Setup (Alternative)</strong></summary>
+
+```bash
+git clone https://github.com/QingYunA/agent-html.git ~/Code/agent-html
+
+# Link into universal agents directory
+ln -sf ~/Code/agent-html/skills/agent-html ~/.agents/skills/agent-html
+
+# If using Claude Code or Pi:
+ln -sf ../../.agents/skills/agent-html ~/.claude/skills/agent-html
+ln -sf ../../../.agents/skills/agent-html ~/.pi/agent/skills/agent-html
+```
+</details>
 
 ---
 
@@ -137,39 +182,15 @@ Interactive 4-column categorization board (Backlog, Progress, Blocked, Done). Ze
 
 ---
 
-## Quick Start & CLI
+## Prompt Triggers
 
-### Local Preview
-No build step or Node.js server required. Open directly in your browser:
+Once installed, prompts like:
+- *"Generate a standalone HTML dashboard for our cluster metrics with a trend chart"*
+- *"Create an executive evaluation report for candidate John Doe as a single file"*
+- *"Build a side-by-side prompt comparison matrix in HTML"*
+- *"Don't write a wall of markdown, give me a clean single-file visual report for this PR review"*
 
-```bash
-# Core component gallery
-open index.html
-
-# 6 Layout templates
-open templates/report.html
-open templates/dashboard.html
-open templates/inspector.html
-open templates/compare.html
-open templates/timeline.html
-open templates/kanban.html
-```
-
-### Standalone CLI Helper
-
-The repository includes a zero-dependency CLI executable:
-
-```bash
-# Open the gallery directly
-npx agent-html open
-
-# Extract any raw archetype directly to a file
-npx agent-html template dashboard > my-dashboard.html
-npx agent-html template report > my-report.html
-
-# Validate any HTML file for zero-CDN & tag hygiene
-npx agent-html check my-dashboard.html
-```
+will automatically trigger the `agent-html` skill and produce clean, zero-dependency, self-contained files.
 
 ---
 
@@ -254,49 +275,6 @@ document.getElementById('searchInput')?.addEventListener('input', (e) => {
   });
 });
 ```
-
----
-
-## Installation
-
-### 1. The 1-Line Install via `skills` (Recommended)
-
-Install directly to your current project (Claude Code, Cursor, Copilot, etc.) with zero manual cloning:
-
-```bash
-# Install to current project workspace
-npx skills add QingYunA/agent-html
-
-# Or install globally to all 70+ agents on your machine (Claude Code, Pi, Cursor, Codex, etc.)
-npx skills add QingYunA/agent-html -g
-```
-
-### 2. Manual Git Symlink (Alternative)
-
-If you prefer managing local symlinks manually:
-
-```bash
-git clone https://github.com/QingYunA/agent-html.git ~/Code/agent-html
-
-# Link into universal agents directory
-ln -sf ~/Code/agent-html/skills/agent-html ~/.agents/skills/agent-html
-
-# If using Claude Code or Pi:
-ln -sf ../../.agents/skills/agent-html ~/.claude/skills/agent-html
-ln -sf ../../../.agents/skills/agent-html ~/.pi/agent/skills/agent-html
-```
-
----
-
-## Triggering the Skill
-
-Once installed, prompts like:
-- *"Generate a standalone HTML dashboard for our cluster metrics with a trend chart"*
-- *"Create an executive evaluation report for candidate John Doe as a single file"*
-- *"Build a side-by-side prompt comparison matrix in HTML"*
-- *"Don't write a wall of markdown, give me a clean single-file visual report for this PR review"*
-
-will automatically trigger the `agent-html` skill and produce clean, zero-dependency, self-contained files.
 
 ---
 

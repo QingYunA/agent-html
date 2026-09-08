@@ -25,10 +25,11 @@
 </p>
 
 <p>
-  <a href="#安装配置">安装配置</a> ·
+  <a href="#快速安装与上手">快速安装</a> ·
+  <a href="#解决什么痛点">痛点</a> ·
   <a href="#核心价值">核心价值</a> ·
   <a href="#六大通用布局母版">六大母版</a> ·
-  <a href="#快速上手与-cli">快速上手</a> ·
+  <a href="#提示词触发示例">提示词</a> ·
   <a href="#微-css-核心基座">微 CSS 基座</a> ·
   <a href="#自验检查器">Linter</a>
 </p>
@@ -40,6 +41,50 @@
 <p align="center">
   <img src="assets/screenshots/zh/gallery.png" alt="agent-html 组件画廊" width="100%">
 </p>
+
+---
+
+## 快速安装与上手
+
+### 1. 使用 `skills` 一行命令安装（推荐）
+
+无需手动克隆或配置路径，通过标准 CLI 一键安装至当前项目或全局 70+ 款 Coding Agent：
+
+```bash
+# 安装至当前项目工作区（Claude Code, Cursor, Copilot 等）
+npx skills add QingYunA/agent-html
+
+# 或全局安装至本机所有 70+ 款 Coding Agent（Claude Code, Pi, Cursor, Codex 等）
+npx skills add QingYunA/agent-html -g
+```
+
+### 2. 免装即开 CLI 体验
+
+无需安装 Node.js 服务，直接打开画廊或导出生产级母版：
+
+```bash
+# 直接在默认浏览器打开组件画廊
+npx agent-html open
+
+# 快速导出指定通用母版代码到本地文件
+npx agent-html template dashboard > my-dashboard.html
+npx agent-html template kanban > my-kanban.html
+```
+
+<details>
+<summary><strong>手动 Git 软链安装（备选）</strong></summary>
+
+```bash
+git clone https://github.com/QingYunA/agent-html.git ~/Code/agent-html
+
+# 链接至统一规范目录
+ln -sf ~/Code/agent-html/skills/agent-html ~/.agents/skills/agent-html
+
+# 为 Claude Code 或 Pi 建立感知软链
+ln -sf ../../.agents/skills/agent-html ~/.claude/skills/agent-html
+ln -sf ../../../.agents/skills/agent-html ~/.pi/agent/skills/agent-html
+```
+</details>
 
 ---
 
@@ -137,39 +182,13 @@
 
 ---
 
-## 快速上手与 CLI
+## 提示词触发示例
 
-### 本地直接预览
-无需安装 Node.js，无需启动开发服务器，直接在浏览器中打开：
-
-```bash
-# 核心组件画廊
-open index.html
-
-# 预览 6 大母版
-open templates/report.html
-open templates/dashboard.html
-open templates/inspector.html
-open templates/compare.html
-open templates/timeline.html
-open templates/kanban.html
-```
-
-### 独立 CLI 命令行辅助
-
-仓库内置了零外部依赖的独立 CLI 工具：
-
-```bash
-# 直接在默认浏览器打开组件画廊
-npx agent-html open
-
-# 快速导出指定通用母版代码到本地文件
-npx agent-html template dashboard > my-dashboard.html
-npx agent-html template report > my-report.html
-
-# 对任意生成的 HTML 进行零 CDN 泄漏与标签静态检查
-npx agent-html check my-dashboard.html
-```
+安装完成后，以下日常指令将自动触发 `agent-html` Skill：
+- *“帮我做个单文件 HTML 监控看板，展示集群延迟和吞吐量趋势图”*
+- *“生成一份技术面试评估报告，单文件 HTML，排版要高级，支持直接打印”*
+- *“做一个模型 A 和模型 B 的横向对比矩阵页面”*
+- *“不要输出 markdown 墙，把这次架构评审结果做成可视化单文件页面”*
 
 ---
 
@@ -254,47 +273,6 @@ document.getElementById('searchInput')?.addEventListener('input', (e) => {
   });
 });
 ```
-
----
-
-## 安装配置
-
-### 1. 使用 `skills` 一行命令安装（推荐）
-
-无需手动克隆或配软链接，直接通过生态标准 CLI 一键安装至当前工程或全局 70+ 款 Agent：
-
-```bash
-# 安装至当前项目工作区（Claude Code, Cursor, Copilot 等）
-npx skills add QingYunA/agent-html
-
-# 或全局安装至本机所有 70+ 款 Coding Agent（Claude Code, Pi, Cursor, Codex 等）
-npx skills add QingYunA/agent-html -g
-```
-
-### 2. 手动 Git 软链安装（备选）
-
-若你习惯本地源码管理：
-
-```bash
-git clone https://github.com/QingYunA/agent-html.git ~/Code/agent-html
-
-# 链接至统一规范目录
-ln -sf ~/Code/agent-html/skills/agent-html ~/.agents/skills/agent-html
-
-# 为 Claude Code 或 Pi 建立感知软链
-ln -sf ../../.agents/skills/agent-html ~/.claude/skills/agent-html
-ln -sf ../../../.agents/skills/agent-html ~/.pi/agent/skills/agent-html
-```
-
----
-
-## 触发提示词示例
-
-安装完成后，以下日常指令将自动触发 `agent-html` Skill：
-- *“帮我做个单文件 HTML 监控看板，展示集群延迟和吞吐量趋势图”*
-- *“生成一份技术面试评估报告，单文件 HTML，排版要高级，支持直接打印”*
-- *“做一个模型 A 和模型 B 的横向对比矩阵页面”*
-- *“不要输出 markdown 墙，把这次架构评审结果做成可视化单文件页面”*
 
 ---
 
