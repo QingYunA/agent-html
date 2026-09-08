@@ -103,7 +103,9 @@
       font-weight: 700;
       letter-spacing: -0.02em;
     }
-    .actions { display: flex; gap: 8px; }
+    .actions { display: flex;
+      align-items: center;
+      flex-shrink: 0; gap: 8px; }
 
     /* Buttons & Badges */
     .btn {
@@ -113,6 +115,7 @@
       font-size: 13px;
       font-weight: 500;
       height: 32px;
+      white-space: nowrap;
       padding: 0 12px;
       border-radius: var(--radius-sm);
       border: 1px solid var(--border);

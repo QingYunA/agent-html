@@ -84,6 +84,7 @@
     /* Header */
     .timeline-header {
       display: flex;
+      gap: 16px;
       justify-content: space-between;
       align-items: flex-start;
       margin-bottom: 24px;
@@ -107,7 +108,9 @@
       color: var(--muted-fg);
       margin-top: 6px;
     }
-    .actions { display: flex; gap: 8px; }
+    .actions { display: flex;
+      align-items: center;
+      flex-shrink: 0; gap: 8px; }
 
     /* Buttons & Badges */
     .btn {
@@ -117,6 +120,7 @@
       font-size: 13px;
       font-weight: 500;
       height: 34px;
+      white-space: nowrap;
       padding: 0 12px;
       border-radius: var(--radius-sm);
       border: 1px solid var(--border);
