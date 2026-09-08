@@ -137,9 +137,14 @@
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
+      gap: 20px;
       margin-bottom: 28px;
       padding-bottom: 20px;
       border-bottom: 1px solid var(--border);
+    }
+    .report-title-box {
+      min-width: 0;
+      flex: 1;
     }
     .report-title-box h1 {
       font-size: 24px;
@@ -165,13 +170,16 @@
     }
     .actions {
       display: flex;
+      align-items: center;
       gap: 8px;
+      flex-shrink: 0;
     }
 
     /* Buttons & Badges */
     .btn {
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 6px;
       font-size: 13px;
       font-weight: 500;
@@ -183,11 +191,20 @@
       color: var(--card-fg);
       cursor: pointer;
       text-decoration: none;
+      white-space: nowrap;
+      flex-shrink: 0;
       transition: all 0.15s ease;
     }
     .btn:hover { background: var(--secondary); }
     .btn-primary { background: var(--primary); color: var(--primary-fg); border-color: var(--primary); }
     .btn-primary:hover { opacity: 0.9; }
+    .btn-icon {
+      width: 34px;
+      height: 34px;
+      padding: 0;
+      justify-content: center;
+      flex-shrink: 0;
+    }
 
     .badge {
       display: inline-flex;
@@ -314,6 +331,18 @@
       gap: 8px;
     }
 
+    /* Anchor Scroll Margins & Focus Highlight */
+    section[id], footer[id] {
+      scroll-margin-top: 32px;
+    }
+    :target {
+      animation: targetHighlight 1.5s ease-out;
+    }
+    @keyframes targetHighlight {
+      0% { box-shadow: 0 0 0 2px var(--primary); }
+      100% { box-shadow: 0 0 0 2px transparent; }
+    }
+
     @media print {
       body { background: #fff; padding: 0; }
       .actions, .toc-rail { display: none !important; }
@@ -378,8 +407,8 @@
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
         <span>打印/PDF</span>
       </button>
-      <button id="themeToggle" class="btn" title="切换暗黑模式">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 0 1 1-9-9Z"/></svg>
+      <button id="themeToggle" class="btn btn-icon" title="切换暗黑模式">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 0 1 1-9-9Z"/></svg>
       </button>
     </div>
   </header>
@@ -417,7 +446,7 @@
   <section id="checklist-section" class="card">
     <div class="card-header">
       <span>评估细项与维度分解清单</span>
-      <span class="badge badge-info">共 3 个核心评估项</span>
+      <span class="badge badge-info">共 6 个核心评估项</span>
     </div>
     <div>
       <!-- Section 1 -->
@@ -445,7 +474,7 @@
       </details>
 
       <!-- Section 2 -->
-      <details>
+      <details open>
         <summary>
           <div style="display: flex; align-items: center; gap: 10px;">
             <span>2. 高可用容灾与极端异常自愈</span>
@@ -455,11 +484,21 @@
         </summary>
         <div class="accordion-inner">
           <p>已完成机房级网络割接与依赖宕机混沌测试。多级熔断器可在 200ms 内生效，未引发级联雪崩。</p>
+          <div class="property-grid">
+            <div class="property-box">
+              <div class="property-label">异地多活表现</div>
+              <div class="property-value">模拟华东可用区断网，流量在 2.4s 内全自动平滑切流至华北可用区。</div>
+            </div>
+            <div class="property-box">
+              <div class="property-label">RPO / RTO 达标度</div>
+              <div class="property-value">RPO = 0（无数据丢失），RTO = 2.4s（优于 10s SLA 基线要求）。</div>
+            </div>
+          </div>
         </div>
       </details>
 
       <!-- Section 3 -->
-      <details>
+      <details open>
         <summary>
           <div style="display: flex; align-items: center; gap: 10px;">
             <span>3. 依赖项安全与代码质量基线</span>
@@ -469,6 +508,58 @@
         </summary>
         <div class="accordion-inner">
           <p>第三方组件漏洞扫描通过。静态代码分析发现 3 处潜在非空指针解引用风险，已记录待修复工单并在当前补丁包打齐防护断言。</p>
+        </div>
+      </details>
+
+      <!-- Section 4 -->
+      <details open>
+        <summary>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span>4. 全链路压测性能与吞吐瓶颈分析</span>
+            <span class="badge badge-success">达标 (96分)</span>
+          </div>
+          <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="accordion-inner">
+          <p>在 3 倍峰值压测场景下持续施压 2 小时，系统整体吞吐稳定在 2,890 TPS，服务实例无 OOM 发生，GC 停顿低于 15ms。</p>
+          <div class="property-grid">
+            <div class="property-box">
+              <div class="property-label">峰值吞吐 (TPS)</div>
+              <div class="property-value">2,890 TPS (基线预期: 2,000 TPS)</div>
+            </div>
+            <div class="property-box">
+              <div class="property-label">P95 延迟</div>
+              <div class="property-value">42ms (未见长尾突刺)</div>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- Section 5 -->
+      <details open>
+        <summary>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span>5. 生产准入灰度放量与回滚预案</span>
+            <span class="badge badge-success">完备 (94分)</span>
+          </div>
+          <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="accordion-inner">
+          <p>放量策略采用梯级灰度：5%（金丝雀）→ 20% → 50% → 100%，各阶段留存 30 分钟观察窗口。核心业务配置有一键热回滚开关，经演练回滚耗时 45s。</p>
+        </div>
+      </details>
+
+      <!-- Section 6 -->
+      <details open>
+        <summary>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span>6. 审查委员会签署与准入决议</span>
+            <span class="badge badge-success">准签生效</span>
+          </div>
+          <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="accordion-inner">
+          <p>技术架构师、SRE 运维团队负责人及业务安全代表共同签署本结论，同意于本周维护窗口正式启动生产灰度放量。</p>
         </div>
       </details>
     </div>
@@ -520,25 +611,75 @@
     });
   });
 
-  // ScrollSpy for Sticky TOC
-  const sections = ['kpi-section', 'summary-section', 'checklist-section', 'colophon-section'];
+  // Interactive Sticky TOC Navigation & ScrollSpy
   const tocLinks = document.querySelectorAll('.toc-link');
-  
+  let isManualScrolling = false;
+  let scrollTimer = null;
+
+  function setActiveToc(id) {
+    tocLinks.forEach(link => {
+      const match = link.getAttribute('href') === '#' + id;
+      link.classList.toggle('active', match);
+    });
+  }
+
+  // 1. Explicit Click Handler: Immediate feedback & smooth scroll
+  tocLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetId = link.getAttribute('href').slice(1);
+      const targetEl = document.getElementById(targetId);
+      if (!targetEl) return;
+
+      setActiveToc(targetId);
+      isManualScrolling = true;
+      clearTimeout(scrollTimer);
+
+      targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      history.pushState(null, '', '#' + targetId);
+
+      // Re-enable IntersectionObserver after smooth scroll settles
+      scrollTimer = setTimeout(() => {
+        isManualScrolling = false;
+      }, 800);
+    });
+  });
+
+  // 2. Initial Hash on Page Load
+  if (window.location.hash) {
+    const initId = window.location.hash.slice(1);
+    const initEl = document.getElementById(initId);
+    if (initEl) {
+      setActiveToc(initId);
+      setTimeout(() => {
+        initEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
+  }
+
+  // 3. ScrollSpy using IntersectionObserver
+  const sections = ['kpi-section', 'summary-section', 'checklist-section', 'colophon-section'];
   const observer = new IntersectionObserver((entries) => {
+    if (isManualScrolling) return;
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        const id = entry.target.getAttribute('id');
-        tocLinks.forEach(link => {
-          link.classList.toggle('active', link.getAttribute('href') === '#' + id);
-        });
+        setActiveToc(entry.target.getAttribute('id'));
       }
     });
-  }, { rootMargin: '-20% 0px -70% 0px' });
+  }, { rootMargin: '-10% 0px -65% 0px' });
 
   sections.forEach(id => {
     const el = document.getElementById(id);
     if (el) observer.observe(el);
   });
+
+  // 4. Bottom of Page Fallback
+  window.addEventListener('scroll', () => {
+    if (isManualScrolling) return;
+    if ((window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 60)) {
+      setActiveToc('colophon-section');
+    }
+  }, { passive: true });
 </script>
 </body>
 </html>

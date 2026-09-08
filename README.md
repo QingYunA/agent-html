@@ -17,6 +17,7 @@
 
 <p>
   <a href="https://github.com/QingYunA/agent-html/releases"><img src="https://img.shields.io/github/v/release/QingYunA/agent-html?style=flat&color=18181b" alt="Release"></a>
+  <a href="https://skills.sh"><img src="https://img.shields.io/badge/skills.sh-npx%20skills%20add%20QingYunA%2Fagent--html-10b981?style=flat&logo=npm" alt="skills.sh install"></a>
   <img src="https://img.shields.io/badge/dependencies-0%20npm%20%7C%200%20cdn-10b981?style=flat" alt="Dependencies">
   <img src="https://img.shields.io/badge/theme-light%20%26%20dark-blue?style=flat" alt="Themes">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-18181b?style=flat" alt="License"></a>
@@ -24,11 +25,11 @@
 </p>
 
 <p>
+  <a href="#installation">Installation</a> ·
   <a href="#what-you-get">What You Get</a> ·
   <a href="#the-4-archetypes">The 4 Archetypes</a> ·
   <a href="#quick-start">Quick Start</a> ·
   <a href="#micro-css-base">Micro-CSS Base</a> ·
-  <a href="#global-agent-skill-setup">Agent Skill</a> ·
   <a href="#linter">Linter</a>
 </p>
 
@@ -113,7 +114,7 @@ Two-column split view (Baseline vs. Challenger) with verdict callout, parameter 
 
 ---
 
-## Quick Start
+## Quick Start & CLI
 
 ### Local Preview
 No build step or Node.js server required. Open directly in your browser:
@@ -127,6 +128,22 @@ open templates/report.html
 open templates/dashboard.html
 open templates/inspector.html
 open templates/compare.html
+```
+
+### Standalone CLI Helper
+
+The repository includes a zero-dependency CLI executable:
+
+```bash
+# Open the gallery directly
+npx agent-html open
+
+# Extract any raw archetype directly to a file
+npx agent-html template dashboard > my-dashboard.html
+npx agent-html template report > my-report.html
+
+# Validate any HTML file for zero-CDN & tag hygiene
+npx agent-html check my-dashboard.html
 ```
 
 ---
@@ -215,25 +232,40 @@ document.getElementById('searchInput')?.addEventListener('input', (e) => {
 
 ---
 
-## Global Agent Skill Setup
+## Installation
 
-To let your local coding agents (Claude Code, Pi, Codex, Cursor) automatically use this system whenever you ask for an HTML page or report:
+### 1. The 1-Line Install via `skills` (Recommended)
+
+Install directly to your current project (Claude Code, Cursor, Copilot, etc.) with zero manual cloning:
 
 ```bash
-# Clone the repository
+# Install to current project workspace
+npx skills add QingYunA/agent-html
+
+# Or install globally to all 70+ agents on your machine (Claude Code, Pi, Cursor, Codex, etc.)
+npx skills add QingYunA/agent-html -g
+```
+
+### 2. Manual Git Symlink (Alternative)
+
+If you prefer managing local symlinks manually:
+
+```bash
 git clone https://github.com/QingYunA/agent-html.git ~/Code/agent-html
 
-# Symlink the skill to your global agent skills directory
+# Link into universal agents directory
 ln -sf ~/Code/agent-html/skills/agent-html ~/.agents/skills/agent-html
 
-# For Claude Code or Pi:
+# If using Claude Code or Pi:
 ln -sf ../../.agents/skills/agent-html ~/.claude/skills/agent-html
 ln -sf ../../../.agents/skills/agent-html ~/.pi/agent/skills/agent-html
 ```
 
-### Triggering the Skill
+---
 
-Once installed, natural requests like:
+## Triggering the Skill
+
+Once installed, prompts like:
 - *"Generate a standalone HTML dashboard for our cluster metrics with a trend chart"*
 - *"Create an executive evaluation report for candidate John Doe as a single file"*
 - *"Build a side-by-side prompt comparison matrix in HTML"*

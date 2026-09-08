@@ -1,0 +1,36 @@
+{
+  "name": "agent-html",
+  "version": "1.0.0",
+  "description": "Zero-dependency, single-file HTML design system & agent skill for LLMs inspired by shadcn/ui",
+  "type": "module",
+  "bin": {
+    "agent-html": "./bin/cli.mjs"
+  },
+  "scripts": {
+    "validate": "node scripts/validate.mjs --all",
+    "test": "node scripts/validate.mjs --all"
+  },
+  "keywords": [
+    "agent-skill",
+    "skills",
+    "claude-code",
+    "pi",
+    "codex",
+    "cursor",
+    "shadcn",
+    "zero-dependency",
+    "single-file-html",
+    "dashboard",
+    "report"
+  ],
+  "author": "QingYunA",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/QingYunA/agent-html.git"
+  },
+  "bugs": {
+    "url": "https://github.com/QingYunA/agent-html/issues"
+  },
+  "homepage": "https://github.com/QingYunA/agent-html#readme"
+}
