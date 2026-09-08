@@ -1,93 +1,92 @@
-# Agent HTML 🎨
+# agent-html
 
-> **面向 AI Agent 的轻量级单文件 HTML 组件化规范与母版体系**
-> 零 npm、零构建链、零外网 CDN 依赖，纯原生现代 HTML5/CSS/JS，开箱复刻 shadcn/ui 极简现代中性美学。
-
----
-
-## 💡 为什么需要这个项目？
-
-在日常使用 AI Agent（如 Claude Code, Pi, Codex 等）生成可视化看板、面试评估报告、系统测试比对或数据分析页时，常常面临：
-1. **每次都要从零手写 HTML/CSS**：消耗大量 context tokens 和生成等待时间。
-2. **样式风格不统一**：有的用 Tailwind CDN（断网就白屏），有的手写粗糙表格，缺乏一致的高级感。
-3. **维护心智重**：重型的前端框架（React/Vue/Vite）对于这种单次展示性报表太重了。
-
-**`agent-html` 的解决方案**：
-- **纯单文件自包含（100% Offline & Standalone）**：双击即可在任何浏览器本地秒开，内联纯原生 CSS 变量与微脚本，绝不依赖任何外部网络。
-- **shadcn/ui 极简中性美学**：Zinc/Slate 冷灰质感底座、1px 精致边框、状态徽章、信息高密度。
-- **四大通用布局母版**：收敛提炼为单栏长文档报告、宽屏监控大盘网格、左右双栏审查工作台、并排横向对比矩阵四大通用骨架。
-- **打通全局 Agent Skill**：无论是哪个 Agent，只要调用 `agent-html` Skill 就能直接照着标准化组件与母版组装页面。
+> Zero-dependency, single-file HTML design system & agent skill inspired by [shadcn/ui](https://ui.shadcn.com).  
+> 100% offline, zero npm packages, zero external CDNs. High information density, light/dark mode, and 4 layout archetypes for LLMs.
 
 ---
 
-## 📂 仓库目录结构
+## The Problem
 
-```text
-agent-html/
-├── README.md                      # 本文档
-├── index.html                     # 🎨 核心画廊：所有原子组件、变体及交互的展示体验站
-├── templates/ -> skills/...       # 📦 4 大通用布局母版（单文件软链，可直接双击运行）
-│   ├── report.html                # 1. 单栏文档与评估报告母版 (Document / Executive Report)
-│   ├── dashboard.html             # 2. 数据大盘与过滤表格母版 (Analytics Dashboard & Grid)
-│   ├── inspector.html             # 3. 左右双栏工作台与审查器母版 (Master-Detail Workbench)
-│   └── compare.html               # 4. 并排横向对比与评测矩阵母版 (Side-by-Side Comparison)
-└── skills/
-    └── agent-html/
-        ├── SKILL.md               # 🤖 供 Agent 全局调用的技能说明书与代码片段字典
-        ├── assets/
-        │   ├── index.html         # 画廊入口镜像软链
-        │   └── templates/         # 4 大母版物理源文件
-        └── evals/
-            └── evals.json         # 4 套覆盖各场景母版的验证基准测试集
-```
+When asking LLMs (Claude Code, Pi, Codex, ChatGPT) to generate a quick HTML report or dashboard, you usually hit one of two walls:
+
+1. **The CDN trap**: The model injects `<script src="https://cdn.tailwindcss.com"></script>` and external Google Fonts. It looks okay initially, but breaks completely in air-gapped corporate intranets, takes 2 seconds to render, and rots when CDNs change or network drops.
+2. **The visual slop trap**: If you forbid CDNs, the model hallucinates ad-hoc CSS—inconsistent 24px paddings, harsh pure-black borders, mismatched border-radii, and zero dark mode support.
+
+`agent-html` solves this by providing a tight ~75-line native CSS token base and 4 structural layout archetypes that agents can inline directly. Double-click any generated file in Finder, and it renders instantly with enterprise-grade polish.
 
 ---
 
-## 🚀 快速体验与浏览
+## Showcase
 
-无需启动任何本地开发服务器，直接在 Finder 中双击或在终端中用浏览器打开：
+### 1. Component Gallery (`index.html`)
+The full atom catalog: Buttons (5 variants), Badges with status dots, Stat cards, Callouts, interactive Tables, Segmented tabs, Native `<dialog>` modals, and 12 Lucide-style inline SVGs.
+
+![Component Gallery](assets/screenshots/gallery.png)
+
+---
+
+### 2. The 4 Structural Archetypes
+
+Rather than rigid business-specific screens, `agent-html` provides 4 fundamental layout scaffolds:
+
+#### Archetype 1: Document & Executive Report (`templates/report.html`)
+Single-column centered layout (860px max-width) optimized for readability and print. Includes metadata header, status badges, KPI score overview, executive summary callout, native `<details>` accordions, and `@media print` styles.
+
+> **Use for**: Technical reviews, interview assessments, postmortems, architecture RFCs, and changelogs.
+
+![Report Template](assets/screenshots/report.png)
+
+---
+
+#### Archetype 2: Analytics Dashboard & Data Grid (`templates/dashboard.html`)
+Fluid wide-screen layout with a 4-column KPI metric grid, dual-filter toolbar (real-time text search + status select), zebra hover table, and native `<dialog>` action modals.
+
+> **Use for**: Resource usage monitoring, quota trackers, task lists, and operational dashboards.
+
+![Dashboard Template](assets/screenshots/dashboard.png)
+
+---
+
+#### Archetype 3: Master-Detail Workbench (`templates/inspector.html`)
+Full-viewport app layout (`100vh` without outer page scroll). Left sidebar (320px) handles real-time item filtering, while the right detail pane dynamically renders selected metadata, property grids, and formatted code blocks with one-click copy.
+
+> **Use for**: Trace replay, log inspectors, JSONL viewers, and prompt debuggers.
+
+![Inspector Template](assets/screenshots/inspector.png)
+
+---
+
+#### Archetype 4: Side-by-Side Comparison Matrix (`templates/compare.html`)
+Two-column split view (Baseline vs. Challenger) with verdict callout, parameter specs, sample payload outputs, and a quantitative delta matrix table.
+
+> **Use for**: LLM model evaluations (Model A vs. Model B), prompt revision benchmarks, and feature/pricing comparisons.
+
+![Compare Template](assets/screenshots/compare.png)
+
+---
+
+## Quick Start
+
+### Local Preview
+No build step or Node.js server required. Open directly in your browser:
 
 ```bash
-# 1. 打开核心组件画廊体验站
+# Core component gallery
 open index.html
 
-# 2. 预览单栏文档与评估报告母版
+# 4 Layout templates
 open templates/report.html
-
-# 3. 预览数据大盘与过滤表格母版
 open templates/dashboard.html
-
-# 4. 预览双栏工作台与审查器母版
 open templates/inspector.html
-
-# 5. 预览并排横向对比与评测矩阵母版
 open templates/compare.html
 ```
 
 ---
 
-## 🧩 核心原子组件清单
+## How It Works (For Humans & AI Agents)
 
-| 组件 | 说明 | 常见变体与特性 |
-| :--- | :--- | :--- |
-| **Button** | 按钮组件 | Primary、Secondary、Outline、Ghost、Destructive、Icon |
-| **Badge** | 状态胶囊徽章 | Success (绿)、Warning (黄)、Danger (红)、Info (蓝)、带状态小圆点 |
-| **Stat Card** | KPI 指标块 | 统计数字、环比/同比趋势 Badge、副标题说明 |
-| **Callout / Alert** | 摘要提示条 | 成功、预警、错误、信息提示条，用于报告核心结论 |
-| **Table** | 交互式数据表格 | 精细 1px 边框、表头悬浮、行 Hover 效果、内置 5 行原生搜索过滤 |
-| **Tabs** | 药丸分段选项卡 | Segmented Control 风格切换不同内容面板 |
-| **Accordion** | 折叠手风琴 | 基于原生 `<details><summary>`，带顺滑展开箭头与无 JS 支持 |
-| **Native Dialog** | 模态弹窗 | 基于原生 `<dialog>`，自带 Backdrop 模糊毛玻璃遮罩 |
-| **Code Block** | 代码展示框 | 深色代码块，支持一键复制代码到剪贴板 |
-| **Curated SVG** | 常用矢量图标 | 提取自 Lucide 的常用矢量 SVG，自适应字色，无网络依赖 |
-
----
-
-## 🌓 设计变量与暗黑模式 (Design Tokens)
-
-`agent-html` 内置对暗黑模式的无缝支持：
-- 默认读取系统偏好（`prefers-color-scheme: dark`）。
-- 支持通过 `document.documentElement.setAttribute('data-theme', 'dark')` 手动切换。
+### 1. The Micro-CSS Base (~75 lines)
+Every standalone HTML generated with this system includes this zero-dep token block in `<head><style>`. It maps shadcn's Zinc neutral palette into pure CSS variables:
 
 ```css
 :root {
@@ -96,11 +95,19 @@ open templates/compare.html
   --card-fg: #09090b;
   --primary: #18181b;
   --primary-fg: #fafafa;
+  --secondary: #f4f4f5;
+  --secondary-fg: #18181b;
+  --muted: #f4f4f5;
+  --muted-fg: #71717a;
   --border: #e4e4e7;
-  --ok: #16a34a;
-  --warn: #d97706;
-  --err: #dc2626;
-  --info: #2563eb;
+  --ring: #18181b;
+  --radius: 8px;
+  --radius-sm: 6px;
+
+  --ok: #16a34a;   --ok-bg: #f0fdf4;   --ok-border: #bbf7d0;
+  --warn: #d97706; --warn-bg: #fffbeb; --warn-border: #fde68a;
+  --err: #dc2626;  --err-bg: #fef2f2;  --err-border: #fecaca;
+  --info: #2563eb; --info-bg: #eff6ff; --info-border: #bfdbfe;
 }
 
 [data-theme="dark"] {
@@ -109,22 +116,92 @@ open templates/compare.html
   --card-fg: #fafafa;
   --primary: #fafafa;
   --primary-fg: #18181b;
+  --secondary: #27272a;
+  --secondary-fg: #fafafa;
+  --muted: #18181b;
+  --muted-fg: #a1a1aa;
   --border: #27272a;
+
+  --ok: #4ade80;   --ok-bg: #052e1680;   --ok-border: #166534;
+  --warn: #fbbf24; --warn-bg: #451a0380; --warn-border: #854d0e;
+  --err: #f87171;  --err-bg: #450a0a80;  --err-border: #991b1b;
+  --info: #60a5fa; --info-bg: #17255480; --info-border: #1e40af;
 }
+```
+
+### 2. 5-Line Micro Scripts
+
+**Native Dark Mode Switcher**:
+```javascript
+const toggle = document.getElementById('themeToggle');
+if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+  document.documentElement.setAttribute('data-theme', 'dark');
+}
+toggle?.addEventListener('click', () => {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+});
+```
+
+**Real-time Table Search (Zero dependencies)**:
+```javascript
+document.getElementById('searchInput')?.addEventListener('input', (e) => {
+  const q = e.target.value.toLowerCase().trim();
+  document.querySelectorAll('#dataTable tbody tr').forEach(tr => {
+    tr.style.display = (!q || tr.textContent.toLowerCase().includes(q)) ? '' : 'none';
+  });
+});
 ```
 
 ---
 
-## 🤖 如何在 Agent 中使用？
+## Global Agent Skill Installation
 
-本仓库的 `skills/agent-html` 已自动软链接至系统全局 Skill 目录：
-- `~/.agents/skills/agent-html`
-- `~/.pi/agent/skills/agent-html`
-- `~/.claude/skills/agent-html`
+To let your local coding agents (Claude Code, Pi, Codex) automatically use this system whenever you ask for an HTML page or report:
 
-当你对 Claude Code、Pi 或 Codex 说：
-> “做个调休看板单文件 HTML”  
-> “帮我生成一份技术面试评估报告的 HTML 页面，样式参考 shadcn”  
-> “做一个单文件的数据大盘，要求支持离线查看”  
+```bash
+# Clone the repository
+git clone https://github.com/QingYunA/agent-html.git ~/Code/agent-html
 
-Agent 将自动触发 `agent-html` Skill，直接复用本规范中的 CSS 基座和母版骨架，数秒内生成出工业级美观、零依赖的单文件 HTML。
+# Symlink the skill to your global agent skills directory
+ln -sf ~/Code/agent-html/skills/agent-html ~/.agents/skills/agent-html
+
+# If you use Claude Code or Pi:
+ln -sf ../../.agents/skills/agent-html ~/.claude/skills/agent-html
+ln -sf ../../../.agents/skills/agent-html ~/.pi/agent/skills/agent-html
+```
+
+Once installed, prompts like:
+- *"Generate a standalone HTML dashboard for our cluster metrics"*
+- *"Create an executive evaluation report for candidate John Doe as a single file"*
+- *"Build a side-by-side prompt comparison matrix in HTML"*
+
+will automatically trigger the `agent-html` skill and output clean, zero-dependency, self-contained files.
+
+---
+
+## Repository Structure
+
+```text
+agent-html/
+├── README.md                      # Documentation & showcase
+├── index.html                     # Visual gallery of all atomic components
+├── templates/                     # Standalone HTML templates (symlinked to assets)
+│   ├── report.html                # Single-column document & evaluation report
+│   ├── dashboard.html             # Metrics dashboard & filterable table
+│   ├── inspector.html             # Master-detail split workbench
+│   └── compare.html               # Side-by-side A/B comparison matrix
+├── assets/
+│   └── screenshots/               # High-res preview assets for README
+└── skills/
+    └── agent-html/
+        ├── SKILL.md               # The LLM prompt instructions & slot definitions
+        ├── assets/                # Bundled templates & index mirror
+        └── evals/                 # Benchmark eval test cases
+```
+
+---
+
+## License
+
+MIT
