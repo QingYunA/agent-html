@@ -1,6 +1,6 @@
 ---
 name: agent-html
-description: 为 AI Agent 提供基于 shadcn/ui 极简现代美学的单文件 HTML 组件化规范与母版体系。只要用户需要生成、编写、设计或重构任何 HTML 页面、前端可视化展示、数据大盘/看板、调休或考勤管理表、面试分析报告、评测对比报表、日志/JSONL 排障审查器或交互式单文件小工具，务必使用本 Skill，即使用户没有明确提到“单文件”或“shadcn”。严禁脱离本规范手写粗糙的临时样式，严禁引入有外网断网风险的外部 CDN。
+description: 为 AI Agent 提供基于 shadcn/ui 极简现代美学的单文件 HTML 组件化规范与母版体系。当用户要求“生成 HTML 页面/网页”、“前端可视化大盘/看板”、“面试/分析/测试报告”、“对比矩阵/方案比对”、“review 结果做成可视化页面”、“代码审查报告”、“不要输出 markdown 墙/不要文字墙”、“把分析结果做成可交互单文件网页”等场景时，务必使用本 Skill。零构建、零 npm、严禁引入外部 CDN（无断网白屏风险），纯原生 HTML/CSS/SVG，支持暗黑模式与双击秒开。
 ---
 
 # Agent HTML 设计系统与组件化规范
@@ -217,6 +217,129 @@ body {
 - 成功: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>`
 - 复制: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>`
 - 日历: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>`
+
+### 6. 轻量原生图表规范 (Zero-CDN Pure SVG Charts)
+在生成数据大盘与报表时，**严禁引入 Chart.js / ECharts / Recharts 等外部 CDN 库**。图表统一采用纯原生矢量 SVG 实现：
+- **零网络依赖**：脱机、内网机房 100% 秒开，绝无 CDN 挂掉或白屏风险；
+- **暗黑模式自适应**：直接使用 `var(--primary)`、`var(--border)`、`var(--muted-fg)` 等主题变量，无须额外 JS 监听重绘；
+- **自适应视口**：设定统一 `viewBox="0 0 500 150"` 与 `style="width: 100%; height: auto;"`，Retina 屏幕与打印完美保真。
+
+#### A. 面积折线趋势图 (Area Trend Line Chart)
+```html
+<div class="card" style="padding: 16px 20px;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+    <div>
+      <div style="font-size: 14px; font-weight: 600;">24小时吞吐量趋势 (TPS)</div>
+      <div style="font-size: 12px; color: var(--muted-fg);">平均 TPS: 1,420 · 峰值: 2,890</div>
+    </div>
+    <span class="badge badge-success"><span class="badge-dot"></span>+14.8% 环比</span>
+  </div>
+  <svg viewBox="0 0 500 150" style="width: 100%; height: auto; overflow: visible;">
+    <defs>
+      <linearGradient id="trendAreaGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="var(--primary)" stop-opacity="0.25"/>
+        <stop offset="100%" stop-color="var(--primary)" stop-opacity="0.00"/>
+      </linearGradient>
+    </defs>
+    <!-- 网格参考虚线 -->
+    <line x1="30" y1="20" x2="490" y2="20" stroke="var(--border)" stroke-dasharray="3 3" />
+    <line x1="30" y1="60" x2="490" y2="60" stroke="var(--border)" stroke-dasharray="3 3" />
+    <line x1="30" y1="100" x2="490" y2="100" stroke="var(--border)" stroke-dasharray="3 3" />
+    <line x1="30" y1="130" x2="490" y2="130" stroke="var(--border)" />
+    <!-- Y 轴刻度 -->
+    <text x="22" y="24" font-size="10" fill="var(--muted-fg)" text-anchor="end">3k</text>
+    <text x="22" y="64" font-size="10" fill="var(--muted-fg)" text-anchor="end">2k</text>
+    <text x="22" y="104" font-size="10" fill="var(--muted-fg)" text-anchor="end">1k</text>
+    <text x="22" y="133" font-size="10" fill="var(--muted-fg)" text-anchor="end">0</text>
+    <!-- 渐变阴影面积与折线 -->
+    <path d="M 40 110 Q 90 95, 130 85 T 220 50 T 310 75 T 400 35 T 480 45 L 480 130 L 40 130 Z" fill="url(#trendAreaGrad)" />
+    <path d="M 40 110 Q 90 95, 130 85 T 220 50 T 310 75 T 400 35 T 480 45" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+    <!-- 关键数据点与峰值气泡 -->
+    <circle cx="220" cy="50" r="3.5" fill="var(--card)" stroke="var(--primary)" stroke-width="2"/>
+    <circle cx="400" cy="35" r="4.5" fill="var(--ok)" stroke="var(--card)" stroke-width="2"/>
+    <g transform="translate(400, 18)">
+      <rect x="-24" y="-12" width="48" height="18" rx="4" fill="var(--primary)" />
+      <text x="0" y="1" font-size="10" font-weight="600" fill="var(--primary-fg)" text-anchor="middle">2,890</text>
+    </g>
+    <!-- X 轴刻度 -->
+    <text x="40" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">00:00</text>
+    <text x="130" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">04:00</text>
+    <text x="220" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">08:00</text>
+    <text x="310" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">12:00</text>
+    <text x="400" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">16:00</text>
+    <text x="480" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">20:00</text>
+  </svg>
+</div>
+```
+
+#### B. 柱状对比分布图 (Column Bar Chart)
+```html
+<div class="card" style="padding: 16px 20px;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+    <div>
+      <div style="font-size: 14px; font-weight: 600;">各模块响应延迟分布 (ms)</div>
+      <div style="font-size: 12px; color: var(--muted-fg);">P95 阶段统计基准</div>
+    </div>
+    <span class="badge"><span class="badge-dot"></span>6 个服务模块</span>
+  </div>
+  <svg viewBox="0 0 500 150" style="width: 100%; height: auto; overflow: visible;">
+    <!-- 网格参考虚线 -->
+    <line x1="30" y1="20" x2="490" y2="20" stroke="var(--border)" stroke-dasharray="3 3" />
+    <line x1="30" y1="60" x2="490" y2="60" stroke="var(--border)" stroke-dasharray="3 3" />
+    <line x1="30" y1="100" x2="490" y2="100" stroke="var(--border)" stroke-dasharray="3 3" />
+    <line x1="30" y1="130" x2="490" y2="130" stroke="var(--border)" />
+    <!-- Y 轴刻度 -->
+    <text x="22" y="24" font-size="10" fill="var(--muted-fg)" text-anchor="end">120</text>
+    <text x="22" y="64" font-size="10" fill="var(--muted-fg)" text-anchor="end">80</text>
+    <text x="22" y="104" font-size="10" fill="var(--muted-fg)" text-anchor="end">40</text>
+    <text x="22" y="133" font-size="10" fill="var(--muted-fg)" text-anchor="end">0</text>
+    <!-- 柱状单元: x, y, width, height, rx -->
+    <rect x="52" y="106" width="36" height="24" rx="4" fill="var(--primary)" opacity="0.85" />
+    <text x="70" y="100" font-size="10" font-weight="600" fill="var(--card-fg)" text-anchor="middle">24</text>
+    <text x="70" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">网关</text>
+
+    <rect x="124" y="82" width="36" height="48" rx="4" fill="var(--primary)" opacity="0.85" />
+    <text x="142" y="76" font-size="10" font-weight="600" fill="var(--card-fg)" text-anchor="middle">48</text>
+    <text x="142" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">鉴权</text>
+
+    <rect x="196" y="38" width="36" height="92" rx="4" fill="var(--warn)" opacity="0.9" />
+    <text x="214" y="32" font-size="10" font-weight="600" fill="var(--warn)" text-anchor="middle">92</text>
+    <text x="214" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">订单</text>
+
+    <rect x="268" y="95" width="36" height="35" rx="4" fill="var(--primary)" opacity="0.85" />
+    <text x="286" y="89" font-size="10" font-weight="600" fill="var(--card-fg)" text-anchor="middle">35</text>
+    <text x="286" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">支付</text>
+
+    <rect x="340" y="112" width="36" height="18" rx="4" fill="var(--primary)" opacity="0.85" />
+    <text x="358" y="106" font-size="10" font-weight="600" fill="var(--card-fg)" text-anchor="middle">18</text>
+    <text x="358" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">存储</text>
+
+    <rect x="412" y="66" width="36" height="64" rx="4" fill="var(--primary)" opacity="0.85" />
+    <text x="430" y="60" font-size="10" font-weight="600" fill="var(--card-fg)" text-anchor="middle">64</text>
+    <text x="430" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">检索</text>
+  </svg>
+</div>
+```
+
+#### C. KPI 卡片内嵌迷你走势线 (Sparkline)
+```html
+<div class="stat-card" style="padding: 16px 20px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);">
+  <div style="display: flex; justify-content: space-between; font-size: 13px; color: var(--muted-fg);">
+    <span>每日活跃会话 (DAU)</span>
+    <span style="color: var(--ok); font-weight: 600;">↑ +18.2%</span>
+  </div>
+  <div style="display: flex; align-items: flex-end; justify-content: space-between; margin-top: 6px;">
+    <div>
+      <div style="font-size: 24px; font-weight: 700; line-height: 1.1;">48,290</div>
+      <div style="font-size: 12px; color: var(--muted-fg); margin-top: 4px;">近 7 日持续攀升</div>
+    </div>
+    <svg width="84" height="28" viewBox="0 0 84 28" fill="none" style="overflow: visible;">
+      <path d="M 2 24 L 16 20 L 30 22 L 44 14 L 58 16 L 70 6 L 82 2" stroke="var(--ok)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="82" cy="2" r="2.5" fill="var(--ok)"/>
+    </svg>
+  </div>
+</div>
+```
 
 ---
 

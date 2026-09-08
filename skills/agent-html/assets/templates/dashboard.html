@@ -176,6 +176,28 @@
       color: var(--muted-fg);
     }
 
+    /* Charts Grid (Pure SVG Zero-CDN) */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(440px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 640px) {
+      .charts-grid { grid-template-columns: 1fr; }
+    }
+    .chart-card {
+      padding: 18px 20px;
+    }
+    .chart-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 14px;
+    }
+    .chart-title { font-size: 14px; font-weight: 600; }
+    .chart-desc { font-size: 12px; color: var(--muted-fg); margin-top: 2px; }
+
     /* Main Table Card */
     .card {
       background: var(--card);
@@ -360,6 +382,95 @@
       </div>
       <div class="stat-val">42ms</div>
       <div class="stat-sub"><span style="color: var(--ok); font-weight: 600;">↓ -8ms</span> 优化后持续平稳</div>
+    </div>
+  </section>
+
+  <!-- [Slot: Charts Grid (Pure SVG Zero-CDN)] -->
+  <section class="charts-grid">
+    <!-- Chart 1: Area Trend Line Chart -->
+    <div class="card chart-card">
+      <div class="chart-head">
+        <div>
+          <div class="chart-title">24小时集群吞吐量趋势 (TPS)</div>
+          <div class="chart-desc">平均负载：1,420 TPS · 峰值：2,890 TPS</div>
+        </div>
+        <span class="badge badge-success"><span class="badge-dot"></span>+14.8% 环比</span>
+      </div>
+      <svg viewBox="0 0 500 150" style="width: 100%; height: auto; overflow: visible;">
+        <defs>
+          <linearGradient id="dashAreaGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="var(--primary)" stop-opacity="0.22"/>
+            <stop offset="100%" stop-color="var(--primary)" stop-opacity="0.00"/>
+          </linearGradient>
+        </defs>
+        <line x1="30" y1="20" x2="490" y2="20" stroke="var(--border)" stroke-dasharray="3 3" />
+        <line x1="30" y1="60" x2="490" y2="60" stroke="var(--border)" stroke-dasharray="3 3" />
+        <line x1="30" y1="100" x2="490" y2="100" stroke="var(--border)" stroke-dasharray="3 3" />
+        <line x1="30" y1="130" x2="490" y2="130" stroke="var(--border)" />
+        <text x="22" y="24" font-size="10" fill="var(--muted-fg)" text-anchor="end">3k</text>
+        <text x="22" y="64" font-size="10" fill="var(--muted-fg)" text-anchor="end">2k</text>
+        <text x="22" y="104" font-size="10" fill="var(--muted-fg)" text-anchor="end">1k</text>
+        <text x="22" y="133" font-size="10" fill="var(--muted-fg)" text-anchor="end">0</text>
+        <path d="M 40 110 Q 90 95, 130 85 T 220 50 T 310 75 T 400 35 T 480 45 L 480 130 L 40 130 Z" fill="url(#dashAreaGrad)" />
+        <path d="M 40 110 Q 90 95, 130 85 T 220 50 T 310 75 T 400 35 T 480 45" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+        <circle cx="220" cy="50" r="3.5" fill="var(--card)" stroke="var(--primary)" stroke-width="2"/>
+        <circle cx="400" cy="35" r="4.5" fill="var(--ok)" stroke="var(--card)" stroke-width="2"/>
+        <g transform="translate(400, 18)">
+          <rect x="-24" y="-12" width="48" height="18" rx="4" fill="var(--primary)" />
+          <text x="0" y="1" font-size="10" font-weight="600" fill="var(--primary-fg)" text-anchor="middle">2,890</text>
+        </g>
+        <text x="40" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">00:00</text>
+        <text x="130" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">04:00</text>
+        <text x="220" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">08:00</text>
+        <text x="310" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">12:00</text>
+        <text x="400" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">16:00</text>
+        <text x="480" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">20:00</text>
+      </svg>
+    </div>
+
+    <!-- Chart 2: Column Bar Chart -->
+    <div class="card chart-card">
+      <div class="chart-head">
+        <div>
+          <div class="chart-title">核心服务响应耗时分布 (ms)</div>
+          <div class="chart-desc">P95 阶段基准 · 订单模块存在优化空间</div>
+        </div>
+        <span class="badge"><span class="badge-dot"></span>6 个服务节点</span>
+      </div>
+      <svg viewBox="0 0 500 150" style="width: 100%; height: auto; overflow: visible;">
+        <line x1="30" y1="20" x2="490" y2="20" stroke="var(--border)" stroke-dasharray="3 3" />
+        <line x1="30" y1="60" x2="490" y2="60" stroke="var(--border)" stroke-dasharray="3 3" />
+        <line x1="30" y1="100" x2="490" y2="100" stroke="var(--border)" stroke-dasharray="3 3" />
+        <line x1="30" y1="130" x2="490" y2="130" stroke="var(--border)" />
+        <text x="22" y="24" font-size="10" fill="var(--muted-fg)" text-anchor="end">120</text>
+        <text x="22" y="64" font-size="10" fill="var(--muted-fg)" text-anchor="end">80</text>
+        <text x="22" y="104" font-size="10" fill="var(--muted-fg)" text-anchor="end">40</text>
+        <text x="22" y="133" font-size="10" fill="var(--muted-fg)" text-anchor="end">0</text>
+
+        <rect x="52" y="106" width="36" height="24" rx="4" fill="var(--primary)" opacity="0.85" />
+        <text x="70" y="100" font-size="10" font-weight="600" fill="var(--card-fg)" text-anchor="middle">24</text>
+        <text x="70" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">网关</text>
+
+        <rect x="124" y="82" width="36" height="48" rx="4" fill="var(--primary)" opacity="0.85" />
+        <text x="142" y="76" font-size="10" font-weight="600" fill="var(--card-fg)" text-anchor="middle">48</text>
+        <text x="142" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">鉴权</text>
+
+        <rect x="196" y="38" width="36" height="92" rx="4" fill="var(--warn)" opacity="0.9" />
+        <text x="214" y="32" font-size="10" font-weight="600" fill="var(--warn)" text-anchor="middle">92</text>
+        <text x="214" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">订单</text>
+
+        <rect x="268" y="95" width="36" height="35" rx="4" fill="var(--primary)" opacity="0.85" />
+        <text x="286" y="89" font-size="10" font-weight="600" fill="var(--card-fg)" text-anchor="middle">35</text>
+        <text x="286" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">支付</text>
+
+        <rect x="340" y="112" width="36" height="18" rx="4" fill="var(--primary)" opacity="0.85" />
+        <text x="358" y="106" font-size="10" font-weight="600" fill="var(--card-fg)" text-anchor="middle">18</text>
+        <text x="358" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">存储</text>
+
+        <rect x="412" y="66" width="36" height="64" rx="4" fill="var(--primary)" opacity="0.85" />
+        <text x="430" y="60" font-size="10" font-weight="600" fill="var(--card-fg)" text-anchor="middle">64</text>
+        <text x="430" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">检索</text>
+      </svg>
     </div>
   </section>
 

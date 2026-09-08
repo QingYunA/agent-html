@@ -19,7 +19,7 @@ When asking LLMs (Claude Code, Pi, Codex, ChatGPT) to generate a quick HTML repo
 ## Showcase
 
 ### 1. Component Gallery (`index.html`)
-The full atom catalog: Buttons (5 variants), Badges with status dots, Stat cards, Callouts, interactive Tables, Segmented tabs, Native `<dialog>` modals, and 12 Lucide-style inline SVGs.
+The full atom catalog: Buttons (5 variants), Badges with status dots, Stat cards (with optional Sparklines), Zero-CDN Pure SVG Charts (Area trends & Column distributions), Callouts, interactive Tables, Segmented tabs, Native `<dialog>` modals, and 12 Lucide-style inline SVGs.
 
 ![Component Gallery](assets/screenshots/gallery.png)
 
@@ -39,7 +39,7 @@ Single-column centered layout (860px max-width) optimized for readability and pr
 ---
 
 #### Archetype 2: Analytics Dashboard & Data Grid (`templates/dashboard.html`)
-Fluid wide-screen layout with a 4-column KPI metric grid, dual-filter toolbar (real-time text search + status select), zebra hover table, and native `<dialog>` action modals.
+Fluid wide-screen layout with a 4-column KPI metric grid, responsive pure SVG charts (24h throughput area trend & P95 latency distribution bars with zero external libraries), dual-filter toolbar (real-time text search + status select), zebra hover table, and native `<dialog>` action modals.
 
 > **Use for**: Resource usage monitoring, quota trackers, task lists, and operational dashboards.
 
@@ -172,9 +172,11 @@ ln -sf ../../../.agents/skills/agent-html ~/.pi/agent/skills/agent-html
 ```
 
 Once installed, prompts like:
-- *"Generate a standalone HTML dashboard for our cluster metrics"*
+- *"Generate a standalone HTML dashboard for our cluster metrics with a trend chart"*
 - *"Create an executive evaluation report for candidate John Doe as a single file"*
 - *"Build a side-by-side prompt comparison matrix in HTML"*
+- *"不要输出 markdown 墙，把这次 code review / 架构审查结果做成可视化页面"*
+- *"对比这几个方案做个展示页，带量化指标与差异矩阵"*
 
 will automatically trigger the `agent-html` skill and output clean, zero-dependency, self-contained files.
 
