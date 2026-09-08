@@ -327,22 +327,30 @@ node scripts/validate.mjs --all
 agent-html/
 ├── README.md                      # 英文文档与全景展示
 ├── README.zh-CN.md                # 简体中文文档
-├── index.html                     # 原子组件画廊
-├── templates/ -> skills/...       # 4 大通用母版（软链至 assets/templates）
-│   ├── report.html                # 单栏长文档与评估审查报告母版
-│   ├── dashboard.html             # 数据大盘与过滤表格母版
-│   ├── inspector.html             # 左右双栏工作台与审查器母版
-│   └── compare.html               # 并排横向对比与评测矩阵母版
+├── index.html                     # 英文介绍主页与组件画廊
+├── index.zh-CN.html               # 简体中文介绍主页与组件画廊
+├── package.json                   # 项目元数据与脚本配置
+├── vercel.json                    # Vercel 静态零配置部署文件 (cleanUrls)
+├── bin/
+│   └── cli.mjs                    # 零依赖独立命令行工具 (npx agent-html)
+├── templates/                     # 独立单文件 HTML 母版
+│   ├── en/                        # 🇺🇸 纯英文 6 大通用母版
+│   └── zh/                        # 🇨🇳 纯中文 6 大通用母版
 ├── assets/
-│   ├── logo.svg                   # 矢量品牌 Logo
-│   └── screenshots/               # 高清预览大图
+│   ├── logo.svg                   # 矢量品牌 Logo (Gemini 官方定制)
+│   └── screenshots/
+│       ├── en/                    # 🇺🇸 英文专有 2x 视网膜高清截图集
+│       └── zh/                    # 🇨🇳 中文专有 2x 视网膜高清截图集
 ├── scripts/
 │   └── validate.mjs               # 零依赖确定性 HTML 检查脚本
 └── skills/
     └── agent-html/
-        ├── SKILL.md               # 面向 Agent 的生成准则与插槽规范
-        ├── assets/                # 随 Skill 打包的模板资产
-        └── evals/                 # 自动化评测用例集
+        ├── SKILL.md               # 面向 Agent 的中英双语生成准则与插槽规范
+        ├── assets/                # 随 Skill 打包分发的母版镜像
+        ├── references/
+        │   └── components.md      # 原子组件与 24 矢量 SVG 参考字典
+        └── evals/
+            └── evals.json         # 涵盖全部 6 大母版的基准评测用例集
 ```
 
 ---

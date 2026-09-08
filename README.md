@@ -329,24 +329,30 @@ node scripts/validate.mjs --all
 agent-html/
 ├── README.md                      # English documentation & showcase
 ├── README.zh-CN.md                # 简体中文文档
-├── index.html                     # Visual gallery of all atomic components
-├── templates/ -> skills/...       # Standalone HTML templates (symlinked to assets)
-│   ├── report.html                # Single-column document & evaluation report
-│   ├── dashboard.html             # Metrics dashboard & filterable table
-│   ├── inspector.html             # Master-detail split workbench
-│   ├── compare.html               # Side-by-side A/B comparison matrix
-│   ├── timeline.html              # Event timeline & incident postmortem
-│   └── kanban.html                # Triage & agile drag-and-drop kanban board
+├── index.html                     # English landing page & component showcase
+├── index.zh-CN.html               # 简体中文介绍主页与组件画廊
+├── package.json                   # Project metadata & npm scripts
+├── vercel.json                    # Vercel static deployment config (cleanUrls)
+├── bin/
+│   └── cli.mjs                    # Zero-dependency CLI runner (npx agent-html)
+├── templates/                     # Standalone HTML templates
+│   ├── en/                        # 🇺🇸 Pure English templates (6 archetypes)
+│   └── zh/                        # 🇨🇳 Pure Chinese templates (6 archetypes)
 ├── assets/
-│   ├── logo.svg                   # Vector brand logo
-│   └── screenshots/               # High-res preview assets
+│   ├── logo.svg                   # Vector brand logo (Gemini designed)
+│   └── screenshots/
+│       ├── en/                    # 🇺🇸 2x Retina screenshots for English docs
+│       └── zh/                    # 🇨🇳 2x Retina screenshots for Chinese docs
 ├── scripts/
 │   └── validate.mjs               # Zero-dependency deterministic HTML linter
 └── skills/
     └── agent-html/
-        ├── SKILL.md               # The LLM prompt instructions & slot definitions
+        ├── SKILL.md               # LLM prompt instructions & bilingual slot router
         ├── assets/                # Bundled templates & index mirror
-        └── evals/                 # Benchmark eval test cases
+        ├── references/
+        │   └── components.md      # Atomic component & SVG reference catalog
+        └── evals/
+            └── evals.json         # Benchmark eval test cases (all 6 archetypes)
 ```
 
 ---
