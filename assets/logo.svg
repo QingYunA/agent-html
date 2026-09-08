@@ -1,14 +1,57 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" fill="none">
-  <rect width="64" height="64" rx="14" fill="#18181b"/>
-  <rect x="1" y="1" width="62" height="62" rx="13" stroke="#27272a" stroke-width="2"/>
-  <!-- Window Header dots -->
-  <circle cx="16" cy="18" r="3" fill="#3f3f46"/>
-  <circle cx="25" cy="18" r="3" fill="#3f3f46"/>
-  <circle cx="34" cy="18" r="3" fill="#3f3f46"/>
-  <!-- Code brackets / UI layout -->
-  <path d="M20 34L14 40L20 46" stroke="#fafafa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M44 34L50 40L44 46" stroke="#fafafa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M35 30L29 50" stroke="#71717a" stroke-width="2" stroke-linecap="round"/>
-  <!-- Small accent spark -->
-  <circle cx="46" cy="20" r="2" fill="#10b981"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#09090b" />
+      <stop offset="50%" stop-color="#121215" />
+      <stop offset="100%" stop-color="#09090b" />
+    </linearGradient>
+    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#52525b" stop-opacity="0.8" />
+      <stop offset="50%" stop-color="#27272a" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#3f3f46" stop-opacity="0.7" />
+    </linearGradient>
+    <radialGradient id="ambientGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#6366f1" stop-opacity="0.28" />
+      <stop offset="60%" stop-color="#0ea5e9" stop-opacity="0.08" />
+      <stop offset="100%" stop-color="#09090b" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="bracketGrad" x1-opacity="0" />
+    </radialGradient>
+    <linearGradient id="bracketGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="60%" stop-color="#6366f1" />
+      <stop offset="100%" stop-color="#a855f7" />
+    </linearGradient>
+    <linearGradient id="sparkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f43f5e" />
+      <stop offset="50%" stop-color="#ec4899" />
+      <stop offset="100%" stop-color="#8b5cf6" />
+    </linearGradient>
+    <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="14" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect x="8" y="8" width="496" height="496" rx="112" fill="url(#bgGrad)" />
+  <rect x="8" y="8" width="496" height="496" rx="112" fill="none" stroke="url(#borderGrad)" stroke-width="2.5" />
+  <circle cx="256" cy="256" r="180" fill="url(#ambientGlow)" />
+
+  <g>
+    <!-- Left Bracket < -->
+    <path d="M 172 170 L 98 256 L 172 342" fill="none" stroke="url(#bracketGrad)" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" />
+    <!-- Right Bracket > -->
+    <path d="M 340 170 L 414 256 L 340 342" fill="none" stroke="url(#bracketGrad)" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" />
+    <!-- Subtle HTML Slash -->
+    <line x1="284" y1="160" x2="228" y2="352" stroke="#52525b" stroke-width="14" stroke-linecap="round" stroke-opacity="0.35" />
+    <!-- AI Spark Core -->
+    <path d="M 256 145 Q 256 225 298 256 Q 256 287 256 367 Q 256 287 214 256 Q 256 225 256 145 Z" fill="url(#sparkGrad)" filter="url(#softGlow)" />
+    <!-- Core Dots -->
+    <circle cx="256" cy="256" r="7" fill="#ffffff" />
+    <circle cx="218" cy="188" r="3.5" fill="#38bdf8" opacity="0.8" />
+    <circle cx="294" cy="324" r="3.5" fill="#ec4899" opacity="0.8" />
+  </g>
 </svg>
