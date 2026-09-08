@@ -355,6 +355,13 @@ agent-html/
 
 ---
 
+## 社区交流
+
+欢迎在 [LINUX DO](https://linux.do) 社区参与交流、反馈建议与分享使用体验。
+
+---
+
 ## 开源协议
 
 [MIT License](LICENSE) © 2026 QingYunA
+
