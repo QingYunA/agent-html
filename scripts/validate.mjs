@@ -49,6 +49,9 @@ function findHtmlFiles(dir) {
 const targetFiles = [];
 if (args.includes('--all')) {
   targetFiles.push(resolve('index.html'));
+  if (existsSync(resolve('index.zh-CN.html'))) {
+    targetFiles.push(resolve('index.zh-CN.html'));
+  }
   const tplDir = resolve('templates');
   if (existsSync(tplDir)) {
     targetFiles.push(...findHtmlFiles(tplDir));

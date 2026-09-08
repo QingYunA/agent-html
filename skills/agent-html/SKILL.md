@@ -60,20 +60,22 @@ description: 为 AI Agent 提供基于 shadcn/ui 极简现代美学的单文件 
 
 ---
 
-## 三、六大通用布局母版与渐进式披露 (Progressive Disclosure)
+## 二、六大通用布局母版与渐进式披露 (Progressive Disclosure)
 
-不要从零手写完整页面。接到需求后，首先从以下 6 种**通用布局母版**中选择最贴近的骨架。需要完整实现时，可使用 `read` 工具读取本 Skill 目录下的对应母版资产：
+不要从零手写完整页面。接到需求后，首先从以下 6 种**通用布局母版**中选择最贴近的骨架。支持中英文双语母版体系，根据用户输入语言对齐：
+- **英文场景**：参考 `assets/templates/en/<name>.html`
+- **中文场景**：参考 `assets/templates/zh/<name>.html`
 
-| 布局模式 | 对应母版路径 | 适用需求与核心结构 |
-| :--- | :--- | :--- |
-| **单栏文档与评估报告**<br>(Document / Report) | `assets/templates/report.html` | **技术选型、架构审查、故障复盘、面试报告、需求说明、发布日志**。<br>结构：单栏居中（860px），悬浮目录（Sticky TOC with ScrollSpy）、核心结论 Callout、KPI 概览栏、多章节 `<details>` 折叠手风琴、一键复制为 Markdown 导出。 |
-| **数据大盘与过滤表格**<br>(Dashboard & Data Grid) | `assets/templates/dashboard.html` | **资源监控、用量大盘、考勤/调休管理、订单/任务流管理**。<br>结构：宽屏网格，顶部操作栏、4 列自适应 KPI 统计卡、原生 SVG 走势图与柱状图、实时双重过滤表格、一键复制表格 (MD)。 |
-| **左右双栏工作台与审查器**<br>(Master-Detail Workbench) | `assets/templates/inspector.html` | **日志/Trace 审查、Prompt 调试器、JSONL 编辑器、配置管理**。<br>结构：视口充满（100vh），左侧条目列表过滤，右侧动态联动渲染选中条目详情、人工审查裁决条（Pass/Fix/Reject）、复制审查结论发回 Agent。 |
-| **并排横向对比与评测矩阵**<br>(Side-by-Side Comparison) | `assets/templates/compare.html` | **模型 A/B 测试、Prompt 改版前后对比、架构版本 diff、产品套餐/特性矩阵**。<br>结构：并排双栏卡片（基准 vs 挑战者）、核心裁决 Callout、量化差异对照表（Delta 胜负判定标签）、一键导出 Markdown。 |
-| **事件时间轴与故障编年史**<br>(Timeline & Postmortem) | `assets/templates/timeline.html` | **发布路线图 (Roadmap)、变更历史 (Changelog)、突发事件复盘 (Postmortem)**。<br>结构：左侧单轨垂直时间线、状态节点小圆点、精确时间戳与操作人 Tag、可展开诊断日志、一键复制时间轴为 Markdown。 |
-| **任务分拣与缺陷优先级看板**<br>(Triage & Agile Kanban) | `assets/templates/kanban.html` | **缺陷分类整理、需求优先级排序、任务状态流转**。<br>结构：4 列敏捷看板（Backlog, In Progress, Blocked, Done）、纯原生 HTML5 拖拽排序（零依赖）、一键复制分拣结果回 Agent 闭环。 |
+| 布局模式 | 中文母版路径 | 英文母版路径 | 适用需求与核心结构 |
+| :--- | :--- | :--- | :--- |
+| **单栏文档与评估报告**<br>(Document / Report) | `assets/templates/zh/report.html` | `assets/templates/en/report.html` | **技术选型、架构审查、故障复盘、面试报告、需求说明、发布日志**。<br>结构：单栏居中（860px），悬浮目录（Sticky TOC with ScrollSpy）、核心结论 Callout、KPI 概览栏、多章节 `<details>` 折叠手风琴、一键复制为 Markdown 导出。 |
+| **数据大盘与过滤表格**<br>(Dashboard & Data Grid) | `assets/templates/zh/dashboard.html` | `assets/templates/en/dashboard.html` | **资源监控、用量大盘、考勤/调休管理、订单/任务流管理**。<br>结构：宽屏网格，顶部操作栏、4 列自适应 KPI 统计卡、原生 SVG 走势图与柱状图、实时双重过滤表格、一键复制表格 (MD)。 |
+| **左右双栏工作台与审查器**<br>(Master-Detail Workbench) | `assets/templates/zh/inspector.html` | `assets/templates/en/inspector.html` | **日志/Trace 审查、Prompt 调试器、JSONL 编辑器、配置管理**。<br>结构：视口充满（100vh），左侧条目列表过滤，右侧动态联动渲染选中条目详情、人工审查裁决条（Pass/Fix/Reject）、复制审查结论发回 Agent。 |
+| **并排横向对比与评测矩阵**<br>(Side-by-Side Comparison) | `assets/templates/zh/compare.html` | `assets/templates/en/compare.html` | **模型 A/B 测试、Prompt 改版前后对比、架构版本 diff、产品套餐/特性矩阵**。<br>结构：并排双栏卡片（基准 vs 挑战者）、核心裁决 Callout、量化差异对照表（Delta 胜负判定标签）、一键导出 Markdown。 |
+| **事件时间轴与故障编年史**<br>(Timeline & Postmortem) | `assets/templates/zh/timeline.html` | `assets/templates/en/timeline.html` | **发布路线图 (Roadmap)、变更历史 (Changelog)、突发事件复盘 (Postmortem)**。<br>结构：左侧单轨垂直时间线、状态节点小圆点、精确时间戳与操作人 Tag、可展开诊断日志、一键复制时间轴为 Markdown。 |
+| **任务分拣与缺陷优先级看板**<br>(Triage & Agile Kanban) | `assets/templates/zh/kanban.html` | `assets/templates/en/kanban.html` | **缺陷分类整理、需求优先级排序、任务状态流转**。<br>结构：4 列敏捷看板（Backlog, In Progress, Blocked, Done）、纯原生 HTML5 拖拽排序（零依赖）、一键复制分拣结果回 Agent 闭环。 |
 
-> 💡 **组件字典查阅**：如需查看所有按钮变体、胶囊徽章、常用 SVG 图标与实时组件效果，可直接读取或打开 `assets/index.html`。
+> 💡 **组件字典查阅**：如需查看所有按钮变体、胶囊徽章、常用 24 个矢量图标、原生纯 SVG 图表与实时组件效果，可直接读取 `references/components.md` 或在浏览器中打开 `assets/index.html`。
 
 ---
 

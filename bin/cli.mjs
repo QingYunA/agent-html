@@ -19,26 +19,30 @@ Usage:
   npx agent-html <command> [options]
 
 Commands:
-  open              Open the local component gallery in your browser
-  list              List all 4 built-in structural layout templates
-  template <name>   Output raw HTML template (report, dashboard, inspector, compare)
-  check <file>      Run the deterministic offline HTML linter against a file
-  install           Quickly install/symlink the skill to ~/.agents/skills/agent-html
+  open [--zh]               Open the local component gallery in your browser (default EN, --zh for CN)
+  list                      List all 6 built-in structural layout templates
+  template <name> [--lang]  Output raw HTML template (report, dashboard, inspector, compare, timeline, kanban)
+  check <file>              Run the deterministic offline HTML linter against a file
+  install                   Quickly install/symlink the skill to ~/.agents/skills/agent-html
 
-Skills.sh Install (Recommended):
+Skills.sh Install (Recommended for all 70+ agents):
   npx skills add QingYunA/agent-html
-  npx skills add QingYunA/agent-html -g  # Global for all 70+ agents
+  npx skills add QingYunA/agent-html -g
 
 Examples:
   npx agent-html open
+  npx agent-html open --zh
   npx agent-html template dashboard > my-dashboard.html
+  npx agent-html template zh/kanban > my-kanban.html
   npx agent-html check my-dashboard.html
 `);
 }
 
 switch (cmd) {
   case 'open': {
-    const indexPath = resolve(rootDir, 'index.html');
+    const isZh = args.includes('--zh') || args.includes('-zh');
+    const targetFile = isZh ? 'index.zh-CN.html' : 'index.html';
+    const indexPath = resolve(rootDir, targetFile);
     const openCmd = process.platform === 'darwin' ? 'open' : process.platform === 'win32' ? 'start' : 'xdg-open';
     execSync(`${openCmd} "${indexPath}"`);
     console.log(`✨ Opened gallery: ${indexPath}`);
@@ -47,22 +51,39 @@ switch (cmd) {
 
   case 'list': {
     console.log(`
-Available Templates:
-  1. report     Single-column document & executive evaluation report
+Available 6 Layout Templates:
+  1. report     Single-column document & executive evaluation report (TOC + print)
   2. dashboard  Fluid wide analytics dashboard & real-time filterable data grid
   3. inspector  Master-detail split workbench (100vh app layout)
   4. compare    Side-by-side A/B comparison & quantitative delta matrix
+  5. timeline   Event timeline chronicle & incident postmortem
+  6. kanban     Triage & agile drag-and-drop kanban board
+
+Languages available:
+  - English:  templates/en/<name>.html (e.g. npx agent-html template en/dashboard)
+  - Chinese:  templates/zh/<name>.html (e.g. npx agent-html template zh/dashboard)
 `);
     break;
   }
 
   case 'template': {
-    const tName = args[1];
-    if (!tName) {
-      console.error('Error: Please specify template name: report, dashboard, inspector, or compare');
+    let tName = args[1];
+    if (!tName || tName.startsWith('-')) {
+      console.error('Error: Please specify template name: report, dashboard, inspector, compare, timeline, or kanban');
+      console.error('Example: npx agent-html template dashboard (or en/dashboard, zh/dashboard)');
       process.exit(1);
     }
-    const tPath = resolve(rootDir, `templates/${tName}.html`);
+
+    const isZh = args.includes('--zh');
+    let tPath = resolve(rootDir, `templates/${tName}.html`);
+    if (!existsSync(tPath)) {
+      if (isZh) {
+        tPath = resolve(rootDir, `templates/zh/${tName}.html`);
+      } else {
+        tPath = resolve(rootDir, `templates/en/${tName}.html`);
+      }
+    }
+
     if (!existsSync(tPath)) {
       console.error(`Error: Template "${tName}" not found at ${tPath}`);
       process.exit(1);
