@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A/B Model & Architecture Comparison Matrix · agent-html</title>
+  <style>
+    /* ==========================================================================
+       Agent-HTML Core Design Tokens (shadcn/ui Neutral Palette)
+       ========================================================================== */
+    :root {
+      --bg: #fafafa;
+      --card: #ffffff;
+      --card-fg: #09090b;
+      --primary: #18181b;
+      --primary-fg: #fafafa;
+      --primary-hover: #27272a;
+      --secondary: #f4f4f5;
+      --secondary-fg: #18181b;
+      --muted: #f4f4f5;
+      --muted-fg: #71717a;
+      --border: #e4e4e7;
+      --ring: #18181b;
+      --radius: 8px;
+      --radius-sm: 6px;
+      --radius-lg: 12px;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      
+      --ok: #16a34a;
+      --ok-bg: #f0fdf4;
+      --ok-border: #bbf7d0;
+      --warn: #d97706;
+      --warn-bg: #fffbeb;
+      --warn-border: #fde68a;
+      --err: #dc2626;
+      --err-bg: #fef2f2;
+      --err-border: #fecaca;
+      --info: #2563eb;
+      --info-bg: #eff6ff;
+      --info-border: #bfdbfe;
+    }
+
+    [data-theme="dark"] {
+      --bg: #09090b;
+      --card: #121215;
+      --card-fg: #fafafa;
+      --primary: #fafafa;
+      --primary-fg: #18181b;
+      --primary-hover: #e4e4e7;
+      --secondary: #27272a;
+      --secondary-fg: #fafafa;
+      --muted: #18181b;
+      --muted-fg: #a1a1aa;
+      --border: #27272a;
+      --ring: #d4d4d8;
+      
+      --ok: #4ade80;
+      --ok-bg: #052e1680;
+      --ok-border: #166534;
+      --warn: #fbbf24;
+      --warn-bg: #451a0380;
+      --warn-border: #854d0e;
+      --err: #f87171;
+      --err-bg: #450a0a80;
+      --err-border: #991b1b;
+      --info: #60a5fa;
+      --info-bg: #17255480;
+      --info-border: #1e40af;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--card-fg);
+      line-height: 1.5;
+      padding: 36px 20px;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* Top Bar */
+    .compare-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 24px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--border);
+    }
+    .compare-header h1 {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .compare-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--muted-fg);
+      margin-top: 6px;
+    }
+    .actions { display: flex; gap: 8px; }
+
+    /* Buttons & Badges */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      height: 34px;
+      padding: 0 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--card-fg);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .btn:hover { background: var(--secondary); }
+    .btn-primary { background: var(--primary); color: var(--primary-fg); border-color: var(--primary); }
+    .btn-primary:hover { opacity: 0.9; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      height: 22px;
+      padding: 0 8px;
+      border-radius: 9999px;
+      border: 1px solid var(--border);
+      background: var(--secondary);
+      color: var(--secondary-fg);
+    }
+    .badge-dot { width: 6px; height: 6px; border-radius: 9999px; background: currentColor; }
+    .badge-success { background: var(--ok-bg); color: var(--ok); border-color: var(--ok-border); }
+    .badge-warning { background: var(--warn-bg); color: var(--warn); border-color: var(--warn-border); }
+    .badge-danger  { background: var(--err-bg);  color: var(--err);  border-color: var(--err-border); }
+    .badge-info    { background: var(--info-bg); color: var(--info); border-color: var(--info-border); }
+
+    /* Summary Verdict Callout */
+    .callout-verdict {
+      padding: 16px 20px;
+      border-radius: var(--radius);
+      border: 1px solid var(--ok-border);
+      background: var(--ok-bg);
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+    .verdict-head {
+      font-weight: 600;
+      color: var(--ok);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+
+    /* Side-by-Side 2 Column Grid */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+    .column-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .column-card.highlight {
+      border-color: var(--ok);
+      box-shadow: 0 0 0 1px var(--ok);
+    }
+    .column-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      background: var(--secondary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .column-title { font-size: 16px; font-weight: 600; }
+    .column-body {
+      padding: 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .spec-item {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      padding-bottom: 8px;
+      border-bottom: 1px dashed var(--border);
+    }
+    .spec-item:last-child { border-bottom: none; }
+    .spec-label { color: var(--muted-fg); }
+    .spec-val { font-weight: 600; }
+
+    .sample-box {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+      font-size: 12px;
+      font-family: ui-monospace, monospace;
+      color: var(--card-fg);
+      max-height: 160px;
+      overflow-y: auto;
+    }
+
+    /* Comparison Matrix Table */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    .card-header {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      font-weight: 600;
+      font-size: 15px;
+    }
+    .table-wrap { overflow-x: auto; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      text-align: left;
+    }
+    th {
+      background: var(--secondary);
+      color: var(--muted-fg);
+      font-weight: 600;
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    tr:last-child td { border-bottom: none; }
+    tbody tr:hover { background: var(--muted); }
+
+    .delta-win { color: var(--ok); font-weight: 600; }
+    .delta-lose { color: var(--err); font-weight: 600; }
+
+    @media (max-width: 768px) {
+      .compare-grid { grid-template-columns: 1fr; }
+      .compare-header { flex-direction: column; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- [Slot: Comparison Top Bar] -->
+  <header class="compare-header">
+    <div>
+      <h1>
+        <span>A/B Architecture & Prompt Evaluation Matrix</span>
+        <span class="badge badge-success"><span class="badge-dot"></span>Verdict: Candidate B Winner</span>
+      </h1>
+      <div class="compare-meta">
+        <span>Target: Core Engine Pipeline Optimization</span>
+        <span>Benchmark Scale: 1,000 Verified Prompts</span>
+        <span>Date: Sep 08, 2026</span>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn" onclick="copyMarkdownCompare()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+        <span id="copyCompareBtn">Copy (MD)</span>
+      </button>
+      <button class="btn" onclick="window.print()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
+        <span>Print/PDF</span>
+      </button>
+      <button id="themeToggle" class="btn" title="Toggle theme">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1 -9 -9Z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- [Slot: Summary Verdict Callout] -->
+  <section class="callout-verdict">
+    <div class="verdict-head">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      <span>Evaluation Verdict: Candidate B Demonstrates Comprehensive Dominance</span>
+    </div>
+    <div>Across 1,000 regression benchmark runs, Candidate B cut average response latency from <strong>850ms to 420ms (-50.6%)</strong>, reduced memory usage by 35%, and achieved a +4.8% improvement in strict instruction compliance. Recommended as the new standard.</div>
+  </section>
+
+  <!-- [Slot: Side-by-Side Two Columns] -->
+  <section class="compare-grid">
+    <!-- Column A: Baseline -->
+    <div class="column-card">
+      <div class="column-header">
+        <div>
+          <div class="column-title">Variant A (Baseline)</div>
+          <span style="font-size: 11px; color: var(--muted-fg);">Current Production v1.0</span>
+        </div>
+        <span class="badge">Score: 78</span>
+      </div>
+      <div class="column-body">
+        <div class="spec-item">
+          <span class="spec-label">Execution Architecture</span>
+          <span class="spec-val">Synchronous Monolith</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label">Latency (P90)</span>
+          <span class="spec-val">850ms</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label">Peak Concurrency</span>
+          <span class="spec-val">250 QPS</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label">Avg Token Consumption</span>
+          <span class="spec-val">3,450 tokens</span>
+        </div>
+
+        <div style="margin-top: 6px;">
+          <div style="font-size: 12px; font-weight: 600; color: var(--muted-fg); margin-bottom: 4px;">Payload Snapshot</div>
+          <div class="sample-box">
+[Response A - Synchronous]
+Processed in 842ms.
+Memory: 4.2GB
+Status: 200 OK
+Payload length: 1,024 bytes.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Column B: Challenger (Winner) -->
+    <div class="column-card highlight">
+      <div class="column-header" style="background: var(--ok-bg);">
+        <div>
+          <div class="column-title" style="color: var(--ok);">Variant B (Candidate Challenger)</div>
+          <span style="font-size: 11px; color: var(--ok);">Recommended Upgrade v2.0</span>
+        </div>
+        <span class="badge badge-success"><span class="badge-dot"></span>Winner (94)</span>
+      </div>
+      <div class="column-body">
+        <div class="spec-item">
+          <span class="spec-label">Execution Architecture</span>
+          <span class="spec-val" style="color: var(--ok);">Async Stream Pipeline</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label">Latency (P90)</span>
+          <span class="spec-val" style="color: var(--ok);">420ms (-50.6%)</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label">Peak Concurrency</span>
+          <span class="spec-val" style="color: var(--ok);">1,200 QPS (4.8x)</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label">Avg Token Consumption</span>
+          <span class="spec-val" style="color: var(--ok);">2,100 tokens (-39%)</span>
+        </div>
+
+        <div style="margin-top: 6px;">
+          <div style="font-size: 12px; font-weight: 600; color: var(--muted-fg); margin-bottom: 4px;">Payload Snapshot (Streamed)</div>
+          <div class="sample-box">
+[Response B - Pipeline Stream]
+First chunk: 85ms.
+Completed in: 418ms.
+Memory: 2.1GB (-50%)
+Status: 200 Stream Finished
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- [Slot: Feature & Metrics Comparison Matrix Table] -->
+  <section class="card">
+    <div class="card-header">Quantitative Score Breakdown & Delta Matrix</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Assessment Dimension</th>
+            <th>Variant A (Baseline)</th>
+            <th>Variant B (Candidate)</th>
+            <th>Quantitative Delta</th>
+            <th style="text-align: right;">Verdict</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>P90 Response Latency</strong></td>
+            <td>850ms</td>
+            <td>420ms</td>
+            <td><span class="delta-win">↓ -50.6% Significant Improvement</span></td>
+            <td style="text-align: right;"><span class="badge badge-success">B Wins</span></td>
+          </tr>
+          <tr>
+            <td><strong>Max Throughput Capacity</strong></td>
+            <td>250 QPS</td>
+            <td>1,200 QPS</td>
+            <td><span class="delta-win">↑ +380% Throughput Boost</span></td>
+            <td style="text-align: right;"><span class="badge badge-success">B Wins</span></td>
+          </tr>
+          <tr>
+            <td><strong>Average Token Cost</strong></td>
+            <td>3,450 tokens</td>
+            <td>2,100 tokens</td>
+            <td><span class="delta-win">↓ -39.1% Cost Savings</span></td>
+            <td style="text-align: right;"><span class="badge badge-success">B Wins</span></td>
+          </tr>
+          <tr>
+            <td><strong>API Backward Compatibility</strong></td>
+            <td>100% Compatible</td>
+            <td>99.6% Compatible</td>
+            <td><span class="delta-lose">Minor change (1 fallback handler)</span></td>
+            <td style="text-align: right;"><span class="badge badge-warning">Parity</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- [Colophon: agent-html design system v1.0.0 · generated at 2026-09-08 · zero-dependency standalone] -->
+</div>
+
+<script>
+  // Theme Toggle
+  const toggle = document.getElementById('themeToggle');
+  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (isDark) document.documentElement.setAttribute('data-theme', 'dark');
+  toggle?.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme') === 'dark';
+    document.documentElement.setAttribute('data-theme', current ? 'light' : 'dark');
+  });
+
+  function copyMarkdownCompare() {
+    const md = `| Dimension | Variant A (Baseline) | Variant B (Candidate) | Delta | Verdict |
+| :--- | :--- | :--- | :--- | :--- |
+| P90 Response Latency | 850ms | 420ms | -50.6% | Variant B Wins |
+| Max Throughput | 250 QPS | 1,200 QPS | +380% | Variant B Wins |
+| Avg Token Cost | 3,450 tokens | 2,100 tokens | -39.1% | Variant B Wins |
+| Compatibility | 100% | 99.6% | Minor delta | Parity |`;
+    navigator.clipboard.writeText(md).then(() => {
+      const btn = document.getElementById('copyCompareBtn');
+      btn.textContent = 'Copied!';
+      setTimeout(() => { btn.textContent = 'Copy (MD)'; }, 1500);
+    });
+  }
+</script>
+</body>
+</html>

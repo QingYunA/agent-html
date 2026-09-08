@@ -138,52 +138,166 @@
 
 ## 6. 原生轻量图表 (Zero-CDN Pure SVG Charts)
 
-### A. 复合环形占比分布图 (Multi-Segment Donut Chart)
+## 6. 原生轻量图表 (Zero-CDN Pure SVG Charts - 6 大核心形态)
+
+> 💡 **设计与配色规范 (Tremor & shadcn-inspired)**：
+> 绝不引入 Chart.js / ECharts 等 CDN，统一采用纯矢量 SVG 驱动。配色采用调校后的语义化色彩变量（避免刺眼高饱和红绿，暗黑模式自动切换为柔和高对比阶）。
+> - `--chart-indigo`: `#6366f1` (暗黑: `#818cf8`) — 主指标时序走势
+> - `--chart-emerald`: `#10b981` (暗黑: `#34d399`) — 正常健康、增长、放行
+> - `--chart-amber`: `#f59e0b` (暗黑: `#fbbf24`) — 警戒、抖动、温和上升
+> - `--chart-rose`: `#f43f5e` (暗黑: `#fb7185`) — 异常瓶颈、错误峰值、降级
+> - `--chart-violet`: `#8b5cf6` (暗黑: `#a78bfa`) — P95/P99 峰值柱状高亮
+> - `--chart-cyan`: `#06b6d4` (暗黑: `#22d3ee`) — 辅助对比时序、出向流量
+> - `--chart-slate`: `#64748b` (暗黑: `#94a3b8`) — 低优对比柱、中性刻度
+
+### A. 面积折线走势图 (Area Trend Line Chart)
 ```html
 <div class="card" style="padding: 16px 20px;">
-  <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+    <span style="font-weight: 600; font-size: 13px;">24h 吞吐走势 (TPS)</span>
+    <span style="color: var(--chart-emerald); font-weight: 600; font-size: 11px;">↑ +18.4%</span>
+  </div>
+  <svg viewBox="0 0 400 95" style="width: 100%; height: 85px; overflow: visible;">
+    <defs>
+      <linearGradient id="areaGradIndigo" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="var(--chart-indigo)" stop-opacity="0.22"/>
+        <stop offset="100%" stop-color="var(--chart-indigo)" stop-opacity="0.0"/>
+      </linearGradient>
+    </defs>
+    <path d="M 0 70 Q 55 30, 110 52 T 210 36 T 310 18 T 400 28 L 400 95 L 0 95 Z" fill="url(#areaGradIndigo)"/>
+    <path d="M 0 70 Q 55 30, 110 52 T 210 36 T 310 18 T 400 28" fill="none" stroke="var(--chart-indigo)" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="210" cy="36" r="3" fill="var(--card)" stroke="var(--chart-indigo)" stroke-width="2"/>
+    <circle cx="310" cy="18" r="3.5" fill="var(--chart-indigo)" stroke="var(--card)" stroke-width="2"/>
+  </svg>
+</div>
+```
+
+### B. 阶段耗时垂直柱状图 (Column Histogram)
+```html
+<div class="card" style="padding: 16px 20px;">
+  <div style="display: flex; justify-content: space-between; align-items: center; font-size: 13px; margin-bottom: 8px;">
+    <span style="font-weight: 600;">各阶段响应延迟分布 (ms)</span>
+    <span class="badge" style="font-size: 10px; height: 18px;">P95</span>
+  </div>
+  <svg viewBox="0 0 400 95" style="width: 100%; height: 85px; overflow: visible;">
+    <rect x="25" y="60" width="38" height="32" rx="4" fill="var(--chart-slate)" opacity="0.6"/>
+    <text x="44" y="54" font-size="10" font-weight="600" fill="var(--muted-fg)" text-anchor="middle">24ms</text>
+    <rect x="100" y="40" width="38" height="52" rx="4" fill="var(--chart-indigo)" opacity="0.8"/>
+    <text x="119" y="34" font-size="10" font-weight="600" fill="var(--card-fg)" text-anchor="middle">48ms</text>
+    <rect x="175" y="18" width="38" height="74" rx="4" fill="var(--chart-violet)" opacity="0.95"/>
+    <text x="194" y="12" font-size="10" font-weight="700" fill="var(--chart-violet)" text-anchor="middle">92ms</text>
+    <rect x="250" y="50" width="38" height="42" rx="4" fill="var(--chart-indigo)" opacity="0.8"/>
+    <text x="269" y="44" font-size="10" font-weight="600" fill="var(--card-fg)" text-anchor="middle">35ms</text>
+    <rect x="325" y="68" width="38" height="24" rx="4" fill="var(--chart-slate)" opacity="0.6"/>
+    <text x="344" y="62" font-size="10" font-weight="600" fill="var(--muted-fg)" text-anchor="middle">18ms</text>
+  </svg>
+</div>
+```
+
+### C. 复合环形占比分布图 (Multi-Segment Donut Chart)
+```html
+<div class="card" style="padding: 16px 20px;">
+  <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px;">
     <span style="font-weight: 600;">节点健康度全景分布</span>
     <span class="badge badge-success">99.8% 达标</span>
   </div>
-  <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px;">
-    <svg viewBox="0 0 160 160" style="width: 90px; height: 90px; flex-shrink: 0;">
-      <circle cx="80" cy="80" r="54" fill="none" stroke="var(--secondary)" stroke-width="20"/>
+  <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+    <svg viewBox="0 0 160 160" style="width: 82px; height: 82px; flex-shrink: 0;">
+      <circle cx="80" cy="80" r="54" fill="none" stroke="var(--secondary)" stroke-width="18"/>
       <!-- 周长 2*PI*54 ≈ 339.3 -->
-      <circle cx="80" cy="80" r="54" fill="none" stroke="var(--ok)" stroke-width="20" stroke-dasharray="220.5 339.3" stroke-dashoffset="0" transform="rotate(-90 80 80)"/>
-      <circle cx="80" cy="80" r="54" fill="none" stroke="var(--warn)" stroke-width="20" stroke-dasharray="84.8 339.3" stroke-dashoffset="-220.5" transform="rotate(-90 80 80)"/>
-      <circle cx="80" cy="80" r="54" fill="none" stroke="var(--err)" stroke-width="20" stroke-dasharray="33.9 339.3" stroke-dashoffset="-305.3" transform="rotate(-90 80 80)"/>
+      <circle cx="80" cy="80" r="54" fill="none" stroke="var(--chart-emerald)" stroke-width="18" stroke-dasharray="220.5 339.3" stroke-dashoffset="0" transform="rotate(-90 80 80)"/>
+      <circle cx="80" cy="80" r="54" fill="none" stroke="var(--chart-amber)" stroke-width="18" stroke-dasharray="84.8 339.3" stroke-dashoffset="-220.5" transform="rotate(-90 80 80)"/>
+      <circle cx="80" cy="80" r="54" fill="none" stroke="var(--chart-rose)" stroke-width="18" stroke-dasharray="33.9 339.3" stroke-dashoffset="-305.3" transform="rotate(-90 80 80)"/>
       <text x="80" y="77" text-anchor="middle" font-size="16" font-weight="700" fill="var(--card-fg)">1,280</text>
-      <text x="80" y="93" text-anchor="middle" font-size="10" fill="var(--muted-fg)">Nodes</text>
+      <text x="80" y="93" text-anchor="middle" font-size="9" fill="var(--muted-fg)">Nodes</text>
     </svg>
-    <div style="font-size: 12px; display: flex; flex-direction: column; gap: 6px; flex: 1;">
-      <div style="display: flex; justify-content: space-between;"><span style="color: var(--ok);">● 65% 正常运行</span><strong>832</strong></div>
-      <div style="display: flex; justify-content: space-between;"><span style="color: var(--warn);">● 25% 负载预警</span><strong>320</strong></div>
-      <div style="display: flex; justify-content: space-between;"><span style="color: var(--err);">● 10% 异常降级</span><strong>128</strong></div>
+    <div style="font-size: 11px; display: flex; flex-direction: column; gap: 4px; flex: 1;">
+      <div style="display: flex; justify-content: space-between;"><span style="color: var(--chart-emerald); font-weight: 500;">● 65% 正常运行</span><strong>832</strong></div>
+      <div style="display: flex; justify-content: space-between;"><span style="color: var(--chart-amber); font-weight: 500;">● 25% 负载预警</span><strong>320</strong></div>
+      <div style="display: flex; justify-content: space-between;"><span style="color: var(--chart-rose); font-weight: 500;">● 10% 异常降级</span><strong>128</strong></div>
     </div>
   </div>
 </div>
 ```
 
-### B. 水平耗时对比排行榜 (Horizontal Ranking Bar)
+### D. 双线时序对比图 (Dual-Line Ingress vs Egress)
 ```html
 <div class="card" style="padding: 16px 20px;">
-  <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 12px;">
-    <span style="font-weight: 600;">核心模块响应耗时排行 (ms)</span>
-    <span style="font-size: 11px; color: var(--muted-fg);">P95 基准</span>
+  <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-bottom: 6px;">
+    <span style="font-weight: 600;">出入网络流量对冲</span>
+    <div style="display: flex; gap: 8px; font-size: 10px;">
+      <span style="color: var(--chart-indigo);">— 入向 1.4G</span>
+      <span style="color: var(--chart-cyan);">┄ 出向 860M</span>
+    </div>
   </div>
-  <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12px;">
+  <svg viewBox="0 0 400 95" style="width: 100%; height: 85px; overflow: visible;">
+    <defs>
+      <linearGradient id="dualAreaGradRef" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="var(--chart-indigo)" stop-opacity="0.16"/>
+        <stop offset="100%" stop-color="var(--chart-indigo)" stop-opacity="0.0"/>
+      </linearGradient>
+    </defs>
+    <path d="M 0 55 Q 60 25, 120 40 T 240 25 T 340 15 T 400 30 L 400 95 L 0 95 Z" fill="url(#dualAreaGradRef)"/>
+    <path d="M 0 55 Q 60 25, 120 40 T 240 25 T 340 15 T 400 30" fill="none" stroke="var(--chart-indigo)" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M 0 75 Q 60 60, 120 68 T 240 48 T 340 40 T 400 52" fill="none" stroke="var(--chart-cyan)" stroke-width="2" stroke-dasharray="4 4" stroke-linecap="round"/>
+    <circle cx="340" cy="15" r="3.5" fill="var(--chart-indigo)" stroke="var(--card)" stroke-width="2"/>
+    <circle cx="340" cy="40" r="3" fill="var(--chart-cyan)" stroke="var(--card)" stroke-width="1.5"/>
+  </svg>
+</div>
+```
+
+### E. 水平耗时对比排行榜 (Horizontal Ranking Bar)
+```html
+<div class="card" style="padding: 16px 20px;">
+  <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px;">
+    <span style="font-weight: 600;">核心模块耗时排行</span>
+    <span style="font-size: 10px; color: var(--muted-fg);">P95 ms</span>
+  </div>
+  <div style="display: flex; flex-direction: column; gap: 6px; font-size: 11px;">
     <div>
-      <div style="display: flex; justify-content: space-between; margin-bottom: 3px;"><span>1. 数据库连接池等待 (DB Pool)</span><strong>280ms</strong></div>
-      <div style="background: var(--secondary); height: 6px; border-radius: 9999px; overflow: hidden;"><div style="background: var(--err); width: 85%; height: 100%;"></div></div>
+      <div style="display: flex; justify-content: space-between; margin-bottom: 2px;"><span>DB Pool Wait</span><strong style="color: var(--chart-rose);">280ms</strong></div>
+      <div style="background: var(--secondary); height: 6px; border-radius: 9999px; overflow: hidden;"><div style="background: var(--chart-rose); width: 85%; height: 100%;"></div></div>
     </div>
     <div>
-      <div style="display: flex; justify-content: space-between; margin-bottom: 3px;"><span>2. 模型首字生成 (LLM First Token)</span><strong>195ms</strong></div>
-      <div style="background: var(--secondary); height: 6px; border-radius: 9999px; overflow: hidden;"><div style="background: var(--warn); width: 60%; height: 100%;"></div></div>
+      <div style="display: flex; justify-content: space-between; margin-bottom: 2px;"><span>LLM Stream First Token</span><strong style="color: var(--chart-amber);">195ms</strong></div>
+      <div style="background: var(--secondary); height: 6px; border-radius: 9999px; overflow: hidden;"><div style="background: var(--chart-amber); width: 62%; height: 100%;"></div></div>
     </div>
     <div>
-      <div style="display: flex; justify-content: space-between; margin-bottom: 3px;"><span>3. 网关鉴权解析 (Auth Gateway)</span><strong>48ms</strong></div>
-      <div style="background: var(--secondary); height: 6px; border-radius: 9999px; overflow: hidden;"><div style="background: var(--primary); width: 22%; height: 100%;"></div></div>
+      <div style="display: flex; justify-content: space-between; margin-bottom: 2px;"><span>Auth Gateway JWT</span><strong style="color: var(--chart-indigo);">48ms</strong></div>
+      <div style="background: var(--secondary); height: 6px; border-radius: 9999px; overflow: hidden;"><div style="background: var(--chart-indigo); width: 22%; height: 100%;"></div></div>
     </div>
+    <div>
+      <div style="display: flex; justify-content: space-between; margin-bottom: 2px;"><span>Asset Cache Edge</span><strong style="color: var(--chart-emerald);">12ms</strong></div>
+      <div style="background: var(--secondary); height: 6px; border-radius: 9999px; overflow: hidden;"><div style="background: var(--chart-emerald); width: 8%; height: 100%;"></div></div>
+    </div>
+  </div>
+</div>
+```
+
+### F. 半环水位仪表盘 (Semi-Circle Capacity Gauge)
+```html
+<div class="card" style="padding: 16px 20px;">
+  <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-bottom: 4px;">
+    <span style="font-weight: 600;">集群内存负载水位</span>
+    <span class="badge badge-warning" style="font-size: 10px; height: 18px;">Normal</span>
+  </div>
+  <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+    <svg viewBox="0 0 180 100" style="width: 140px; height: 78px; overflow: visible;">
+      <defs>
+        <linearGradient id="gaugeGradRef" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="var(--chart-emerald)"/>
+          <stop offset="60%" stop-color="var(--chart-indigo)"/>
+          <stop offset="100%" stop-color="var(--chart-amber)"/>
+        </linearGradient>
+      </defs>
+      <!-- 半圆周长 = 204.2 -->
+      <circle cx="90" cy="90" r="65" fill="none" stroke="var(--secondary)" stroke-width="16" stroke-dasharray="204.2 408.4" stroke-dashoffset="0" transform="rotate(-180 90 90)" stroke-linecap="round"/>
+      <circle cx="90" cy="90" r="65" fill="none" stroke="url(#gaugeGradRef)" stroke-width="16" stroke-dasharray="160.1 408.4" stroke-dashoffset="0" transform="rotate(-180 90 90)" stroke-linecap="round"/>
+      <text x="90" y="74" text-anchor="middle" font-size="18" font-weight="700" fill="var(--card-fg)">78.4%</text>
+      <text x="90" y="88" text-anchor="middle" font-size="9" fill="var(--muted-fg)">15.6 / 20 TB used</text>
+      <text x="25" y="98" font-size="9" fill="var(--muted-fg)" text-anchor="middle">0%</text>
+      <text x="155" y="98" font-size="9" fill="var(--muted-fg)" text-anchor="middle">100%</text>
+    </svg>
   </div>
 </div>
 ```

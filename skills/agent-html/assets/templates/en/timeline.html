@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Incident Postmortem & Event Timeline · agent-html</title>
+  <style>
+    /* ==========================================================================
+       Agent-HTML Core Design Tokens (shadcn/ui Neutral Palette)
+       ========================================================================== */
+    :root {
+      --bg: #fafafa;
+      --card: #ffffff;
+      --card-fg: #09090b;
+      --primary: #18181b;
+      --primary-fg: #fafafa;
+      --primary-hover: #27272a;
+      --secondary: #f4f4f5;
+      --secondary-fg: #18181b;
+      --muted: #f4f4f5;
+      --muted-fg: #71717a;
+      --border: #e4e4e7;
+      --ring: #18181b;
+      --radius: 8px;
+      --radius-sm: 6px;
+      --radius-lg: 12px;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      
+      --ok: #16a34a;
+      --ok-bg: #f0fdf4;
+      --ok-border: #bbf7d0;
+      --warn: #d97706;
+      --warn-bg: #fffbeb;
+      --warn-border: #fde68a;
+      --err: #dc2626;
+      --err-bg: #fef2f2;
+      --err-border: #fecaca;
+      --info: #2563eb;
+      --info-bg: #eff6ff;
+      --info-border: #bfdbfe;
+    }
+
+    [data-theme="dark"] {
+      --bg: #09090b;
+      --card: #121215;
+      --card-fg: #fafafa;
+      --primary: #fafafa;
+      --primary-fg: #18181b;
+      --primary-hover: #e4e4e7;
+      --secondary: #27272a;
+      --secondary-fg: #fafafa;
+      --muted: #18181b;
+      --muted-fg: #a1a1aa;
+      --border: #27272a;
+      --ring: #d4d4d8;
+      
+      --ok: #4ade80;
+      --ok-bg: #052e1680;
+      --ok-border: #166534;
+      --warn: #fbbf24;
+      --warn-bg: #451a0380;
+      --warn-border: #854d0e;
+      --err: #f87171;
+      --err-bg: #450a0a80;
+      --err-border: #991b1b;
+      --info: #60a5fa;
+      --info-bg: #17255480;
+      --info-border: #1e40af;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--card-fg);
+      line-height: 1.5;
+      padding: 40px 20px;
+    }
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .timeline-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 24px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--border);
+    }
+    .timeline-header h1 {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .timeline-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--muted-fg);
+      margin-top: 6px;
+    }
+    .actions { display: flex; gap: 8px; }
+
+    /* Buttons & Badges */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      height: 34px;
+      padding: 0 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--card-fg);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .btn:hover { background: var(--secondary); }
+    .btn-primary { background: var(--primary); color: var(--primary-fg); border-color: var(--primary); }
+    .btn-primary:hover { opacity: 0.9; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      height: 22px;
+      padding: 0 8px;
+      border-radius: 9999px;
+      border: 1px solid var(--border);
+      background: var(--secondary);
+      color: var(--secondary-fg);
+    }
+    .badge-dot { width: 6px; height: 6px; border-radius: 9999px; background: currentColor; }
+    .badge-success { background: var(--ok-bg); color: var(--ok); border-color: var(--ok-border); }
+    .badge-warning { background: var(--warn-bg); color: var(--warn); border-color: var(--warn-border); }
+    .badge-danger  { background: var(--err-bg);  color: var(--err);  border-color: var(--err-border); }
+    .badge-info    { background: var(--info-bg); color: var(--info); border-color: var(--info-border); }
+
+    /* Metrics Overview */
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .stat-mini {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      box-shadow: var(--shadow-sm);
+    }
+    .stat-mini-label { font-size: 12px; color: var(--muted-fg); }
+    .stat-mini-val { font-size: 20px; font-weight: 700; margin-top: 4px; }
+
+    /* Timeline Container */
+    .timeline-container {
+      position: relative;
+      padding-left: 28px;
+      margin-bottom: 36px;
+    }
+    .timeline-container::before {
+      content: '';
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      bottom: 10px;
+      width: 2px;
+      background: var(--border);
+    }
+
+    .timeline-event {
+      position: relative;
+      margin-bottom: 24px;
+    }
+    .timeline-event:last-child { margin-bottom: 0; }
+    .timeline-node {
+      position: absolute;
+      left: -28px;
+      top: 4px;
+      width: 22px;
+      height: 22px;
+      border-radius: 9999px;
+      background: var(--card);
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+    .timeline-node-inner {
+      width: 8px;
+      height: 8px;
+      border-radius: 9999px;
+      background: currentColor;
+    }
+    .node-err { color: var(--err); border-color: var(--err); }
+    .node-warn { color: var(--warn); border-color: var(--warn); }
+    .node-ok { color: var(--ok); border-color: var(--ok); }
+    .node-info { color: var(--info); border-color: var(--info); }
+
+    .event-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      box-shadow: var(--shadow-sm);
+    }
+    .event-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .event-title { font-size: 14px; font-weight: 600; }
+    .event-time { font-family: ui-monospace, monospace; font-size: 12px; color: var(--muted-fg); }
+    .event-body { font-size: 13px; color: var(--muted-fg); line-height: 1.55; }
+    .event-log {
+      margin-top: 10px;
+      background: var(--secondary);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      font-family: ui-monospace, monospace;
+      font-size: 11px;
+      color: var(--card-fg);
+      overflow-x: auto;
+    }
+
+    @media (max-width: 640px) {
+      .stat-row { grid-template-columns: 1fr 1fr; }
+      .timeline-header { flex-direction: column; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- [Slot: Timeline Header] -->
+  <header class="timeline-header">
+    <div>
+      <h1>
+        <span>Major Incident Postmortem & Chronology</span>
+        <span class="badge badge-success"><span class="badge-dot"></span>Incident Resolved</span>
+      </h1>
+      <div class="timeline-meta">
+        <span>Incident ID: INC-20260908</span>
+        <span>Severity: P1 Critical</span>
+        <span>Impact Duration: 42 minutes</span>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn" onclick="copyMarkdownTimeline()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+        <span id="copyTimelineBtn">Copy (MD)</span>
+      </button>
+      <button id="themeToggle" class="btn" title="Toggle theme">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1 -9 -9Z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- [Slot: KPI Metrics Row] -->
+  <section class="stat-row">
+    <div class="stat-mini">
+      <div class="stat-mini-label">Time to Detect (TTD)</div>
+      <div class="stat-mini-val" style="color: var(--ok);">2m 14s</div>
+    </div>
+    <div class="stat-mini">
+      <div class="stat-mini-label">Time to Mitigate (TTM)</div>
+      <div class="stat-mini-val">18m 40s</div>
+    </div>
+    <div class="stat-mini">
+      <div class="stat-mini-label">Total Downtime</div>
+      <div class="stat-mini-val" style="color: var(--err);">42m 00s</div>
+    </div>
+    <div class="stat-mini">
+      <div class="stat-mini-label">Data Loss Rate</div>
+      <div class="stat-mini-val" style="color: var(--ok);">0.00%</div>
+    </div>
+  </section>
+
+  <!-- [Slot: Vertical Event Timeline] -->
+  <div class="timeline-container">
+    <!-- Event 1: Resolution -->
+    <div class="timeline-event">
+      <div class="timeline-node node-ok"><div class="timeline-node-inner"></div></div>
+      <div class="event-card">
+        <div class="event-header">
+          <div class="event-title">Traffic Restored & Canary Passes All Health Checks</div>
+          <span class="event-time">14:42:10 UTC</span>
+        </div>
+        <div class="event-body">
+          Failover cluster in us-west fully assumed traffic. Latency returned to 38ms baseline. Incident marked resolved.
+        </div>
+      </div>
+    </div>
+
+    <!-- Event 2: Mitigation -->
+    <div class="timeline-event">
+      <div class="timeline-node node-info"><div class="timeline-node-inner"></div></div>
+      <div class="event-card">
+        <div class="event-header">
+          <div class="event-title">Initiated Automated Traffic Drain to Backup Region</div>
+          <span class="event-time">14:18:25 UTC</span>
+        </div>
+        <div class="event-body">
+          SRE team executed Runbook #104. Edge CDN redirected 100% of ingress requests to secondary availability zone.
+        </div>
+        <div class="event-log">
+[ACTION] Cloudflare route drain: applied zone us-east-01 -> weight: 0
+[STATUS] 200 OK: Traffic migrated to us-west-02
+        </div>
+      </div>
+    </div>
+
+    <!-- Event 3: Root Cause Trigger -->
+    <div class="timeline-event">
+      <div class="timeline-node node-err"><div class="timeline-node-inner"></div></div>
+      <div class="event-card">
+        <div class="event-header">
+          <div class="event-title">Database Connection Pool Exhaustion Triggered</div>
+          <span class="event-time">14:00:10 UTC</span>
+        </div>
+        <div class="event-body">
+          High memory spike caused unindexed analytical query to hold 100% of active pooled connections, blocking HTTP ingress.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- [Colophon: agent-html design system v1.0.0 · generated at 2026-09-08 · zero-dependency standalone] -->
+</div>
+
+<script>
+  // Theme Toggle
+  const toggle = document.getElementById('themeToggle');
+  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (isDark) document.documentElement.setAttribute('data-theme', 'dark');
+  toggle?.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme') === 'dark';
+    document.documentElement.setAttribute('data-theme', current ? 'light' : 'dark');
+  });
+
+  function copyMarkdownTimeline() {
+    const md = `# Incident Chronology (INC-20260908)
+- **14:42 UTC** [RESOLVED] Traffic Restored & Canary Passes All Health Checks
+- **14:18 UTC** [MITIGATED] Initiated Automated Traffic Drain to Backup Region
+- **14:00 UTC** [OUTAGE] Database Connection Pool Exhaustion Triggered`;
+    navigator.clipboard.writeText(md).then(() => {
+      const btn = document.getElementById('copyTimelineBtn');
+      btn.textContent = 'Copied!';
+      setTimeout(() => { btn.textContent = 'Copy (MD)'; }, 1500);
+    });
+  }
+</script>
+</body>
+</html>

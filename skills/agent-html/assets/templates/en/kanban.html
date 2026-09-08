@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Triage & Kanban Board · agent-html</title>
+  <style>
+    /* ==========================================================================
+       Agent-HTML Core Design Tokens (shadcn/ui Neutral Palette)
+       ========================================================================== */
+    :root {
+      --bg: #fafafa;
+      --card: #ffffff;
+      --card-fg: #09090b;
+      --primary: #18181b;
+      --primary-fg: #fafafa;
+      --primary-hover: #27272a;
+      --secondary: #f4f4f5;
+      --secondary-fg: #18181b;
+      --muted: #f4f4f5;
+      --muted-fg: #71717a;
+      --border: #e4e4e7;
+      --ring: #18181b;
+      --radius: 8px;
+      --radius-sm: 6px;
+      --radius-lg: 12px;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      
+      --ok: #16a34a;
+      --ok-bg: #f0fdf4;
+      --ok-border: #bbf7d0;
+      --warn: #d97706;
+      --warn-bg: #fffbeb;
+      --warn-border: #fde68a;
+      --err: #dc2626;
+      --err-bg: #fef2f2;
+      --err-border: #fecaca;
+      --info: #2563eb;
+      --info-bg: #eff6ff;
+      --info-border: #bfdbfe;
+    }
+
+    [data-theme="dark"] {
+      --bg: #09090b;
+      --card: #121215;
+      --card-fg: #fafafa;
+      --primary: #fafafa;
+      --primary-fg: #18181b;
+      --primary-hover: #e4e4e7;
+      --secondary: #27272a;
+      --secondary-fg: #fafafa;
+      --muted: #18181b;
+      --muted-fg: #a1a1aa;
+      --border: #27272a;
+      --ring: #d4d4d8;
+      
+      --ok: #4ade80;
+      --ok-bg: #052e1680;
+      --ok-border: #166534;
+      --warn: #fbbf24;
+      --warn-bg: #451a0380;
+      --warn-border: #854d0e;
+      --err: #f87171;
+      --err-bg: #450a0a80;
+      --err-border: #991b1b;
+      --info: #60a5fa;
+      --info-bg: #17255480;
+      --info-border: #1e40af;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--card-fg);
+      line-height: 1.5;
+      padding: 32px 24px;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* Header */
+    .kanban-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-shrink: 0;
+    }
+    .kanban-header h1 {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .actions { display: flex; gap: 8px; }
+
+    /* Buttons & Badges */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      height: 32px;
+      padding: 0 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--card-fg);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .btn:hover { background: var(--secondary); }
+    .btn-primary { background: var(--primary); color: var(--primary-fg); border-color: var(--primary); }
+    .btn-primary:hover { opacity: 0.9; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 500;
+      height: 20px;
+      padding: 0 7px;
+      border-radius: 9999px;
+      border: 1px solid var(--border);
+      background: var(--secondary);
+      color: var(--secondary-fg);
+    }
+    .badge-dot { width: 5px; height: 5px; border-radius: 9999px; background: currentColor; }
+    .badge-success { background: var(--ok-bg); color: var(--ok); border-color: var(--ok-border); }
+    .badge-warning { background: var(--warn-bg); color: var(--warn); border-color: var(--warn-border); }
+    .badge-danger  { background: var(--err-bg);  color: var(--err);  border-color: var(--err-border); }
+    .badge-info    { background: var(--info-bg); color: var(--info); border-color: var(--info-border); }
+
+    /* 4-Column Board */
+    .kanban-board {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      flex: 1;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding-bottom: 8px;
+    }
+    .kanban-col {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .kanban-col.drag-over {
+      border-color: var(--primary);
+      background: var(--secondary);
+    }
+    .col-header {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      background: var(--secondary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+    .cards-container {
+      padding: 12px;
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .card-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      box-shadow: var(--shadow-sm);
+      cursor: grab;
+      user-select: none;
+      transition: all 0.15s ease;
+    }
+    .card-item:hover {
+      border-color: var(--primary);
+      transform: translateY(-1px);
+    }
+    .card-item.dragging {
+      opacity: 0.4;
+      cursor: grabbing;
+    }
+    .card-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .card-desc {
+      font-size: 12px;
+      color: var(--muted-fg);
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--muted-fg);
+    }
+
+    @media (max-width: 900px) {
+      .kanban-board { grid-template-columns: repeat(2, 300px); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- [Slot: Header] -->
+  <header class="kanban-header">
+    <div>
+      <h1>Sprint Triage & Priority Board</h1>
+      <div style="font-size: 12px; color: var(--muted-fg); margin-top: 2px;">Pure HTML5 Drag-and-Drop · Zero External Dependencies</div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-primary" onclick="copyTriageDecisions()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+        <span id="copyKanbanBtn">Copy Decisions to Agent</span>
+      </button>
+      <button id="themeToggle" class="btn" title="Toggle theme">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1 -9 -9Z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- [Slot: 4-Column Board] -->
+  <div class="kanban-board">
+    <!-- Col 1: Backlog -->
+    <div class="kanban-col" data-col="Backlog">
+      <div class="col-header">
+        <span>Backlog</span>
+        <span class="badge">1 item</span>
+      </div>
+      <div class="cards-container">
+        <div class="card-item" draggable="true" data-id="TASK-104">
+          <div class="card-title">Deprecate v1 WebSocket protocol</div>
+          <div class="card-desc">Scheduled for Q4 legacy cleanup; non-blocking.</div>
+          <div class="card-meta">
+            <span>TASK-104</span>
+            <span class="badge">P3 Low</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Col 2: In Progress -->
+    <div class="kanban-col" data-col="Progress">
+      <div class="col-header">
+        <span>In Progress</span>
+        <span class="badge badge-info">1 item</span>
+      </div>
+      <div class="cards-container">
+        <div class="card-item" draggable="true" data-id="TASK-102">
+          <div class="card-title">Token Cache Serialization Fix</div>
+          <div class="card-desc">Investigate Redis memory spike on concurrent batches.</div>
+          <div class="card-meta">
+            <span>TASK-102</span>
+            <span class="badge badge-warning">P1 High</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Col 3: Blocked -->
+    <div class="kanban-col" data-col="Blocked">
+      <div class="col-header">
+        <span>Blocked</span>
+        <span class="badge badge-danger">1 item</span>
+      </div>
+      <div class="cards-container">
+        <div class="card-item" draggable="true" data-id="TASK-103">
+          <div class="card-title">Cloudflare DNS Failover Route</div>
+          <div class="card-desc">Awaiting upstream API token renewal from SRE.</div>
+          <div class="card-meta">
+            <span>TASK-103</span>
+            <span class="badge badge-danger">Blocked</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Col 4: Done -->
+    <div class="kanban-col" data-col="Done">
+      <div class="col-header">
+        <span>Done</span>
+        <span class="badge badge-success">1 item</span>
+      </div>
+      <div class="cards-container">
+        <div class="card-item" draggable="true" data-id="TASK-101">
+          <div class="card-title">Zero-CDN HTML Validator Engine</div>
+          <div class="card-desc">Shipped scripts/validate.mjs with 100% test coverage.</div>
+          <div class="card-meta">
+            <span>TASK-101</span>
+            <span class="badge badge-success">Completed</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- [Colophon: agent-html design system v1.0.0 · generated at 2026-09-08 · zero-dependency standalone] -->
+</div>
+
+<script>
+  // Theme Toggle
+  const toggle = document.getElementById('themeToggle');
+  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (isDark) document.documentElement.setAttribute('data-theme', 'dark');
+  toggle?.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme') === 'dark';
+    document.documentElement.setAttribute('data-theme', current ? 'light' : 'dark');
+  });
+
+  // Pure HTML5 Drag and Drop (~30 lines)
+  let draggedCard = null;
+  document.querySelectorAll('.card-item').forEach(card => {
+    card.addEventListener('dragstart', () => {
+      draggedCard = card;
+      card.classList.add('dragging');
+    });
+    card.addEventListener('dragend', () => {
+      card.classList.remove('dragging');
+      draggedCard = null;
+    });
+  });
+
+  document.querySelectorAll('.kanban-col').forEach(col => {
+    col.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      col.classList.add('drag-over');
+    });
+    col.addEventListener('dragleave', () => {
+      col.classList.remove('drag-over');
+    });
+    col.addEventListener('drop', (e) => {
+      e.preventDefault();
+      col.classList.remove('drag-over');
+      if (draggedCard) {
+        col.querySelector('.cards-container').appendChild(draggedCard);
+      }
+    });
+  });
+
+  function copyTriageDecisions() {
+    const md = `# Kanban Triage Status
+- Backlog: TASK-104 (Deprecate v1 WebSocket protocol)
+- In Progress: TASK-102 (Token Cache Serialization Fix)
+- Blocked: TASK-103 (Cloudflare DNS Failover Route: waiting on API token)
+- Done: TASK-101 (Zero-CDN HTML Validator Engine)`;
+    navigator.clipboard.writeText(md).then(() => {
+      const btn = document.getElementById('copyKanbanBtn');
+      btn.textContent = 'Copied to Agent!';
+      setTimeout(() => { btn.textContent = 'Copy Decisions to Agent'; }, 1500);
+    });
+  }
+</script>
+</body>
+</html>

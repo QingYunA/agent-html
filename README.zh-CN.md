@@ -38,7 +38,7 @@
 ---
 
 <p align="center">
-  <img src="assets/screenshots/gallery.png" alt="agent-html 组件画廊" width="100%">
+  <img src="assets/screenshots/zh/gallery.png" alt="agent-html 组件画廊" width="100%">
 </p>
 
 ---
@@ -77,7 +77,7 @@
 > **适用场景**：技术评审 ADR、面试评估报告、故障复盘 Postmortem、需求草案、更新日志。
 
 <p align="center">
-  <img src="assets/screenshots/report.png" alt="报告母版" width="100%">
+  <img src="assets/screenshots/zh/report.png" alt="报告母版" width="100%">
 </p>
 
 ---
@@ -88,7 +88,7 @@
 > **适用场景**：资源监控大盘、调休考勤管理、Token 用量追踪、工单列表。
 
 <p align="center">
-  <img src="assets/screenshots/dashboard.png" alt="数据大盘母版" width="100%">
+  <img src="assets/screenshots/zh/dashboard.png" alt="数据大盘母版" width="100%">
 </p>
 
 ---
@@ -99,7 +99,7 @@
 > **适用场景**：链路 Trace 回溯、JSONL 审查工具、Prompt 调试器、日志分析。
 
 <p align="center">
-  <img src="assets/screenshots/inspector.png" alt="工作台母版" width="100%">
+  <img src="assets/screenshots/zh/inspector.png" alt="工作台母版" width="100%">
 </p>
 
 ---
@@ -110,7 +110,7 @@
 > **适用场景**：大模型 A/B 评测、Prompt 调优版本对比、架构方案 V1 vs V2 差异评估、产品定价规格矩阵。
 
 <p align="center">
-  <img src="assets/screenshots/compare.png" alt="对比矩阵母版" width="100%">
+  <img src="assets/screenshots/zh/compare.png" alt="对比矩阵母版" width="100%">
 </p>
 
 ---
@@ -121,7 +121,7 @@
 > **适用场景**：突发故障复盘 (Postmortem)、版本发布路线图 (Roadmap)、变更历史 (Changelog)、长流程事件溯源。
 
 <p align="center">
-  <img src="assets/screenshots/timeline.png" alt="时间轴母版" width="100%">
+  <img src="assets/screenshots/zh/timeline.png" alt="时间轴母版" width="100%">
 </p>
 
 ---
@@ -132,7 +132,7 @@
 > **适用场景**：Bug 故障分拣、需求优先级评估、日常任务状态流转。
 
 <p align="center">
-  <img src="assets/screenshots/kanban.png" alt="敏捷看板母版" width="100%">
+  <img src="assets/screenshots/zh/kanban.png" alt="敏捷看板母版" width="100%">
 </p>
 
 ---

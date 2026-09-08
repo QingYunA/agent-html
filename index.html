@@ -53,6 +53,15 @@
       --info: #2563eb;
       --info-bg: #eff6ff;
       --info-border: #bfdbfe;
+
+      /* Calibrated Chart Tokens (Tremor & shadcn-inspired) */
+      --chart-indigo: #6366f1;
+      --chart-emerald: #10b981;
+      --chart-amber: #f59e0b;
+      --chart-rose: #f43f5e;
+      --chart-violet: #8b5cf6;
+      --chart-cyan: #06b6d4;
+      --chart-slate: #64748b;
     }
 
     [data-theme="dark"] {
@@ -93,6 +102,15 @@
       --info: #60a5fa;
       --info-bg: #17255480;
       --info-border: #1e40af;
+
+      /* Calibrated Chart Tokens (Dark Mode) */
+      --chart-indigo: #818cf8;
+      --chart-emerald: #34d399;
+      --chart-amber: #fbbf24;
+      --chart-rose: #fb7185;
+      --chart-violet: #a78bfa;
+      --chart-cyan: #22d3ee;
+      --chart-slate: #94a3b8;
     }
 
     /* Base Reset */
@@ -739,6 +757,7 @@
         <a href="#archetypes" class="nav-link">Archetypes</a>
         <a href="#components" class="nav-link">Components</a>
         <a href="#cookbook" class="nav-link">Cookbook</a>
+        <a href="index.zh-CN.html" class="nav-link" style="display: inline-flex; align-items: center; gap: 4px;" title="Switch to 简体中文">🌐 简体中文</a>
         <a href="https://github.com/QingYunA/agent-html" target="_blank" rel="noopener" class="btn btn-outline btn-sm">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
           <span>GitHub</span>
@@ -848,15 +867,15 @@
               <p>Centered 860px reading container optimized for executive reviews, audit memos, architecture RFCs, and print-to-PDF workflows. Features metadata headers, score cards, callouts, and native details accordions.</p>
             </div>
             <div class="archetype-actions">
-              <a href="templates/report.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+              <a href="templates/en/report.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
                 <span>Open Live Demo</span>
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
               </a>
-              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('report')">Copy HTML</button>
+              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('en/report')">Copy HTML</button>
             </div>
           </div>
           <div class="archetype-preview-frame">
-            <img src="assets/screenshots/report.png" alt="Report Archetype Preview">
+            <img src="assets/screenshots/en/report.png" alt="Report Archetype Preview">
           </div>
         </div>
 
@@ -868,15 +887,15 @@
               <p>Wide-screen fluid layout with a 4-column KPI stat grid, pure-SVG area and bar charts, dual-filter toolbar (search + status dropdown), and a native modal dialog for create/edit operations.</p>
             </div>
             <div class="archetype-actions">
-              <a href="templates/dashboard.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+              <a href="templates/en/dashboard.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
                 <span>Open Live Demo</span>
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
               </a>
-              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('dashboard')">Copy HTML</button>
+              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('en/dashboard')">Copy HTML</button>
             </div>
           </div>
           <div class="archetype-preview-frame">
-            <img src="assets/screenshots/dashboard.png" alt="Dashboard Archetype Preview">
+            <img src="assets/screenshots/en/dashboard.png" alt="Dashboard Archetype Preview">
           </div>
         </div>
 
@@ -888,15 +907,15 @@
               <p>App-like layout occupying full viewport height without page scroll. Left sidebar filters items, right detail pane updates dynamically with 3-column property grids, verdict actions, and syntax-styled code blocks.</p>
             </div>
             <div class="archetype-actions">
-              <a href="templates/inspector.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+              <a href="templates/en/inspector.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
                 <span>Open Live Demo</span>
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
               </a>
-              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('inspector')">Copy HTML</button>
+              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('en/inspector')">Copy HTML</button>
             </div>
           </div>
           <div class="archetype-preview-frame">
-            <img src="assets/screenshots/inspector.png" alt="Inspector Archetype Preview">
+            <img src="assets/screenshots/en/inspector.png" alt="Inspector Archetype Preview">
           </div>
         </div>
 
@@ -908,15 +927,15 @@
               <p>Two-column split view (Baseline vs. Challenger) with verdict callout, parameter specs, sample payload outputs, and a quantitative delta matrix table. Perfect for model evals and prompt revisions.</p>
             </div>
             <div class="archetype-actions">
-              <a href="templates/compare.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+              <a href="templates/en/compare.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
                 <span>Open Live Demo</span>
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
               </a>
-              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('compare')">Copy HTML</button>
+              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('en/compare')">Copy HTML</button>
             </div>
           </div>
           <div class="archetype-preview-frame">
-            <img src="assets/screenshots/compare.png" alt="Compare Archetype Preview">
+            <img src="assets/screenshots/en/compare.png" alt="Compare Archetype Preview">
           </div>
         </div>
 
@@ -928,32 +947,15 @@
               <p>High-density single-track vertical timeline with semantic status nodes (Error, Warning, Success, Info), exact timestamps, operator tags, expandable diagnosis logs, and one-click "Copy as Markdown" export.</p>
             </div>
             <div class="archetype-actions">
-              <a href="templates/timeline.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+              <a href="templates/en/timeline.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
                 <span>Open Live Demo</span>
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
               </a>
-              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('timeline')">Copy HTML</button>
+              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('en/timeline')">Copy HTML</button>
             </div>
           </div>
-          <div class="archetype-preview-frame" style="padding: 24px 28px; background: var(--bg); display: flex; flex-direction: column; gap: 14px;">
-            <div style="font-size: 13px; font-weight: 600; color: var(--card-fg);">Timeline Chronicle Sample</div>
-            <div style="border-left: 2px solid var(--border); padding-left: 18px; margin-left: 8px; display: flex; flex-direction: column; gap: 12px;">
-              <div>
-                <span class="badge badge-danger" style="font-size: 10px; height: 18px;">14:10:02</span>
-                <strong style="margin-left: 6px; font-size: 13px;">Gateway Ingress 502 Spike Detected</strong>
-                <div style="font-size: 12px; color: var(--muted-fg); margin-top: 2px;">Prometheus probe triggered alert across cluster-node-alpha.</div>
-              </div>
-              <div>
-                <span class="badge badge-warning" style="font-size: 10px; height: 18px;">14:13:45</span>
-                <strong style="margin-left: 6px; font-size: 13px;">SRE On-Call Intervention & War Room</strong>
-                <div style="font-size: 12px; color: var(--muted-fg); margin-top: 2px;">BGP route oscillation suspected; failover plan initiated.</div>
-              </div>
-              <div>
-                <span class="badge badge-success" style="font-size: 10px; height: 18px;">14:34:10</span>
-                <strong style="margin-left: 6px; font-size: 13px;">Traffic Failover Completed & Resolved</strong>
-                <div style="font-size: 12px; color: var(--muted-fg); margin-top: 2px;">All health probes green; latency stabilized to 38ms.</div>
-              </div>
-            </div>
+          <div class="archetype-preview-frame">
+            <img src="assets/screenshots/en/timeline.png" alt="Timeline Archetype Preview">
           </div>
         </div>
 
@@ -965,10 +967,17 @@
               <p>4-column task categorization board (Backlog, Progress, Blocked, Done). Zero external dependencies, pure HTML5 drag-and-drop. Features a "Copy Triage Decisions to Agent" button to close the interactive human-in-the-loop workflow.</p>
             </div>
             <div class="archetype-actions">
-              <a href="templates/kanban.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+              <a href="templates/en/kanban.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
                 <span>Open Live Demo</span>
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
               </a>
+              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('en/kanban')">Copy HTML</button>
+            </div>
+          </div>
+          <div class="archetype-preview-frame">
+            <img src="assets/screenshots/en/kanban.png" alt="Kanban Archetype Preview">
+          </div>
+        </div>
               <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('kanban')">Copy HTML</button>
             </div>
           </div>
@@ -1088,97 +1097,152 @@
           </div>
         </div>
 
-        <!-- 2. Pure SVG Charts -->
+        <!-- 2. Pure SVG Charts (6 Core Formats) -->
         <div class="arsenal-box" style="grid-column: span 2;">
           <div class="arsenal-title">
-            <span>Zero-CDN Pure SVG Charts (4 Core Formats)</span>
-            <span class="badge badge-info">Zero Libraries · Dark Mode Native</span>
+            <span>Zero-CDN Pure SVG Charts (6 Core Formats)</span>
+            <span class="badge badge-info">Zero Libraries · Calibrated Palette</span>
           </div>
-          <div class="arsenal-desc">Lightweight vector data curves rendered with native SVG. Zero JS libraries, Retina sharp, automatic dark mode adaptation.</div>
+          <div class="arsenal-desc">Lightweight vector data curves rendered with native SVG. 100% offline, zero JS libraries, Retina sharp, automatic dark mode adaptation.</div>
 
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-top: 12px;">
-            <!-- Chart 1: Area Trend Line -->
-            <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px;">
-              <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 8px;">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-top: 14px;">
+            <!-- Chart 1: Area Trend Curve -->
+            <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
+              <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-bottom: 8px;">
                 <span style="font-weight: 600;">24h Throughput (TPS)</span>
-                <span style="color: var(--ok); font-weight: 600;">↑ +18.4%</span>
+                <span style="color: var(--chart-emerald); font-weight: 600; font-size: 11px;">↑ +18.4%</span>
               </div>
-              <svg viewBox="0 0 400 85" style="width: 100%; height: 75px; overflow: visible;">
+              <svg viewBox="0 0 400 95" style="width: 100%; height: 85px; overflow: visible;">
                 <defs>
-                  <linearGradient id="areaGradLive" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stop-color="var(--primary)" stop-opacity="0.25"/>
-                    <stop offset="100%" stop-color="var(--primary)" stop-opacity="0.0"/>
+                  <linearGradient id="areaGradIndigo" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="var(--chart-indigo)" stop-opacity="0.22"/>
+                    <stop offset="100%" stop-color="var(--chart-indigo)" stop-opacity="0.0"/>
                   </linearGradient>
                 </defs>
-                <path d="M 0 65 Q 50 25, 100 48 T 200 32 T 300 18 T 400 28 L 400 85 L 0 85 Z" fill="url(#areaGradLive)"/>
-                <path d="M 0 65 Q 50 25, 100 48 T 200 32 T 300 18 T 400 28" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round"/>
-                <circle cx="200" cy="32" r="3" fill="var(--card)" stroke="var(--primary)" stroke-width="2"/>
-                <circle cx="300" cy="18" r="3.5" fill="var(--ok)" stroke="var(--card)" stroke-width="2"/>
+                <path d="M 0 70 Q 55 30, 110 52 T 210 36 T 310 18 T 400 28 L 400 95 L 0 95 Z" fill="url(#areaGradIndigo)"/>
+                <path d="M 0 70 Q 55 30, 110 52 T 210 36 T 310 18 T 400 28" fill="none" stroke="var(--chart-indigo)" stroke-width="2.5" stroke-linecap="round"/>
+                <circle cx="210" cy="36" r="3" fill="var(--card)" stroke="var(--chart-indigo)" stroke-width="2"/>
+                <circle cx="310" cy="18" r="3.5" fill="var(--chart-indigo)" stroke="var(--card)" stroke-width="2"/>
               </svg>
             </div>
 
-            <!-- Chart 2: Column Bar Distribution -->
-            <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px;">
-              <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 8px;">
+            <!-- Chart 2: Latency Distribution (Histogram) -->
+            <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
+              <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-bottom: 8px;">
                 <span style="font-weight: 600;">Latency Distribution (ms)</span>
                 <span class="badge" style="font-size: 10px; height: 18px;">P95</span>
               </div>
-              <svg viewBox="0 0 400 85" style="width: 100%; height: 75px; overflow: visible;">
-                <rect x="20" y="55" width="40" height="30" rx="3" fill="var(--primary)" opacity="0.85"/>
-                <text x="40" y="50" font-size="10" font-weight="600" fill="var(--card-fg)" text-anchor="middle">24ms</text>
-                <rect x="90" y="35" width="40" height="50" rx="3" fill="var(--primary)" opacity="0.85"/>
-                <text x="110" y="30" font-size="10" font-weight="600" fill="var(--card-fg)" text-anchor="middle">48ms</text>
-                <rect x="160" y="15" width="40" height="70" rx="3" fill="var(--warn)" opacity="0.9"/>
-                <text x="180" y="10" font-size="10" font-weight="600" fill="var(--warn)" text-anchor="middle">92ms</text>
-                <rect x="230" y="45" width="40" height="40" rx="3" fill="var(--primary)" opacity="0.85"/>
-                <text x="250" y="40" font-size="10" font-weight="600" fill="var(--card-fg)" text-anchor="middle">35ms</text>
-                <rect x="300" y="65" width="40" height="20" rx="3" fill="var(--primary)" opacity="0.85"/>
-                <text x="320" y="60" font-size="10" font-weight="600" fill="var(--card-fg)" text-anchor="middle">18ms</text>
+              <svg viewBox="0 0 400 95" style="width: 100%; height: 85px; overflow: visible;">
+                <rect x="25" y="60" width="38" height="32" rx="4" fill="var(--chart-slate)" opacity="0.6"/>
+                <text x="44" y="54" font-size="10" font-weight="600" fill="var(--muted-fg)" text-anchor="middle">24ms</text>
+                <rect x="100" y="40" width="38" height="52" rx="4" fill="var(--chart-indigo)" opacity="0.8"/>
+                <text x="119" y="34" font-size="10" font-weight="600" fill="var(--card-fg)" text-anchor="middle">48ms</text>
+                <rect x="175" y="18" width="38" height="74" rx="4" fill="var(--chart-violet)" opacity="0.95"/>
+                <text x="194" y="12" font-size="10" font-weight="700" fill="var(--chart-violet)" text-anchor="middle">92ms</text>
+                <rect x="250" y="50" width="38" height="42" rx="4" fill="var(--chart-indigo)" opacity="0.8"/>
+                <text x="269" y="44" font-size="10" font-weight="600" fill="var(--card-fg)" text-anchor="middle">35ms</text>
+                <rect x="325" y="68" width="38" height="24" rx="4" fill="var(--chart-slate)" opacity="0.6"/>
+                <text x="344" y="62" font-size="10" font-weight="600" fill="var(--muted-fg)" text-anchor="middle">18ms</text>
               </svg>
             </div>
 
-            <!-- Chart 3: Multi-Segment Donut Chart -->
-            <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px;">
-              <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px;">
+            <!-- Chart 3: Multi-Segment Donut Ratio -->
+            <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
+              <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-bottom: 6px;">
                 <span style="font-weight: 600;">Node Health Ratio</span>
                 <span class="badge badge-success" style="font-size: 10px; height: 18px;">99.8% SLA</span>
               </div>
-              <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
-                <svg viewBox="0 0 160 160" style="width: 80px; height: 80px; flex-shrink: 0;">
-                  <circle cx="80" cy="80" r="54" fill="none" stroke="var(--secondary)" stroke-width="20"/>
-                  <circle cx="80" cy="80" r="54" fill="none" stroke="var(--ok)" stroke-width="20" stroke-dasharray="220.5 339.3" stroke-dashoffset="0" transform="rotate(-90 80 80)"/>
-                  <circle cx="80" cy="80" r="54" fill="none" stroke="var(--warn)" stroke-width="20" stroke-dasharray="84.8 339.3" stroke-dashoffset="-220.5" transform="rotate(-90 80 80)"/>
-                  <circle cx="80" cy="80" r="54" fill="none" stroke="var(--err)" stroke-width="20" stroke-dasharray="33.9 339.3" stroke-dashoffset="-305.3" transform="rotate(-90 80 80)"/>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+                <svg viewBox="0 0 160 160" style="width: 82px; height: 82px; flex-shrink: 0;">
+                  <circle cx="80" cy="80" r="54" fill="none" stroke="var(--secondary)" stroke-width="18"/>
+                  <circle cx="80" cy="80" r="54" fill="none" stroke="var(--chart-emerald)" stroke-width="18" stroke-dasharray="220.5 339.3" stroke-dashoffset="0" transform="rotate(-90 80 80)"/>
+                  <circle cx="80" cy="80" r="54" fill="none" stroke="var(--chart-amber)" stroke-width="18" stroke-dasharray="84.8 339.3" stroke-dashoffset="-220.5" transform="rotate(-90 80 80)"/>
+                  <circle cx="80" cy="80" r="54" fill="none" stroke="var(--chart-rose)" stroke-width="18" stroke-dasharray="33.9 339.3" stroke-dashoffset="-305.3" transform="rotate(-90 80 80)"/>
                   <text x="80" y="77" text-anchor="middle" font-size="16" font-weight="700" fill="var(--card-fg)">1,280</text>
                   <text x="80" y="93" text-anchor="middle" font-size="9" fill="var(--muted-fg)">Nodes</text>
                 </svg>
                 <div style="font-size: 11px; display: flex; flex-direction: column; gap: 4px; flex: 1;">
-                  <div style="display: flex; justify-content: space-between;"><span style="color: var(--ok);">● 65% Healthy</span><strong>832</strong></div>
-                  <div style="display: flex; justify-content: space-between;"><span style="color: var(--warn);">● 25% Warning</span><strong>320</strong></div>
-                  <div style="display: flex; justify-content: space-between;"><span style="color: var(--err);">● 10% Degraded</span><strong>128</strong></div>
+                  <div style="display: flex; justify-content: space-between;"><span style="color: var(--chart-emerald); font-weight: 500;">● 65% Healthy</span><strong>832</strong></div>
+                  <div style="display: flex; justify-content: space-between;"><span style="color: var(--chart-amber); font-weight: 500;">● 25% Warning</span><strong>320</strong></div>
+                  <div style="display: flex; justify-content: space-between;"><span style="color: var(--chart-rose); font-weight: 500;">● 10% Degraded</span><strong>128</strong></div>
                 </div>
               </div>
             </div>
 
-            <!-- Chart 4: Horizontal Ranking Bars -->
-            <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px;">
-              <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px;">
-                <span style="font-weight: 600;">Latency Bottlenecks</span>
-                <span style="font-size: 11px; color: var(--muted-fg);">ms</span>
+            <!-- Chart 4: Dual-Line Comparison (Ingress vs Egress) -->
+            <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
+              <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-bottom: 6px;">
+                <span style="font-weight: 600;">Traffic Ingress vs Egress</span>
+                <div style="display: flex; gap: 8px; font-size: 10px;">
+                  <span style="color: var(--chart-indigo);">— In 1.4G</span>
+                  <span style="color: var(--chart-cyan);">┄ Out 860M</span>
+                </div>
+              </div>
+              <svg viewBox="0 0 400 95" style="width: 100%; height: 85px; overflow: visible;">
+                <defs>
+                  <linearGradient id="dualAreaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="var(--chart-indigo)" stop-opacity="0.16"/>
+                    <stop offset="100%" stop-color="var(--chart-indigo)" stop-opacity="0.0"/>
+                  </linearGradient>
+                </defs>
+                <path d="M 0 55 Q 60 25, 120 40 T 240 25 T 340 15 T 400 30 L 400 95 L 0 95 Z" fill="url(#dualAreaGrad)"/>
+                <path d="M 0 55 Q 60 25, 120 40 T 240 25 T 340 15 T 400 30" fill="none" stroke="var(--chart-indigo)" stroke-width="2.5" stroke-linecap="round"/>
+                <path d="M 0 75 Q 60 60, 120 68 T 240 48 T 340 40 T 400 52" fill="none" stroke="var(--chart-cyan)" stroke-width="2" stroke-dasharray="4 4" stroke-linecap="round"/>
+                <circle cx="340" cy="15" r="3.5" fill="var(--chart-indigo)" stroke="var(--card)" stroke-width="2"/>
+                <circle cx="340" cy="40" r="3" fill="var(--chart-cyan)" stroke="var(--card)" stroke-width="1.5"/>
+              </svg>
+            </div>
+
+            <!-- Chart 5: Latency Bottlenecks (Horizontal Ranking Bars) -->
+            <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
+              <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-bottom: 6px;">
+                <span style="font-weight: 600;">Top Stage Bottlenecks</span>
+                <span style="font-size: 10px; color: var(--muted-fg);">P95 ms</span>
               </div>
               <div style="display: flex; flex-direction: column; gap: 6px; font-size: 11px;">
                 <div>
-                  <div style="display: flex; justify-content: space-between; margin-bottom: 2px;"><span>DB Pool Wait</span><strong>280ms</strong></div>
-                  <div style="background: var(--secondary); height: 6px; border-radius: 9999px; overflow: hidden;"><div style="background: var(--err); width: 85%; height: 100%;"></div></div>
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 2px;"><span>DB Pool Wait</span><strong style="color: var(--chart-rose);">280ms</strong></div>
+                  <div style="background: var(--secondary); height: 6px; border-radius: 9999px; overflow: hidden;"><div style="background: var(--chart-rose); width: 85%; height: 100%;"></div></div>
                 </div>
                 <div>
-                  <div style="display: flex; justify-content: space-between; margin-bottom: 2px;"><span>LLM First Token</span><strong>195ms</strong></div>
-                  <div style="background: var(--secondary); height: 6px; border-radius: 9999px; overflow: hidden;"><div style="background: var(--warn); width: 62%; height: 100%;"></div></div>
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 2px;"><span>LLM Stream First Token</span><strong style="color: var(--chart-amber);">195ms</strong></div>
+                  <div style="background: var(--secondary); height: 6px; border-radius: 9999px; overflow: hidden;"><div style="background: var(--chart-amber); width: 62%; height: 100%;"></div></div>
                 </div>
                 <div>
-                  <div style="display: flex; justify-content: space-between; margin-bottom: 2px;"><span>Auth Gateway</span><strong>48ms</strong></div>
-                  <div style="background: var(--secondary); height: 6px; border-radius: 9999px; overflow: hidden;"><div style="background: var(--primary); width: 22%; height: 100%;"></div></div>
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 2px;"><span>Auth Gateway JWT</span><strong style="color: var(--chart-indigo);">48ms</strong></div>
+                  <div style="background: var(--secondary); height: 6px; border-radius: 9999px; overflow: hidden;"><div style="background: var(--chart-indigo); width: 22%; height: 100%;"></div></div>
                 </div>
+                <div>
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 2px;"><span>Asset Cache Edge</span><strong style="color: var(--chart-emerald);">12ms</strong></div>
+                  <div style="background: var(--secondary); height: 6px; border-radius: 9999px; overflow: hidden;"><div style="background: var(--chart-emerald); width: 8%; height: 100%;"></div></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Chart 6: Semi-Circle Resource Quota Gauge -->
+            <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
+              <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-bottom: 4px;">
+                <span style="font-weight: 600;">Cluster Memory Watermark</span>
+                <span class="badge badge-warning" style="font-size: 10px; height: 18px;">Normal</span>
+              </div>
+              <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
+                <svg viewBox="0 0 180 100" style="width: 140px; height: 78px; overflow: visible;">
+                  <defs>
+                    <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stop-color="var(--chart-emerald)"/>
+                      <stop offset="60%" stop-color="var(--chart-indigo)"/>
+                      <stop offset="100%" stop-color="var(--chart-amber)"/>
+                    </linearGradient>
+                  </defs>
+                  <!-- Radius = 65, Half Circumference = 204.2 -->
+                  <circle cx="90" cy="90" r="65" fill="none" stroke="var(--secondary)" stroke-width="16" stroke-dasharray="204.2 408.4" stroke-dashoffset="0" transform="rotate(-180 90 90)" stroke-linecap="round"/>
+                  <!-- Active arc 78.4%: length = 160.1 -->
+                  <circle cx="90" cy="90" r="65" fill="none" stroke="url(#gaugeGrad)" stroke-width="16" stroke-dasharray="160.1 408.4" stroke-dashoffset="0" transform="rotate(-180 90 90)" stroke-linecap="round"/>
+                  <text x="90" y="74" text-anchor="middle" font-size="18" font-weight="700" fill="var(--card-fg)">78.4%</text>
+                  <text x="90" y="88" text-anchor="middle" font-size="9" fill="var(--muted-fg)">15.6 / 20 TB used</text>
+                  <text x="25" y="98" font-size="9" fill="var(--muted-fg)" text-anchor="middle">0%</text>
+                  <text x="155" y="98" font-size="9" fill="var(--muted-fg)" text-anchor="middle">100%</text>
+                </svg>
               </div>
             </div>
           </div>
@@ -1429,12 +1493,12 @@ npx agent-html check dashboard.html</code></pre>
       </div>
 
       <div class="footer-links">
-        <a href="templates/report.html" target="_blank">Report</a>
-        <a href="templates/dashboard.html" target="_blank">Dashboard</a>
-        <a href="templates/inspector.html" target="_blank">Inspector</a>
-        <a href="templates/compare.html" target="_blank">Compare</a>
-        <a href="templates/timeline.html" target="_blank">Timeline</a>
-        <a href="templates/kanban.html" target="_blank">Kanban</a>
+        <a href="templates/en/report.html" target="_blank">Report</a>
+        <a href="templates/en/dashboard.html" target="_blank">Dashboard</a>
+        <a href="templates/en/inspector.html" target="_blank">Inspector</a>
+        <a href="templates/en/compare.html" target="_blank">Compare</a>
+        <a href="templates/en/timeline.html" target="_blank">Timeline</a>
+        <a href="templates/en/kanban.html" target="_blank">Kanban</a>
         <a href="https://github.com/QingYunA/agent-html" target="_blank">GitHub</a>
       </div>
       <!-- [Colophon: agent-html design system v1.0.0 · generated at 2026-09-08 · zero-dependency standalone] -->

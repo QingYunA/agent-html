@@ -38,7 +38,7 @@
 ---
 
 <p align="center">
-  <img src="assets/screenshots/gallery.png" alt="agent-html Component Gallery" width="100%">
+  <img src="assets/screenshots/en/gallery.png" alt="agent-html Component Gallery" width="100%">
 </p>
 
 ---
@@ -77,7 +77,7 @@ Single-column centered layout (860px max-width) optimized for readability and pr
 > **Use for**: Technical reviews, interview assessments, postmortems, architecture RFCs, and changelogs.
 
 <p align="center">
-  <img src="assets/screenshots/report.png" alt="Report Template" width="100%">
+  <img src="assets/screenshots/en/report.png" alt="Report Template" width="100%">
 </p>
 
 ---
@@ -88,7 +88,7 @@ Fluid wide-screen layout with a 4-column KPI metric grid, responsive pure SVG ch
 > **Use for**: Resource usage monitoring, quota trackers, task lists, and operational dashboards.
 
 <p align="center">
-  <img src="assets/screenshots/dashboard.png" alt="Dashboard Template" width="100%">
+  <img src="assets/screenshots/en/dashboard.png" alt="Dashboard Template" width="100%">
 </p>
 
 ---
@@ -99,7 +99,7 @@ Full-viewport app layout (`100vh` without outer page scroll). Left sidebar (320p
 > **Use for**: Trace replay, log inspectors, JSONL viewers, and prompt debuggers.
 
 <p align="center">
-  <img src="assets/screenshots/inspector.png" alt="Inspector Template" width="100%">
+  <img src="assets/screenshots/en/inspector.png" alt="Inspector Template" width="100%">
 </p>
 
 ---
@@ -110,7 +110,7 @@ Two-column split view (Baseline vs. Challenger) with verdict callout, parameter 
 > **Use for**: LLM model evaluations (Model A vs. Model B), prompt revision benchmarks, and feature/pricing comparisons.
 
 <p align="center">
-  <img src="assets/screenshots/compare.png" alt="Compare Template" width="100%">
+  <img src="assets/screenshots/en/compare.png" alt="Compare Template" width="100%">
 </p>
 
 ---
@@ -121,7 +121,7 @@ High-density single-track vertical timeline with semantic status nodes (Error, W
 > **Use for**: Incident postmortems, changelogs, release roadmaps, and event chronicles.
 
 <p align="center">
-  <img src="assets/screenshots/timeline.png" alt="Timeline Template" width="100%">
+  <img src="assets/screenshots/en/timeline.png" alt="Timeline Template" width="100%">
 </p>
 
 ---
@@ -132,7 +132,7 @@ Interactive 4-column categorization board (Backlog, Progress, Blocked, Done). Ze
 > **Use for**: Ticket triage, task prioritization, backlog grooming, and bug tracking.
 
 <p align="center">
-  <img src="assets/screenshots/kanban.png" alt="Kanban Template" width="100%">
+  <img src="assets/screenshots/en/kanban.png" alt="Kanban Template" width="100%">
 </p>
 
 ---

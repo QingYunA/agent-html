@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>通用单栏文档与评估报告母版 · Agent HTML</title>
+  <style>
+    /* ==========================================================================
+       Agent-HTML Core Design Tokens (shadcn/ui Neutral Palette)
+       ========================================================================== */
+    :root {
+      --bg: #fafafa;
+      --card: #ffffff;
+      --card-fg: #09090b;
+      --primary: #18181b;
+      --primary-fg: #fafafa;
+      --primary-hover: #27272a;
+      --secondary: #f4f4f5;
+      --secondary-fg: #18181b;
+      --muted: #f4f4f5;
+      --muted-fg: #71717a;
+      --border: #e4e4e7;
+      --ring: #18181b;
+      --radius: 8px;
+      --radius-sm: 6px;
+      --radius-lg: 12px;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      
+      --ok: #16a34a;
+      --ok-bg: #f0fdf4;
+      --ok-border: #bbf7d0;
+      --warn: #d97706;
+      --warn-bg: #fffbeb;
+      --warn-border: #fde68a;
+      --err: #dc2626;
+      --err-bg: #fef2f2;
+      --err-border: #fecaca;
+      --info: #2563eb;
+      --info-bg: #eff6ff;
+      --info-border: #bfdbfe;
+    }
+
+    [data-theme="dark"] {
+      --bg: #09090b;
+      --card: #121215;
+      --card-fg: #fafafa;
+      --primary: #fafafa;
+      --primary-fg: #18181b;
+      --primary-hover: #e4e4e7;
+      --secondary: #27272a;
+      --secondary-fg: #fafafa;
+      --muted: #18181b;
+      --muted-fg: #a1a1aa;
+      --border: #27272a;
+      --ring: #d4d4d8;
+      
+      --ok: #4ade80;
+      --ok-bg: #052e1680;
+      --ok-border: #166534;
+      --warn: #fbbf24;
+      --warn-bg: #451a0380;
+      --warn-border: #854d0e;
+      --err: #f87171;
+      --err-bg: #450a0a80;
+      --err-border: #991b1b;
+      --info: #60a5fa;
+      --info-bg: #17255480;
+      --info-border: #1e40af;
+    }
+
+    html { scroll-behavior: smooth; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--card-fg);
+      line-height: 1.5;
+      padding: 40px 20px;
+    }
+    .layout-wrapper {
+      max-width: 1140px;
+      margin: 0 auto;
+      display: flex;
+      gap: 36px;
+      justify-content: center;
+    }
+    .container {
+      flex: 1;
+      max-width: 860px;
+      min-width: 0;
+    }
+    .toc-rail {
+      width: 200px;
+      flex-shrink: 0;
+      display: none;
+    }
+    @media (min-width: 1080px) {
+      .toc-rail { display: block; }
+    }
+    .toc-sticky {
+      position: sticky;
+      top: 40px;
+      font-size: 13px;
+    }
+    .toc-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted-fg);
+      margin-bottom: 12px;
+      padding-left: 10px;
+    }
+    .toc-link {
+      display: block;
+      color: var(--muted-fg);
+      text-decoration: none;
+      padding: 6px 10px;
+      border-left: 2px solid transparent;
+      margin-bottom: 4px;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      transition: all 0.15s ease;
+    }
+    .toc-link:hover {
+      color: var(--card-fg);
+      background: var(--secondary);
+    }
+    .toc-link.active {
+      color: var(--primary);
+      font-weight: 600;
+      border-left-color: var(--primary);
+      background: var(--secondary);
+    }
+
+    /* Header */
+    .report-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .report-title-box {
+      min-width: 0;
+      flex: 1;
+    }
+    .report-title-box h1 {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .report-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--muted-fg);
+      margin-top: 8px;
+    }
+    .report-meta-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    /* Buttons & Badges */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      height: 34px;
+      padding: 0 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--card-fg);
+      cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: all 0.15s ease;
+    }
+    .btn:hover { background: var(--secondary); }
+    .btn-primary { background: var(--primary); color: var(--primary-fg); border-color: var(--primary); }
+    .btn-primary:hover { opacity: 0.9; }
+    .btn-icon {
+      width: 34px;
+      height: 34px;
+      padding: 0;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      height: 22px;
+      padding: 0 8px;
+      border-radius: 9999px;
+      border: 1px solid var(--border);
+      background: var(--secondary);
+      color: var(--secondary-fg);
+    }
+    .badge-dot { width: 6px; height: 6px; border-radius: 9999px; background: currentColor; }
+    .badge-success { background: var(--ok-bg); color: var(--ok); border-color: var(--ok-border); }
+    .badge-warning { background: var(--warn-bg); color: var(--warn); border-color: var(--warn-border); }
+    .badge-danger  { background: var(--err-bg);  color: var(--err);  border-color: var(--err-border); }
+    .badge-info    { background: var(--info-bg); color: var(--info); border-color: var(--info-border); }
+
+    /* Stat Banner */
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .stat-mini {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      box-shadow: var(--shadow-sm);
+    }
+    .stat-mini-label { font-size: 12px; color: var(--muted-fg); }
+    .stat-mini-val { font-size: 22px; font-weight: 700; margin-top: 4px; }
+
+    /* Executive Callout */
+    .callout {
+      padding: 16px 18px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--secondary);
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    .callout-success { background: var(--ok-bg); border-color: var(--ok-border); }
+    .callout-warning { background: var(--warn-bg); border-color: var(--warn-border); }
+    .callout-title { font-weight: 600; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; color: var(--ok); }
+    .callout-warning .callout-title { color: var(--warn); }
+
+    /* Card & Accordions */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    .card-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      font-weight: 600;
+      font-size: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    details {
+      border-bottom: 1px solid var(--border);
+    }
+    details:last-child { border-bottom: none; }
+    summary {
+      list-style: none;
+      padding: 14px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      user-select: none;
+      transition: background 0.15s;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary:hover { background: var(--secondary); }
+    .chevron { transition: transform 0.2s; color: var(--muted-fg); }
+    details[open] .chevron { transform: rotate(180deg); }
+    
+    .accordion-inner {
+      padding: 0 16px 16px;
+      font-size: 13px;
+      color: var(--muted-fg);
+      line-height: 1.6;
+    }
+    .property-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .property-box {
+      background: var(--secondary);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+    }
+    .property-label { font-weight: 600; font-size: 11px; color: var(--muted-fg); }
+    .property-value { font-size: 13px; color: var(--card-fg); margin-top: 2px; }
+
+    /* Colophon Metadata Footer */
+    .colophon {
+      margin-top: 40px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--muted-fg);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    /* Anchor Scroll Margins & Focus Highlight */
+    section[id], footer[id] {
+      scroll-margin-top: 32px;
+    }
+    :target {
+      animation: targetHighlight 1.5s ease-out;
+    }
+    @keyframes targetHighlight {
+      0% { box-shadow: 0 0 0 2px var(--primary); }
+      100% { box-shadow: 0 0 0 2px transparent; }
+    }
+
+    @media print {
+      body { background: #fff; padding: 0; }
+      .actions, .toc-rail { display: none !important; }
+      .container { max-width: 100% !important; }
+      details { break-inside: avoid; }
+      details[open] { margin-bottom: 10px; }
+    }
+    @media (max-width: 640px) {
+      .stat-row { grid-template-columns: 1fr 1fr; }
+      .property-grid { grid-template-columns: 1fr; }
+      .report-header { flex-direction: column; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="layout-wrapper">
+  <!-- [Sticky Table of Contents Rail] -->
+  <aside class="toc-rail">
+    <div class="toc-sticky">
+      <div class="toc-title">目录导航 (TOC)</div>
+      <nav id="tocNav">
+        <a href="#kpi-section" class="toc-link active">1. 核心指标概览</a>
+        <a href="#summary-section" class="toc-link">2. 执行摘要与结论</a>
+        <a href="#checklist-section" class="toc-link">3. 维度细项审查清单</a>
+        <a href="#colophon-section" class="toc-link">4. 审查签署与溯源</a>
+      </nav>
+    </div>
+  </aside>
+
+  <div class="container">
+  <!-- [Slot: Report Header] -->
+  <header class="report-header">
+    <div class="report-title-box">
+      <h1>
+        <!-- Title Slot -->
+        <span>系统架构评估与综合审查报告</span>
+        <!-- Status Badge Slot -->
+        <span class="badge badge-success"><span class="badge-dot"></span>综合评定：通过 (Approved)</span>
+      </h1>
+      <div class="report-meta">
+        <div class="report-meta-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span>评估主体：Project Alpha / 生产基线审查</span>
+        </div>
+        <div class="report-meta-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+          <span>评估日期：2026-09-08</span>
+        </div>
+        <div class="report-meta-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span>版本标识：v2.4.0-RC3</span>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <button id="copyMarkdownBtn" class="btn" title="一键复制本报告为 Markdown 文本">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+        <span>复制 Markdown</span>
+      </button>
+      <button class="btn" onclick="window.print()" title="打印或保存为 PDF">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
+        <span>打印/PDF</span>
+      </button>
+      <button id="themeToggle" class="btn btn-icon" title="切换暗黑模式">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1 -9 -9Z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- [Slot: KPI Score Overview] -->
+  <section id="kpi-section" class="stat-row">
+    <div class="stat-mini">
+      <div class="stat-mini-label">综合达标得分</div>
+      <div class="stat-mini-val" style="color: var(--ok);">92.5 <span style="font-size: 13px; font-weight: normal; color: var(--muted-fg);">/ 100</span></div>
+    </div>
+    <div class="stat-mini">
+      <div class="stat-mini-label">架构解耦与内聚</div>
+      <div class="stat-mini-val">94%</div>
+    </div>
+    <div class="stat-mini">
+      <div class="stat-mini-label">性能压测通过率</div>
+      <div class="stat-mini-val">98.2%</div>
+    </div>
+    <div class="stat-mini">
+      <div class="stat-mini-label">安全合规审查</div>
+      <div class="stat-mini-val" style="color: var(--ok);">100%</div>
+    </div>
+  </section>
+
+  <!-- [Slot: Executive Summary Callout] -->
+  <section id="summary-section" class="callout callout-success">
+    <div class="callout-title">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      <span>执行摘要与上线决策结论 (Executive Summary)</span>
+    </div>
+    <div>经专家委员会全面审查，当前版本架构清晰度高、边界划分清晰，核心服务具备自动容灾切流能力。全链路压力测试达标且无阻断性缺陷，<strong>建议准予发布至生产环境并开启灰度放量</strong>。</div>
+  </section>
+
+  <!-- [Slot: Dimension Breakdown / Detailed Sections] -->
+  <section id="checklist-section" class="card">
+    <div class="card-header">
+      <span>评估细项与维度分解清单</span>
+      <span class="badge badge-info">共 6 个核心评估项</span>
+    </div>
+    <div>
+      <!-- Section 1 -->
+      <details open>
+        <summary>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span>1. 架构模块设计与边界清晰度</span>
+            <span class="badge badge-success">优异 (95分)</span>
+          </div>
+          <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="accordion-inner">
+          <p>核心业务链路已实现事件驱动异步化解耦，依赖关系单向流动，符合领域驱动设计标准。</p>
+          <div class="property-grid">
+            <div class="property-box">
+              <div class="property-label">关键优势</div>
+              <div class="property-value">跨模块通信全面接入统一消息总线，降低点对点强依赖。</div>
+            </div>
+            <div class="property-box">
+              <div class="property-label">持续改进点</div>
+              <div class="property-value">建议后续迭代逐步清理老旧废弃协议接口。</div>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- Section 2 -->
+      <details open>
+        <summary>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span>2. 高可用容灾与极端异常自愈</span>
+            <span class="badge badge-success">良好 (90分)</span>
+          </div>
+          <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="accordion-inner">
+          <p>已完成机房级网络割接与依赖宕机混沌测试。多级熔断器可在 200ms 内生效，未引发级联雪崩。</p>
+          <div class="property-grid">
+            <div class="property-box">
+              <div class="property-label">异地多活表现</div>
+              <div class="property-value">模拟华东可用区断网，流量在 2.4s 内全自动平滑切流至华北可用区。</div>
+            </div>
+            <div class="property-box">
+              <div class="property-label">RPO / RTO 达标度</div>
+              <div class="property-value">RPO = 0（无数据丢失），RTO = 2.4s（优于 10s SLA 基线要求）。</div>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- Section 3 -->
+      <details open>
+        <summary>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span>3. 依赖项安全与代码质量基线</span>
+            <span class="badge badge-warning">注意项 (88分)</span>
+          </div>
+          <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="accordion-inner">
+          <p>第三方组件漏洞扫描通过。静态代码分析发现 3 处潜在非空指针解引用风险，已记录待修复工单并在当前补丁包打齐防护断言。</p>
+        </div>
+      </details>
+
+      <!-- Section 4 -->
+      <details open>
+        <summary>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span>4. 全链路压测性能与吞吐瓶颈分析</span>
+            <span class="badge badge-success">达标 (96分)</span>
+          </div>
+          <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="accordion-inner">
+          <p>在 3 倍峰值压测场景下持续施压 2 小时，系统整体吞吐稳定在 2,890 TPS，服务实例无 OOM 发生，GC 停顿低于 15ms。</p>
+          <div class="property-grid">
+            <div class="property-box">
+              <div class="property-label">峰值吞吐 (TPS)</div>
+              <div class="property-value">2,890 TPS (基线预期: 2,000 TPS)</div>
+            </div>
+            <div class="property-box">
+              <div class="property-label">P95 延迟</div>
+              <div class="property-value">42ms (未见长尾突刺)</div>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- Section 5 -->
+      <details open>
+        <summary>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span>5. 生产准入灰度放量与回滚预案</span>
+            <span class="badge badge-success">完备 (94分)</span>
+          </div>
+          <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="accordion-inner">
+          <p>放量策略采用梯级灰度：5%（金丝雀）→ 20% → 50% → 100%，各阶段留存 30 分钟观察窗口。核心业务配置有一键热回滚开关，经演练回滚耗时 45s。</p>
+        </div>
+      </details>
+
+      <!-- Section 6 -->
+      <details open>
+        <summary>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span>6. 审查委员会签署与准入决议</span>
+            <span class="badge badge-success">准签生效</span>
+          </div>
+          <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="accordion-inner">
+          <p>技术架构师、SRE 运维团队负责人及业务安全代表共同签署本结论，同意于本周维护窗口正式启动生产灰度放量。</p>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- [Slot: Colophon Metadata Footer] -->
+  <footer id="colophon-section" class="colophon">
+    <div>Generated by <strong>agent-html</strong> · 零依赖单文件规范 · 100% 离线自包含</div>
+    <div>时间戳：2026-09-08 · 基准：Project Alpha (main@v2.4.0-RC3) · 状态：已存档</div>
+  </footer>
+  </div>
+</div>
+
+<script>
+  // Theme Toggle
+  const toggle = document.getElementById('themeToggle');
+  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (isDark) document.documentElement.setAttribute('data-theme', 'dark');
+
+  toggle?.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme') === 'dark';
+    document.documentElement.setAttribute('data-theme', current ? 'light' : 'dark');
+  });
+
+  // Copy as Markdown
+  document.getElementById('copyMarkdownBtn')?.addEventListener('click', () => {
+    const md = `# 系统架构评估与综合审查报告
+> 状态：通过 (Approved) | 评估主体：Project Alpha | 日期：2026-09-08 | 版本：v2.4.0-RC3
+
+## 1. 核心指标概览
+- 综合达标得分：92.5 / 100
+- 架构解耦与内聚：94%
+- 性能压测通过率：98.2%
+- 安全合规审查：100%
+
+## 2. 执行摘要与结论
+经专家委员会全面审查，当前版本架构清晰度高、边界划分清晰，核心服务具备自动容灾切流能力。全链路压力测试达标且无阻断性缺陷，建议准予发布至生产环境并开启灰度放量。
+
+## 3. 维度细项审查清单
+- [✓] 架构模块设计与边界清晰度: 优异 (95分) — 核心业务链路已实现事件驱动解耦
+- [✓] 高可用容灾与极端异常自愈: 良好 (90分) — 多级熔断器可在 200ms 内生效
+- [!] 依赖项安全与代码质量基线: 注意项 (88分) — 第三方扫描通过，补齐防护断言
+`;
+    navigator.clipboard.writeText(md).then(() => {
+      const btn = document.getElementById('copyMarkdownBtn');
+      const orig = btn.innerHTML;
+      btn.innerHTML = '<span>已复制 Markdown!</span>';
+      setTimeout(() => { btn.innerHTML = orig; }, 1800);
+    });
+  });
+
+  // Interactive Sticky TOC Navigation & ScrollSpy
+  const tocLinks = document.querySelectorAll('.toc-link');
+  let isManualScrolling = false;
+  let scrollTimer = null;
+
+  function setActiveToc(id) {
+    tocLinks.forEach(link => {
+      const match = link.getAttribute('href') === '#' + id;
+      link.classList.toggle('active', match);
+    });
+  }
+
+  // 1. Explicit Click Handler: Immediate feedback & smooth scroll
+  tocLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetId = link.getAttribute('href').slice(1);
+      const targetEl = document.getElementById(targetId);
+      if (!targetEl) return;
+
+      setActiveToc(targetId);
+      isManualScrolling = true;
+      clearTimeout(scrollTimer);
+
+      targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      history.pushState(null, '', '#' + targetId);
+
+      // Re-enable IntersectionObserver after smooth scroll settles
+      scrollTimer = setTimeout(() => {
+        isManualScrolling = false;
+      }, 800);
+    });
+  });
+
+  // 2. Initial Hash on Page Load
+  if (window.location.hash) {
+    const initId = window.location.hash.slice(1);
+    const initEl = document.getElementById(initId);
+    if (initEl) {
+      setActiveToc(initId);
+      setTimeout(() => {
+        initEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
+  }
+
+  // 3. ScrollSpy using IntersectionObserver
+  const sections = ['kpi-section', 'summary-section', 'checklist-section', 'colophon-section'];
+  const observer = new IntersectionObserver((entries) => {
+    if (isManualScrolling) return;
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        setActiveToc(entry.target.getAttribute('id'));
+      }
+    });
+  }, { rootMargin: '-10% 0px -65% 0px' });
+
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) observer.observe(el);
+  });
+
+  // 4. Bottom of Page Fallback
+  window.addEventListener('scroll', () => {
+    if (isManualScrolling) return;
+    if ((window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 60)) {
+      setActiveToc('colophon-section');
+    }
+  }, { passive: true });
+</script>
+</body>
+</html>

@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Service Telemetry & Operations Dashboard · agent-html</title>
+  <style>
+    /* ==========================================================================
+       Agent-HTML Core Design Tokens (shadcn/ui Neutral Palette)
+       ========================================================================== */
+    :root {
+      --bg: #fafafa;
+      --card: #ffffff;
+      --card-fg: #09090b;
+      --primary: #18181b;
+      --primary-fg: #fafafa;
+      --primary-hover: #27272a;
+      --secondary: #f4f4f5;
+      --secondary-fg: #18181b;
+      --muted: #f4f4f5;
+      --muted-fg: #71717a;
+      --border: #e4e4e7;
+      --ring: #18181b;
+      --radius: 8px;
+      --radius-sm: 6px;
+      --radius-lg: 12px;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      
+      --ok: #16a34a;
+      --ok-bg: #f0fdf4;
+      --ok-border: #bbf7d0;
+      --warn: #d97706;
+      --warn-bg: #fffbeb;
+      --warn-border: #fde68a;
+      --err: #dc2626;
+      --err-bg: #fef2f2;
+      --err-border: #fecaca;
+      --info: #2563eb;
+      --info-bg: #eff6ff;
+      --info-border: #bfdbfe;
+    }
+
+    [data-theme="dark"] {
+      --bg: #09090b;
+      --card: #121215;
+      --card-fg: #fafafa;
+      --primary: #fafafa;
+      --primary-fg: #18181b;
+      --primary-hover: #e4e4e7;
+      --secondary: #27272a;
+      --secondary-fg: #fafafa;
+      --muted: #18181b;
+      --muted-fg: #a1a1aa;
+      --border: #27272a;
+      --ring: #d4d4d8;
+      
+      --ok: #4ade80;
+      --ok-bg: #052e1680;
+      --ok-border: #166534;
+      --warn: #fbbf24;
+      --warn-bg: #451a0380;
+      --warn-border: #854d0e;
+      --err: #f87171;
+      --err-bg: #450a0a80;
+      --err-border: #991b1b;
+      --info: #60a5fa;
+      --info-bg: #17255480;
+      --info-border: #1e40af;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--card-fg);
+      line-height: 1.5;
+      padding: 32px 24px;
+    }
+    .container {
+      max-width: 1160px;
+      margin: 0 auto;
+    }
+
+    /* Top Bar */
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    .dashboard-header h1 {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .header-desc {
+      font-size: 13px;
+      color: var(--muted-fg);
+      margin-top: 2px;
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Buttons & Badges */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      height: 34px;
+      padding: 0 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--card-fg);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .btn:hover { background: var(--secondary); }
+    .btn-primary { background: var(--primary); color: var(--primary-fg); border-color: var(--primary); }
+    .btn-primary:hover { opacity: 0.9; }
+    .btn-sm { height: 28px; padding: 0 8px; font-size: 12px; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      height: 20px;
+      padding: 0 7px;
+      border-radius: 9999px;
+      border: 1px solid var(--border);
+      background: var(--secondary);
+      color: var(--secondary-fg);
+    }
+    .badge-dot { width: 6px; height: 6px; border-radius: 9999px; background: currentColor; }
+    .badge-success { background: var(--ok-bg); color: var(--ok); border-color: var(--ok-border); }
+    .badge-warning { background: var(--warn-bg); color: var(--warn); border-color: var(--warn-border); }
+    .badge-danger  { background: var(--err-bg);  color: var(--err);  border-color: var(--err-border); }
+    .badge-info    { background: var(--info-bg); color: var(--info); border-color: var(--info-border); }
+
+    /* Stat Cards */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    .stat-head {
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted-fg);
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .stat-val {
+      font-size: 26px;
+      font-weight: 700;
+      margin: 8px 0 4px;
+    }
+    .stat-sub {
+      font-size: 12px;
+      color: var(--muted-fg);
+    }
+
+    /* Charts Row */
+    .charts-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .chart-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    .chart-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .chart-title { font-size: 14px; font-weight: 600; }
+    .chart-meta { font-size: 12px; color: var(--muted-fg); }
+
+    /* Main Table Card */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+    
+    /* Toolbar */
+    .toolbar {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    .toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+      max-width: 540px;
+    }
+    .input-wrap {
+      position: relative;
+      width: 100%;
+      display: flex;
+      align-items: center;
+    }
+    .input-wrap svg {
+      position: absolute;
+      left: 10px;
+      color: var(--muted-fg);
+      pointer-events: none;
+    }
+    .input {
+      width: 100%;
+      height: 34px;
+      padding: 0 10px 0 32px;
+      font-size: 13px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--card-fg);
+      outline: none;
+    }
+    .input:focus { border-color: var(--ring); }
+    .select {
+      height: 34px;
+      padding: 0 10px;
+      font-size: 13px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--card-fg);
+      outline: none;
+      cursor: pointer;
+    }
+
+    /* Table */
+    .table-wrap { overflow-x: auto; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      text-align: left;
+    }
+    th {
+      background: var(--secondary);
+      color: var(--muted-fg);
+      font-weight: 600;
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    tr:last-child td { border-bottom: none; }
+    tbody tr:hover { background: var(--muted); }
+
+    .footer-bar {
+      padding: 12px 18px;
+      background: var(--secondary);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--muted-fg);
+    }
+
+    /* Dialog */
+    dialog {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      background: var(--card);
+      color: var(--card-fg);
+      padding: 24px;
+      max-width: 440px;
+      width: 90%;
+      margin: auto;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+    }
+    dialog::backdrop {
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(4px);
+    }
+    .dialog-header { margin-bottom: 16px; font-weight: 600; font-size: 16px; }
+    .form-item { margin-bottom: 12px; }
+    .form-item label { display: block; font-size: 12px; font-weight: 500; margin-bottom: 4px; }
+    .dialog-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; }
+
+    @media (max-width: 768px) {
+      .charts-row { grid-template-columns: 1fr; }
+      .toolbar { flex-direction: column; align-items: stretch; }
+      .toolbar-left { max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- [Slot: Dashboard Header] -->
+  <header class="dashboard-header">
+    <div>
+      <h1>Service Telemetry & Operations Dashboard</h1>
+      <div class="header-desc">Data Source: Production Gateway Cluster · Streaming Mode: Active</div>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-primary" onclick="document.getElementById('actionModal').showModal()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <span>New Entry</span>
+      </button>
+      <button id="themeToggle" class="btn" title="Toggle theme">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1 -9 -9Z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- [Slot: 4-Column KPI Stat Grid] -->
+  <section class="stat-grid">
+    <!-- Stat 1 -->
+    <div class="stat-card">
+      <div class="stat-head">
+        <span>Total Volume</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      </div>
+      <div class="stat-val">128,940</div>
+      <div class="stat-sub"><span style="color: var(--ok); font-weight: 600;">↑ +14.2%</span> vs baseline period</div>
+    </div>
+
+    <!-- Stat 2 -->
+    <div class="stat-card">
+      <div class="stat-head">
+        <span>SLA Availability</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      </div>
+      <div class="stat-val" style="color: var(--ok);">99.8%</div>
+      <div class="stat-sub">SLA Target Met</div>
+    </div>
+
+    <!-- Stat 3 -->
+    <div class="stat-card">
+      <div class="stat-head">
+        <span>Active Alerts</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </div>
+      <div class="stat-val" style="color: var(--warn);">3 <span style="font-size: 14px; font-weight: normal; color: var(--muted-fg);">items</span></div>
+      <div class="stat-sub">2 pending, 1 auto-recovering</div>
+    </div>
+
+    <!-- Stat 4 -->
+    <div class="stat-card">
+      <div class="stat-head">
+        <span>Avg Latency (P95)</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <div class="stat-val">42ms</div>
+      <div class="stat-sub"><span style="color: var(--ok); font-weight: 600;">↓ -8ms</span> stable post-optimization</div>
+    </div>
+  </section>
+
+  <!-- [Slot: 2-Column Responsive Pure SVG Charts] -->
+  <section class="charts-row">
+    <!-- Chart A: 24h Area Trend -->
+    <div class="chart-card">
+      <div class="chart-head">
+        <div>
+          <div class="chart-title">24h Cluster Request Throughput (TPS)</div>
+          <div class="chart-meta">Avg: 1,420 TPS · Peak: 2,890 TPS</div>
+        </div>
+        <span class="badge badge-success"><span class="badge-dot"></span>+14.8%</span>
+      </div>
+      <svg viewBox="0 0 500 130" style="width: 100%; height: 110px; overflow: visible;">
+        <defs>
+          <linearGradient id="chartAreaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#18181b" stop-opacity="0.25"/>
+            <stop offset="100%" stop-color="#18181b" stop-opacity="0.0"/>
+          </linearGradient>
+        </defs>
+        <!-- Horizontal gridlines -->
+        <line x1="0" y1="20" x2="500" y2="20" stroke="var(--border)" stroke-dasharray="3,3"/>
+        <line x1="0" y1="60" x2="500" y2="60" stroke="var(--border)" stroke-dasharray="3,3"/>
+        <line x1="0" y1="100" x2="500" y2="100" stroke="var(--border)" stroke-dasharray="3,3"/>
+        <!-- Area fill -->
+        <path d="M 0 100 Q 80 80, 160 70 T 320 30 T 420 20 L 500 70 L 500 120 L 0 120 Z" fill="url(#chartAreaGrad)"/>
+        <!-- Curve line -->
+        <path d="M 0 100 Q 80 80, 160 70 T 320 30 T 420 20 L 500 70" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- Peak marker dot -->
+        <circle cx="420" cy="20" r="4" fill="var(--primary)" stroke="var(--card)" stroke-width="2"/>
+        <rect x="395" y="4" width="50" height="16" rx="3" fill="var(--primary)"/>
+        <text x="420" y="15" fill="var(--primary-fg)" font-size="9" font-weight="600" text-anchor="middle">2,890</text>
+        <!-- X-axis labels -->
+        <text x="5" y="125" fill="var(--muted-fg)" font-size="10">00:00</text>
+        <text x="160" y="125" fill="var(--muted-fg)" font-size="10">08:00</text>
+        <text x="320" y="125" fill="var(--muted-fg)" font-size="10">16:00</text>
+        <text x="475" y="125" fill="var(--muted-fg)" font-size="10">23:59</text>
+      </svg>
+    </div>
+
+    <!-- Chart B: Latency Distribution Bars -->
+    <div class="chart-card">
+      <div class="chart-head">
+        <div>
+          <div class="chart-title">Core Service Latency Distribution (ms)</div>
+          <div class="chart-meta">P95 Benchmark across 6 services</div>
+        </div>
+        <span class="badge">6 Nodes</span>
+      </div>
+      <svg viewBox="0 0 500 130" style="width: 100%; height: 110px; overflow: visible;">
+        <line x1="0" y1="30" x2="500" y2="30" stroke="var(--border)" stroke-dasharray="3,3"/>
+        <line x1="0" y1="70" x2="500" y2="70" stroke="var(--border)" stroke-dasharray="3,3"/>
+        <line x1="0" y1="105" x2="500" y2="105" stroke="var(--border)"/>
+        
+        <!-- Bar 1: Gateway 24ms -->
+        <rect x="30" y="80" width="34" height="25" rx="3" fill="var(--primary)"/>
+        <text x="47" y="74" fill="var(--card-fg)" font-size="10" font-weight="600" text-anchor="middle">24</text>
+        <text x="47" y="120" fill="var(--muted-fg)" font-size="10" text-anchor="middle">Gateway</text>
+
+        <!-- Bar 2: Auth 48ms -->
+        <rect x="110" y="60" width="34" height="45" rx="3" fill="var(--primary)"/>
+        <text x="127" y="54" fill="var(--card-fg)" font-size="10" font-weight="600" text-anchor="middle">48</text>
+        <text x="127" y="120" fill="var(--muted-fg)" font-size="10" text-anchor="middle">Auth</text>
+
+        <!-- Bar 3: Order 92ms (Warning) -->
+        <rect x="190" y="30" width="34" height="75" rx="3" fill="var(--warn)"/>
+        <text x="207" y="24" fill="var(--warn)" font-size="10" font-weight="700" text-anchor="middle">92</text>
+        <text x="207" y="120" fill="var(--muted-fg)" font-size="10" text-anchor="middle">Order</text>
+
+        <!-- Bar 4: Payment 35ms -->
+        <rect x="270" y="70" width="34" height="35" rx="3" fill="var(--primary)"/>
+        <text x="287" y="64" fill="var(--card-fg)" font-size="10" font-weight="600" text-anchor="middle">35</text>
+        <text x="287" y="120" fill="var(--muted-fg)" font-size="10" text-anchor="middle">Payment</text>
+
+        <!-- Bar 5: Storage 18ms -->
+        <rect x="350" y="84" width="34" height="21" rx="3" fill="var(--primary)"/>
+        <text x="367" y="78" fill="var(--card-fg)" font-size="10" font-weight="600" text-anchor="middle">18</text>
+        <text x="367" y="120" fill="var(--muted-fg)" font-size="10" text-anchor="middle">Storage</text>
+
+        <!-- Bar 6: Search 64ms -->
+        <rect x="430" y="50" width="34" height="55" rx="3" fill="var(--primary)"/>
+        <text x="447" y="44" fill="var(--card-fg)" font-size="10" font-weight="600" text-anchor="middle">64</text>
+        <text x="447" y="120" fill="var(--muted-fg)" font-size="10" text-anchor="middle">Search</text>
+      </svg>
+    </div>
+  </section>
+
+  <!-- [Slot: Data Table & Filter Card] -->
+  <section class="card">
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <div class="input-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="text" id="searchInput" class="input" placeholder="Filter by name, ID, or module...">
+        </div>
+        <select id="statusFilter" class="select">
+          <option value="ALL">All Statuses</option>
+          <option value="Healthy">Healthy</option>
+          <option value="Warning">Warning</option>
+          <option value="Finished">Finished</option>
+        </select>
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <button class="btn btn-sm" onclick="copyTableMarkdown()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+          <span id="copyTableText">Copy (MD)</span>
+        </button>
+        <button class="btn btn-sm" onclick="alert('Export CSV triggered')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span>Export CSV</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table id="dataTable">
+        <thead>
+          <tr>
+            <th>Item ID</th>
+            <th>Service / Description</th>
+            <th>Cluster Module</th>
+            <th>Throughput</th>
+            <th>Updated</th>
+            <th>Status</th>
+            <th style="text-align: right;">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-status="Healthy">
+            <td><code>ITEM-2026-001</code></td>
+            <td><strong>Core Engine API Cluster</strong> (Primary)</td>
+            <td>Core Gateway</td>
+            <td>1.28M req/s</td>
+            <td>Just now</td>
+            <td><span class="badge badge-success"><span class="badge-dot"></span>Healthy</span></td>
+            <td style="text-align: right;">
+              <button class="btn btn-sm" onclick="alert('View details')">Details</button>
+            </td>
+          </tr>
+          <tr data-status="Warning">
+            <td><code>ITEM-2026-002</code></td>
+            <td><strong>Async Queue Worker Group</strong> (Spike)</td>
+            <td>Message Bus</td>
+            <td>45.2K msg/s</td>
+            <td>3m ago</td>
+            <td><span class="badge badge-warning"><span class="badge-dot"></span>Warning</span></td>
+            <td style="text-align: right;">
+              <button class="btn btn-sm" onclick="alert('Investigate')">Triage</button>
+            </td>
+          </tr>
+          <tr data-status="Healthy">
+            <td><code>ITEM-2026-003</code></td>
+            <td><strong>Vector DB Cache Partition</strong> (98% hit)</td>
+            <td>Cache Tier</td>
+            <td>12.8 GB</td>
+            <td>12m ago</td>
+            <td><span class="badge badge-success"><span class="badge-dot"></span>Healthy</span></td>
+            <td style="text-align: right;">
+              <button class="btn btn-sm" onclick="alert('View details')">Details</button>
+            </td>
+          </tr>
+          <tr data-status="Finished">
+            <td><code>ITEM-2026-004</code></td>
+            <td><strong>Batch Data Ingestion Pipeline</strong> (Daily)</td>
+            <td>Sync Service</td>
+            <td>850 GB total</td>
+            <td>2h ago</td>
+            <td><span class="badge"><span class="badge-dot"></span>Finished</span></td>
+            <td style="text-align: right;">
+              <button class="btn btn-sm" disabled>Archived</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="footer-bar">
+      <span id="recordCount">Showing 4 records</span>
+      <span>10 records per page · Client-side instant filter</span>
+    </div>
+  </section>
+
+  <!-- [Colophon: agent-html design system v1.0.0 · generated at 2026-09-08 · zero-dependency standalone] -->
+</div>
+
+<!-- [Slot: Create / Action Dialog Modal] -->
+<dialog id="actionModal">
+  <div class="dialog-header">Create Service Entity</div>
+  <div class="form-item">
+    <label>Entity Identifier</label>
+    <input type="text" class="input" style="padding-left: 10px;" placeholder="e.g. Data Sync Worker">
+  </div>
+  <div class="form-item">
+    <label>Cluster Group</label>
+    <input type="text" class="input" style="padding-left: 10px;" value="Default Group">
+  </div>
+  <div class="dialog-actions">
+    <button class="btn" onclick="document.getElementById('actionModal').close()">Cancel</button>
+    <button class="btn btn-primary" onclick="alert('Saved successfully!'); document.getElementById('actionModal').close()">Confirm Save</button>
+  </div>
+</dialog>
+
+<script>
+  // Theme Toggle
+  const toggle = document.getElementById('themeToggle');
+  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (isDark) document.documentElement.setAttribute('data-theme', 'dark');
+  toggle?.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme') === 'dark';
+    document.documentElement.setAttribute('data-theme', current ? 'light' : 'dark');
+  });
+
+  // Table Real-Time Filter
+  const searchInput = document.getElementById('searchInput');
+  const statusFilter = document.getElementById('statusFilter');
+  const table = document.getElementById('dataTable');
+  const countSpan = document.getElementById('recordCount');
+
+  function applyFilter() {
+    const q = searchInput.value.toLowerCase().trim();
+    const st = statusFilter.value;
+    const rows = table.querySelectorAll('tbody tr');
+    let visible = 0;
+
+    rows.forEach(row => {
+      const matchText = !q || row.textContent.toLowerCase().includes(q);
+      const rowStatus = row.getAttribute('data-status');
+      const matchStatus = (st === 'ALL') || (rowStatus === st);
+
+      if (matchText && matchStatus) {
+        row.style.display = '';
+        visible++;
+      } else {
+        row.style.display = 'none';
+      }
+    });
+
+    countSpan.textContent = `Showing ${visible} records`;
+  }
+
+  searchInput.addEventListener('input', applyFilter);
+  statusFilter.addEventListener('change', applyFilter);
+
+  // Copy Table Markdown
+  function copyTableMarkdown() {
+    const md = `| Item ID | Service / Description | Cluster Module | Throughput | Status |
+| :--- | :--- | :--- | :--- | :--- |
+| ITEM-2026-001 | Core Engine API Cluster | Core Gateway | 1.28M req/s | Healthy |
+| ITEM-2026-002 | Async Queue Worker Group | Message Bus | 45.2K msg/s | Warning |
+| ITEM-2026-003 | Vector DB Cache Partition | Cache Tier | 12.8 GB | Healthy |
+| ITEM-2026-004 | Batch Data Ingestion Pipeline | Sync Service | 850 GB total | Finished |`;
+    navigator.clipboard.writeText(md).then(() => {
+      const btn = document.getElementById('copyTableText');
+      btn.textContent = 'Copied!';
+      setTimeout(() => { btn.textContent = 'Copy (MD)'; }, 1500);
+    });
+  }
+</script>
+</body>
+</html>
