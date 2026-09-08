@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>评估分析报告母版 · Agent HTML</title>
+  <style>
+    /* Design Tokens */
+    :root {
+      --bg: #fafafa;
+      --card: #ffffff;
+      --card-fg: #09090b;
+      --primary: #18181b;
+      --primary-fg: #fafafa;
+      --primary-hover: #27272a;
+      --secondary: #f4f4f5;
+      --secondary-fg: #18181b;
+      --muted: #f4f4f5;
+      --muted-fg: #71717a;
+      --border: #e4e4e7;
+      --ring: #18181b;
+      --radius: 8px;
+      --radius-sm: 6px;
+      --radius-lg: 12px;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      
+      --ok: #16a34a;
+      --ok-bg: #f0fdf4;
+      --ok-border: #bbf7d0;
+      --warn: #d97706;
+      --warn-bg: #fffbeb;
+      --warn-border: #fde68a;
+      --err: #dc2626;
+      --err-bg: #fef2f2;
+      --err-border: #fecaca;
+      --info: #2563eb;
+      --info-bg: #eff6ff;
+      --info-border: #bfdbfe;
+    }
+
+    [data-theme="dark"] {
+      --bg: #09090b;
+      --card: #121215;
+      --card-fg: #fafafa;
+      --primary: #fafafa;
+      --primary-fg: #18181b;
+      --primary-hover: #e4e4e7;
+      --secondary: #27272a;
+      --secondary-fg: #fafafa;
+      --muted: #18181b;
+      --muted-fg: #a1a1aa;
+      --border: #27272a;
+      --ring: #d4d4d8;
+      
+      --ok: #4ade80;
+      --ok-bg: #052e1680;
+      --ok-border: #166534;
+      --warn: #fbbf24;
+      --warn-bg: #451a0380;
+      --warn-border: #854d0e;
+      --err: #f87171;
+      --err-bg: #450a0a80;
+      --err-border: #991b1b;
+      --info: #60a5fa;
+      --info-bg: #17255480;
+      --info-border: #1e40af;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--card-fg);
+      line-height: 1.5;
+      padding: 40px 20px;
+    }
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    /* Top Bar */
+    .report-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .report-title-box h1 {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .report-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--muted-fg);
+      margin-top: 8px;
+    }
+    .report-meta-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    /* Components */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    .card-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      font-weight: 600;
+      font-size: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .card-content {
+      padding: 20px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      height: 34px;
+      padding: 0 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--card-fg);
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .btn:hover { background: var(--secondary); }
+    .btn-primary { background: var(--primary); color: var(--primary-fg); border-color: var(--primary); }
+    .btn-primary:hover { opacity: 0.9; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      height: 22px;
+      padding: 0 8px;
+      border-radius: 9999px;
+      border: 1px solid var(--border);
+      background: var(--secondary);
+      color: var(--secondary-fg);
+    }
+    .badge-dot { width: 6px; height: 6px; border-radius: 9999px; background: currentColor; }
+    .badge-success { background: var(--ok-bg); color: var(--ok); border-color: var(--ok-border); }
+    .badge-warning { background: var(--warn-bg); color: var(--warn); border-color: var(--warn-border); }
+    .badge-danger  { background: var(--err-bg);  color: var(--err);  border-color: var(--err-border); }
+    .badge-info    { background: var(--info-bg); color: var(--info); border-color: var(--info-border); }
+
+    /* Stat Banner */
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .stat-mini {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+    }
+    .stat-mini-label { font-size: 12px; color: var(--muted-fg); }
+    .stat-mini-val { font-size: 22px; font-weight: 700; margin-top: 4px; }
+
+    /* Summary Callout */
+    .callout {
+      padding: 16px 18px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--secondary);
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    .callout-success { background: var(--ok-bg); border-color: var(--ok-border); }
+    .callout-title { font-weight: 600; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; color: var(--ok); }
+
+    /* Accordion */
+    details {
+      border-bottom: 1px solid var(--border);
+    }
+    details:last-child { border-bottom: none; }
+    summary {
+      list-style: none;
+      padding: 14px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      user-select: none;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary:hover { background: var(--secondary); }
+    .chevron { transition: transform 0.2s; color: var(--muted-fg); }
+    details[open] .chevron { transform: rotate(180deg); }
+    .accordion-inner {
+      padding: 0 16px 16px;
+      font-size: 13px;
+      color: var(--muted-fg);
+      line-height: 1.6;
+    }
+    .qa-box {
+      background: var(--secondary);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      margin-top: 8px;
+      color: var(--card-fg);
+    }
+    .qa-label { font-weight: 600; font-size: 12px; color: var(--muted-fg); margin-bottom: 4px; }
+
+    @media print {
+      body { background: #fff; padding: 0; }
+      .actions { display: none; }
+      details { break-inside: avoid; }
+    }
+    @media (max-width: 640px) {
+      .stat-row { grid-template-columns: 1fr 1fr; }
+      .report-header { flex-direction: column; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Report Header -->
+  <div class="report-header">
+    <div class="report-title-box">
+      <h1>
+        <span>刘一戈 · 专家级技术面试分析报告</span>
+        <span class="badge badge-success"><span class="badge-dot"></span>强烈推荐 (Pass)</span>
+      </h1>
+      <div class="report-meta">
+        <div class="report-meta-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span>目标岗位：资深工程架构师</span>
+        </div>
+        <div class="report-meta-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+          <span>评估日期：2026-08-31</span>
+        </div>
+        <div class="report-meta-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span>面谈时长：65 分钟</span>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn" onclick="window.print()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
+        <span>打印/PDF</span>
+      </button>
+      <button id="themeToggle" class="btn" title="切换暗黑模式">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Score Summary -->
+  <div class="stat-row">
+    <div class="stat-mini">
+      <div class="stat-mini-label">综合评定分</div>
+      <div class="stat-mini-val" style="color: var(--ok);">91 <span style="font-size: 13px; font-weight: normal; color: var(--muted-fg);">/ 100</span></div>
+    </div>
+    <div class="stat-mini">
+      <div class="stat-mini-label">工程架构深度</div>
+      <div class="stat-mini-val">94%</div>
+    </div>
+    <div class="stat-mini">
+      <div class="stat-mini-label">复杂系统排障</div>
+      <div class="stat-mini-val">88%</div>
+    </div>
+    <div class="stat-mini">
+      <div class="stat-mini-label">沟通协作与自驱</div>
+      <div class="stat-mini-val">90%</div>
+    </div>
+  </div>
+
+  <!-- Executive Summary Callout -->
+  <div class="callout callout-success">
+    <div class="callout-title">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      <span>面试官核心结论与定级建议</span>
+    </div>
+    <div>候选人底层功底扎实，对大规模高并发分布式架构与稳定性治理有深刻洞察。现场编码逻辑缜密、边界条件防御完备。具备极强的技术领导力与跨团队推进能力，建议定级 <strong>P7 / 资深技术专家</strong>，进入 HR 最终薪酬洽谈阶段。</div>
+  </div>
+
+  <!-- Dimension Checklist -->
+  <div class="card">
+    <div class="card-header">
+      <span>能力维度评定细项</span>
+      <span class="badge badge-info">共 4 个核心板块</span>
+    </div>
+    <div>
+      <details open>
+        <summary>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span>1. 分布式系统架构设计与微服务拆分</span>
+            <span class="badge badge-success">卓越 (95)</span>
+          </div>
+          <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="accordion-inner">
+          <div class="qa-box">
+            <div class="qa-label">考察问题</div>
+            <div>面对日均数十亿级请求的电商核心交易链路，如何设计多级缓存一致性方案与容灾降级策略？</div>
+          </div>
+          <div class="qa-box" style="margin-top: 8px;">
+            <div class="qa-label">回答摘要与亮点</div>
+            <div>候选人清晰阐述了基于 Canal 监听 Binlog 异构同步缓存、引入本地 Caffeine + 分布式 Redis 两级架构，并结合布隆过滤器防御击穿穿透。容灾方面设计了动态熔断与影子降级方案，实操经验极其丰富。</div>
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span>2. 高并发环境下的故障排查与性能调优</span>
+            <span class="badge badge-success">良好 (88)</span>
+          </div>
+          <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="accordion-inner">
+          <div class="qa-box">
+            <div class="qa-label">考察问题</div>
+            <div>曾遇到过最棘手的线上内存泄漏或 CPU 飙高问题是什么？如何一步步抓取 dump 与定位？</div>
+          </div>
+          <div class="qa-box" style="margin-top: 8px;">
+            <div class="qa-label">回答摘要与亮点</div>
+            <div>分享了 Netty 堆外内存泄漏定位案例，通过 jcmd、perf-map-agent 以及 async-profiler 捕获 Native 内存分配，手法规范。</div>
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span>3. 团队协作、技术沉淀与自驱力</span>
+            <span class="badge badge-info">良好 (90)</span>
+          </div>
+          <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="accordion-inner">
+          <p style="padding-top: 4px;">候选人表达条理清晰、谦逊务实，有主动主导组内技术规范与效能工具开发的成功经历。</p>
+        </div>
+      </details>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Theme Toggle
+  const toggle = document.getElementById('themeToggle');
+  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (isDark) document.documentElement.setAttribute('data-theme', 'dark');
+
+  toggle.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme') === 'dark';
+    document.documentElement.setAttribute('data-theme', current ? 'light' : 'dark');
+  });
+</script>
+</body>
+</html>
