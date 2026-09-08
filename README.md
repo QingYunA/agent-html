@@ -30,8 +30,8 @@
   <a href="#what-you-get">What You Get</a> ·
   <a href="#the-6-archetypes">The 6 Archetypes</a> ·
   <a href="#prompt-triggers">Prompt Triggers</a> ·
-  <a href="#micro-css-base">Micro-CSS Base</a> ·
-  <a href="#linter">Linter</a>
+  <a href="#linter">Linter</a> ·
+  <a href="#star-history">Star History</a>
 </p>
 
 </div>
@@ -194,87 +194,9 @@ will automatically trigger the `agent-html` skill and produce clean, zero-depend
 
 ---
 
-## Micro-CSS Base
+## Atomic Components & Design Reference
 
-Every standalone HTML generated with this system inlines this ~75-line token block in `<head><style>`:
-
-```css
-:root {
-  --bg: #fafafa;
-  --card: #ffffff;
-  --card-fg: #09090b;
-  --primary: #18181b;
-  --primary-fg: #fafafa;
-  --primary-hover: #27272a;
-  --secondary: #f4f4f5;
-  --secondary-fg: #18181b;
-  --muted: #f4f4f5;
-  --muted-fg: #71717a;
-  --border: #e4e4e7;
-  --ring: #18181b;
-  --radius: 8px;
-  --radius-sm: 6px;
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-
-  --ok: #16a34a;   --ok-bg: #f0fdf4;   --ok-border: #bbf7d0;
-  --warn: #d97706; --warn-bg: #fffbeb; --warn-border: #fde68a;
-  --err: #dc2626;  --err-bg: #fef2f2;  --err-border: #fecaca;
-  --info: #2563eb; --info-bg: #eff6ff; --info-border: #bfdbfe;
-}
-
-[data-theme="dark"] {
-  --bg: #09090b;
-  --card: #121215;
-  --card-fg: #fafafa;
-  --primary: #fafafa;
-  --primary-fg: #18181b;
-  --primary-hover: #e4e4e7;
-  --secondary: #27272a;
-  --secondary-fg: #fafafa;
-  --muted: #18181b;
-  --muted-fg: #a1a1aa;
-  --border: #27272a;
-  --ring: #d4d4d8;
-
-  --ok: #4ade80;   --ok-bg: #052e1680;   --ok-border: #166534;
-  --warn: #fbbf24; --warn-bg: #451a0380; --warn-border: #854d0e;
-  --err: #f87171;  --err-bg: #450a0a80;  --err-border: #991b1b;
-  --info: #60a5fa; --info-bg: #17255480; --info-border: #1e40af;
-}
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  background-color: var(--bg);
-  color: var(--card-fg);
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-}
-```
-
-### Essential Micro-Scripts
-
-**Native Dark Mode Switcher (5 lines)**:
-```javascript
-const toggle = document.getElementById('themeToggle');
-if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-  document.documentElement.setAttribute('data-theme', 'dark');
-}
-toggle?.addEventListener('click', () => {
-  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
-});
-```
-
-**Real-time Table Search (5 lines)**:
-```javascript
-document.getElementById('searchInput')?.addEventListener('input', (e) => {
-  const q = e.target.value.toLowerCase().trim();
-  document.querySelectorAll('#dataTable tbody tr').forEach(tr => {
-    tr.style.display = (!q || tr.textContent.toLowerCase().includes(q)) ? '' : 'none';
-  });
-});
-```
+All atomic HTML slots (buttons, badges, callouts, KPI stat cards), 24 currentColor vector SVGs, zero-CDN pure SVG charts, and vanilla interaction scripts are documented in [skills/agent-html/references/components.md](skills/agent-html/references/components.md) and live-previewed in `index.html`.
 
 ---
 
@@ -332,6 +254,16 @@ agent-html/
         └── evals/
             └── evals.json         # Benchmark eval test cases (all 6 archetypes)
 ```
+
+---
+
+## Star History
+
+<p align="center">
+  <a href="https://star-history.com/#QingYunA/agent-html&Date">
+    <img src="https://api.star-history.com/svg?repos=QingYunA/agent-html&type=Date" alt="Star History Chart" width="100%">
+  </a>
+</p>
 
 ---
 

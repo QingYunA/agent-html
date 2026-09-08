@@ -30,8 +30,8 @@
   <a href="#核心价值">核心价值</a> ·
   <a href="#六大通用布局母版">六大母版</a> ·
   <a href="#提示词触发示例">提示词</a> ·
-  <a href="#微-css-核心基座">微 CSS 基座</a> ·
-  <a href="#自验检查器">Linter</a>
+  <a href="#自验检查器-linter">Linter</a> ·
+  <a href="#star-history">Star History</a>
 </p>
 
 </div>
@@ -192,87 +192,9 @@ ln -sf ../../../.agents/skills/agent-html ~/.pi/agent/skills/agent-html
 
 ---
 
-## 微 CSS 核心基座
+## 组件字典与设计规范参考
 
-生成的每个单文件 HTML 均在 `<head><style>` 中内置这段约 75 行的纯原生 CSS 变量设计底座：
-
-```css
-:root {
-  --bg: #fafafa;
-  --card: #ffffff;
-  --card-fg: #09090b;
-  --primary: #18181b;
-  --primary-fg: #fafafa;
-  --primary-hover: #27272a;
-  --secondary: #f4f4f5;
-  --secondary-fg: #18181b;
-  --muted: #f4f4f5;
-  --muted-fg: #71717a;
-  --border: #e4e4e7;
-  --ring: #18181b;
-  --radius: 8px;
-  --radius-sm: 6px;
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-
-  --ok: #16a34a;   --ok-bg: #f0fdf4;   --ok-border: #bbf7d0;
-  --warn: #d97706; --warn-bg: #fffbeb; --warn-border: #fde68a;
-  --err: #dc2626;  --err-bg: #fef2f2;  --err-border: #fecaca;
-  --info: #2563eb; --info-bg: #eff6ff; --info-border: #bfdbfe;
-}
-
-[data-theme="dark"] {
-  --bg: #09090b;
-  --card: #121215;
-  --card-fg: #fafafa;
-  --primary: #fafafa;
-  --primary-fg: #18181b;
-  --primary-hover: #e4e4e7;
-  --secondary: #27272a;
-  --secondary-fg: #fafafa;
-  --muted: #18181b;
-  --muted-fg: #a1a1aa;
-  --border: #27272a;
-  --ring: #d4d4d8;
-
-  --ok: #4ade80;   --ok-bg: #052e1680;   --ok-border: #166534;
-  --warn: #fbbf24; --warn-bg: #451a0380; --warn-border: #854d0e;
-  --err: #f87171;  --err-bg: #450a0a80;  --err-border: #991b1b;
-  --info: #60a5fa; --info-bg: #17255480; --info-border: #1e40af;
-}
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  background-color: var(--bg);
-  color: var(--card-fg);
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-}
-```
-
-### 必备微脚本片段
-
-**原生暗黑模式切换（5 行）**：
-```javascript
-const toggle = document.getElementById('themeToggle');
-if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-  document.documentElement.setAttribute('data-theme', 'dark');
-}
-toggle?.addEventListener('click', () => {
-  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
-});
-```
-
-**纯前端表格实时搜索过滤（5 行）**：
-```javascript
-document.getElementById('searchInput')?.addEventListener('input', (e) => {
-  const q = e.target.value.toLowerCase().trim();
-  document.querySelectorAll('#dataTable tbody tr').forEach(tr => {
-    tr.style.display = (!q || tr.textContent.toLowerCase().includes(q)) ? '' : 'none';
-  });
-});
-```
+所有原子 HTML 插槽（按钮、胶囊徽章、Callout 提示条、KPI 统计卡）、24 个 currentColor 矢量 SVG 图标、零 CDN 原生 SVG 图表和微交互脚本，均完整收录在 [skills/agent-html/references/components.md](skills/agent-html/references/components.md) 中，并可在 `index.zh-CN.html` 中实时预览。
 
 ---
 
@@ -330,6 +252,16 @@ agent-html/
         └── evals/
             └── evals.json         # 涵盖全部 6 大母版的基准评测用例集
 ```
+
+---
+
+## Star History
+
+<p align="center">
+  <a href="https://star-history.com/#QingYunA/agent-html&Date">
+    <img src="https://api.star-history.com/svg?repos=QingYunA/agent-html&type=Date" alt="Star History Chart" width="100%">
+  </a>
+</p>
 
 ---
 
