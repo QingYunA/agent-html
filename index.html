@@ -386,7 +386,7 @@
     }
     .archetype-tab-btn {
       flex: 1;
-      min-width: 220px;
+      min-width: 160px;
       padding: 16px 20px;
       background: transparent;
       border: none;
@@ -783,7 +783,7 @@
           </button>
         </div>
 
-        <a href="#archetypes" class="btn btn-primary btn-lg">Explore 4 Archetypes</a>
+        <a href="#archetypes" class="btn btn-primary btn-lg">Explore 6 Archetypes</a>
         <a href="#components" class="btn btn-outline btn-lg">Component Arsenal</a>
       </div>
     </section>
@@ -799,8 +799,8 @@
         <div class="metric-label">Double-click in Finder; runs in air-gapped intranets</div>
       </div>
       <div class="metric-item">
-        <div class="metric-val">4 Archetypes</div>
-        <div class="metric-label">Document, Dashboard, Workbench, Comparison</div>
+        <div class="metric-val">6 Archetypes</div>
+        <div class="metric-label">Document, Dashboard, Workbench, Comparison, Timeline, Kanban</div>
       </div>
       <div class="metric-item">
         <div class="metric-val" style="color: var(--info);">70+ Agents</div>
@@ -808,11 +808,11 @@
       </div>
     </section>
 
-    <!-- The 4 Structural Archetypes Interactive Showcase -->
+    <!-- The 6 Structural Archetypes Interactive Showcase -->
     <section id="archetypes">
       <div class="section-header">
         <div class="section-tag">Interactive Templates</div>
-        <h2 class="section-title">4 Battle-Tested Layout Archetypes</h2>
+        <h2 class="section-title">6 Battle-Tested Layout Archetypes</h2>
         <p class="section-desc">Don't let models invent ad-hoc layouts. Pick the structural archetype that fits your data density and interaction flow.</p>
       </div>
 
@@ -834,6 +834,14 @@
           <button class="archetype-tab-btn" data-archetype="compare">
             <span class="tab-num">Archetype 04</span>
             <span class="tab-name">Side-by-Side Comparison</span>
+          </button>
+          <button class="archetype-tab-btn" data-archetype="timeline">
+            <span class="tab-num">Archetype 05</span>
+            <span class="tab-name">Event Timeline</span>
+          </button>
+          <button class="archetype-tab-btn" data-archetype="kanban">
+            <span class="tab-num">Archetype 06</span>
+            <span class="tab-name">Triage Kanban</span>
           </button>
         </div>
 
@@ -914,6 +922,80 @@
           </div>
           <div class="archetype-preview-frame">
             <img src="assets/screenshots/compare.png" alt="Compare Archetype Preview">
+          </div>
+        </div>
+
+        <!-- Archetype 5: Timeline -->
+        <div class="archetype-content" id="pane-timeline">
+          <div class="archetype-info-row">
+            <div class="archetype-info-left">
+              <h3>Vertical Event Timeline & Incident Postmortem</h3>
+              <p>High-density single-track vertical timeline with semantic status nodes (Error, Warning, Success, Info), exact timestamps, operator tags, expandable diagnosis logs, and one-click "Copy as Markdown" export.</p>
+            </div>
+            <div class="archetype-actions">
+              <a href="templates/timeline.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+                <span>Open Live Demo</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('timeline')">Copy HTML</button>
+            </div>
+          </div>
+          <div class="archetype-preview-frame" style="padding: 24px 28px; background: var(--bg); display: flex; flex-direction: column; gap: 14px;">
+            <div style="font-size: 13px; font-weight: 600; color: var(--card-fg);">Timeline Chronicle Sample</div>
+            <div style="border-left: 2px solid var(--border); padding-left: 18px; margin-left: 8px; display: flex; flex-direction: column; gap: 12px;">
+              <div>
+                <span class="badge badge-danger" style="font-size: 10px; height: 18px;">14:10:02</span>
+                <strong style="margin-left: 6px; font-size: 13px;">Gateway Ingress 502 Spike Detected</strong>
+                <div style="font-size: 12px; color: var(--muted-fg); margin-top: 2px;">Prometheus probe triggered alert across cluster-node-alpha.</div>
+              </div>
+              <div>
+                <span class="badge badge-warning" style="font-size: 10px; height: 18px;">14:13:45</span>
+                <strong style="margin-left: 6px; font-size: 13px;">SRE On-Call Intervention & War Room</strong>
+                <div style="font-size: 12px; color: var(--muted-fg); margin-top: 2px;">BGP route oscillation suspected; failover plan initiated.</div>
+              </div>
+              <div>
+                <span class="badge badge-success" style="font-size: 10px; height: 18px;">14:34:10</span>
+                <strong style="margin-left: 6px; font-size: 13px;">Traffic Failover Completed & Resolved</strong>
+                <div style="font-size: 12px; color: var(--muted-fg); margin-top: 2px;">All health probes green; latency stabilized to 38ms.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Archetype 6: Kanban -->
+        <div class="archetype-content" id="pane-kanban">
+          <div class="archetype-info-row">
+            <div class="archetype-info-left">
+              <h3>Triage & Agile Kanban Board (Native Drag & Drop)</h3>
+              <p>4-column task categorization board (Backlog, Progress, Blocked, Done). Zero external dependencies, pure HTML5 drag-and-drop. Features a "Copy Triage Decisions to Agent" button to close the interactive human-in-the-loop workflow.</p>
+            </div>
+            <div class="archetype-actions">
+              <a href="templates/kanban.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+                <span>Open Live Demo</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('kanban')">Copy HTML</button>
+            </div>
+          </div>
+          <div class="archetype-preview-frame" style="padding: 20px; background: var(--bg);">
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+              <div style="background: var(--card); border: 1px solid var(--border); padding: 10px; border-radius: 6px;">
+                <div style="font-size: 12px; font-weight: 600; margin-bottom: 6px;">Backlog (2)</div>
+                <div style="padding: 6px 8px; background: var(--secondary); border: 1px solid var(--border); border-radius: 4px; font-size: 11px;">TASK-401: V1 deprecation</div>
+              </div>
+              <div style="background: var(--card); border: 1px solid var(--border); padding: 10px; border-radius: 6px;">
+                <div style="font-size: 12px; font-weight: 600; margin-bottom: 6px; color: var(--info);">In Progress (2)</div>
+                <div style="padding: 6px 8px; background: var(--secondary); border: 1px solid var(--border); border-radius: 4px; font-size: 11px;">TASK-403: DNS dynamic routing</div>
+              </div>
+              <div style="background: var(--card); border: 1px solid var(--border); padding: 10px; border-radius: 6px;">
+                <div style="font-size: 12px; font-weight: 600; margin-bottom: 6px; color: var(--err);">Blocked (1)</div>
+                <div style="padding: 6px 8px; background: var(--secondary); border: 1px solid var(--border); border-radius: 4px; font-size: 11px;">TASK-405: TCP handshake timeout</div>
+              </div>
+              <div style="background: var(--card); border: 1px solid var(--border); padding: 10px; border-radius: 6px;">
+                <div style="font-size: 12px; font-weight: 600; margin-bottom: 6px; color: var(--ok);">Done (3)</div>
+                <div style="padding: 6px 8px; background: var(--secondary); border: 1px solid var(--border); border-radius: 4px; font-size: 11px;">TASK-406: 3x stress baseline</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1016,28 +1098,98 @@
         </div>
 
         <!-- 2. Pure SVG Charts -->
-        <div class="arsenal-box">
+        <div class="arsenal-box" style="grid-column: span 2;">
           <div class="arsenal-title">
-            <span>Zero-CDN Pure SVG Charts</span>
-            <span class="badge badge-info">Zero Libraries</span>
+            <span>Zero-CDN Pure SVG Charts (4 Core Formats)</span>
+            <span class="badge badge-info">Zero Libraries · Dark Mode Native</span>
           </div>
-          <div class="arsenal-desc">Lightweight vector data curves rendered with native SVG paths.</div>
+          <div class="arsenal-desc">Lightweight vector data curves rendered with native SVG. Zero JS libraries, Retina sharp, automatic dark mode adaptation.</div>
 
-          <div class="chart-container">
-            <div class="chart-header">
-              <span>Cluster Request Throughput (24h Trend)</span>
-              <span style="color: var(--ok);">↑ +18.4%</span>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-top: 12px;">
+            <!-- Chart 1: Area Trend Line -->
+            <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px;">
+              <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 8px;">
+                <span style="font-weight: 600;">24h Throughput (TPS)</span>
+                <span style="color: var(--ok); font-weight: 600;">↑ +18.4%</span>
+              </div>
+              <svg viewBox="0 0 400 85" style="width: 100%; height: 75px; overflow: visible;">
+                <defs>
+                  <linearGradient id="areaGradLive" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="var(--primary)" stop-opacity="0.25"/>
+                    <stop offset="100%" stop-color="var(--primary)" stop-opacity="0.0"/>
+                  </linearGradient>
+                </defs>
+                <path d="M 0 65 Q 50 25, 100 48 T 200 32 T 300 18 T 400 28 L 400 85 L 0 85 Z" fill="url(#areaGradLive)"/>
+                <path d="M 0 65 Q 50 25, 100 48 T 200 32 T 300 18 T 400 28" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round"/>
+                <circle cx="200" cy="32" r="3" fill="var(--card)" stroke="var(--primary)" stroke-width="2"/>
+                <circle cx="300" cy="18" r="3.5" fill="var(--ok)" stroke="var(--card)" stroke-width="2"/>
+              </svg>
             </div>
-            <svg viewBox="0 0 400 80" style="width: 100%; height: 70px; overflow: visible;">
-              <defs>
-                <linearGradient id="areaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stop-color="#16a34a" stop-opacity="0.3"/>
-                  <stop offset="100%" stop-color="#16a34a" stop-opacity="0.0"/>
-                </linearGradient>
-              </defs>
-              <path d="M 0 60 Q 50 20, 100 45 T 200 30 T 300 15 T 400 25 L 400 80 L 0 80 Z" fill="url(#areaGrad)"/>
-              <path d="M 0 60 Q 50 20, 100 45 T 200 30 T 300 15 T 400 25" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round"/>
-            </svg>
+
+            <!-- Chart 2: Column Bar Distribution -->
+            <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px;">
+              <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 8px;">
+                <span style="font-weight: 600;">Latency Distribution (ms)</span>
+                <span class="badge" style="font-size: 10px; height: 18px;">P95</span>
+              </div>
+              <svg viewBox="0 0 400 85" style="width: 100%; height: 75px; overflow: visible;">
+                <rect x="20" y="55" width="40" height="30" rx="3" fill="var(--primary)" opacity="0.85"/>
+                <text x="40" y="50" font-size="10" font-weight="600" fill="var(--card-fg)" text-anchor="middle">24ms</text>
+                <rect x="90" y="35" width="40" height="50" rx="3" fill="var(--primary)" opacity="0.85"/>
+                <text x="110" y="30" font-size="10" font-weight="600" fill="var(--card-fg)" text-anchor="middle">48ms</text>
+                <rect x="160" y="15" width="40" height="70" rx="3" fill="var(--warn)" opacity="0.9"/>
+                <text x="180" y="10" font-size="10" font-weight="600" fill="var(--warn)" text-anchor="middle">92ms</text>
+                <rect x="230" y="45" width="40" height="40" rx="3" fill="var(--primary)" opacity="0.85"/>
+                <text x="250" y="40" font-size="10" font-weight="600" fill="var(--card-fg)" text-anchor="middle">35ms</text>
+                <rect x="300" y="65" width="40" height="20" rx="3" fill="var(--primary)" opacity="0.85"/>
+                <text x="320" y="60" font-size="10" font-weight="600" fill="var(--card-fg)" text-anchor="middle">18ms</text>
+              </svg>
+            </div>
+
+            <!-- Chart 3: Multi-Segment Donut Chart -->
+            <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px;">
+              <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px;">
+                <span style="font-weight: 600;">Node Health Ratio</span>
+                <span class="badge badge-success" style="font-size: 10px; height: 18px;">99.8% SLA</span>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+                <svg viewBox="0 0 160 160" style="width: 80px; height: 80px; flex-shrink: 0;">
+                  <circle cx="80" cy="80" r="54" fill="none" stroke="var(--secondary)" stroke-width="20"/>
+                  <circle cx="80" cy="80" r="54" fill="none" stroke="var(--ok)" stroke-width="20" stroke-dasharray="220.5 339.3" stroke-dashoffset="0" transform="rotate(-90 80 80)"/>
+                  <circle cx="80" cy="80" r="54" fill="none" stroke="var(--warn)" stroke-width="20" stroke-dasharray="84.8 339.3" stroke-dashoffset="-220.5" transform="rotate(-90 80 80)"/>
+                  <circle cx="80" cy="80" r="54" fill="none" stroke="var(--err)" stroke-width="20" stroke-dasharray="33.9 339.3" stroke-dashoffset="-305.3" transform="rotate(-90 80 80)"/>
+                  <text x="80" y="77" text-anchor="middle" font-size="16" font-weight="700" fill="var(--card-fg)">1,280</text>
+                  <text x="80" y="93" text-anchor="middle" font-size="9" fill="var(--muted-fg)">Nodes</text>
+                </svg>
+                <div style="font-size: 11px; display: flex; flex-direction: column; gap: 4px; flex: 1;">
+                  <div style="display: flex; justify-content: space-between;"><span style="color: var(--ok);">● 65% Healthy</span><strong>832</strong></div>
+                  <div style="display: flex; justify-content: space-between;"><span style="color: var(--warn);">● 25% Warning</span><strong>320</strong></div>
+                  <div style="display: flex; justify-content: space-between;"><span style="color: var(--err);">● 10% Degraded</span><strong>128</strong></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Chart 4: Horizontal Ranking Bars -->
+            <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px;">
+              <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px;">
+                <span style="font-weight: 600;">Latency Bottlenecks</span>
+                <span style="font-size: 11px; color: var(--muted-fg);">ms</span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 6px; font-size: 11px;">
+                <div>
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 2px;"><span>DB Pool Wait</span><strong>280ms</strong></div>
+                  <div style="background: var(--secondary); height: 6px; border-radius: 9999px; overflow: hidden;"><div style="background: var(--err); width: 85%; height: 100%;"></div></div>
+                </div>
+                <div>
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 2px;"><span>LLM First Token</span><strong>195ms</strong></div>
+                  <div style="background: var(--secondary); height: 6px; border-radius: 9999px; overflow: hidden;"><div style="background: var(--warn); width: 62%; height: 100%;"></div></div>
+                </div>
+                <div>
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 2px;"><span>Auth Gateway</span><strong>48ms</strong></div>
+                  <div style="background: var(--secondary); height: 6px; border-radius: 9999px; overflow: hidden;"><div style="background: var(--primary); width: 22%; height: 100%;"></div></div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -1095,38 +1247,110 @@
         </div>
       </div>
 
-      <!-- Curated SVG Icon Grid -->
+      <!-- Curated SVG Icon Grid (24 Icons) -->
       <div class="arsenal-box" style="margin-bottom: 72px;">
         <div class="arsenal-title">
-          <span>12 Curated Lucide-Style Vector Icons</span>
+          <span>24 Curated Engineering & DevOps Vector Icons</span>
           <span style="font-size: 12px; color: var(--muted-fg);">Click any icon to copy its SVG code</span>
         </div>
-        <div class="arsenal-desc">Vector icons designed with <code>stroke="currentColor"</code> that automatically inherit font color.</div>
+        <div class="arsenal-desc">Vector icons designed with <code>stroke="currentColor"</code> that automatically inherit font color. Zero web fonts, 100% offline.</div>
 
         <div class="icon-grid">
-          <div class="icon-tile" onclick="copySvgCode('search', '<svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"11\" cy=\"11\" r=\"8\"/><path d=\"m21 21-4.3-4.3\"/></svg>')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <div class="icon-tile" onclick="copySvgCode('search', '<svg width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot;><circle cx=&quot;11&quot; cy=&quot;11&quot; r=&quot;8&quot;/><path d=&quot;m21 21-4.3-4.3&quot;/></svg>')">
+            <svg viewBox="0 0 24 24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
             <span>Search</span>
           </div>
-          <div class="icon-tile" onclick="copySvgCode('check', '<svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><polyline points=\"20 6 9 17 4 12\"/></svg>')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          <div class="icon-tile" onclick="copySvgCode('check', '<svg width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot;><polyline points=&quot;20 6 9 17 4 12&quot;/></svg>')">
+            <svg viewBox="0 0 24 24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
             <span>Check</span>
           </div>
-          <div class="icon-tile" onclick="copySvgCode('alert', '<svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><line x1=\"12\" y1=\"8\" x2=\"12\" y2=\"12\"/><line x1=\"12\" y1=\"16\" x2=\"12.01\" y2=\"16\"/></svg>')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1=\"8\" x2=\"12\" y2=\"12\"/><line x1=\"12\" y1=\"16\" x2=\"12.01\" y2=\"16\"/></svg>
+          <div class="icon-tile" onclick="copySvgCode('alert', '<svg width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot;><circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;10&quot;/><line x1=&quot;12&quot; y1=&quot;8&quot; x2=&quot;12&quot; y2=&quot;12&quot;/><line x1=&quot;12&quot; y1=&quot;16&quot; x2=&quot;12.01&quot; y2=&quot;16&quot;/></svg>')">
+            <svg viewBox="0 0 24 24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
             <span>Alert</span>
           </div>
-          <div class="icon-tile" onclick="copySvgCode('copy', '<svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><rect width=\"14\" height=\"14\" x=\"8\" y=\"8\" rx=\"2\" ry=\"2\"/><path d=\"M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2\"/></svg>')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width=\"14\" height=\"14\" x=\"8\" y=\"8\" rx=\"2\" ry=\"2\"/><path d=\"M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2\"/></svg>
+          <div class="icon-tile" onclick="copySvgCode('copy', '<svg width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot;><rect width=&quot;14&quot; height=&quot;14&quot; x=&quot;8&quot; y=&quot;8&quot; rx=&quot;2&quot; ry=&quot;2&quot;/><path d=&quot;M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2&quot;/></svg>')">
+            <svg viewBox="0 0 24 24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
             <span>Copy</span>
           </div>
-          <div class="icon-tile" onclick="copySvgCode('calendar', '<svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><rect width=\"18\" height=\"18\" x=\"3\" y=\"4\" rx=\"2\" ry=\"2\"/><line x1=\"16\" x2=\"16\" y1=\"2\" y2=\"6\"/><line x1=\"8\" x2=\"8\" y1=\"2\" y2=\"6\"/><line x1=\"3\" x2=\"21\" y1=\"10\" y2=\"10\"/></svg>')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width=\"18\" height=\"18\" x=\"3\" y=\"4\" rx=\"2\" ry=\"2\"/><line x1=\"16\" x2=\"16\" y1=\"2\" y2=\"6\"/><line x1=\"8\" x2=\"8\" y1=\"2\" y2=\"6\"/><line x1=\"3\" x2=\"21\" y1=\"10\" y2=\"10\"/></svg>
+          <div class="icon-tile" onclick="copySvgCode('calendar', '<svg width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot;><rect width=&quot;18&quot; height=&quot;18&quot; x=&quot;3&quot; y=&quot;4&quot; rx=&quot;2&quot; ry=&quot;2&quot;/><line x1=&quot;16&quot; y1=&quot;2&quot; x2=&quot;16&quot; y2=&quot;6&quot;/><line x1=&quot;8&quot; y1=&quot;2&quot; x2=&quot;8&quot; y2=&quot;6&quot;/><line x1=&quot;3&quot; y1=&quot;10&quot; x2=&quot;21&quot; y2=&quot;10&quot;/></svg>')">
+            <svg viewBox="0 0 24 24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
             <span>Calendar</span>
           </div>
-          <div class="icon-tile" onclick="copySvgCode('terminal', '<svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><polyline points=\"4 17 10 11 4 5\"/><line x1=\"12\" x2=\"20\" y1=\"19\" y2=\"19\"/></svg>')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/></svg>
+          <div class="icon-tile" onclick="copySvgCode('terminal', '<svg width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot;><polyline points=&quot;4 17 10 11 4 5&quot;/><line x1=&quot;12&quot; y1=&quot;19&quot; x2=&quot;20&quot; y2=&quot;19&quot;/></svg>')">
+            <svg viewBox="0 0 24 24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
             <span>Terminal</span>
+          </div>
+          <div class="icon-tile" onclick="copySvgCode('filter', '<svg width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot;><polygon points=&quot;22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3&quot;/></svg>')">
+            <svg viewBox="0 0 24 24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+            <span>Filter</span>
+          </div>
+          <div class="icon-tile" onclick="copySvgCode('external', '<svg width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot;><path d=&quot;M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6&quot;/><polyline points=&quot;15 3 21 3 21 9&quot;/><line x1=&quot;10&quot; y1=&quot;14&quot; x2=&quot;21&quot; y2=&quot;3&quot;/></svg>')">
+            <svg viewBox="0 0 24 24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            <span>External</span>
+          </div>
+          <div class="icon-tile" onclick="copySvgCode('user', '<svg width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot;><path d=&quot;M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2&quot;/><circle cx=&quot;12&quot; cy=&quot;7&quot; r=&quot;4&quot;/></svg>')">
+            <svg viewBox="0 0 24 24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span>User</span>
+          </div>
+          <div class="icon-tile" onclick="copySvgCode('chevron', '<svg width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot;><path d=&quot;m6 9 6 6 6-6&quot;/></svg>')">
+            <svg viewBox="0 0 24 24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+            <span>Chevron</span>
+          </div>
+          <div class="icon-tile" onclick="copySvgCode('trash', '<svg width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot;><path d=&quot;M3 6h18&quot;/><path d=&quot;M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6&quot;/><path d=&quot;M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2&quot;/></svg>')">
+            <svg viewBox="0 0 24 24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+            <span>Trash</span>
+          </div>
+          <div class="icon-tile" onclick="copySvgCode('download', '<svg width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot;><path d=&quot;M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4&quot;/><polyline points=&quot;7 10 12 15 17 10&quot;/><line x1=&quot;12&quot; y1=&quot;15&quot; x2=&quot;12&quot; y2=&quot;3&quot;/></svg>')">
+            <svg viewBox="0 0 24 24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>Download</span>
+          </div>
+          <div class="icon-tile" onclick="copySvgCode('git-branch', '<svg width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot;><line x1=&quot;6&quot; y1=&quot;3&quot; x2=&quot;6&quot; y2=&quot;15&quot;/><circle cx=&quot;18&quot; cy=&quot;6&quot; r=&quot;3&quot;/><circle cx=&quot;6&quot; cy=&quot;18&quot; r=&quot;3&quot;/><path d=&quot;M18 9a9 9 0 0 1-9 9&quot;/></svg>')">
+            <svg viewBox="0 0 24 24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>
+            <span>Branch</span>
+          </div>
+          <div class="icon-tile" onclick="copySvgCode('git-commit', '<svg width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot;><circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;4&quot;/><line x1=&quot;1.05&quot; y1=&quot;12&quot; x2=&quot;7&quot; y2=&quot;12&quot;/><line x1=&quot;17.01&quot; y1=&quot;12&quot; x2=&quot;22.96&quot; y2=&quot;12&quot;/></svg>')">
+            <svg viewBox="0 0 24 24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><line x1="1.05" y1="12" x2="7" y2="12"/><line x1="17.01" y1="12" x2="22.96" y2="12"/></svg>
+            <span>Commit</span>
+          </div>
+          <div class="icon-tile" onclick="copySvgCode('git-pr', '<svg width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot;><circle cx=&quot;18&quot; cy=&quot;18&quot; r=&quot;3&quot;/><circle cx=&quot;6&quot; cy=&quot;6&quot; r=&quot;3&quot;/><path d=&quot;M13 6h3a2 2 0 0 1 2 2v7&quot;/><line x1=&quot;6&quot; y1=&quot;9&quot; x2=&quot;6&quot; y2=&quot;21&quot;/></svg>')">
+            <svg viewBox="0 0 24 24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7"/><line x1="6" y1="9" x2="6" y2="21"/></svg>
+            <span>Pull Req</span>
+          </div>
+          <div class="icon-tile" onclick="copySvgCode('bug', '<svg width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot;><rect width=&quot;8&quot; height=&quot;14&quot; x=&quot;8&quot; y=&quot;6&quot; rx=&quot;4&quot;/><path d=&quot;m19 7-3 2&quot;/><path d=&quot;m5 7 3 2&quot;/><path d=&quot;m19 19-3-2&quot;/><path d=&quot;m5 19 3-2&quot;/><path d=&quot;M20 13h-4&quot;/><path d=&quot;M4 13h4&quot;/><path d=&quot;m10 4 1 2&quot;/><path d=&quot;m14 4-1 2&quot;/></svg>')">
+            <svg viewBox="0 0 24 24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="8" height="14" x="8" y="6" rx="4"/><path d="m19 7-3 2"/><path d="m5 7 3 2"/><path d="m19 19-3-2"/><path d="m5 19 3-2"/><path d="M20 13h-4"/><path d="M4 13h4"/><path d="m10 4 1 2"/><path d="m14 4-1 2"/></svg>
+            <span>Bug</span>
+          </div>
+          <div class="icon-tile" onclick="copySvgCode('server', '<svg width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot;><rect width=&quot;20&quot; height=&quot;8&quot; x=&quot;2&quot; y=&quot;2&quot; rx=&quot;2&quot; ry=&quot;2&quot;/><rect width=&quot;20&quot; height=&quot;8&quot; x=&quot;2&quot; y=&quot;14&quot; rx=&quot;2&quot; ry=&quot;2&quot;/><line x1=&quot;6&quot; y1=&quot;6&quot; x2=&quot;6.01&quot; y2=&quot;6&quot;/><line x1=&quot;6&quot; y1=&quot;18&quot; x2=&quot;6.01&quot; y2=&quot;18&quot;/></svg>')">
+            <svg viewBox="0 0 24 24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+            <span>Server</span>
+          </div>
+          <div class="icon-tile" onclick="copySvgCode('database', '<svg width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot;><ellipse cx=&quot;12&quot; cy=&quot;5&quot; rx=&quot;9&quot; ry=&quot;3&quot;/><path d=&quot;M21 12c0 1.66-4 3-9 3s-9-1.34-9-3&quot;/><path d=&quot;M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5&quot;/></svg>')">
+            <svg viewBox="0 0 24 24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+            <span>Database</span>
+          </div>
+          <div class="icon-tile" onclick="copySvgCode('cpu', '<svg width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot;><rect width=&quot;16&quot; height=&quot;16&quot; x=&quot;4&quot; y=&quot;4&quot; rx=&quot;2&quot;/><rect width=&quot;6&quot; height=&quot;6&quot; x=&quot;9&quot; y=&quot;9&quot; rx=&quot;1&quot;/><path d=&quot;M9 1v3&quot;/><path d=&quot;M15 1v3&quot;/><path d=&quot;M9 20v3&quot;/><path d=&quot;M15 20v3&quot;/><path d=&quot;M20 9h3&quot;/><path d=&quot;M20 15h3&quot;/><path d=&quot;M1 9h3&quot;/><path d=&quot;M1 15h3&quot;/></svg>')">
+            <svg viewBox="0 0 24 24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M9 1v3"/><path d="M15 1v3"/><path d="M9 20v3"/><path d="M15 20v3"/><path d="M20 9h3"/><path d="M20 15h3"/><path d="M1 9h3"/><path d="M1 15h3"/></svg>
+            <span>CPU</span>
+          </div>
+          <div class="icon-tile" onclick="copySvgCode('activity', '<svg width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot;><path d=&quot;M22 12h-4l-3 9L9 3l-3 9H2&quot;/></svg>')">
+            <svg viewBox="0 0 24 24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            <span>Activity</span>
+          </div>
+          <div class="icon-tile" onclick="copySvgCode('shield', '<svg width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot;><path d=&quot;M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z&quot;/></svg>')">
+            <svg viewBox="0 0 24 24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span>Shield</span>
+          </div>
+          <div class="icon-tile" onclick="copySvgCode('lock', '<svg width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot;><rect width=&quot;18&quot; height=&quot;11&quot; x=&quot;3&quot; y=&quot;11&quot; rx=&quot;2&quot; ry=&quot;2&quot;/><path d=&quot;M7 11V7a5 5 0 0 1 10 0v4&quot;/></svg>')">
+            <svg viewBox="0 0 24 24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <span>Lock</span>
+          </div>
+          <div class="icon-tile" onclick="copySvgCode('refresh', '<svg width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot;><path d=&quot;M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8&quot;/><path d=&quot;M3 3v5h5&quot;/><path d=&quot;M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16&quot;/><path d=&quot;M16 21h5v-5&quot;/></svg>')">
+            <svg viewBox="0 0 24 24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 21h5v-5"/></svg>
+            <span>Refresh</span>
+          </div>
+          <div class="icon-tile" onclick="copySvgCode('settings', '<svg width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot;><circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;3&quot;/><path d=&quot;M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z&quot;/></svg>')">
+            <svg viewBox="0 0 24 24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            <span>Settings</span>
           </div>
         </div>
       </div>
@@ -1146,6 +1370,22 @@
           <div class="prompt-footer">
             <span>Triggers: Archetype 01 (Report)</span>
             <button class="btn btn-outline btn-sm" onclick="copyText(this, 'Don\\'t write a wall of markdown. Give me a clean single-file visual report for this architecture review, including score cards, collapsible findings, and print-to-PDF styles.')">Copy</button>
+          </div>
+        </div>
+
+        <div class="prompt-card">
+          <div class="prompt-text">"Record an incident postmortem and timeline chronicle for today's gateway outage. Single-track vertical timeline with timestamps, operator tags, and copy-as-markdown."</div>
+          <div class="prompt-footer">
+            <span>Triggers: Archetype 05 (Timeline)</span>
+            <button class="btn btn-outline btn-sm" onclick="copyText(this, 'Record an incident postmortem and timeline chronicle for today\'s gateway outage. Single-track vertical timeline with timestamps, operator tags, and copy-as-markdown.')">Copy</button>
+          </div>
+        </div>
+
+        <div class="prompt-card">
+          <div class="prompt-text">"Give me a 4-column triage kanban board to categorize these 20 bug tickets. Support native drag-and-drop and a button to copy sorted decisions back to terminal."</div>
+          <div class="prompt-footer">
+            <span>Triggers: Archetype 06 (Kanban)</span>
+            <button class="btn btn-outline btn-sm" onclick="copyText(this, 'Give me a 4-column triage kanban board to categorize these 20 bug tickets. Support native drag-and-drop and a button to copy sorted decisions back to terminal.')">Copy</button>
           </div>
         </div>
 
@@ -1207,6 +1447,8 @@ npx agent-html check dashboard.html</code></pre>
         <a href="templates/dashboard.html" target="_blank">Dashboard</a>
         <a href="templates/inspector.html" target="_blank">Inspector</a>
         <a href="templates/compare.html" target="_blank">Compare</a>
+        <a href="templates/timeline.html" target="_blank">Timeline</a>
+        <a href="templates/kanban.html" target="_blank">Kanban</a>
         <a href="https://github.com/QingYunA/agent-html" target="_blank">GitHub</a>
       </div>
       <!-- [Colophon: agent-html design system v1.0.0 · generated at 2026-09-08 · zero-dependency standalone] -->

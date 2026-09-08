@@ -60,16 +60,18 @@ description: 为 AI Agent 提供基于 shadcn/ui 极简现代美学的单文件 
 
 ---
 
-## 二、通用布局母版与渐进式披露 (Progressive Disclosure)
+## 三、六大通用布局母版与渐进式披露 (Progressive Disclosure)
 
-不要从零手写完整页面。接到需求后，首先从以下 4 种**通用布局母版**中选择最贴近的骨架。需要完整实现时，可使用 `read` 工具读取本 Skill 目录下的对应母版资产：
+不要从零手写完整页面。接到需求后，首先从以下 6 种**通用布局母版**中选择最贴近的骨架。需要完整实现时，可使用 `read` 工具读取本 Skill 目录下的对应母版资产：
 
 | 布局模式 | 对应母版路径 | 适用需求与核心结构 |
 | :--- | :--- | :--- |
-| **单栏文档与评估报告**<br>(Document / Report) | `assets/templates/report.html` | **技术选型、架构审查、故障复盘、面试报告、需求说明、发布日志**。<br>结构：单栏居中（860px），元数据标头、核心结论 Callout、KPI 概览栏、多章节 `<details>` 折叠手风琴、浏览器打印/PDF 样式支持。 |
-| **数据大盘与过滤表格**<br>(Dashboard & Data Grid) | `assets/templates/dashboard.html` | **资源监控、用量大盘、考勤/调休管理、订单/任务流管理**。<br>结构：宽屏网格，顶部操作栏、4 列自适应 KPI 统计卡（数值+环比趋势）、实时搜索与下拉双重过滤表格、原生 `<dialog>` 弹窗。 |
-| **左右双栏工作台与审查器**<br>(Master-Detail Workbench) | `assets/templates/inspector.html` | **日志/Trace 审查、Prompt 调试器、JSONL 编辑器、配置管理**。<br>结构：视口充满（100vh），左侧可折叠/过滤条目列表，右侧动态联动渲染选中条目详情、3 列属性网格、带一键复制的深色代码块。 |
-| **并排横向对比与评测矩阵**<br>(Side-by-Side Comparison) | `assets/templates/compare.html` | **模型 A/B 测试、Prompt 改版前后对比、架构版本 diff、产品套餐/特性矩阵**。<br>结构：并排双栏卡片（基准 vs 挑战者）、核心裁决 Callout、量化差异对照表（Delta/胜负判定标签）。 |
+| **单栏文档与评估报告**<br>(Document / Report) | `assets/templates/report.html` | **技术选型、架构审查、故障复盘、面试报告、需求说明、发布日志**。<br>结构：单栏居中（860px），悬浮目录（Sticky TOC with ScrollSpy）、核心结论 Callout、KPI 概览栏、多章节 `<details>` 折叠手风琴、一键复制为 Markdown 导出。 |
+| **数据大盘与过滤表格**<br>(Dashboard & Data Grid) | `assets/templates/dashboard.html` | **资源监控、用量大盘、考勤/调休管理、订单/任务流管理**。<br>结构：宽屏网格，顶部操作栏、4 列自适应 KPI 统计卡、原生 SVG 走势图与柱状图、实时双重过滤表格、一键复制表格 (MD)。 |
+| **左右双栏工作台与审查器**<br>(Master-Detail Workbench) | `assets/templates/inspector.html` | **日志/Trace 审查、Prompt 调试器、JSONL 编辑器、配置管理**。<br>结构：视口充满（100vh），左侧条目列表过滤，右侧动态联动渲染选中条目详情、人工审查裁决条（Pass/Fix/Reject）、复制审查结论发回 Agent。 |
+| **并排横向对比与评测矩阵**<br>(Side-by-Side Comparison) | `assets/templates/compare.html` | **模型 A/B 测试、Prompt 改版前后对比、架构版本 diff、产品套餐/特性矩阵**。<br>结构：并排双栏卡片（基准 vs 挑战者）、核心裁决 Callout、量化差异对照表（Delta 胜负判定标签）、一键导出 Markdown。 |
+| **事件时间轴与故障编年史**<br>(Timeline & Postmortem) | `assets/templates/timeline.html` | **发布路线图 (Roadmap)、变更历史 (Changelog)、突发事件复盘 (Postmortem)**。<br>结构：左侧单轨垂直时间线、状态节点小圆点、精确时间戳与操作人 Tag、可展开诊断日志、一键复制时间轴为 Markdown。 |
+| **任务分拣与缺陷优先级看板**<br>(Triage & Agile Kanban) | `assets/templates/kanban.html` | **缺陷分类整理、需求优先级排序、任务状态流转**。<br>结构：4 列敏捷看板（Backlog, In Progress, Blocked, Done）、纯原生 HTML5 拖拽排序（零依赖）、一键复制分拣结果回 Agent 闭环。 |
 
 > 💡 **组件字典查阅**：如需查看所有按钮变体、胶囊徽章、常用 SVG 图标与实时组件效果，可直接读取或打开 `assets/index.html`。
 
@@ -248,11 +250,32 @@ body {
 </div>
 ```
 
-### 5. 常用纯矢量 SVG 图标字典 (继承字色)
+### 5. 常用纯矢量 SVG 图标字典 (24 个精选工程图标)
+所有图标均基于 `viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"`，通过继承字色自动融入暗黑模式：
 - 搜索: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>`
 - 成功: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>`
+- 警告: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`
 - 复制: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>`
 - 日历: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>`
+- 终端: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/></svg>`
+- 过滤: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>`
+- 外链: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`
+- 用户: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`
+- 折叠: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>`
+- 删除: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>`
+- 下载: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`
+- Git分支: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>`
+- Git提交: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><line x1="1.05" y1="12" x2="7" y2="12"/><line x1="17.01" y1="12" x2="22.96" y2="12"/></svg>`
+- Git PR: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7"/><line x1="6" y1="9" x2="6" y2="21"/></svg>`
+- 缺陷/Bug: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="8" height="14" x="8" y="6" rx="4"/><path d="m19 7-3 2"/><path d="m5 7 3 2"/><path d="m19 19-3-2"/><path d="m5 19 3-2"/><path d="M20 13h-4"/><path d="M4 13h4"/><path d="m10 4 1 2"/><path d="m14 4-1 2"/></svg>`
+- 服务器: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>`
+- 数据库: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>`
+- CPU算力: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M9 1v3"/><path d="M15 1v3"/><path d="M9 20v3"/><path d="M15 20v3"/><path d="M20 9h3"/><path d="M20 15h3"/><path d="M1 9h3"/><path d="M1 15h3"/></svg>`
+- 心跳/探活: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>`
+- 安全防护: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`
+- 鉴权锁定: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`
+- 刷新/重试: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 21h5v-5"/></svg>`
+- 系统设置: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`
 
 ### 6. 轻量原生图表规范 (Zero-CDN Pure SVG Charts)
 在生成数据大盘与报表时，**严禁引入 Chart.js / ECharts / Recharts 等外部 CDN 库**。图表统一采用纯原生矢量 SVG 实现：
@@ -377,9 +400,64 @@ body {
 </div>
 ```
 
+#### D. 复合环形占比分布图 (Multi-Segment Donut Chart)
+利用纯 SVG `<circle stroke-dasharray stroke-dashoffset>` 构造多色拼接圆环，中央标注总量，右侧排列图例：
+```html
+<div class="card" style="padding: 16px 20px;">
+  <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px;">
+    <span style="font-weight: 600;">节点运行健康度分布</span>
+    <span class="badge badge-success">99.8% 达标</span>
+  </div>
+  <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+    <svg viewBox="0 0 160 160" style="width: 90px; height: 90px; flex-shrink: 0;">
+      <!-- 底环 (周长 2*PI*54 ≈ 339.3) -->
+      <circle cx="80" cy="80" r="54" fill="none" stroke="var(--secondary)" stroke-width="20"/>
+      <!-- 绿段 65% (220.5), 偏移 0 -->
+      <circle cx="80" cy="80" r="54" fill="none" stroke="var(--ok)" stroke-width="20" stroke-dasharray="220.5 339.3" stroke-dashoffset="0" transform="rotate(-90 80 80)"/>
+      <!-- 黄段 25% (84.8), 偏移 -220.5 -->
+      <circle cx="80" cy="80" r="54" fill="none" stroke="var(--warn)" stroke-width="20" stroke-dasharray="84.8 339.3" stroke-dashoffset="-220.5" transform="rotate(-90 80 80)"/>
+      <!-- 红段 10% (33.9), 偏移 -305.3 -->
+      <circle cx="80" cy="80" r="54" fill="none" stroke="var(--err)" stroke-width="20" stroke-dasharray="33.9 339.3" stroke-dashoffset="-305.3" transform="rotate(-90 80 80)"/>
+      <text x="80" y="77" text-anchor="middle" font-size="16" font-weight="700" fill="var(--card-fg)">1,280</text>
+      <text x="80" y="93" text-anchor="middle" font-size="10" fill="var(--muted-fg)">Nodes</text>
+    </svg>
+    <div style="font-size: 12px; display: flex; flex-direction: column; gap: 6px; flex: 1;">
+      <div style="display: flex; justify-content: space-between;"><span style="color: var(--ok);">● 65% 正常运行</span><strong>832</strong></div>
+      <div style="display: flex; justify-content: space-between;"><span style="color: var(--warn);">● 25% 负载预警</span><strong>320</strong></div>
+      <div style="display: flex; justify-content: space-between;"><span style="color: var(--err);">● 10% 异常降级</span><strong>128</strong></div>
+    </div>
+  </div>
+</div>
+```
+
+#### E. 水平对比排行榜 (Horizontal Ranking Bar)
+特别适合微服务或长命名实体的耗时排行与资源占用比对：
+```html
+<div class="card" style="padding: 16px 20px;">
+  <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 12px;">
+    <span style="font-weight: 600;">核心模块响应耗时 Top 3 (ms)</span>
+    <span style="font-size: 11px; color: var(--muted-fg);">P95 阶段</span>
+  </div>
+  <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12px;">
+    <div>
+      <div style="display: flex; justify-content: space-between; margin-bottom: 3px;"><span>1. 数据库连接池等待 (DB Pool)</span><strong>280ms</strong></div>
+      <div style="background: var(--secondary); height: 6px; border-radius: 9999px; overflow: hidden;"><div style="background: var(--err); width: 85%; height: 100%;"></div></div>
+    </div>
+    <div>
+      <div style="display: flex; justify-content: space-between; margin-bottom: 3px;"><span>2. 模型首字生成 (LLM First Token)</span><strong>195ms</strong></div>
+      <div style="background: var(--secondary); height: 6px; border-radius: 9999px; overflow: hidden;"><div style="background: var(--warn); width: 60%; height: 100%;"></div></div>
+    </div>
+    <div>
+      <div style="display: flex; justify-content: space-between; margin-bottom: 3px;"><span>3. 网关鉴权解析 (Auth Gateway)</span><strong>48ms</strong></div>
+      <div style="background: var(--secondary); height: 6px; border-radius: 9999px; overflow: hidden;"><div style="background: var(--primary); width: 22%; height: 100%;"></div></div>
+    </div>
+  </div>
+</div>
+```
+
 ---
 
-## 五、经典微交互原生脚本 (Micro Vanilla JS)
+## 六、经典微交互原生脚本 (Micro Vanilla JS)
 
 ### 1. 暗黑模式切换按钮（建议所有页面右上角均标配）
 ```javascript
@@ -459,6 +537,25 @@ document.querySelectorAll('section[id]').forEach(el => observer.observe(el));
   <div>Generated by <strong>Agent HTML</strong> · 零依赖单文件规范 · 100% 离线自包含</div>
   <div>时间戳：2026-09-08 · 基准：main@HEAD · 状态：已正式归档</div>
 </footer>
+```
+
+### 7. 原生 HTML5 看板跨列拖拽逻辑 (Kanban Drag & Drop)
+零外部库，仅 ~30 行原生事件监听即可实现卡片跨列拖拽：
+```javascript
+let dragged = null;
+document.querySelectorAll('.card-item').forEach(card => {
+  card.addEventListener('dragstart', () => { dragged = card; card.classList.add('dragging'); });
+  card.addEventListener('dragend', () => { card.classList.remove('dragging'); dragged = null; });
+});
+document.querySelectorAll('.kanban-col').forEach(col => {
+  col.addEventListener('dragover', (e) => { e.preventDefault(); col.classList.add('drag-over'); });
+  col.addEventListener('dragleave', () => col.classList.remove('drag-over'));
+  col.addEventListener('drop', (e) => {
+    e.preventDefault();
+    col.classList.remove('drag-over');
+    if (dragged) col.querySelector('.cards-container').appendChild(dragged);
+  });
+});
 ```
 
 ---

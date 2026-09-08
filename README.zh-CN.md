@@ -27,7 +27,7 @@
 <p>
   <a href="#安装配置">安装配置</a> ·
   <a href="#核心价值">核心价值</a> ·
-  <a href="#四大通用布局母版">四大母版</a> ·
+  <a href="#六大通用布局母版">六大母版</a> ·
   <a href="#快速上手与-cli">快速上手</a> ·
   <a href="#微-css-核心基座">微 CSS 基座</a> ·
   <a href="#自验检查器">Linter</a>
@@ -58,17 +58,18 @@
 
 - **零依赖自包含**：0 个 npm 包、0 行构建脚本、0 个外部 CDN。双击即可在任何离线环境秒开。
 - **Zinc 冷灰中性色阶**：精准复刻 shadcn/ui 的设计变量体系。1px 微细边框、精细圆角、高信息密度。
-- **四大通用空间布局母版**：收敛长文档报告、宽屏监控大盘、双栏审查工作台、并排对比矩阵四大泛化骨架。
+- **六大通用空间布局母版**：收敛长文档报告、宽屏监控大盘、双栏审查工作台、并排对比矩阵、事件时间轴、敏捷任务看板六大泛化骨架。
 - **原生明暗双模式**：CSS 变量原生自适应系统偏好，内置 5 行原生 JS 切换开关。
 - **闭环反馈设计**：提供“一键导出 Markdown”与“复制审查结论至终端 Agent”机制，拒绝单向死胡同页面。
 - **确定性自验检查器（`scripts/validate.mjs`）**：Agent 在将 HTML 呈现给人类前，自动运行检查标签对称性、零 CDN 泄漏与移动端视口配置。
-- **12 个内联纯矢量 SVG**：精选 Lucide 风格矢量图标，继承字体颜色，不依赖图标字体库。
+- **24 个内联纯矢量 SVG**：精选 Lucide 风格矢量图标，继承字体颜色，不依赖图标字体库。
+- **零 CDN 纯原生图表**：纯 SVG 面积走势图、柱状分布图、复合环形占比图、水平排行榜。
 
 ---
 
-## 四大通用布局母版
+## 六大通用布局母版
 
-摆脱具体的业务限制，`agent-html` 将界面提炼为 4 套带有清晰 `<!-- [Slot: ...] -->` 插槽注释的基础空间骨架：
+摆脱具体的业务限制，`agent-html` 将界面提炼为 6 套带有清晰 `<!-- [Slot: ...] -->` 插槽注释的基础空间骨架：
 
 ### 母版 1：单栏长文档与评估审查报告 (`templates/report.html`)
 单栏居中流式布局（最大宽度 860px），专为阅读和打印优化。包含元数据标头、状态徽章、KPI 得分概览、执行摘要 Callout、原生 `<details>` 手风琴折叠栏、一键复制 Markdown 以及 `@media print` 打印防截断样式。
@@ -114,6 +115,28 @@
 
 ---
 
+### 母版 5：事件时间轴与故障编年史 (`templates/timeline.html`)
+高信息密度的垂直单轨时间线，具备语义化状态圆点（故障、警告、恢复、信息）、精确时间戳、操作人标签、可展开诊断日志以及一键复制时间线为 Markdown 功能。
+
+> **适用场景**：突发故障复盘 (Postmortem)、版本发布路线图 (Roadmap)、变更历史 (Changelog)、长流程事件溯源。
+
+<p align="center">
+  <img src="assets/screenshots/timeline.png" alt="时间轴母版" width="100%">
+</p>
+
+---
+
+### 母版 6：任务分拣与敏捷拖拽看板 (`templates/kanban.html`)
+交互式四列分类看板（Backlog、进行中、阻塞阻断、已完成）。零外部库依赖，纯原生 HTML5 Drag & Drop（~35 行原生 JS 实现拖拽交互），并提供“一键复制看板决策发回 Agent”闭环按钮。
+
+> **适用场景**：Bug 故障分拣、需求优先级评估、日常任务状态流转。
+
+<p align="center">
+  <img src="assets/screenshots/kanban.png" alt="敏捷看板母版" width="100%">
+</p>
+
+---
+
 ## 快速上手与 CLI
 
 ### 本地直接预览
@@ -123,11 +146,13 @@
 # 核心组件画廊
 open index.html
 
-# 预览 4 大母版
+# 预览 6 大母版
 open templates/report.html
 open templates/dashboard.html
 open templates/inspector.html
 open templates/compare.html
+open templates/timeline.html
+open templates/kanban.html
 ```
 
 ### 独立 CLI 命令行辅助

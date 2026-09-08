@@ -27,7 +27,7 @@
 <p>
   <a href="#installation">Installation</a> ·
   <a href="#what-you-get">What You Get</a> ·
-  <a href="#the-4-archetypes">The 4 Archetypes</a> ·
+  <a href="#the-6-archetypes">The 6 Archetypes</a> ·
   <a href="#quick-start">Quick Start</a> ·
   <a href="#micro-css-base">Micro-CSS Base</a> ·
   <a href="#linter">Linter</a>
@@ -58,17 +58,18 @@ When asking LLMs (Claude Code, Pi, Codex, ChatGPT) to generate an HTML dashboard
 
 - **Zero dependencies:** No `node_modules`, no npm build step, no CDN links. Every file runs offline and standalone.
 - **Zinc-neutral design tokens:** A pure CSS variable port of shadcn/ui. 1px borders, subtle radii, clean typography, and high information density.
-- **4 structural layout archetypes:** Scaffolds for Reports, Dashboards, Workbenches, and Side-by-Side Comparisons ready to copy.
+- **6 structural layout archetypes:** Scaffolds for Reports, Dashboards, Workbenches, Side-by-Side Comparisons, Timelines, and Kanban Boards ready to copy.
 - **Native light & dark modes:** Seamless switching with CSS variables and a 5-line vanilla JS toggle.
 - **Closed-loop feedback:** Built-in "Copy as Markdown" and "Copy Review Decisions" affordances so static HTML files never become dead ends.
 - **Deterministic verification linter:** Includes `scripts/validate.mjs` so agents self-test tag symmetry, zero-CDN compliance, and viewport setup before presenting files to humans.
-- **12 curated vector SVGs:** Lucide-style inline vector icons with `stroke="currentColor"` that adapt to font colors without font files.
+- **24 curated vector SVGs:** Lucide-style inline vector icons with `stroke="currentColor"` that adapt to font colors without font files.
+- **Zero-CDN Pure SVG charts:** Area trend curves, column distributions, multi-segment donut ratio charts, and horizontal ranking bars.
 
 ---
 
-## The 4 Archetypes
+## The 6 Archetypes
 
-Rather than rigid business screens, `agent-html` provides 4 fundamental layout scaffolds with clear `<!-- [Slot: ...] -->` injection points:
+Rather than rigid business screens, `agent-html` provides 6 fundamental layout scaffolds with clear `<!-- [Slot: ...] -->` injection points:
 
 ### Archetype 1: Document & Executive Report (`templates/report.html`)
 Single-column centered layout (860px max-width) optimized for readability and print. Includes metadata header, status badges, KPI score overview, executive summary callout, native `<details>` accordions, one-click "Copy as Markdown" export, and `@media print` styles.
@@ -114,6 +115,28 @@ Two-column split view (Baseline vs. Challenger) with verdict callout, parameter 
 
 ---
 
+### Archetype 5: Event Timeline & Incident Postmortem (`templates/timeline.html`)
+High-density single-track vertical timeline with semantic status nodes (Error, Warning, Success, Info), exact timestamps, operator tags, expandable diagnosis logs, and one-click "Copy as Markdown" export.
+
+> **Use for**: Incident postmortems, changelogs, release roadmaps, and event chronicles.
+
+<p align="center">
+  <img src="assets/screenshots/timeline.png" alt="Timeline Template" width="100%">
+</p>
+
+---
+
+### Archetype 6: Triage & Agile Kanban Board (`templates/kanban.html`)
+Interactive 4-column categorization board (Backlog, Progress, Blocked, Done). Zero external dependencies, pure HTML5 drag-and-drop (~35 lines vanilla JS). Features a "Copy Triage Decisions to Agent" button to close the interactive loop.
+
+> **Use for**: Ticket triage, task prioritization, backlog grooming, and bug tracking.
+
+<p align="center">
+  <img src="assets/screenshots/kanban.png" alt="Kanban Template" width="100%">
+</p>
+
+---
+
 ## Quick Start & CLI
 
 ### Local Preview
@@ -123,11 +146,13 @@ No build step or Node.js server required. Open directly in your browser:
 # Core component gallery
 open index.html
 
-# 4 Layout templates
+# 6 Layout templates
 open templates/report.html
 open templates/dashboard.html
 open templates/inspector.html
 open templates/compare.html
+open templates/timeline.html
+open templates/kanban.html
 ```
 
 ### Standalone CLI Helper
@@ -309,7 +334,9 @@ agent-html/
 │   ├── report.html                # Single-column document & evaluation report
 │   ├── dashboard.html             # Metrics dashboard & filterable table
 │   ├── inspector.html             # Master-detail split workbench
-│   └── compare.html               # Side-by-side A/B comparison matrix
+│   ├── compare.html               # Side-by-side A/B comparison matrix
+│   ├── timeline.html              # Event timeline & incident postmortem
+│   └── kanban.html                # Triage & agile drag-and-drop kanban board
 ├── assets/
 │   ├── logo.svg                   # Vector brand logo
 │   └── screenshots/               # High-res preview assets
