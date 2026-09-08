@@ -39,7 +39,7 @@
 ---
 
 <p align="center">
-  <img src="assets/screenshots/en/gallery.png" alt="agent-html Component Gallery" width="100%">
+  <img width="2326" height="1442" alt="image" src="https://github.com/user-attachments/assets/cb546a47-188e-46ac-af2a-c4af09a3ca59" />
 </p>
 
 ---
