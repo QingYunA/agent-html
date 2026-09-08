@@ -107,12 +107,13 @@
       color: var(--muted-fg);
       margin-top: 6px;
     }
-    .actions { display: flex; gap: 8px; }
+    .actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 
     /* Buttons & Badges */
     .btn {
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 6px;
       font-size: 13px;
       font-weight: 500;
@@ -124,11 +125,20 @@
       color: var(--card-fg);
       cursor: pointer;
       text-decoration: none;
+      white-space: nowrap;
+      flex-shrink: 0;
       transition: all 0.15s ease;
     }
     .btn:hover { background: var(--secondary); }
     .btn-primary { background: var(--primary); color: var(--primary-fg); border-color: var(--primary); }
     .btn-primary:hover { opacity: 0.9; }
+    .btn-icon {
+      width: 34px;
+      height: 34px;
+      padding: 0;
+      justify-content: center;
+      flex-shrink: 0;
+    }
 
     .badge {
       display: inline-flex;
@@ -299,7 +309,7 @@
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
         <span>打印/PDF</span>
       </button>
-      <button id="themeToggle" class="btn" title="切换暗黑模式">
+      <button id="themeToggle" class="btn btn-icon" title="切换暗黑模式">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 0 1 1-9-9Z"/></svg>
       </button>
     </div>

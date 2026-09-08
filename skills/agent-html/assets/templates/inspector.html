@@ -110,6 +110,7 @@
     .btn {
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 6px;
       font-size: 13px;
       font-weight: 500;
@@ -121,11 +122,20 @@
       color: var(--card-fg);
       cursor: pointer;
       text-decoration: none;
+      white-space: nowrap;
+      flex-shrink: 0;
       transition: all 0.15s ease;
     }
     .btn:hover { background: var(--secondary); }
     .btn-primary { background: var(--primary); color: var(--primary-fg); border-color: var(--primary); }
     .btn-primary:hover { opacity: 0.9; }
+    .btn-icon {
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      justify-content: center;
+      flex-shrink: 0;
+    }
 
     .badge {
       display: inline-flex;
@@ -288,12 +298,12 @@
       <span>工作台与数据审查器</span>
       <span class="brand-tag">Master-Detail View</span>
     </div>
-    <div style="display: flex; gap: 8px;">
+    <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
       <button id="exportDecisionBtn" class="btn btn-primary" title="将当前人工审查决策复制到剪贴板发回 Agent">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
         <span>复制审查结论发回 Agent</span>
       </button>
-      <button id="themeToggle" class="btn" title="切换暗黑模式">
+      <button id="themeToggle" class="btn btn-icon" title="切换暗黑模式">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 0 1 1-9-9Z"/></svg>
       </button>
     </div>
