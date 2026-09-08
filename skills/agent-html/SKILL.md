@@ -189,6 +189,8 @@ body {
 
 ## 四、高频原子 HTML 插槽字典 (Atomic HTML Snippets)
 
+> 💡 **原子积木按需索取 (Progressive Disclosure)**：本节列举最核心的高频插槽。如需查阅完整 24 个研发矢量图标、复合多色段环形图、水平耗时排行榜等详细代码片段，可使用 `read` 工具查阅本 Skill 目录下的 `references/components.md`。
+
 ### 1. 指标卡片 (Stat Card)
 ```html
 <div class="stat-card" style="padding: 18px 20px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);">

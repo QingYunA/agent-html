@@ -15,8 +15,6 @@
       <stop offset="60%" stop-color="#0ea5e9" stop-opacity="0.08" />
       <stop offset="100%" stop-color="#09090b" stop-opacity="0" />
     </radialGradient>
-    <linearGradient id="bracketGrad" x1-opacity="0" />
-    </radialGradient>
     <linearGradient id="bracketGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#38bdf8" />
       <stop offset="60%" stop-color="#6366f1" />

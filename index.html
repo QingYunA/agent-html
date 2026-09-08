@@ -717,6 +717,11 @@
       .archetype-info-row { flex-direction: column; align-items: stretch; }
       .footer-inner { flex-direction: column; align-items: flex-start; }
     }
+  
+    dialog::backdrop {
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(4px);
+    }
   </style>
 </head>
 <body>
@@ -740,7 +745,7 @@
         </a>
         <button id="themeToggle" class="btn btn-outline btn-icon" title="Toggle Theme (Light / Dark)">
           <svg id="themeIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 3a6 6 0 0 0 9 9 9 0 1 1-9-9Z"></path>
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1 -9 -9Z"></path>
           </svg>
         </button>
       </nav>
@@ -991,68 +996,6 @@
       </div>
     </section>
 
-    <!-- Why Not Tailwind CDN vs Why Not Ad-hoc CSS -->
-    <section>
-      <div class="section-header">
-        <div class="section-tag">Engineering Philosophy</div>
-        <h2 class="section-title">Why Zero-CDN Standalone?</h2>
-        <p class="section-desc">Comparing the three ways AI agents generate frontend interfaces.</p>
-      </div>
-
-      <div class="contrast-grid">
-        <div class="contrast-card">
-          <div>
-            <div class="contrast-badge" style="color: var(--err);">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-              <span>The CDN Trap</span>
-            </div>
-            <div class="contrast-title">Tailwind CDN Runtime</div>
-            <div class="contrast-desc">Models inject <code>&lt;script src="cdn.tailwindcss.com"&gt;</code> and Google Fonts.</div>
-          </div>
-          <ul class="contrast-list">
-            <li class="bad">✕ Breaks in offline / air-gapped corporate intranets</li>
-            <li class="bad">✕ 2-second JS parse delay causing FOUC layout shift</li>
-            <li class="bad">✕ Fails under strict corporate Content-Security-Policies</li>
-            <li class="bad">✕ Link rot causes page degradation over time</li>
-          </ul>
-        </div>
-
-        <div class="contrast-card">
-          <div>
-            <div class="contrast-badge" style="color: var(--warn);">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-              <span>The Visual Slop Trap</span>
-            </div>
-            <div class="contrast-title">Ad-Hoc Inline CSS</div>
-            <div class="contrast-desc">Forbidding CDNs leads models to hallucinate arbitrary inline styles.</div>
-          </div>
-          <ul class="contrast-list">
-            <li class="bad">✕ Inconsistent pure-black harsh 1px borders</li>
-            <li class="bad">✕ Oversized 30px unpadded tables and misaligned columns</li>
-            <li class="bad">✕ Zero dark mode support; eye-burning white screens</li>
-            <li class="bad">✕ Every session invents divergent CSS class names</li>
-          </ul>
-        </div>
-
-        <div class="contrast-card featured">
-          <div>
-            <div class="contrast-badge" style="color: var(--ok);">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>The agent-html Standard</span>
-            </div>
-            <div class="contrast-title">Native Micro-CSS Base</div>
-            <div class="contrast-desc">~75 lines of pure CSS variables and pre-tested semantic classes.</div>
-          </div>
-          <ul class="contrast-list">
-            <li class="good">✓ 100% offline; double-click in Finder to render</li>
-            <li class="good">✓ Instant 0ms load with zero runtime dependencies</li>
-            <li class="good">✓ Faithful shadcn Zinc-neutral aesthetic & tokens</li>
-            <li class="good">✓ Automatic Light/Dark mode with 5-line native toggle</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
     <!-- Component Arsenal (Interactive Playground) -->
     <section id="components">
       <div class="section-header">
@@ -1062,15 +1005,17 @@
       </div>
 
       <div class="arsenal-grid">
-        <!-- 1. Buttons & Badges -->
+        <!-- 1. Buttons & Status Badges Matrix -->
         <div class="arsenal-box">
           <div class="arsenal-title">
-            <span>Buttons & Status Badges</span>
+            <span>Buttons & Badges Matrix</span>
             <span class="badge badge-success"><span class="badge-dot"></span>Interactive</span>
           </div>
-          <div class="arsenal-desc">Variants: Primary, Secondary, Outline, Ghost, Destructive, and Icon states.</div>
+          <div class="arsenal-desc">All button variants, sizes (sm/md/lg), icon combinations, and semantic status pills.</div>
           
-          <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;">
+          <!-- Variant Row -->
+          <div style="font-size: 11px; font-weight: 600; color: var(--muted-fg); margin: 14px 0 6px;">STYLE VARIANTS</div>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
             <button class="btn btn-primary btn-sm">Primary</button>
             <button class="btn btn-secondary btn-sm">Secondary</button>
             <button class="btn btn-outline btn-sm">Outline</button>
@@ -1078,12 +1023,68 @@
             <button class="btn btn-destructive btn-sm">Destructive</button>
           </div>
 
+          <!-- Sizes & Icons Row -->
+          <div style="font-size: 11px; font-weight: 600; color: var(--muted-fg); margin: 12px 0 6px;">SIZES & ICONS</div>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 12px;">
+            <button class="btn btn-primary btn-sm">Small (sm)</button>
+            <button class="btn btn-primary">Default (md)</button>
+            <button class="btn btn-primary btn-lg">Large (lg)</button>
+            <button class="btn btn-outline btn-sm">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <span>Download</span>
+            </button>
+            <button class="btn btn-outline btn-icon" title="Settings">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            </button>
+            <button class="btn btn-outline btn-sm" disabled style="opacity: 0.5; cursor: not-allowed;">Disabled</button>
+          </div>
+
+          <!-- Badges Row -->
+          <div style="font-size: 11px; font-weight: 600; color: var(--muted-fg); margin: 12px 0 6px;">STATUS BADGES</div>
           <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-            <span class="badge badge-success"><span class="badge-dot"></span>Success / 200 OK</span>
-            <span class="badge badge-warning"><span class="badge-dot"></span>Warning / Alert</span>
-            <span class="badge badge-danger"><span class="badge-dot"></span>Critical Error</span>
+            <span class="badge badge-success"><span class="badge-dot"></span>200 OK</span>
+            <span class="badge badge-warning"><span class="badge-dot"></span>Warning</span>
+            <span class="badge badge-danger"><span class="badge-dot"></span>Error</span>
             <span class="badge badge-info"><span class="badge-dot"></span>In Progress</span>
-            <span class="badge">Default</span>
+            <span class="badge">Neutral</span>
+          </div>
+        </div>
+
+        <!-- 2. Micro-Interactive Primitives -->
+        <div class="arsenal-box">
+          <div class="arsenal-title">
+            <span>Micro-Interactive Primitives</span>
+            <span class="badge badge-info">Native DOM</span>
+          </div>
+          <div class="arsenal-desc">Zero-dependency native dialog modals, collapsible details, and executive callouts.</div>
+
+          <!-- Native Dialog Button -->
+          <div style="margin-top: 14px; display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: var(--secondary); border: 1px solid var(--border); border-radius: var(--radius-sm);">
+            <div>
+              <div style="font-size: 13px; font-weight: 600;">Native &lt;dialog&gt; Modal</div>
+              <div style="font-size: 11px; color: var(--muted-fg);">Backdrop blur, ESC key dismiss, zero JS libs</div>
+            </div>
+            <button class="btn btn-outline btn-sm" onclick="document.getElementById('playgroundDialog').showModal()">Open Modal</button>
+          </div>
+
+          <!-- Native Accordion Details -->
+          <details style="margin-top: 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 12px; background: var(--secondary);">
+            <summary style="font-size: 12px; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none;">
+              <span>Expandable &lt;details&gt; Accordion</span>
+              <span style="color: var(--muted-fg);">▾</span>
+            </summary>
+            <div style="font-size: 12px; color: var(--muted-fg); margin-top: 6px; line-height: 1.5;">
+              Zero JavaScript required. Ideal for collapsible audit logs, trace replays, and long explanations.
+            </div>
+          </details>
+
+          <!-- Executive Callout -->
+          <div style="margin-top: 10px; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--ok-border); background: var(--ok-bg); font-size: 12px; display: flex; gap: 8px; align-items: flex-start;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ok)" stroke-width="2" style="margin-top: 2px; flex-shrink: 0;"><polyline points="20 6 9 17 4 12"/></svg>
+            <div>
+              <strong style="color: var(--ok); display: block;">Executive Callout Box</strong>
+              <span style="color: var(--card-fg);">Highlight critical architectural verdicts, security findings, or launch gates.</span>
+            </div>
           </div>
         </div>
 
@@ -1441,6 +1442,16 @@ npx agent-html check dashboard.html</code></pre>
   </footer>
 
   <!-- Toast Notification Container -->
+  <!-- Native Dialog Modal Demo -->
+  <dialog id="playgroundDialog" style="border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--card); color: var(--card-fg); padding: 24px; max-width: 420px; width: 90%; margin: auto; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3);">
+    <div style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Native &lt;dialog&gt; Component</div>
+    <p style="font-size: 13px; color: var(--muted-fg); margin-bottom: 20px; line-height: 1.5;">Built entirely with the browser's native dialog element and CSS backdrop blur. Fully accessible, handles keyboard focus, and requires zero external libraries.</p>
+    <div style="display: flex; justify-content: flex-end; gap: 8px;">
+      <button class="btn btn-sm" onclick="document.getElementById('playgroundDialog').close()">Cancel</button>
+      <button class="btn btn-primary btn-sm" onclick="document.getElementById('playgroundDialog').close()">Confirm Action</button>
+    </div>
+  </dialog>
+
   <div id="toast">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
     <span id="toastMsg">Copied to clipboard!</span>
@@ -1457,7 +1468,7 @@ npx agent-html check dashboard.html</code></pre>
       if (isDark) {
         themeIcon.innerHTML = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>';
       } else {
-        themeIcon.innerHTML = '<path d="M12 3a6 6 0 0 0 9 9 9 0 1 1-9-9Z"></path>';
+        themeIcon.innerHTML = '<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1 -9 -9Z"></path>';
       }
     }
 
