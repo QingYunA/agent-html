@@ -289,9 +289,9 @@
       <span class="brand-tag">Master-Detail View</span>
     </div>
     <div style="display: flex; gap: 8px;">
-      <button class="btn btn-primary" onclick="alert('执行批量操作')">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-        <span>执行所选</span>
+      <button id="exportDecisionBtn" class="btn btn-primary" title="将当前人工审查决策复制到剪贴板发回 Agent">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+        <span>复制审查结论发回 Agent</span>
       </button>
       <button id="themeToggle" class="btn" title="切换暗黑模式">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 0 1 1-9-9Z"/></svg>
@@ -380,6 +380,16 @@
           <div class="kv-box">
             <div class="kv-label">记录时间戳</div>
             <div class="kv-val" id="dTime">10:30:12</div>
+          </div>
+        </div>
+
+        <!-- Human Review Action Bar (Closed-Loop Affordance) -->
+        <div style="display: flex; gap: 8px; margin-top: 14px; padding: 10px 14px; background: var(--secondary); border-radius: var(--radius-sm); border: 1px solid var(--border); align-items: center; justify-content: space-between; flex-wrap: wrap;">
+          <div style="font-size: 12px; font-weight: 600;">人工审查裁决: <span id="currentVerdictText" style="color: var(--ok); margin-left: 4px;">准予放行 (PASS)</span></div>
+          <div style="display: flex; gap: 6px;">
+            <button class="btn btn-sm" onclick="setVerdict('PASS')" style="color: var(--ok);">✓ 准予放行</button>
+            <button class="btn btn-sm" onclick="setVerdict('FIX')" style="color: var(--warn);">⚠ 标记修复</button>
+            <button class="btn btn-sm" onclick="setVerdict('REJECT')" style="color: var(--err);">✗ 阻断驳回</button>
           </div>
         </div>
 
@@ -476,6 +486,42 @@
         setTimeout(() => { btn.textContent = '复制内容'; }, 1500);
       });
     }
+
+    // Human Verdict & Export Back to Agent
+    const verdicts = {
+      'ITEM-101': 'PASS',
+      'ITEM-102': 'REJECT',
+      'ITEM-103': 'PASS',
+      'ITEM-104': 'FIX'
+    };
+
+    function setVerdict(type) {
+      const currentActive = document.querySelector('.item-row.active');
+      if (!currentActive) return;
+      const id = currentActive.getAttribute('data-id');
+      verdicts[id] = type;
+      const vt = document.getElementById('currentVerdictText');
+      if (type === 'PASS') { vt.textContent = '准予放行 (PASS)'; vt.style.color = 'var(--ok)'; }
+      else if (type === 'FIX') { vt.textContent = '标记修复 (FIX)'; vt.style.color = 'var(--warn)'; }
+      else { vt.textContent = '阻断驳回 (REJECT)'; vt.style.color = 'var(--err)'; }
+    }
+
+    document.getElementById('exportDecisionBtn')?.addEventListener('click', () => {
+      let lines = ['### 人工审查结论回传 (Review Decisions from Inspector)'];
+      rows.forEach(r => {
+        const id = r.getAttribute('data-id');
+        const name = r.getAttribute('data-name');
+        const v = verdicts[id] || r.getAttribute('data-status');
+        lines.push(`- [${v}] ${id}: ${name}`);
+      });
+      lines.push('\n请根据上述人工裁决结果继续处理下一步任务。');
+      navigator.clipboard.writeText(lines.join('\n')).then(() => {
+        const btn = document.getElementById('exportDecisionBtn');
+        const orig = btn.innerHTML;
+        btn.innerHTML = '<span>已复制审查结论 (可粘贴回终端)!</span>';
+        setTimeout(() => { btn.innerHTML = orig; }, 2000);
+      });
+    });
   </script>
 </body>
 </html>

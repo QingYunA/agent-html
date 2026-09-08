@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" fill="none">
+  <rect width="64" height="64" rx="14" fill="#18181b"/>
+  <rect x="1" y="1" width="62" height="62" rx="13" stroke="#27272a" stroke-width="2"/>
+  <!-- Window Header dots -->
+  <circle cx="16" cy="18" r="3" fill="#3f3f46"/>
+  <circle cx="25" cy="18" r="3" fill="#3f3f46"/>
+  <circle cx="34" cy="18" r="3" fill="#3f3f46"/>
+  <!-- Code brackets / UI layout -->
+  <path d="M20 34L14 40L20 46" stroke="#fafafa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M44 34L50 40L44 46" stroke="#fafafa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M35 30L29 50" stroke="#71717a" stroke-width="2" stroke-linecap="round"/>
+  <!-- Small accent spark -->
+  <circle cx="46" cy="20" r="2" fill="#10b981"/>
+</svg>

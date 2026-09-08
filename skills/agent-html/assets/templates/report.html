@@ -68,6 +68,7 @@
       --info-border: #1e40af;
     }
 
+    html { scroll-behavior: smooth; }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -76,9 +77,59 @@
       line-height: 1.5;
       padding: 40px 20px;
     }
-    .container {
-      max-width: 860px;
+    .layout-wrapper {
+      max-width: 1140px;
       margin: 0 auto;
+      display: flex;
+      gap: 36px;
+      justify-content: center;
+    }
+    .container {
+      flex: 1;
+      max-width: 860px;
+      min-width: 0;
+    }
+    .toc-rail {
+      width: 200px;
+      flex-shrink: 0;
+      display: none;
+    }
+    @media (min-width: 1080px) {
+      .toc-rail { display: block; }
+    }
+    .toc-sticky {
+      position: sticky;
+      top: 40px;
+      font-size: 13px;
+    }
+    .toc-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted-fg);
+      margin-bottom: 12px;
+      padding-left: 10px;
+    }
+    .toc-link {
+      display: block;
+      color: var(--muted-fg);
+      text-decoration: none;
+      padding: 6px 10px;
+      border-left: 2px solid transparent;
+      margin-bottom: 4px;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      transition: all 0.15s ease;
+    }
+    .toc-link:hover {
+      color: var(--card-fg);
+      background: var(--secondary);
+    }
+    .toc-link.active {
+      color: var(--primary);
+      font-weight: 600;
+      border-left-color: var(--primary);
+      background: var(--secondary);
     }
 
     /* Header */
@@ -249,9 +300,24 @@
     .property-label { font-weight: 600; font-size: 11px; color: var(--muted-fg); }
     .property-value { font-size: 13px; color: var(--card-fg); margin-top: 2px; }
 
+    /* Colophon Metadata Footer */
+    .colophon {
+      margin-top: 40px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--muted-fg);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
     @media print {
       body { background: #fff; padding: 0; }
-      .actions { display: none; }
+      .actions, .toc-rail { display: none !important; }
+      .container { max-width: 100% !important; }
       details { break-inside: avoid; }
       details[open] { margin-bottom: 10px; }
     }
@@ -264,7 +330,21 @@
 </head>
 <body>
 
-<div class="container">
+<div class="layout-wrapper">
+  <!-- [Sticky Table of Contents Rail] -->
+  <aside class="toc-rail">
+    <div class="toc-sticky">
+      <div class="toc-title">目录导航 (TOC)</div>
+      <nav id="tocNav">
+        <a href="#kpi-section" class="toc-link active">1. 核心指标概览</a>
+        <a href="#summary-section" class="toc-link">2. 执行摘要与结论</a>
+        <a href="#checklist-section" class="toc-link">3. 维度细项审查清单</a>
+        <a href="#colophon-section" class="toc-link">4. 审查签署与溯源</a>
+      </nav>
+    </div>
+  </aside>
+
+  <div class="container">
   <!-- [Slot: Report Header] -->
   <header class="report-header">
     <div class="report-title-box">
@@ -290,6 +370,10 @@
       </div>
     </div>
     <div class="actions">
+      <button id="copyMarkdownBtn" class="btn" title="一键复制本报告为 Markdown 文本">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+        <span>复制 Markdown</span>
+      </button>
       <button class="btn" onclick="window.print()" title="打印或保存为 PDF">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
         <span>打印/PDF</span>
@@ -301,7 +385,7 @@
   </header>
 
   <!-- [Slot: KPI Score Overview] -->
-  <section class="stat-row">
+  <section id="kpi-section" class="stat-row">
     <div class="stat-mini">
       <div class="stat-mini-label">综合达标得分</div>
       <div class="stat-mini-val" style="color: var(--ok);">92.5 <span style="font-size: 13px; font-weight: normal; color: var(--muted-fg);">/ 100</span></div>
@@ -321,7 +405,7 @@
   </section>
 
   <!-- [Slot: Executive Summary Callout] -->
-  <section class="callout callout-success">
+  <section id="summary-section" class="callout callout-success">
     <div class="callout-title">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
       <span>执行摘要与上线决策结论 (Executive Summary)</span>
@@ -330,7 +414,7 @@
   </section>
 
   <!-- [Slot: Dimension Breakdown / Detailed Sections] -->
-  <section class="card">
+  <section id="checklist-section" class="card">
     <div class="card-header">
       <span>评估细项与维度分解清单</span>
       <span class="badge badge-info">共 3 个核心评估项</span>
@@ -389,6 +473,13 @@
       </details>
     </div>
   </section>
+
+  <!-- [Slot: Colophon Metadata Footer] -->
+  <footer id="colophon-section" class="colophon">
+    <div>Generated by <strong>agent-html</strong> · 零依赖单文件规范 · 100% 离线自包含</div>
+    <div>时间戳：2026-09-08 · 基准：Project Alpha (main@v2.4.0-RC3) · 状态：已存档</div>
+  </footer>
+  </div>
 </div>
 
 <script>
@@ -400,6 +491,53 @@
   toggle?.addEventListener('click', () => {
     const current = document.documentElement.getAttribute('data-theme') === 'dark';
     document.documentElement.setAttribute('data-theme', current ? 'light' : 'dark');
+  });
+
+  // Copy as Markdown
+  document.getElementById('copyMarkdownBtn')?.addEventListener('click', () => {
+    const md = `# 系统架构评估与综合审查报告
+> 状态：通过 (Approved) | 评估主体：Project Alpha | 日期：2026-09-08 | 版本：v2.4.0-RC3
+
+## 1. 核心指标概览
+- 综合达标得分：92.5 / 100
+- 架构解耦与内聚：94%
+- 性能压测通过率：98.2%
+- 安全合规审查：100%
+
+## 2. 执行摘要与结论
+经专家委员会全面审查，当前版本架构清晰度高、边界划分清晰，核心服务具备自动容灾切流能力。全链路压力测试达标且无阻断性缺陷，建议准予发布至生产环境并开启灰度放量。
+
+## 3. 维度细项审查清单
+- [✓] 架构模块设计与边界清晰度: 优异 (95分) — 核心业务链路已实现事件驱动解耦
+- [✓] 高可用容灾与极端异常自愈: 良好 (90分) — 多级熔断器可在 200ms 内生效
+- [!] 依赖项安全与代码质量基线: 注意项 (88分) — 第三方扫描通过，补齐防护断言
+`;
+    navigator.clipboard.writeText(md).then(() => {
+      const btn = document.getElementById('copyMarkdownBtn');
+      const orig = btn.innerHTML;
+      btn.innerHTML = '<span>已复制 Markdown!</span>';
+      setTimeout(() => { btn.innerHTML = orig; }, 1800);
+    });
+  });
+
+  // ScrollSpy for Sticky TOC
+  const sections = ['kpi-section', 'summary-section', 'checklist-section', 'colophon-section'];
+  const tocLinks = document.querySelectorAll('.toc-link');
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute('id');
+        tocLinks.forEach(link => {
+          link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) observer.observe(el);
   });
 </script>
 </body>

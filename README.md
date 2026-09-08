@@ -1,67 +1,115 @@
+<div align="center">
+
+<img src="./assets/logo.svg" width="64" height="64" alt="agent-html logo">
+
 # agent-html
 
-> Zero-dependency, single-file HTML design system & agent skill inspired by [shadcn/ui](https://ui.shadcn.com).  
-> 100% offline, zero npm packages, zero external CDNs. High information density, light/dark mode, and 4 layout archetypes for LLMs.
+<p>
+  <strong>Zero-dependency, single-file HTML design system & agent skill for LLMs.</strong><br>
+  Inspired by shadcn/ui. 100% offline. 0 npm packages. 0 external CDNs.<br>
+  Optimized for Claude Code, Pi, Codex, and Cursor.
+</p>
+
+<p>
+  <a href="README.md">English</a> ·
+  <a href="README.zh-CN.md">简体中文</a>
+</p>
+
+<p>
+  <a href="https://github.com/QingYunA/agent-html/releases"><img src="https://img.shields.io/github/v/release/QingYunA/agent-html?style=flat&color=18181b" alt="Release"></a>
+  <img src="https://img.shields.io/badge/dependencies-0%20npm%20%7C%200%20cdn-10b981?style=flat" alt="Dependencies">
+  <img src="https://img.shields.io/badge/theme-light%20%26%20dark-blue?style=flat" alt="Themes">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-18181b?style=flat" alt="License"></a>
+  <a href="https://github.com/QingYunA/agent-html/stargazers"><img src="https://img.shields.io/github/stars/QingYunA/agent-html?style=flat&logo=github&color=18181b" alt="Stars"></a>
+</p>
+
+<p>
+  <a href="#what-you-get">What You Get</a> ·
+  <a href="#the-4-archetypes">The 4 Archetypes</a> ·
+  <a href="#quick-start">Quick Start</a> ·
+  <a href="#micro-css-base">Micro-CSS Base</a> ·
+  <a href="#global-agent-skill-setup">Agent Skill</a> ·
+  <a href="#linter">Linter</a>
+</p>
+
+</div>
+
+---
+
+<p align="center">
+  <img src="assets/screenshots/gallery.png" alt="agent-html Component Gallery" width="100%">
+</p>
 
 ---
 
 ## The Problem
 
-When asking LLMs (Claude Code, Pi, Codex, ChatGPT) to generate a quick HTML report or dashboard, you usually hit one of two walls:
+When asking LLMs (Claude Code, Pi, Codex, ChatGPT) to generate an HTML dashboard or report, the output usually falls into one of two traps:
 
-1. **The CDN trap**: The model injects `<script src="https://cdn.tailwindcss.com"></script>` and external Google Fonts. It looks okay initially, but breaks completely in air-gapped corporate intranets, takes 2 seconds to render, and rots when CDNs change or network drops.
-2. **The visual slop trap**: If you forbid CDNs, the model hallucinates ad-hoc CSS—inconsistent 24px paddings, harsh pure-black borders, mismatched border-radii, and zero dark mode support.
+- **The CDN trap:** The model injects `<script src="https://cdn.tailwindcss.com"></script>` and external Google Fonts. It looks acceptable at first glance, but breaks completely in air-gapped corporate intranets, takes 2 seconds to parse, causes flash-of-unstyled-content (FOUC), and rots over time when CDN endpoints change.
+- **The visual slop trap:** If you forbid CDNs, the model hallucinates raw inline CSS with garish colors, harsh pure-black borders, random 30px paddings, broken alignment, and zero dark mode support.
 
-`agent-html` solves this by providing a tight ~75-line native CSS token base and 4 structural layout archetypes that agents can inline directly. Double-click any generated file in Finder, and it renders instantly with enterprise-grade polish.
-
----
-
-## Showcase
-
-### 1. Component Gallery (`index.html`)
-The full atom catalog: Buttons (5 variants), Badges with status dots, Stat cards (with optional Sparklines), Zero-CDN Pure SVG Charts (Area trends & Column distributions), Callouts, interactive Tables, Segmented tabs, Native `<dialog>` modals, and 12 Lucide-style inline SVGs.
-
-![Component Gallery](assets/screenshots/gallery.png)
+`agent-html` fixes this by packaging a tight ~75-line native CSS token sheet and 4 battle-tested layout archetypes. Double-click any generated file in Finder, and it renders instantly with enterprise-grade polish.
 
 ---
 
-### 2. The 4 Structural Archetypes
+## What You Get
 
-Rather than rigid business-specific screens, `agent-html` provides 4 fundamental layout scaffolds:
+- **Zero dependencies:** No `node_modules`, no npm build step, no CDN links. Every file runs offline and standalone.
+- **Zinc-neutral design tokens:** A pure CSS variable port of shadcn/ui. 1px borders, subtle radii, clean typography, and high information density.
+- **4 structural layout archetypes:** Scaffolds for Reports, Dashboards, Workbenches, and Side-by-Side Comparisons ready to copy.
+- **Native light & dark modes:** Seamless switching with CSS variables and a 5-line vanilla JS toggle.
+- **Closed-loop feedback:** Built-in "Copy as Markdown" and "Copy Review Decisions" affordances so static HTML files never become dead ends.
+- **Deterministic verification linter:** Includes `scripts/validate.mjs` so agents self-test tag symmetry, zero-CDN compliance, and viewport setup before presenting files to humans.
+- **12 curated vector SVGs:** Lucide-style inline vector icons with `stroke="currentColor"` that adapt to font colors without font files.
 
-#### Archetype 1: Document & Executive Report (`templates/report.html`)
-Single-column centered layout (860px max-width) optimized for readability and print. Includes metadata header, status badges, KPI score overview, executive summary callout, native `<details>` accordions, and `@media print` styles.
+---
+
+## The 4 Archetypes
+
+Rather than rigid business screens, `agent-html` provides 4 fundamental layout scaffolds with clear `<!-- [Slot: ...] -->` injection points:
+
+### Archetype 1: Document & Executive Report (`templates/report.html`)
+Single-column centered layout (860px max-width) optimized for readability and print. Includes metadata header, status badges, KPI score overview, executive summary callout, native `<details>` accordions, one-click "Copy as Markdown" export, and `@media print` styles.
 
 > **Use for**: Technical reviews, interview assessments, postmortems, architecture RFCs, and changelogs.
 
-![Report Template](assets/screenshots/report.png)
+<p align="center">
+  <img src="assets/screenshots/report.png" alt="Report Template" width="100%">
+</p>
 
 ---
 
-#### Archetype 2: Analytics Dashboard & Data Grid (`templates/dashboard.html`)
+### Archetype 2: Analytics Dashboard & Data Grid (`templates/dashboard.html`)
 Fluid wide-screen layout with a 4-column KPI metric grid, responsive pure SVG charts (24h throughput area trend & P95 latency distribution bars with zero external libraries), dual-filter toolbar (real-time text search + status select), zebra hover table, and native `<dialog>` action modals.
 
 > **Use for**: Resource usage monitoring, quota trackers, task lists, and operational dashboards.
 
-![Dashboard Template](assets/screenshots/dashboard.png)
+<p align="center">
+  <img src="assets/screenshots/dashboard.png" alt="Dashboard Template" width="100%">
+</p>
 
 ---
 
-#### Archetype 3: Master-Detail Workbench (`templates/inspector.html`)
-Full-viewport app layout (`100vh` without outer page scroll). Left sidebar (320px) handles real-time item filtering, while the right detail pane dynamically renders selected metadata, property grids, and formatted code blocks with one-click copy.
+### Archetype 3: Master-Detail Workbench (`templates/inspector.html`)
+Full-viewport app layout (`100vh` without outer page scroll). Left sidebar (320px) handles real-time item filtering, while the right detail pane dynamically renders selected metadata, property grids, human review verdict actions (Pass/Fix/Reject), and a "Copy Review Decisions back to Agent" button to close the interactive feedback loop.
 
 > **Use for**: Trace replay, log inspectors, JSONL viewers, and prompt debuggers.
 
-![Inspector Template](assets/screenshots/inspector.png)
+<p align="center">
+  <img src="assets/screenshots/inspector.png" alt="Inspector Template" width="100%">
+</p>
 
 ---
 
-#### Archetype 4: Side-by-Side Comparison Matrix (`templates/compare.html`)
-Two-column split view (Baseline vs. Challenger) with verdict callout, parameter specs, sample payload outputs, and a quantitative delta matrix table.
+### Archetype 4: Side-by-Side Comparison Matrix (`templates/compare.html`)
+Two-column split view (Baseline vs. Challenger) with verdict callout, parameter specs, sample payload outputs, quantitative delta matrix table, and one-click "Copy as Markdown" export.
 
 > **Use for**: LLM model evaluations (Model A vs. Model B), prompt revision benchmarks, and feature/pricing comparisons.
 
-![Compare Template](assets/screenshots/compare.png)
+<p align="center">
+  <img src="assets/screenshots/compare.png" alt="Compare Template" width="100%">
+</p>
 
 ---
 
@@ -83,10 +131,9 @@ open templates/compare.html
 
 ---
 
-## How It Works (For Humans & AI Agents)
+## Micro-CSS Base
 
-### 1. The Micro-CSS Base (~75 lines)
-Every standalone HTML generated with this system includes this zero-dep token block in `<head><style>`. It maps shadcn's Zinc neutral palette into pure CSS variables:
+Every standalone HTML generated with this system inlines this ~75-line token block in `<head><style>`:
 
 ```css
 :root {
@@ -95,6 +142,7 @@ Every standalone HTML generated with this system includes this zero-dep token bl
   --card-fg: #09090b;
   --primary: #18181b;
   --primary-fg: #fafafa;
+  --primary-hover: #27272a;
   --secondary: #f4f4f5;
   --secondary-fg: #18181b;
   --muted: #f4f4f5;
@@ -103,6 +151,7 @@ Every standalone HTML generated with this system includes this zero-dep token bl
   --ring: #18181b;
   --radius: 8px;
   --radius-sm: 6px;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 
   --ok: #16a34a;   --ok-bg: #f0fdf4;   --ok-border: #bbf7d0;
   --warn: #d97706; --warn-bg: #fffbeb; --warn-border: #fde68a;
@@ -116,22 +165,33 @@ Every standalone HTML generated with this system includes this zero-dep token bl
   --card-fg: #fafafa;
   --primary: #fafafa;
   --primary-fg: #18181b;
+  --primary-hover: #e4e4e7;
   --secondary: #27272a;
   --secondary-fg: #fafafa;
   --muted: #18181b;
   --muted-fg: #a1a1aa;
   --border: #27272a;
+  --ring: #d4d4d8;
 
   --ok: #4ade80;   --ok-bg: #052e1680;   --ok-border: #166534;
   --warn: #fbbf24; --warn-bg: #451a0380; --warn-border: #854d0e;
   --err: #f87171;  --err-bg: #450a0a80;  --err-border: #991b1b;
   --info: #60a5fa; --info-bg: #17255480; --info-border: #1e40af;
 }
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: var(--bg);
+  color: var(--card-fg);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
 ```
 
-### 2. 5-Line Micro Scripts
+### Essential Micro-Scripts
 
-**Native Dark Mode Switcher**:
+**Native Dark Mode Switcher (5 lines)**:
 ```javascript
 const toggle = document.getElementById('themeToggle');
 if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -143,7 +203,7 @@ toggle?.addEventListener('click', () => {
 });
 ```
 
-**Real-time Table Search (Zero dependencies)**:
+**Real-time Table Search (5 lines)**:
 ```javascript
 document.getElementById('searchInput')?.addEventListener('input', (e) => {
   const q = e.target.value.toLowerCase().trim();
@@ -155,9 +215,9 @@ document.getElementById('searchInput')?.addEventListener('input', (e) => {
 
 ---
 
-## Global Agent Skill Installation
+## Global Agent Skill Setup
 
-To let your local coding agents (Claude Code, Pi, Codex) automatically use this system whenever you ask for an HTML page or report:
+To let your local coding agents (Claude Code, Pi, Codex, Cursor) automatically use this system whenever you ask for an HTML page or report:
 
 ```bash
 # Clone the repository
@@ -166,19 +226,43 @@ git clone https://github.com/QingYunA/agent-html.git ~/Code/agent-html
 # Symlink the skill to your global agent skills directory
 ln -sf ~/Code/agent-html/skills/agent-html ~/.agents/skills/agent-html
 
-# If you use Claude Code or Pi:
+# For Claude Code or Pi:
 ln -sf ../../.agents/skills/agent-html ~/.claude/skills/agent-html
 ln -sf ../../../.agents/skills/agent-html ~/.pi/agent/skills/agent-html
 ```
 
-Once installed, prompts like:
+### Triggering the Skill
+
+Once installed, natural requests like:
 - *"Generate a standalone HTML dashboard for our cluster metrics with a trend chart"*
 - *"Create an executive evaluation report for candidate John Doe as a single file"*
 - *"Build a side-by-side prompt comparison matrix in HTML"*
-- *"不要输出 markdown 墙，把这次 code review / 架构审查结果做成可视化页面"*
-- *"对比这几个方案做个展示页，带量化指标与差异矩阵"*
+- *"Don't write a wall of markdown, give me a clean single-file visual report for this PR review"*
 
-will automatically trigger the `agent-html` skill and output clean, zero-dependency, self-contained files.
+will automatically trigger the `agent-html` skill and produce clean, zero-dependency, self-contained files.
+
+---
+
+## Linter
+
+Agents can self-verify their generated HTML before presenting it to the user:
+
+```bash
+# Validate a specific file
+node scripts/validate.mjs path/to/output.html
+
+# Validate all bundled templates
+node scripts/validate.mjs --all
+```
+
+### Check Rules
+
+- `[ZERO_CDN]`: Zero external CDN scripts or remote stylesheet links.
+- `[THEME_TOKENS]`: Complete CSS token base (`--bg`, `--card`, `--border`, status colors) & dark mode support.
+- `[VIEWPORT]`: Mobile responsive meta tag (`viewport`).
+- `[TAG_HYGIENE]`: Symmetric tag closure (`<html>`, `<head>`, `<body>`).
+- `[AFFORDANCE]`: Non-dead-end UI (export, copy, or print action present).
+- `[COLOPHON]`: Timestamped generation metadata stamp in HTML comments.
 
 ---
 
@@ -186,15 +270,19 @@ will automatically trigger the `agent-html` skill and output clean, zero-depende
 
 ```text
 agent-html/
-├── README.md                      # Documentation & showcase
+├── README.md                      # English documentation & showcase
+├── README.zh-CN.md                # 简体中文文档
 ├── index.html                     # Visual gallery of all atomic components
-├── templates/                     # Standalone HTML templates (symlinked to assets)
+├── templates/ -> skills/...       # Standalone HTML templates (symlinked to assets)
 │   ├── report.html                # Single-column document & evaluation report
 │   ├── dashboard.html             # Metrics dashboard & filterable table
 │   ├── inspector.html             # Master-detail split workbench
 │   └── compare.html               # Side-by-side A/B comparison matrix
 ├── assets/
-│   └── screenshots/               # High-res preview assets for README
+│   ├── logo.svg                   # Vector brand logo
+│   └── screenshots/               # High-res preview assets
+├── scripts/
+│   └── validate.mjs               # Zero-dependency deterministic HTML linter
 └── skills/
     └── agent-html/
         ├── SKILL.md               # The LLM prompt instructions & slot definitions
@@ -206,4 +294,4 @@ agent-html/
 
 ## License
 
-MIT
+[MIT](LICENSE) © 2026 QingYunA
