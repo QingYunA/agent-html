@@ -116,69 +116,42 @@ ln -sf ../../../.agents/skills/agent-html ~/.pi/agent/skills/agent-html
 
 摆脱具体的业务限制，`agent-html` 将界面提炼为 6 套带有清晰 `<!-- [Slot: ...] -->` 插槽注释的基础空间骨架：
 
-### 母版 1：单栏长文档与评估审查报告 (`templates/report.html`)
-单栏居中流式布局（最大宽度 860px），专为阅读和打印优化。包含元数据标头、状态徽章、KPI 得分概览、执行摘要 Callout、原生 `<details>` 手风琴折叠栏、一键复制 Markdown 以及 `@media print` 打印防截断样式。
-
-> **适用场景**：技术评审 ADR、面试评估报告、故障复盘 Postmortem、需求草案、更新日志。
-
 <p align="center">
-  <img src="assets/screenshots/zh/report.png" alt="报告母版" width="100%">
+  <img src="assets/screenshots/zh/preview.gif" alt="agent-html 6 大布局母版动态预览" width="100%">
 </p>
 
----
+| 布局母版 | 模板文件路径 | 核心适用场景 | 关键原生特性 |
+| :--- | :--- | :--- | :--- |
+| **01. 长文档审查报告** | [`templates/zh/report.html`](templates/zh/report.html) | 技术评审、面试评估、RFC 说明书 | 悬浮目录（TOC ScrollSpy）、达标评分卡、可折叠手风琴、打印优化 |
+| **02. 监控大盘数据表** | [`templates/zh/dashboard.html`](templates/zh/dashboard.html) | 资源监控、Token 用量、工单大盘 | 4 列 KPI 卡、纯原生 SVG 趋势图/柱状图、实时搜索双重过滤表 |
+| **03. 双栏工作台审查器** | [`templates/zh/inspector.html`](templates/zh/inspector.html) | Trace 回溯、JSONL 查看、调试器 | 100vh 满屏、左侧实时检索、右侧动态联动、人工裁决按钮组 |
+| **04. 并排横向对比矩阵** | [`templates/zh/compare.html`](templates/zh/compare.html) | 模型 A/B 测、Prompt 改版 diff | 左右双方案并排比对、胜出裁决 Callout、量化 Delta 差异表 |
+| **05. 时间轴与故障编年史** | [`templates/zh/timeline.html`](templates/zh/timeline.html) | 突发事故复盘、版本发布路线图 | 单轨垂直时间线、语义状态圆点、诊断日志展开、一键复制 MD |
+| **06. 敏捷分拣拖拽看板** | [`templates/zh/kanban.html`](templates/zh/kanban.html) | 需求优先级、Bug 分拣流转 | 纯原生 HTML5 Drag & Drop 跨列拖拽、一键复制看板决策回 Agent |
 
-### 母版 2：数据大盘与过滤表格 (`templates/dashboard.html`)
-宽屏响应式网格布局。包含 4 列 KPI 统计卡片、纯原生响应式 SVG 趋势图表（24小时面积图与 P95 柱状分布图）、双重实时过滤工具栏（文本搜索 + 状态下拉）、斑马纹表格以及原生 `<dialog>` 模态弹窗。
+<details>
+<summary><strong>📸 点击展开查看全部 6 大母版高清大图</strong></summary>
+<br>
 
-> **适用场景**：资源监控大盘、调休考勤管理、Token 用量追踪、工单列表。
+#### 01. 单栏长文档与评估审查报告
+<p align="center"><img src="assets/screenshots/zh/report.png" alt="报告母版" width="100%"></p>
 
-<p align="center">
-  <img src="assets/screenshots/zh/dashboard.png" alt="数据大盘母版" width="100%">
-</p>
+#### 02. 数据大盘与过滤表格
+<p align="center"><img src="assets/screenshots/zh/dashboard.png" alt="数据大盘母版" width="100%"></p>
 
----
+#### 03. 左右双栏工作台与审查器
+<p align="center"><img src="assets/screenshots/zh/inspector.png" alt="工作台母版" width="100%"></p>
 
-### 母版 3：左右双栏工作台与审查器 (`templates/inspector.html`)
-视口充满型应用布局（`100vh` 页面无外滚动条）。左侧 320px 边栏支持实时过滤列表，右侧详情区动态联动渲染所选条目属性、3列关键指标网格、人工审查裁决按钮组（通过/修复/拒绝）以及带一键复制的深色代码块。
+#### 04. 并排横向对比与评测矩阵
+<p align="center"><img src="assets/screenshots/zh/compare.png" alt="对比矩阵母版" width="100%"></p>
 
-> **适用场景**：链路 Trace 回溯、JSONL 审查工具、Prompt 调试器、日志分析。
+#### 05. 事件时间轴与故障编年史
+<p align="center"><img src="assets/screenshots/zh/timeline.png" alt="时间轴母版" width="100%"></p>
 
-<p align="center">
-  <img src="assets/screenshots/zh/inspector.png" alt="工作台母版" width="100%">
-</p>
+#### 06. 任务分拣与敏捷拖拽看板
+<p align="center"><img src="assets/screenshots/zh/kanban.png" alt="敏捷看板母版" width="100%"></p>
 
----
-
-### 母版 4：并排横向对比与评测矩阵 (`templates/compare.html`)
-双栏左右并排对比布局（基准方案 vs 升级挑战方案）。包含胜出判定 Callout、参数规格比对、输出快照对比、量化差异对照表（Delta）以及一键复制 Markdown 摘要。
-
-> **适用场景**：大模型 A/B 评测、Prompt 调优版本对比、架构方案 V1 vs V2 差异评估、产品定价规格矩阵。
-
-<p align="center">
-  <img src="assets/screenshots/zh/compare.png" alt="对比矩阵母版" width="100%">
-</p>
-
----
-
-### 母版 5：事件时间轴与故障编年史 (`templates/timeline.html`)
-高信息密度的垂直单轨时间线，具备语义化状态圆点（故障、警告、恢复、信息）、精确时间戳、操作人标签、可展开诊断日志以及一键复制时间线为 Markdown 功能。
-
-> **适用场景**：突发故障复盘 (Postmortem)、版本发布路线图 (Roadmap)、变更历史 (Changelog)、长流程事件溯源。
-
-<p align="center">
-  <img src="assets/screenshots/zh/timeline.png" alt="时间轴母版" width="100%">
-</p>
-
----
-
-### 母版 6：任务分拣与敏捷拖拽看板 (`templates/kanban.html`)
-交互式四列分类看板（Backlog、进行中、阻塞阻断、已完成）。零外部库依赖，纯原生 HTML5 Drag & Drop（~35 行原生 JS 实现拖拽交互），并提供“一键复制看板决策发回 Agent”闭环按钮。
-
-> **适用场景**：Bug 故障分拣、需求优先级评估、日常任务状态流转。
-
-<p align="center">
-  <img src="assets/screenshots/zh/kanban.png" alt="敏捷看板母版" width="100%">
-</p>
+</details>
 
 ---
 

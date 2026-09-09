@@ -116,69 +116,42 @@ When asking LLMs (Claude Code, Pi, Codex, ChatGPT) to generate an HTML dashboard
 
 Rather than rigid business screens, `agent-html` provides 6 fundamental layout scaffolds with clear `<!-- [Slot: ...] -->` injection points:
 
-### Archetype 1: Document & Executive Report (`templates/report.html`)
-Single-column centered layout (860px max-width) optimized for readability and print. Includes metadata header, status badges, KPI score overview, executive summary callout, native `<details>` accordions, one-click "Copy as Markdown" export, and `@media print` styles.
-
-> **Use for**: Technical reviews, interview assessments, postmortems, architecture RFCs, and changelogs.
-
 <p align="center">
-  <img src="assets/screenshots/en/report.png" alt="Report Template" width="100%">
+  <img src="assets/screenshots/en/preview.gif" alt="agent-html 6 Layout Archetypes Animated Preview" width="100%">
 </p>
 
----
+| Archetype | Template Path | Best For | Key Capabilities |
+| :--- | :--- | :--- | :--- |
+| **01. Document & Report** | [`templates/en/report.html`](templates/en/report.html) | Technical reviews, RFCs, audits | TOC ScrollSpy, KPI score overview, details accordion, print CSS |
+| **02. Analytics Dashboard** | [`templates/en/dashboard.html`](templates/en/dashboard.html) | Metrics monitoring, billing | 4 KPI cards, native SVG area & bar charts, filterable table |
+| **03. Master-Detail Workbench** | [`templates/en/inspector.html`](templates/en/inspector.html) | Trace inspection, prompt debugging | 100vh split screen, item filtering, JSON payload viewer, review actions |
+| **04. Side-by-Side Comparison** | [`templates/en/compare.html`](templates/en/compare.html) | Model A/B testing, prompt diffs | Dual baseline vs challenger cards, delta comparison matrix |
+| **05. Event Timeline** | [`templates/en/timeline.html`](templates/en/timeline.html) | Incident postmortems, changelogs | Single-track vertical timeline, status dots, diagnostic logs |
+| **06. Triage Kanban** | [`templates/en/kanban.html`](templates/en/kanban.html) | Bug triage, backlog grooming | 4-column drag & drop, status badges, agent feedback loop |
 
-### Archetype 2: Analytics Dashboard & Data Grid (`templates/dashboard.html`)
-Fluid wide-screen layout with a 4-column KPI metric grid, responsive pure SVG charts (24h throughput area trend & P95 latency distribution bars with zero external libraries), dual-filter toolbar (real-time text search + status select), zebra hover table, and native `<dialog>` action modals.
+<details>
+<summary><strong>📸 Click to view full-resolution static screenshots for all 6 archetypes</strong></summary>
+<br>
 
-> **Use for**: Resource usage monitoring, quota trackers, task lists, and operational dashboards.
+#### 01. Document & Executive Report
+<p align="center"><img src="assets/screenshots/en/report.png" alt="Report Template" width="100%"></p>
 
-<p align="center">
-  <img src="assets/screenshots/en/dashboard.png" alt="Dashboard Template" width="100%">
-</p>
+#### 02. Analytics Dashboard & Data Grid
+<p align="center"><img src="assets/screenshots/en/dashboard.png" alt="Dashboard Template" width="100%"></p>
 
----
+#### 03. Master-Detail Workbench & Inspector
+<p align="center"><img src="assets/screenshots/en/inspector.png" alt="Inspector Template" width="100%"></p>
 
-### Archetype 3: Master-Detail Workbench (`templates/inspector.html`)
-Full-viewport app layout (`100vh` without outer page scroll). Left sidebar (320px) handles real-time item filtering, while the right detail pane dynamically renders selected metadata, property grids, human review verdict actions (Pass/Fix/Reject), and a "Copy Review Decisions back to Agent" button to close the interactive feedback loop.
+#### 04. Side-by-Side Comparison Matrix
+<p align="center"><img src="assets/screenshots/en/compare.png" alt="Compare Template" width="100%"></p>
 
-> **Use for**: Trace replay, log inspectors, JSONL viewers, and prompt debuggers.
+#### 05. Event Timeline & Incident Postmortem
+<p align="center"><img src="assets/screenshots/en/timeline.png" alt="Timeline Template" width="100%"></p>
 
-<p align="center">
-  <img src="assets/screenshots/en/inspector.png" alt="Inspector Template" width="100%">
-</p>
+#### 06. Triage & Agile Kanban Board
+<p align="center"><img src="assets/screenshots/en/kanban.png" alt="Kanban Template" width="100%"></p>
 
----
-
-### Archetype 4: Side-by-Side Comparison Matrix (`templates/compare.html`)
-Two-column split view (Baseline vs. Challenger) with verdict callout, parameter specs, sample payload outputs, quantitative delta matrix table, and one-click "Copy as Markdown" export.
-
-> **Use for**: LLM model evaluations (Model A vs. Model B), prompt revision benchmarks, and feature/pricing comparisons.
-
-<p align="center">
-  <img src="assets/screenshots/en/compare.png" alt="Compare Template" width="100%">
-</p>
-
----
-
-### Archetype 5: Event Timeline & Incident Postmortem (`templates/timeline.html`)
-High-density single-track vertical timeline with semantic status nodes (Error, Warning, Success, Info), exact timestamps, operator tags, expandable diagnosis logs, and one-click "Copy as Markdown" export.
-
-> **Use for**: Incident postmortems, changelogs, release roadmaps, and event chronicles.
-
-<p align="center">
-  <img src="assets/screenshots/en/timeline.png" alt="Timeline Template" width="100%">
-</p>
-
----
-
-### Archetype 6: Triage & Agile Kanban Board (`templates/kanban.html`)
-Interactive 4-column categorization board (Backlog, Progress, Blocked, Done). Zero external dependencies, pure HTML5 drag-and-drop (~35 lines vanilla JS). Features a "Copy Triage Decisions to Agent" button to close the interactive loop.
-
-> **Use for**: Ticket triage, task prioritization, backlog grooming, and bug tracking.
-
-<p align="center">
-  <img src="assets/screenshots/en/kanban.png" alt="Kanban Template" width="100%">
-</p>
+</details>
 
 ---
 
