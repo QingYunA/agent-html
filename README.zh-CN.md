@@ -353,8 +353,12 @@ agent-html/
 ## Star History
 
 <p align="center">
-  <a href="https://star-history.com/#QingYunA/agent-html&Date">
-    <img src="https://api.star-history.com/svg?repos=QingYunA/agent-html&type=Date" alt="Star History Chart" width="100%">
+  <a href="https://star-history.com/#qingyuna/agent-html&Date">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=qingyuna/agent-html&type=Date&theme=dark" />
+      <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=qingyuna/agent-html&type=Date" />
+      <img src="https://api.star-history.com/svg?repos=qingyuna/agent-html&type=Date" alt="Star History Chart" width="100%" />
+    </picture>
   </a>
 </p>
 
