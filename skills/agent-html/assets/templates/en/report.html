@@ -77,10 +77,11 @@
       padding: 40px 20px;
     }
     .container {
-      max-width: 860px;
+      max-width: 1280px; width: 100%; transition: max-width 0.2s ease;
       margin: 0 auto;
     }
 
+    body.fluid-mode .container { max-width: 96% !important; }
     /* Header */
     .report-header {
       display: flex;
@@ -290,6 +291,9 @@
       </div>
     </div>
     <div class="actions">
+      <button id="widthToggleBtn" class="btn" title="Toggle Full Width / Centered Mode" onclick="toggleWidth()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+      </button>
       <button class="btn" onclick="copyMarkdownReport()" title="Copy as clean Markdown">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
         <span id="copyBtnText">Copy Markdown</span>
@@ -428,6 +432,9 @@ Following rigorous architectural verification, the core event-driven pipelines, 
       btn.textContent = 'Copied!';
       setTimeout(() => { btn.textContent = 'Copy Markdown'; }, 1500);
     });
+  }
+  function toggleWidth() {
+    document.body.classList.toggle("fluid-mode");
   }
 </script>
 </body>

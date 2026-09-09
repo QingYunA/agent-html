@@ -68,7 +68,7 @@ description: 为 AI Agent 提供基于 shadcn/ui 极简现代美学的单文件 
 
 | 布局模式 | 中文母版路径 | 英文母版路径 | 适用需求与核心结构 |
 | :--- | :--- | :--- | :--- |
-| **单栏文档与评估报告**<br>(Document / Report) | `assets/templates/zh/report.html` | `assets/templates/en/report.html` | **技术选型、架构审查、故障复盘、面试报告、需求说明、发布日志**。<br>结构：单栏居中（860px），悬浮目录（Sticky TOC with ScrollSpy）、核心结论 Callout、KPI 概览栏、多章节 `<details>` 折叠手风琴、一键复制为 Markdown 导出。 |
+| **单栏文档与评估报告**<br>(Document / Report) | `assets/templates/zh/report.html` | `assets/templates/en/report.html` | **技术选型、架构审查、故障复盘、面试报告、需求说明、发布日志**。<br>结构：自适应宽屏容器（默认 1200px ~ 1280px，支持宽屏自适应扩展至 96%，避免宽屏下表格被挤扁）、悬浮目录（Sticky TOC with ScrollSpy）、核心结论 Callout、KPI 概览栏、多章节 `<details>` 折叠手风琴、一键复制为 Markdown 导出。 |
 | **数据大盘与过滤表格**<br>(Dashboard & Data Grid) | `assets/templates/zh/dashboard.html` | `assets/templates/en/dashboard.html` | **资源监控、用量大盘、考勤/调休管理、订单/任务流管理**。<br>结构：宽屏网格，顶部操作栏、4 列自适应 KPI 统计卡、原生 SVG 走势图与柱状图、实时双重过滤表格、一键复制表格 (MD)。 |
 | **左右双栏工作台与审查器**<br>(Master-Detail Workbench) | `assets/templates/zh/inspector.html` | `assets/templates/en/inspector.html` | **日志/Trace 审查、Prompt 调试器、JSONL 编辑器、配置管理**。<br>结构：视口充满（100vh），左侧条目列表过滤，右侧动态联动渲染选中条目详情、人工审查裁决条（Pass/Fix/Reject）、复制审查结论发回 Agent。 |
 | **并排横向对比与评测矩阵**<br>(Side-by-Side Comparison) | `assets/templates/zh/compare.html` | `assets/templates/en/compare.html` | **模型 A/B 测试、Prompt 改版前后对比、架构版本 diff、产品套餐/特性矩阵**。<br>结构：并排双栏卡片（基准 vs 挑战者）、核心裁决 Callout、量化差异对照表（Delta 胜负判定标签）、一键导出 Markdown。 |
@@ -572,11 +572,12 @@ AI Agent 在完成任何单文件 HTML 输出后，**推荐在终端中执行本
 node scripts/validate.mjs <generated_file.html>
 ```
 
-该脚本将零网络、零 Token 地确定性校验以下 6 项标准：
+该脚本将零网络、零 Token 地确定性校验以下 7 项标准：
 1. `[ZERO_CDN]` 是否含有外部外网 script / link CDN 引用；
 2. `[THEME_TOKENS]` 是否具备 `--bg/--card/--primary` 变量底座与暗黑模式支持；
 3. `[VIEWPORT]` 是否具备移动端小屏响应式 viewport；
 4. `[TAG_HYGIENE]` svg/dialog/details 等关键标签是否正确对称闭合；
 5. `[AFFORDANCE]` 是否具备复制/导出出口（杜绝交互死胡同）；
-6. `[COLOPHON]` 是否包含溯源归档印章。
+6. `[COLOPHON]` 是否包含溯源归档印章；
+7. `[WIDTH_HYGIENE]` 容器自适应性：严禁将主容器硬编码为过窄的死宽度（如 800px-860px），导致宽屏左右大量留白、数据表格被严重挤压。包含多列表格或对比矩阵的场景，`.container` 基础宽度推荐 `max-width: 1280px`（或 `width: 100%; max-width: 1380px`），表格外层应包裹 `<div class="table-wrap" style="overflow-x: auto; width: 100%;">`。
 ```

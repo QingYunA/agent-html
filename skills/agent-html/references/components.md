@@ -113,24 +113,26 @@
     <input type="text" id="searchInput" placeholder="实时搜索过滤..." style="height: 32px; padding: 0 10px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--bg); color: var(--card-fg); outline: none;">
     <button id="copyTableMdBtn" class="btn btn-sm">复制表格 (MD)</button>
   </div>
-  <table id="dataTable" style="width: 100%; border-collapse: collapse; font-size: 13px; text-align: left;">
-    <thead>
-      <tr style="background: var(--secondary); color: var(--muted-fg); border-bottom: 1px solid var(--border);">
-        <th style="padding: 10px 16px;">项目编号</th>
-        <th style="padding: 10px 16px;">模块名称</th>
-        <th style="padding: 10px 16px;">响应延迟</th>
-        <th style="padding: 10px 16px;">当前状态</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr style="border-bottom: 1px solid var(--border);">
-        <td style="padding: 10px 16px;"><code>TASK-001</code></td>
-        <td style="padding: 10px 16px;">Auth-Gateway</td>
-        <td style="padding: 10px 16px;">14ms</td>
-        <td style="padding: 10px 16px;"><span class="badge badge-success"><span class="badge-dot"></span>正常</span></td>
-      </tr>
-    </tbody>
-  </table>
+  <div style="overflow-x: auto; width: 100%;">
+    <table id="dataTable" style="width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; min-width: 540px;">
+      <thead>
+        <tr style="background: var(--secondary); color: var(--muted-fg); border-bottom: 1px solid var(--border);">
+          <th style="padding: 10px 16px;">项目编号</th>
+          <th style="padding: 10px 16px;">模块名称</th>
+          <th style="padding: 10px 16px;">响应延迟</th>
+          <th style="padding: 10px 16px;">当前状态</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom: 1px solid var(--border);">
+          <td style="padding: 10px 16px;"><code>TASK-001</code></td>
+          <td style="padding: 10px 16px;">Auth-Gateway</td>
+          <td style="padding: 10px 16px;">14ms</td>
+          <td style="padding: 10px 16px;"><span class="badge badge-success"><span class="badge-dot"></span>正常</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 ```
 

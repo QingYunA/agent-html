@@ -78,7 +78,7 @@
       padding: 40px 20px;
     }
     .layout-wrapper {
-      max-width: 1140px;
+      max-width: 1400px; width: 100%; transition: max-width 0.2s ease;
       margin: 0 auto;
       display: flex;
       gap: 36px;
@@ -86,16 +86,20 @@
     }
     .container {
       flex: 1;
-      max-width: 860px;
+      max-width: 1200px; width: 100%; transition: max-width 0.2s ease;
       min-width: 0;
     }
+    body.fluid-mode .layout-wrapper { max-width: 96% !important; }
+    body.fluid-mode .container { max-width: 100% !important; }
     .toc-rail {
       width: 200px;
       flex-shrink: 0;
       display: none;
     }
     @media (min-width: 1080px) {
-      .toc-rail { display: block; }
+      body.fluid-mode .layout-wrapper { max-width: 96% !important; }
+    body.fluid-mode .container { max-width: 100% !important; }
+    .toc-rail { display: block; }
     }
     .toc-sticky {
       position: sticky;
@@ -399,6 +403,9 @@
       </div>
     </div>
     <div class="actions">
+      <button id="widthToggleBtn" class="btn" title="切换宽屏自适应 / 居中阅读模式" onclick="toggleWidth()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+      </button>
       <button id="copyMarkdownBtn" class="btn" title="一键复制本报告为 Markdown 文本">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
         <span>复制 Markdown</span>
@@ -680,6 +687,9 @@
       setActiveToc('colophon-section');
     }
   }, { passive: true });
+  function toggleWidth() {
+    document.body.classList.toggle("fluid-mode");
+  }
 </script>
 </body>
 </html>
