@@ -31,7 +31,6 @@
   <a href="#the-6-archetypes">The 6 Archetypes</a> ·
   <a href="#atomic-capabilities--component-arsenal">Atomic Arsenal</a> ·
   <a href="#prompt-triggers">Prompt Triggers</a> ·
-  <a href="#linter">Linter</a> ·
   <a href="#star-history">Star History</a>
 </p>
 
@@ -284,63 +283,6 @@ will automatically trigger the `agent-html` skill and produce clean, zero-depend
 ## Atomic Components & Design Reference
 
 All atomic HTML slots (buttons, badges, callouts, KPI stat cards), 24 currentColor vector SVGs, zero-CDN pure SVG charts, and vanilla interaction scripts are documented in [skills/agent-html/references/components.md](skills/agent-html/references/components.md) and live-previewed in `index.html`.
-
----
-
-## Linter
-
-Agents can self-verify their generated HTML before presenting it to the user:
-
-```bash
-# Validate a specific file
-node scripts/validate.mjs path/to/output.html
-
-# Validate all bundled templates
-node scripts/validate.mjs --all
-```
-
-### Check Rules
-
-- `[ZERO_CDN]`: Zero external CDN scripts or remote stylesheet links.
-- `[THEME_TOKENS]`: Complete CSS token base (`--bg`, `--card`, `--border`, status colors) & dark mode support.
-- `[VIEWPORT]`: Mobile responsive meta tag (`viewport`).
-- `[TAG_HYGIENE]`: Symmetric tag closure (`<html>`, `<head>`, `<body>`).
-- `[AFFORDANCE]`: Non-dead-end UI (export, copy, or print action present).
-- `[COLOPHON]`: Timestamped generation metadata stamp in HTML comments.
-
----
-
-## Repository Structure
-
-```text
-agent-html/
-├── README.md                      # English documentation & showcase
-├── README.zh-CN.md                # 简体中文文档
-├── index.html                     # English landing page & component showcase
-├── index.zh-CN.html               # 简体中文介绍主页与组件画廊
-├── package.json                   # Project metadata & npm scripts
-├── vercel.json                    # Vercel static deployment config (cleanUrls)
-├── bin/
-│   └── cli.mjs                    # Zero-dependency CLI runner (npx agent-html)
-├── templates/                     # Standalone HTML templates
-│   ├── en/                        # 🇺🇸 Pure English templates (6 archetypes)
-│   └── zh/                        # 🇨🇳 Pure Chinese templates (6 archetypes)
-├── assets/
-│   ├── logo.svg                   # Vector brand logo (Gemini designed)
-│   └── screenshots/
-│       ├── en/                    # 🇺🇸 2x Retina screenshots for English docs
-│       └── zh/                    # 🇨🇳 2x Retina screenshots for Chinese docs
-├── scripts/
-│   └── validate.mjs               # Zero-dependency deterministic HTML linter
-└── skills/
-    └── agent-html/
-        ├── SKILL.md               # LLM prompt instructions & bilingual slot router
-        ├── assets/                # Bundled templates & index mirror
-        ├── references/
-        │   └── components.md      # Atomic component & SVG reference catalog
-        └── evals/
-            └── evals.json         # Benchmark eval test cases (all 6 archetypes)
-```
 
 ---
 

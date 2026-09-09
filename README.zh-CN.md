@@ -31,7 +31,6 @@
   <a href="#六大通用布局母版">六大母版</a> ·
   <a href="#原生原子能力矩阵">原子能力</a> ·
   <a href="#提示词触发示例">提示词</a> ·
-  <a href="#自验检查器-linter">Linter</a> ·
   <a href="#star-history">Star History</a>
 </p>
 
@@ -290,63 +289,6 @@ ln -sf ../../../.agents/skills/agent-html ~/.pi/agent/skills/agent-html
 ## 组件字典与设计规范参考
 
 所有原子 HTML 插槽（按钮、胶囊徽章、Callout 提示条、KPI 统计卡）、24 个 currentColor 矢量 SVG 图标、零 CDN 原生 SVG 图表和微交互脚本，均完整收录在 [skills/agent-html/references/components.md](skills/agent-html/references/components.md) 中，并可在 `index.zh-CN.html` 中实时预览。
-
----
-
-## 自验检查器 (Linter)
-
-Agent 在将生成的 HTML 交给用户之前，可自检页面规范合规性：
-
-```bash
-# 验证单个生成文件
-node scripts/validate.mjs path/to/output.html
-
-# 验证所有内置母版
-node scripts/validate.mjs --all
-```
-
-### 检查规则
-
-- `[ZERO_CDN]`：严禁任何外部 CDN 脚本或远程字体链接泄漏。
-- `[THEME_TOKENS]`：必须具备完整的 CSS 变量底座与深浅模式支持。
-- `[VIEWPORT]`：必须配置移动端自适应视口标签。
-- `[TAG_HYGIENE]`：确保 `<html>`, `<head>`, `<body>` 标签完整对称闭合。
-- `[AFFORDANCE]`：非死胡同页面（必须提供导出、复制或打印等操作入口）。
-- `[COLOPHON]`：必须包含时间戳生成元数据注释。
-
----
-
-## 仓库目录结构
-
-```text
-agent-html/
-├── README.md                      # 英文文档与全景展示
-├── README.zh-CN.md                # 简体中文文档
-├── index.html                     # 英文介绍主页与组件画廊
-├── index.zh-CN.html               # 简体中文介绍主页与组件画廊
-├── package.json                   # 项目元数据与脚本配置
-├── vercel.json                    # Vercel 静态零配置部署文件 (cleanUrls)
-├── bin/
-│   └── cli.mjs                    # 零依赖独立命令行工具 (npx agent-html)
-├── templates/                     # 独立单文件 HTML 母版
-│   ├── en/                        # 🇺🇸 纯英文 6 大通用母版
-│   └── zh/                        # 🇨🇳 纯中文 6 大通用母版
-├── assets/
-│   ├── logo.svg                   # 矢量品牌 Logo (Gemini 官方定制)
-│   └── screenshots/
-│       ├── en/                    # 🇺🇸 英文专有 2x 视网膜高清截图集
-│       └── zh/                    # 🇨🇳 中文专有 2x 视网膜高清截图集
-├── scripts/
-│   └── validate.mjs               # 零依赖确定性 HTML 检查脚本
-└── skills/
-    └── agent-html/
-        ├── SKILL.md               # 面向 Agent 的中英双语生成准则与插槽规范
-        ├── assets/                # 随 Skill 打包分发的母版镜像
-        ├── references/
-        │   └── components.md      # 原子组件与 24 矢量 SVG 参考字典
-        └── evals/
-            └── evals.json         # 涵盖全部 6 大母版的基准评测用例集
-```
 
 ---
 
