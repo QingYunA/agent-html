@@ -16,6 +16,11 @@
 </p>
 
 <p>
+  <a href="https://agent-html-bice.vercel.app" target="_blank"><strong>🌐 Live Interactive Demo ↗</strong></a>
+</p>
+
+<p>
+  <a href="https://agent-html-bice.vercel.app" target="_blank"><img src="https://img.shields.io/badge/Live%20Demo-agent--html--bice.vercel.app-000000?style=flat&logo=vercel&logoColor=white" alt="Live Demo"></a>
   <a href="https://github.com/QingYunA/agent-html/releases"><img src="https://img.shields.io/github/v/release/QingYunA/agent-html?style=flat&color=18181b" alt="Release"></a>
   <a href="https://skills.sh"><img src="https://img.shields.io/badge/skills.sh-npx%20skills%20add%20QingYunA%2Fagent--html-10b981?style=flat&logo=npm" alt="skills.sh install"></a>
   <img src="https://img.shields.io/badge/dependencies-0%20npm%20%7C%200%20cdn-10b981?style=flat" alt="Dependencies">
@@ -39,7 +44,11 @@
 ---
 
 <p align="center">
-  <img width="2326" height="1442" alt="image" src="https://github.com/user-attachments/assets/cb546a47-188e-46ac-af2a-c4af09a3ca59" />
+  <a href="https://agent-html-bice.vercel.app" target="_blank">
+    <img width="2326" height="1442" alt="agent-html live gallery" src="https://github.com/user-attachments/assets/cb546a47-188e-46ac-af2a-c4af09a3ca59" />
+  </a>
+  <br>
+  <sub>👉 Click the preview above or visit <a href="https://agent-html-bice.vercel.app" target="_blank"><strong>agent-html-bice.vercel.app</strong></a> to test the live interactive component gallery &amp; archetype previews.</sub>
 </p>
 
 ---
@@ -58,9 +67,9 @@ npx skills add QingYunA/agent-html
 npx skills add QingYunA/agent-html -g
 ```
 
-### Try it Instantly (CLI)
+### Try it Instantly (CLI & Live Web App)
 
-No build step or Node.js server required. Explore the component gallery or scaffold a template immediately:
+No build step or Node.js server required. Explore the component gallery (or test online directly at [**agent-html-bice.vercel.app**](https://agent-html-bice.vercel.app)):
 
 ```bash
 # Open the interactive component gallery in your browser

@@ -16,6 +16,11 @@
 </p>
 
 <p>
+  <a href="https://agent-html-bice.vercel.app" target="_blank"><strong>🌐 在线交互式画廊 Live Demo ↗</strong></a>
+</p>
+
+<p>
+  <a href="https://agent-html-bice.vercel.app" target="_blank"><img src="https://img.shields.io/badge/Live%20Demo-agent--html--bice.vercel.app-000000?style=flat&logo=vercel&logoColor=white" alt="Live Demo"></a>
   <a href="https://github.com/QingYunA/agent-html/releases"><img src="https://img.shields.io/github/v/release/QingYunA/agent-html?style=flat&color=18181b" alt="Release"></a>
   <a href="https://skills.sh"><img src="https://img.shields.io/badge/skills.sh-npx%20skills%20add%20QingYunA%2Fagent--html-10b981?style=flat&logo=npm" alt="skills.sh install"></a>
   <img src="https://img.shields.io/badge/dependencies-0%20npm%20%7C%200%20cdn-10b981?style=flat" alt="Dependencies">
@@ -39,7 +44,11 @@
 ---
 
 <p align="center">
-  <img src="assets/screenshots/zh/gallery.png" alt="agent-html 组件画廊" width="100%">
+  <a href="https://agent-html-bice.vercel.app" target="_blank">
+    <img src="assets/screenshots/zh/gallery.png" alt="agent-html 组件画廊" width="100%">
+  </a>
+  <br>
+  <sub>👉 点击上方图片或访问 <a href="https://agent-html-bice.vercel.app" target="_blank"><strong>agent-html-bice.vercel.app</strong></a> 体验在线交互式组件画廊与母版预览</sub>
 </p>
 
 ---
@@ -60,7 +69,7 @@ npx skills add QingYunA/agent-html -g
 
 ### 2. 免装即开 CLI 体验
 
-无需安装 Node.js 服务，直接打开画廊或导出生产级母版：
+无需安装 Node.js 服务，直接打开画廊或导出生产级母版（亦可直接访问在线演示站 [**agent-html-bice.vercel.app**](https://agent-html-bice.vercel.app)）：
 
 ```bash
 # 直接在默认浏览器打开组件画廊
