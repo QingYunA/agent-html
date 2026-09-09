@@ -29,6 +29,7 @@
   <a href="#the-problem">The Problem</a> ·
   <a href="#what-you-get">What You Get</a> ·
   <a href="#the-6-archetypes">The 6 Archetypes</a> ·
+  <a href="#atomic-capabilities--component-arsenal">Atomic Arsenal</a> ·
   <a href="#prompt-triggers">Prompt Triggers</a> ·
   <a href="#linter">Linter</a> ·
   <a href="#star-history">Star History</a>
@@ -152,6 +153,107 @@ Rather than rigid business screens, `agent-html` provides 6 fundamental layout s
 <p align="center"><img src="assets/screenshots/en/kanban.png" alt="Kanban Template" width="100%"></p>
 
 </details>
+
+---
+
+## Atomic Capabilities & Component Arsenal
+
+Beyond full-page archetypes, `agent-html` packages production-grade **atomic primitives** and **zero-CDN pure SVG charts**. 100% offline, zero npm, zero external CDN, and instant dark mode support:
+
+### 1. Button System (Buttons Matrix)
+
+Semantic variants aligned with shadcn/ui standards, complete with `:hover`, `:active`, and `:disabled` micro-interactions:
+
+| Variant | Class | Semantic Role | Common Use Case |
+| :--- | :--- | :--- | :--- |
+| **Primary** | `.btn.btn-primary` | Solid high-contrast block | Submit, approve, primary CTAs |
+| **Secondary** | `.btn.btn-secondary` | Neutral subtle background | Cancel, back to list, secondary filters |
+| **Outline** | `.btn.btn-outline` | 1px border stroke | Export report, copy Markdown, view details |
+| **Ghost** | `.btn.btn-ghost` | Transparent, hover-only fill | Table row actions, breadcrumbs, link buttons |
+| **Destructive**| `.btn.btn-destructive`| Semantic warning red | Block release, drop database, abort workflow |
+| **With Icon** | `.btn` with inline `<svg>` | Icon + text pair | Download PDF, refresh status, search |
+| **Icon Button** | `.btn.btn-icon` | 32x32px square | Theme toggle, settings, collapse trigger |
+
+```html
+<!-- Ready-to-copy button snippets -->
+<button class="btn btn-primary">Approve Release</button>
+<button class="btn btn-secondary">Previous Step</button>
+<button class="btn btn-outline btn-sm">
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+  <span>Export PDF</span>
+</button>
+<button class="btn btn-destructive btn-sm">Block Deployment</button>
+```
+
+---
+
+### 2. Zero-CDN Pure SVG Charts
+
+Zero external JS chart libraries required. Uses standard inline SVG for crisp, Retina-sharp rendering that never breaks:
+
+| Chart Type | Native Mechanism | Key Advantage | Typical Use Cases |
+| :--- | :--- | :--- | :--- |
+| **📈 Area Trend** | Bezier curves with `linearGradient` | Zero load time, smooth gradient | 24h throughput (TPS), latency trends |
+| **📊 Column Histogram** | Rounded `rect` with data value labels | High contrast, intuitive comparison | P95/P99 latency distribution, error codes |
+| **🍩 Multi-Segment Donut** | `circle` with `stroke-dasharray` offsets | Pure CSS variable math, zero JS | Node health ratio, resource allocations |
+| **📉 Dual-Line Ingress/Egress**| Solid line vs dashed comparator line | Dual-metric temporal correlation | Inbound vs outbound traffic, baseline vs test |
+| **📑 Horizontal Ranking Bar** | Pill progress bars with semantic colors | Maximum space efficiency | Slow query ranking, TTFT by model |
+| **⏱️ Semi-Circle Gauge** | Semi-circle stroke arc with gradient | Immediate threshold alert | Memory watermark, API rate-limit quota |
+
+<details>
+<summary><strong>Expand to view sample SVG chart code snippets</strong></summary>
+
+#### A. Gradient Area Trend Curve
+```html
+<svg viewBox="0 0 400 95" style="width: 100%; height: 85px; overflow: visible;">
+  <defs>
+    <linearGradient id="areaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="var(--chart-indigo)" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="var(--chart-indigo)" stop-opacity="0.0"/>
+    </linearGradient>
+  </defs>
+  <path d="M 0 70 Q 55 30, 110 52 T 210 36 T 310 18 T 400 28 L 400 95 L 0 95 Z" fill="url(#areaGrad)"/>
+  <path d="M 0 70 Q 55 30, 110 52 T 210 36 T 310 18 T 400 28" fill="none" stroke="var(--chart-indigo)" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="210" cy="36" r="3" fill="var(--card)" stroke="var(--chart-indigo)" stroke-width="2"/>
+  <circle cx="310" cy="18" r="3.5" fill="var(--chart-indigo)" stroke="var(--card)" stroke-width="2"/>
+</svg>
+```
+
+#### B. Multi-Segment Donut Chart
+```html
+<svg viewBox="0 0 160 160" style="width: 120px; height: 120px;">
+  <circle cx="80" cy="80" r="54" fill="none" stroke="var(--secondary)" stroke-width="18"/>
+  <circle cx="80" cy="80" r="54" fill="none" stroke="var(--chart-emerald)" stroke-width="18" stroke-dasharray="220.5 339.3" stroke-dashoffset="0" transform="rotate(-90 80 80)"/>
+  <circle cx="80" cy="80" r="54" fill="none" stroke="var(--chart-amber)" stroke-width="18" stroke-dasharray="84.8 339.3" stroke-dashoffset="-220.5" transform="rotate(-90 80 80)"/>
+  <circle cx="80" cy="80" r="54" fill="none" stroke="var(--chart-rose)" stroke-width="18" stroke-dasharray="33.9 339.3" stroke-dashoffset="-305.3" transform="rotate(-90 80 80)"/>
+  <text x="80" y="77" text-anchor="middle" font-size="16" font-weight="700" fill="var(--card-fg)">1,280</text>
+  <text x="80" y="93" text-anchor="middle" font-size="9" fill="var(--muted-fg)">Nodes</text>
+</svg>
+```
+
+</details>
+
+---
+
+### 3. 24 Curated Engineering Vector Icons
+
+Designed with `stroke="currentColor"` to automatically inherit font size and color in light and dark modes:
+
+| Category | Curated Icons | Engineering Context |
+| :--- | :--- | :--- |
+| **System & Shell** | `Search` · `Terminal` · `Settings` · `Activity` | Global search, CLI output, settings, healthcheck |
+| **DevOps & Git** | `Branch` · `Commit` · `PR` · `Bug` | Code reviews, trace audits, changelog releases |
+| **Status & Verdicts** | `Check` · `Alert` · `Shield` · `Lock` | Pass badges, critical blockers, security audits |
+| **Actions & Data** | `Copy` · `Download` · `Calendar` · `Filter` · `Refresh` | Copy back to Agent, PDF export, date ranges |
+| **Infrastructure** | `Server` · `Database` · `CPU` · `External` | Host metrics, slow queries, cluster CPU, RFC docs |
+
+```html
+<!-- Automatic theme & color inheritance -->
+<span style="display: inline-flex; align-items: center; gap: 6px; color: var(--ok);">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+  <span>All test suites passing</span>
+</span>
+```
 
 ---
 

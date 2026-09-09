@@ -29,6 +29,7 @@
   <a href="#解决什么痛点">痛点</a> ·
   <a href="#核心价值">核心价值</a> ·
   <a href="#六大通用布局母版">六大母版</a> ·
+  <a href="#原生原子能力矩阵">原子能力</a> ·
   <a href="#提示词触发示例">提示词</a> ·
   <a href="#自验检查器-linter">Linter</a> ·
   <a href="#star-history">Star History</a>
@@ -152,6 +153,115 @@ ln -sf ../../../.agents/skills/agent-html ~/.pi/agent/skills/agent-html
 <p align="center"><img src="assets/screenshots/zh/kanban.png" alt="敏捷看板母版" width="100%"></p>
 
 </details>
+
+---
+
+## 原生原子能力矩阵 (Atomic Capabilities & Component Arsenal)
+
+除了宏观整页级母版，`agent-html` 将常用界面元素提炼为即拷即用的**基础原子组件**与**零 CDN 纯原生矢量图表**。100% 离线自包含、零外部依赖、自动适配深浅双主题：
+
+### 1. 按钮与操作体系 (Buttons Matrix)
+
+采用与 shadcn/ui 一致的语义变体与尺寸规范，内置 `:hover`、`:active`、`:disabled` 微动效：
+
+| 变体名称 | 核心类名 | 视觉语义 | 典型应用场景 |
+| :--- | :--- | :--- | :--- |
+| **Primary 主要操作** | `.btn.btn-primary` | 高对比实体色块 | 提交表单、放行准入、确认执行 |
+| **Secondary 次要辅助** | `.btn.btn-secondary` | 低饱和中性底色 | 取消操作、返回列表、次级筛选 |
+| **Outline 轮廓边框** | `.btn.btn-outline` | 1px 细微边界 | 导出报表、复制结果、查看详情 |
+| **Ghost 幽灵按钮** | `.btn.btn-ghost` | 平时不占视觉，悬浮出底色 | 表格行内操作、面包屑、次级链接 |
+| **Destructive 危险操作**| `.btn.btn-destructive`| 语义化警示红色 | 阻断上线、删除资源、终止流水线 |
+| **带图标按钮** | `.btn` 内嵌 `<svg>` | 图标 + 文字联动 | 下载报告、刷新状态、搜索执行 |
+| **正方形图标按钮** | `.btn.btn-icon` | 32x32px 等宽图标 | 主题切换、系统设置、展开折叠 |
+
+```html
+<!-- 常用按钮代码片段（开箱即用） -->
+<button class="btn btn-primary">确认发布</button>
+<button class="btn btn-secondary">返回上一步</button>
+<button class="btn btn-outline btn-sm">
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+  <span>下载 PDF 报告</span>
+</button>
+<button class="btn btn-destructive btn-sm">阻断上线</button>
+```
+
+---
+
+### 2. 零 CDN 纯原生 SVG 图表库 (Zero-CDN Pure SVG Charts)
+
+无需引入 Chart.js / ECharts 等动辄数百 KB 的外部脚本，利用纯原生 HTML + SVG 即可绘制企业级工业质感图表，Retina 视网膜高清无损：
+
+| 图表形态 | 原生绘制原理 | 核心优势 | 效果预览 / 适用场景 |
+| :--- | :--- | :--- | :--- |
+| **📈 面积走势图 (Area Trend)** | `path` 贝塞尔平滑曲线 + `linearGradient` 渐变填充 | 毫秒级加载，平滑过渡 | API 24h 吞吐量 (TPS)、延迟趋势分析 |
+| **📊 阶段耗时柱状图 (Histogram)** | `rect` 圆角矩形 + 顶部数值文本标注 | 精准直观，高对比度 | P95/P99 阶段耗时分布、错误码分布统计 |
+| **🍩 复合环形占比图 (Donut Chart)** | `circle` + `stroke-dasharray` 虚线偏移行程 | 零 JS 计算，纯 CSS 驱动 | 集群节点健康度、资源类型配比全景 |
+| **📉 双线流量对冲图 (Dual-Line)** | 实线主趋势 + 虚线对照组对比 | 双维度时序同步对照 | 入向 vs 出向带宽、基准 vs 实验流量 |
+| **📑 水平耗时排行榜 (Ranking Bar)** | `border-radius: 9999px` 胶囊进度条与阈值色 | 空间利用率极高 | 慢 SQL 排行、微服务首字延迟 (TTFT) |
+| **⏱️ 半环水位仪表盘 (Capacity Gauge)** | 半圆弧行程切割 + 渐变警戒色 | 醒目直观的水位预警 | 显存/内存占用水位、API 速率限制配额 |
+
+<details>
+<summary><strong>展开查看典型原生 SVG 图表实现代码（即拷即用）</strong></summary>
+
+#### A. 渐变平滑折线走势图 (Area Trend Curve)
+```html
+<svg viewBox="0 0 400 95" style="width: 100%; height: 85px; overflow: visible;">
+  <defs>
+    <linearGradient id="areaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="var(--chart-indigo)" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="var(--chart-indigo)" stop-opacity="0.0"/>
+    </linearGradient>
+  </defs>
+  <!-- 半透明填充底色 -->
+  <path d="M 0 70 Q 55 30, 110 52 T 210 36 T 310 18 T 400 28 L 400 95 L 0 95 Z" fill="url(#areaGrad)"/>
+  <!-- 核心数据平滑折线 -->
+  <path d="M 0 70 Q 55 30, 110 52 T 210 36 T 310 18 T 400 28" fill="none" stroke="var(--chart-indigo)" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- 数据高亮点 -->
+  <circle cx="210" cy="36" r="3" fill="var(--card)" stroke="var(--chart-indigo)" stroke-width="2"/>
+  <circle cx="310" cy="18" r="3.5" fill="var(--chart-indigo)" stroke="var(--card)" stroke-width="2"/>
+</svg>
+```
+
+#### B. 复合环形多段占比图 (Multi-Segment Donut Chart)
+```html
+<!-- 半径 r=54，周长 2*PI*54 ≈ 339.3，通过 stroke-dasharray 切割多段占比 -->
+<svg viewBox="0 0 160 160" style="width: 120px; height: 120px;">
+  <!-- 底槽 -->
+  <circle cx="80" cy="80" r="54" fill="none" stroke="var(--secondary)" stroke-width="18"/>
+  <!-- 正常段 (65%): 339.3 * 0.65 ≈ 220.5 -->
+  <circle cx="80" cy="80" r="54" fill="none" stroke="var(--chart-emerald)" stroke-width="18" stroke-dasharray="220.5 339.3" stroke-dashoffset="0" transform="rotate(-90 80 80)"/>
+  <!-- 预警段 (25%): 339.3 * 0.25 ≈ 84.8 -->
+  <circle cx="80" cy="80" r="54" fill="none" stroke="var(--chart-amber)" stroke-width="18" stroke-dasharray="84.8 339.3" stroke-dashoffset="-220.5" transform="rotate(-90 80 80)"/>
+  <!-- 异常段 (10%): 339.3 * 0.10 ≈ 33.9 -->
+  <circle cx="80" cy="80" r="54" fill="none" stroke="var(--chart-rose)" stroke-width="18" stroke-dasharray="33.9 339.3" stroke-dashoffset="-305.3" transform="rotate(-90 80 80)"/>
+  <text x="80" y="77" text-anchor="middle" font-size="16" font-weight="700" fill="var(--card-fg)">1,280</text>
+  <text x="80" y="93" text-anchor="middle" font-size="9" fill="var(--muted-fg)">Nodes</text>
+</svg>
+```
+
+</details>
+
+---
+
+### 3. 精选 24 纯矢量 Lucide 风格图标 (Curated Vector Icons)
+
+采用 `stroke="currentColor"` 设计，自动继承宿主字号与文字颜色，杜绝 Web Font 图标断网白屏问题：
+
+| 图标分类 | 覆盖图标清单 | 研发/审查典型应用 |
+| :--- | :--- | :--- |
+| **系统与检索** | `Search (搜索)` · `Terminal (终端)` · `Settings (设置)` · `Activity (监控心跳)` | 全文搜索、命令行执行结果、系统参数设置、探活心跳 |
+| **研发与协作** | `Branch (分支)` · `Commit (提交)` · `PR (合并请求)` · `Bug (缺陷漏洞)` | Git 变更审查、Trace 缺陷追踪、版本发布日志 |
+| **状态与判定** | `Check (成功)` · `Alert (告警)` · `Shield (安全防护)` · `Lock (访问控制)` | 准入达标徽章、漏洞阻断警示、RBAC 鉴权提示 |
+| **数据与操作** | `Copy (复制)` · `Download (下载)` · `Calendar (日历)` · `Filter (过滤)` · `Refresh (刷新)` | 一键回传 Agent、导出 PDF/CSV、时间区间筛选 |
+| **基础设施** | `Server (服务器)` · `Database (数据库)` · `CPU (处理器)` · `External (外链)` | 拓扑节点监控、慢查询排查、计算集群负载、参考文档跳转 |
+
+```html
+<!-- 使用示例：直接内嵌，字色自动跟随父级 -->
+<span style="display: inline-flex; align-items: center; gap: 6px; color: var(--ok);">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+  <span>测试套件全部通过</span>
+</span>
+```
 
 ---
 

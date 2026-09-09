@@ -53,6 +53,15 @@
       --info: #2563eb;
       --info-bg: #eff6ff;
       --info-border: #bfdbfe;
+
+      /* Calibrated Chart Tokens (Tremor & shadcn-inspired) */
+      --chart-indigo: #6366f1;
+      --chart-emerald: #10b981;
+      --chart-amber: #f59e0b;
+      --chart-rose: #f43f5e;
+      --chart-violet: #8b5cf6;
+      --chart-cyan: #06b6d4;
+      --chart-slate: #64748b;
     }
 
     [data-theme="dark"] {
@@ -93,6 +102,15 @@
       --info: #60a5fa;
       --info-bg: #17255480;
       --info-border: #1e40af;
+
+      /* Calibrated Chart Tokens (Dark Mode) */
+      --chart-indigo: #818cf8;
+      --chart-emerald: #34d399;
+      --chart-amber: #fbbf24;
+      --chart-rose: #fb7185;
+      --chart-violet: #a78bfa;
+      --chart-cyan: #22d3ee;
+      --chart-slate: #94a3b8;
     }
 
     /* Base Reset */
@@ -717,6 +735,11 @@
       .archetype-info-row { flex-direction: column; align-items: stretch; }
       .footer-inner { flex-direction: column; align-items: flex-start; }
     }
+
+    dialog::backdrop {
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(4px);
+    }
   </style>
 </head>
 <body>
@@ -1024,63 +1047,241 @@
     <section id="components">
       <div class="section-header">
         <div class="section-tag">基础组件</div>
-        <h2 class="section-title">基础原子组件与矢量图标</h2>
-        <p class="section-desc">开箱即用的 HTML 片段：按钮、胶囊徽章、提示条与 12 个 currentColor 矢量图标。</p>
+        <h2 class="section-title">基础原子组件与矢量图表</h2>
+        <p class="section-desc">开箱即用的 HTML 片段：按钮体系、胶囊徽章、原生微交互、6 大纯原生 SVG 图表与 24 个矢量图标。</p>
       </div>
 
       <div class="arsenal-grid">
         <!-- 1. Buttons & Badges -->
         <div class="arsenal-box">
           <div class="arsenal-title">
-            <span>按钮与状态徽章</span>
+            <span>按钮体系与状态徽章</span>
             <span class="badge badge-success"><span class="badge-dot"></span>交互可用</span>
           </div>
-          <div class="arsenal-desc">覆盖 Primary、Secondary、Outline、Ghost、Destructive 以及图标状态。</div>
+          <div class="arsenal-desc">覆盖 Primary、Secondary、Outline、Ghost、Destructive 以及图标尺寸变体。</div>
           
-          <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;">
-            <button class="btn btn-primary btn-sm">主要按钮</button>
-            <button class="btn btn-secondary btn-sm">次要辅助</button>
-            <button class="btn btn-outline btn-sm">线框轮廓</button>
-            <button class="btn btn-ghost btn-sm">幽灵悬浮</button>
-            <button class="btn btn-destructive btn-sm">危险警示</button>
+          <div style="font-size: 11px; font-weight: 600; color: var(--muted-fg); margin-bottom: 6px;">按钮变体</div>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px;">
+            <button class="btn btn-primary btn-sm">主要按钮 (Primary)</button>
+            <button class="btn btn-secondary btn-sm">辅助按钮 (Secondary)</button>
+            <button class="btn btn-outline btn-sm">线框轮廓 (Outline)</button>
+            <button class="btn btn-ghost btn-sm">幽灵悬浮 (Ghost)</button>
+            <button class="btn btn-destructive btn-sm">危险操作 (Destructive)</button>
           </div>
 
+          <div style="font-size: 11px; font-weight: 600; color: var(--muted-fg); margin-bottom: 6px;">带图标与尺寸组合</div>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 14px;">
+            <button class="btn btn-primary btn-sm">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <span>导出报告</span>
+            </button>
+            <button class="btn btn-outline btn-sm">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span>阻断审核</span>
+            </button>
+            <button class="btn btn-outline btn-sm" style="width: 32px; padding: 0; display: inline-flex; align-items: center; justify-content: center;" title="设置">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            </button>
+          </div>
+
+          <div style="font-size: 11px; font-weight: 600; color: var(--muted-fg); margin-bottom: 6px;">语义状态徽章</div>
           <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-            <span class="badge badge-success"><span class="badge-dot"></span>正常运行 / 200 OK</span>
-            <span class="badge badge-warning"><span class="badge-dot"></span>负载预警 / 告警</span>
-            <span class="badge badge-danger"><span class="badge-dot"></span>阻断性错误</span>
-            <span class="badge badge-info"><span class="badge-dot"></span>异步流式处理中</span>
-            <span class="badge">默认状态</span>
+            <span class="badge badge-success"><span class="badge-dot"></span>200 OK 正常</span>
+            <span class="badge badge-warning"><span class="badge-dot"></span>Warning 预警</span>
+            <span class="badge badge-danger"><span class="badge-dot"></span>Critical 阻断</span>
+            <span class="badge badge-info"><span class="badge-dot"></span>In Progress 处理中</span>
+            <span class="badge">中性默认</span>
           </div>
         </div>
 
-        <!-- 2. Pure SVG Charts -->
+        <!-- 2. Micro-Interactive Primitives -->
         <div class="arsenal-box">
           <div class="arsenal-title">
-            <span>零 CDN 纯原生 SVG 图表</span>
-            <span class="badge badge-info">零外部库依赖</span>
+            <span>原生微交互基元</span>
+            <span class="badge badge-info">原生 DOM</span>
           </div>
-          <div class="arsenal-desc">无需引入任何外部 JS 图表库，纯原生矢量绘制优雅渐变面积曲线。</div>
+          <div class="arsenal-desc">零依赖原生弹窗、手风琴折叠面板与决策结论提示框。</div>
 
-          <div class="chart-container">
-            <div class="chart-header">
-              <span>集群 24 小时请求吞吐量 (TPS)</span>
-              <span style="color: var(--ok);">↑ +18.4% 环比</span>
+          <!-- Native Dialog Button -->
+          <div style="margin-top: 14px; display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: var(--secondary); border: 1px solid var(--border); border-radius: var(--radius-sm);">
+            <div>
+              <div style="font-size: 13px; font-weight: 600;">原生 &lt;dialog&gt; 模态弹窗</div>
+              <div style="font-size: 11px; color: var(--muted-fg);">自带背景虚化遮罩、ESC 自动关闭、0 第三方库</div>
             </div>
-            <svg viewBox="0 0 400 80" style="width: 100%; height: 70px; overflow: visible;">
-              <defs>
-                <linearGradient id="areaGradZh" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stop-color="#16a34a" stop-opacity="0.3"/>
-                  <stop offset="100%" stop-color="#16a34a" stop-opacity="0.0"/>
-                </linearGradient>
-              </defs>
-              <path d="M 0 60 Q 50 20, 100 45 T 200 30 T 300 15 T 400 25 L 400 80 L 0 80 Z" fill="url(#areaGradZh)"/>
-              <path d="M 0 60 Q 50 20, 100 45 T 200 30 T 300 15 T 400 25" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round"/>
-            </svg>
+            <button class="btn btn-outline btn-sm" onclick="document.getElementById('playgroundDialogZh').showModal()">打开弹窗演示</button>
+          </div>
+
+          <!-- Native Accordion Details -->
+          <details style="margin-top: 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 12px; background: var(--secondary);">
+            <summary style="font-size: 12px; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none;">
+              <span>可折叠 &lt;details&gt; 诊断日志手风琴</span>
+              <span style="color: var(--muted-fg);">▾</span>
+            </summary>
+            <div style="font-size: 12px; color: var(--muted-fg); margin-top: 6px; line-height: 1.5;">
+              无需任何 JavaScript，用于超长排障 Trace 日志、执行细节、长文本折叠等场景。
+            </div>
+          </details>
+
+          <!-- Executive Callout -->
+          <div style="margin-top: 10px; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--ok-border); background: var(--ok-bg); font-size: 12px; display: flex; gap: 8px; align-items: flex-start;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ok)" stroke-width="2" style="margin-top: 2px; flex-shrink: 0;"><polyline points="20 6 9 17 4 12"/></svg>
+            <div>
+              <strong style="color: var(--ok); display: block;">执行摘要提示框 (Callout)</strong>
+              <span style="color: var(--card-fg);">突出展示架构评审结论、安全性检测判定或灰度发布准入意见。</span>
+            </div>
           </div>
         </div>
 
-        <!-- 3. Real-time Filterable Table -->
+        <!-- 3. Pure SVG Charts (6 Core Formats) -->
+        <div class="arsenal-box" style="grid-column: span 2;">
+          <div class="arsenal-title">
+            <span>零 CDN 纯原生 SVG 图表（6 大核心形态）</span>
+            <span class="badge badge-info">零外部库 · 精准调色</span>
+          </div>
+          <div class="arsenal-desc">基于原生 SVG 矢量曲线绘制。100% 离线自包含、零 JS 图表库依赖、Retina 高清视网膜渲染、自动适配深浅主题。</div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-top: 14px;">
+            <!-- Chart 1: Area Trend Curve -->
+            <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
+              <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-bottom: 8px;">
+                <span style="font-weight: 600;">24h 请求吞吐量 (TPS)</span>
+                <span style="color: var(--chart-emerald); font-weight: 600; font-size: 11px;">↑ +18.4%</span>
+              </div>
+              <svg viewBox="0 0 400 95" style="width: 100%; height: 85px; overflow: visible;">
+                <defs>
+                  <linearGradient id="areaGradIndigoZh" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="var(--chart-indigo)" stop-opacity="0.22"/>
+                    <stop offset="100%" stop-color="var(--chart-indigo)" stop-opacity="0.0"/>
+                  </linearGradient>
+                </defs>
+                <path d="M 0 70 Q 55 30, 110 52 T 210 36 T 310 18 T 400 28 L 400 95 L 0 95 Z" fill="url(#areaGradIndigoZh)"/>
+                <path d="M 0 70 Q 55 30, 110 52 T 210 36 T 310 18 T 400 28" fill="none" stroke="var(--chart-indigo)" stroke-width="2.5" stroke-linecap="round"/>
+                <circle cx="210" cy="36" r="3" fill="var(--card)" stroke="var(--chart-indigo)" stroke-width="2"/>
+                <circle cx="310" cy="18" r="3.5" fill="var(--chart-indigo)" stroke="var(--card)" stroke-width="2"/>
+              </svg>
+            </div>
+
+            <!-- Chart 2: Column Histogram -->
+            <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
+              <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-bottom: 8px;">
+                <span style="font-weight: 600;">各阶段响应延迟分布 (ms)</span>
+                <span class="badge" style="font-size: 10px; height: 18px;">P95 统计</span>
+              </div>
+              <svg viewBox="0 0 400 95" style="width: 100%; height: 85px; overflow: visible;">
+                <rect x="25" y="60" width="38" height="32" rx="4" fill="var(--chart-slate)" opacity="0.6"/>
+                <text x="44" y="54" font-size="10" font-weight="600" fill="var(--muted-fg)" text-anchor="middle">24ms</text>
+                <rect x="100" y="40" width="38" height="52" rx="4" fill="var(--chart-indigo)" opacity="0.8"/>
+                <text x="119" y="34" font-size="10" font-weight="600" fill="var(--card-fg)" text-anchor="middle">48ms</text>
+                <rect x="175" y="18" width="38" height="74" rx="4" fill="var(--chart-violet)" opacity="0.95"/>
+                <text x="194" y="12" font-size="10" font-weight="700" fill="var(--chart-violet)" text-anchor="middle">92ms</text>
+                <rect x="250" y="50" width="38" height="42" rx="4" fill="var(--chart-indigo)" opacity="0.8"/>
+                <text x="269" y="44" font-size="10" font-weight="600" fill="var(--card-fg)" text-anchor="middle">35ms</text>
+                <rect x="325" y="68" width="38" height="24" rx="4" fill="var(--chart-slate)" opacity="0.6"/>
+                <text x="344" y="62" font-size="10" font-weight="600" fill="var(--muted-fg)" text-anchor="middle">18ms</text>
+              </svg>
+            </div>
+
+            <!-- Chart 3: Donut Allocation -->
+            <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
+              <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px;">
+                <span style="font-weight: 600;">集群健康度全景占比</span>
+                <span class="badge badge-success" style="font-size: 10px; height: 18px;">99.8% 达标</span>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+                <svg viewBox="0 0 160 160" style="width: 82px; height: 82px; flex-shrink: 0;">
+                  <circle cx="80" cy="80" r="54" fill="none" stroke="var(--secondary)" stroke-width="18"/>
+                  <circle cx="80" cy="80" r="54" fill="none" stroke="var(--chart-emerald)" stroke-width="18" stroke-dasharray="220.5 339.3" stroke-dashoffset="0" transform="rotate(-90 80 80)"/>
+                  <circle cx="80" cy="80" r="54" fill="none" stroke="var(--chart-amber)" stroke-width="18" stroke-dasharray="84.8 339.3" stroke-dashoffset="-220.5" transform="rotate(-90 80 80)"/>
+                  <circle cx="80" cy="80" r="54" fill="none" stroke="var(--chart-rose)" stroke-width="18" stroke-dasharray="33.9 339.3" stroke-dashoffset="-305.3" transform="rotate(-90 80 80)"/>
+                  <text x="80" y="77" text-anchor="middle" font-size="16" font-weight="700" fill="var(--card-fg)">1,280</text>
+                  <text x="80" y="93" text-anchor="middle" font-size="9" fill="var(--muted-fg)">节点</text>
+                </svg>
+                <div style="font-size: 11px; display: flex; flex-direction: column; gap: 4px; flex: 1;">
+                  <div style="display: flex; justify-content: space-between;"><span style="color: var(--chart-emerald); font-weight: 500;">● 65% 正常</span><strong>832</strong></div>
+                  <div style="display: flex; justify-content: space-between;"><span style="color: var(--chart-amber); font-weight: 500;">● 25% 预警</span><strong>320</strong></div>
+                  <div style="display: flex; justify-content: space-between;"><span style="color: var(--chart-rose); font-weight: 500;">● 10% 降级</span><strong>128</strong></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Chart 4: Dual Line Trend Ingress vs Egress -->
+            <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
+              <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-bottom: 6px;">
+                <span style="font-weight: 600;">出入网络流量对冲</span>
+                <div style="display: flex; gap: 8px; font-size: 10px;">
+                  <span style="color: var(--chart-indigo);">— 入向 1.4G</span>
+                  <span style="color: var(--chart-cyan);">┄ 出向 860M</span>
+                </div>
+              </div>
+              <svg viewBox="0 0 400 95" style="width: 100%; height: 85px; overflow: visible;">
+                <defs>
+                  <linearGradient id="dualAreaGradZh" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="var(--chart-indigo)" stop-opacity="0.16"/>
+                    <stop offset="100%" stop-color="var(--chart-indigo)" stop-opacity="0.0"/>
+                  </linearGradient>
+                </defs>
+                <path d="M 0 55 Q 60 25, 120 40 T 240 25 T 340 15 T 400 30 L 400 95 L 0 95 Z" fill="url(#dualAreaGradZh)"/>
+                <path d="M 0 55 Q 60 25, 120 40 T 240 25 T 340 15 T 400 30" fill="none" stroke="var(--chart-indigo)" stroke-width="2.5" stroke-linecap="round"/>
+                <path d="M 0 75 Q 60 60, 120 68 T 240 48 T 340 40 T 400 52" fill="none" stroke="var(--chart-cyan)" stroke-width="2" stroke-dasharray="4 4" stroke-linecap="round"/>
+                <circle cx="340" cy="15" r="3.5" fill="var(--chart-indigo)" stroke="var(--card)" stroke-width="2"/>
+                <circle cx="340" cy="40" r="3" fill="var(--chart-cyan)" stroke="var(--card)" stroke-width="1.5"/>
+              </svg>
+            </div>
+
+            <!-- Chart 5: Horizontal Ranking Bar -->
+            <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
+              <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px;">
+                <span style="font-weight: 600;">核心模块耗时排行</span>
+                <span style="font-size: 10px; color: var(--muted-fg);">P95 ms</span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 6px; font-size: 11px;">
+                <div>
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 2px;"><span>DB 连接池等待</span><strong style="color: var(--chart-rose);">280ms</strong></div>
+                  <div style="background: var(--secondary); height: 6px; border-radius: 9999px; overflow: hidden;"><div style="background: var(--chart-rose); width: 85%; height: 100%;"></div></div>
+                </div>
+                <div>
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 2px;"><span>大模型首字生成 (TTFT)</span><strong style="color: var(--chart-amber);">195ms</strong></div>
+                  <div style="background: var(--secondary); height: 6px; border-radius: 9999px; overflow: hidden;"><div style="background: var(--chart-amber); width: 62%; height: 100%;"></div></div>
+                </div>
+                <div>
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 2px;"><span>网关鉴权校验 (JWT)</span><strong style="color: var(--chart-indigo);">48ms</strong></div>
+                  <div style="background: var(--secondary); height: 6px; border-radius: 9999px; overflow: hidden;"><div style="background: var(--chart-indigo); width: 22%; height: 100%;"></div></div>
+                </div>
+                <div>
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 2px;"><span>边缘静态资源缓存</span><strong style="color: var(--chart-emerald);">12ms</strong></div>
+                  <div style="background: var(--secondary); height: 6px; border-radius: 9999px; overflow: hidden;"><div style="background: var(--chart-emerald); width: 8%; height: 100%;"></div></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Chart 6: Semi-Circle Resource Quota Gauge -->
+            <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
+              <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-bottom: 4px;">
+                <span style="font-weight: 600;">集群内存占用水位</span>
+                <span class="badge badge-warning" style="font-size: 10px; height: 18px;">正常负荷</span>
+              </div>
+              <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
+                <svg viewBox="0 0 180 100" style="width: 140px; height: 78px; overflow: visible;">
+                  <defs>
+                    <linearGradient id="gaugeGradZh" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stop-color="var(--chart-emerald)"/>
+                      <stop offset="60%" stop-color="var(--chart-indigo)"/>
+                      <stop offset="100%" stop-color="var(--chart-amber)"/>
+                    </linearGradient>
+                  </defs>
+                  <circle cx="90" cy="90" r="65" fill="none" stroke="var(--secondary)" stroke-width="16" stroke-dasharray="204.2 408.4" stroke-dashoffset="0" transform="rotate(-180 90 90)" stroke-linecap="round"/>
+                  <circle cx="90" cy="90" r="65" fill="none" stroke="url(#gaugeGradZh)" stroke-width="16" stroke-dasharray="160.1 408.4" stroke-dashoffset="0" transform="rotate(-180 90 90)" stroke-linecap="round"/>
+                  <text x="90" y="74" text-anchor="middle" font-size="18" font-weight="700" fill="var(--card-fg)">78.4%</text>
+                  <text x="90" y="88" text-anchor="middle" font-size="9" fill="var(--muted-fg)">已使用 15.6 / 20 TB</text>
+                  <text x="25" y="98" font-size="9" fill="var(--muted-fg)" text-anchor="middle">0%</text>
+                  <text x="155" y="98" font-size="9" fill="var(--muted-fg)" text-anchor="middle">100%</text>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Real-time Filterable Table -->
         <div class="arsenal-box" style="grid-column: span 2;">
           <div class="arsenal-title">
             <span>纯前端实时过滤数据表</span>
@@ -1134,42 +1335,115 @@
         </div>
       </div>
 
-      <!-- Curated SVG Icon Grid -->
+      <!-- Curated SVG Icon Grid (24 Icons) -->
       <div class="arsenal-box" style="margin-bottom: 72px;">
         <div class="arsenal-title">
-          <span>精选 12 纯矢量 Lucide 风格图标</span>
+          <span>精选 24 研发与运维纯矢量 Lucide 风格图标</span>
           <span style="font-size: 12px; color: var(--muted-fg);">点击任意图标即可将 SVG 代码复制至剪贴板</span>
         </div>
-        <div class="arsenal-desc">采用 <code>stroke="currentColor"</code>，能够随父级字色自动适配深浅主题。</div>
+        <div class="arsenal-desc">采用 <code>stroke="currentColor"</code>，能够随父级字色自动适配深浅主题。零字体依赖，100% 离线可用。</div>
 
         <div class="icon-grid">
-          <div class="icon-tile" onclick="copySvgCode('search', '<svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"11\" cy=\"11\" r=\"8\"/><path d=\"m21 21-4.3-4.3\"/></svg>')">
+          <div class="icon-tile" data-name="搜索 (Search)" onclick="copySvgCode(this)">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
             <span>搜索 (Search)</span>
           </div>
-          <div class="icon-tile" onclick="copySvgCode('check', '<svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><polyline points=\"20 6 9 17 4 12\"/></svg>')">
+          <div class="icon-tile" data-name="成功 (Check)" onclick="copySvgCode(this)">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
             <span>成功 (Check)</span>
           </div>
-          <div class="icon-tile" onclick="copySvgCode('alert', '<svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><line x1=\"12\" y1=\"8\" x2=\"12\" y2=\"12\"/><line x1=\"12\" y1=\"16\" x2=\"12.01\" y2=\"16\"/></svg>')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1=\"8\" x2=\"12\" y2=\"12\"/><line x1=\"12\" y1=\"16\" x2=\"12.01\" y2=\"16\"/></svg>
+          <div class="icon-tile" data-name="告警 (Alert)" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
             <span>告警 (Alert)</span>
           </div>
-          <div class="icon-tile" onclick="copySvgCode('copy', '<svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><rect width=\"14\" height=\"14\" x=\"8\" y=\"8\" rx=\"2\" ry=\"2\"/><path d=\"M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2\"/></svg>')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width=\"14\" height=\"14\" x=\"8\" y=\"8\" rx=\"2\" ry=\"2\"/><path d=\"M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2\"/></svg>
+          <div class="icon-tile" data-name="复制 (Copy)" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
             <span>复制 (Copy)</span>
           </div>
-          <div class="icon-tile" onclick="copySvgCode('calendar', '<svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><rect width=\"18\" height=\"18\" x=\"3\" y=\"4\" rx=\"2\" ry=\"2\"/><line x1=\"16\" x2=\"16\" y1=\"2\" y2=\"6\"/><line x1=\"8\" x2=\"8\" y1=\"2\" y2=\"6\"/><line x1=\"3\" x2=\"21\" y1=\"10\" y2=\"10\"/></svg>')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width=\"18\" height=\"18\" x=\"3\" y=\"4\" rx=\"2\" ry=\"2\"/><line x1=\"16\" x2=\"16\" y1=\"2\" y2=\"6\"/><line x1=\"8\" x2=\"8\" y1=\"2\" y2=\"6\"/><line x1=\"3\" x2=\"21\" y1=\"10\" y2=\"10\"/></svg>
+          <div class="icon-tile" data-name="日历 (Calendar)" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
             <span>日历 (Calendar)</span>
           </div>
-          <div class="icon-tile" onclick="copySvgCode('terminal', '<svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><polyline points=\"4 17 10 11 4 5\"/><line x1=\"12\" x2=\"20\" y1=\"19\" y2=\"19\"/></svg>')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points=\"4 17 10 11 4 5\"/><line x1=\"12\" x2=\"20\" y1=\"19\" y2=\"19\"/></svg>
+          <div class="icon-tile" data-name="终端 (Terminal)" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
             <span>终端 (Terminal)</span>
+          </div>
+          <div class="icon-tile" data-name="过滤 (Filter)" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+            <span>过滤 (Filter)</span>
+          </div>
+          <div class="icon-tile" data-name="外链 (External)" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            <span>外链 (External)</span>
+          </div>
+          <div class="icon-tile" data-name="用户 (User)" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span>用户 (User)</span>
+          </div>
+          <div class="icon-tile" data-name="折叠 (Chevron)" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+            <span>折叠 (Chevron)</span>
+          </div>
+          <div class="icon-tile" data-name="删除 (Trash)" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+            <span>删除 (Trash)</span>
+          </div>
+          <div class="icon-tile" data-name="下载 (Download)" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>下载 (Download)</span>
+          </div>
+          <div class="icon-tile" data-name="分支 (Branch)" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>
+            <span>分支 (Branch)</span>
+          </div>
+          <div class="icon-tile" data-name="提交 (Commit)" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><line x1="1.05" y1="12" x2="7" y2="12"/><line x1="17.01" y1="12" x2="22.96" y2="12"/></svg>
+            <span>提交 (Commit)</span>
+          </div>
+          <div class="icon-tile" data-name="合并请求 (PR)" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7"/><line x1="6" y1="9" x2="6" y2="21"/></svg>
+            <span>合并请求 (PR)</span>
+          </div>
+          <div class="icon-tile" data-name="缺陷漏洞 (Bug)" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="8" height="14" x="8" y="6" rx="4"/><path d="m19 7-3 2"/><path d="m5 7 3 2"/><path d="m19 19-3-2"/><path d="m5 19 3-2"/><path d="M20 13h-4"/><path d="M4 13h4"/><path d="m10 4 1 2"/><path d="m14 4-1 2"/></svg>
+            <span>缺陷 (Bug)</span>
+          </div>
+          <div class="icon-tile" data-name="服务器 (Server)" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+            <span>服务器 (Server)</span>
+          </div>
+          <div class="icon-tile" data-name="数据库 (Database)" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+            <span>数据库 (Database)</span>
+          </div>
+          <div class="icon-tile" data-name="处理器 (CPU)" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M9 1v3"/><path d="M15 1v3"/><path d="M9 20v3"/><path d="M15 20v3"/><path d="M20 9h3"/><path d="M20 15h3"/><path d="M1 9h3"/><path d="M1 15h3"/></svg>
+            <span>处理器 (CPU)</span>
+          </div>
+          <div class="icon-tile" data-name="实时监控 (Activity)" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            <span>实时监控 (Activity)</span>
+          </div>
+          <div class="icon-tile" data-name="安全防护 (Shield)" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span>防护 (Shield)</span>
+          </div>
+          <div class="icon-tile" data-name="访问锁 (Lock)" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <span>访问控制 (Lock)</span>
+          </div>
+          <div class="icon-tile" data-name="刷新重试 (Refresh)" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 21h5v-5"/></svg>
+            <span>刷新 (Refresh)</span>
+          </div>
+          <div class="icon-tile" data-name="系统设置 (Settings)" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            <span>设置 (Settings)</span>
           </div>
         </div>
       </div>
     </section>
+
 
     <!-- Prompt Cookbook Section -->
     <section id="cookbook">
@@ -1249,6 +1523,16 @@ npx agent-html check dashboard.html</code></pre>
       <!-- [Colophon: agent-html design system v1.0.0 · generated at 2026-09-08 · zero-dependency standalone] -->
     </div>
   </footer>
+
+  <!-- Native Dialog Modal Demo -->
+  <dialog id="playgroundDialogZh" style="border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--card); color: var(--card-fg); padding: 24px; max-width: 420px; width: 90%; margin: auto; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3);">
+    <div style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">原生 &lt;dialog&gt; 模态弹窗组件</div>
+    <p style="font-size: 13px; color: var(--muted-fg); margin-bottom: 20px; line-height: 1.5;">完全采用浏览器原生 dialog 标签与 CSS backdrop 虚化滤镜构建。具备原生键盘焦点锁、无障碍支持与 ESC 一键关闭，不需要引入任何外部 JS 弹窗库。</p>
+    <div style="display: flex; justify-content: flex-end; gap: 8px;">
+      <button class="btn btn-sm" onclick="document.getElementById('playgroundDialogZh').close()">取消操作</button>
+      <button class="btn btn-primary btn-sm" onclick="document.getElementById('playgroundDialogZh').close()">确认执行</button>
+    </div>
+  </dialog>
 
   <!-- Toast Notification Container -->
   <div id="toast">
@@ -1349,8 +1633,13 @@ npx agent-html check dashboard.html</code></pre>
     }
 
     // Copy SVG Code
-    function copySvgCode(name, svg) {
-      navigator.clipboard.writeText(svg).then(() => {
+    function copySvgCode(el) {
+      const svgEl = el.querySelector('svg');
+      const name = el.getAttribute('data-name') || el.querySelector('span')?.textContent || '图标';
+      const clone = svgEl.cloneNode(true);
+      clone.setAttribute('width', '16');
+      clone.setAttribute('height', '16');
+      navigator.clipboard.writeText(clone.outerHTML).then(() => {
         showToast(`已复制 <${name}> 矢量图标代码！`);
       });
     }
