@@ -1,70 +1,71 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 250" width="100%" height="auto">
   <defs>
     <style>
-      .tile { fill: #ffffff; stroke: #e4e4e7; stroke-width: 1; rx: 8; }
-      .tile-name { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 10px; font-weight: 500; fill: #52525b; text-anchor: middle; }
+      .bg { fill: #ffffff; stroke: #e4e4e7; stroke-width: 1; rx: 12; }
+      .tile { fill: #ffffff; stroke: #e4e4e7; stroke-width: 1; rx: 6; }
+      .tile-name { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 10.5px; font-weight: 500; fill: #71717a; text-anchor: middle; }
     </style>
   </defs>
 
   <!-- Background Card -->
-  <rect width="920" height="250" rx="14" fill="#fafafa" stroke="#e4e4e7" stroke-width="1" />
+  <rect width="920" height="250" class="bg" />
 
   <!-- Title -->
-  <text x="24" y="28" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="11px" font-weight="700" fill="#71717a" letter-spacing="0.08em">24 CURATED ENGINEERING &amp; DEVOPS VECTOR ICONS (STROKE="CURRENTCOLOR")</text>
+  <text x="24" y="28" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="11px" font-weight="700" fill="#71717a" letter-spacing="0.08em">24 CURATED ENGINEERING &amp; DEVOPS VECTOR ICONS (MONOCHROME · STROKE="CURRENTCOLOR")</text>
 
   <!-- ROW 1 (Icons 1 to 8) -->
   <!-- 1. Search -->
   <g transform="translate(24, 44)">
-    <rect width="100" height="56" rx="8" class="tile" />
+    <rect width="100" height="56" class="tile" />
     <svg x="41" y="10" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
     <text x="50" y="44" class="tile-name">Search</text>
   </g>
 
   <!-- 2. Check -->
   <g transform="translate(134, 44)">
-    <rect width="100" height="56" rx="8" class="tile" />
-    <svg x="41" y="10" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>
+    <rect width="100" height="56" class="tile" />
+    <svg x="41" y="10" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
     <text x="50" y="44" class="tile-name">Check</text>
   </g>
 
   <!-- 3. Alert -->
   <g transform="translate(244, 44)">
-    <rect width="100" height="56" rx="8" class="tile" />
-    <svg x="41" y="10" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    <rect width="100" height="56" class="tile" />
+    <svg x="41" y="10" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
     <text x="50" y="44" class="tile-name">Alert</text>
   </g>
 
   <!-- 4. Copy -->
   <g transform="translate(354, 44)">
-    <rect width="100" height="56" rx="8" class="tile" />
+    <rect width="100" height="56" class="tile" />
     <svg x="41" y="10" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
     <text x="50" y="44" class="tile-name">Copy</text>
   </g>
 
   <!-- 5. Calendar -->
   <g transform="translate(464, 44)">
-    <rect width="100" height="56" rx="8" class="tile" />
+    <rect width="100" height="56" class="tile" />
     <svg x="41" y="10" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
     <text x="50" y="44" class="tile-name">Calendar</text>
   </g>
 
   <!-- 6. Terminal -->
   <g transform="translate(574, 44)">
-    <rect width="100" height="56" rx="8" class="tile" />
+    <rect width="100" height="56" class="tile" />
     <svg x="41" y="10" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
     <text x="50" y="44" class="tile-name">Terminal</text>
   </g>
 
   <!-- 7. Filter -->
   <g transform="translate(684, 44)">
-    <rect width="100" height="56" rx="8" class="tile" />
+    <rect width="100" height="56" class="tile" />
     <svg x="41" y="10" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
     <text x="50" y="44" class="tile-name">Filter</text>
   </g>
 
   <!-- 8. External -->
   <g transform="translate(794, 44)">
-    <rect width="100" height="56" rx="8" class="tile" />
+    <rect width="100" height="56" class="tile" />
     <svg x="41" y="10" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
     <text x="50" y="44" class="tile-name">External</text>
   </g>
@@ -72,113 +73,113 @@
   <!-- ROW 2 (Icons 9 to 16) -->
   <!-- 9. User -->
   <g transform="translate(24, 110)">
-    <rect width="100" height="56" rx="8" class="tile" />
+    <rect width="100" height="56" class="tile" />
     <svg x="41" y="10" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
     <text x="50" y="44" class="tile-name">User</text>
   </g>
 
   <!-- 10. Chevron -->
   <g transform="translate(134, 110)">
-    <rect width="100" height="56" rx="8" class="tile" />
+    <rect width="100" height="56" class="tile" />
     <svg x="41" y="10" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
     <text x="50" y="44" class="tile-name">Chevron</text>
   </g>
 
   <!-- 11. Trash -->
   <g transform="translate(244, 110)">
-    <rect width="100" height="56" rx="8" class="tile" />
-    <svg x="41" y="10" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+    <rect width="100" height="56" class="tile" />
+    <svg x="41" y="10" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
     <text x="50" y="44" class="tile-name">Trash</text>
   </g>
 
   <!-- 12. Download -->
   <g transform="translate(354, 110)">
-    <rect width="100" height="56" rx="8" class="tile" />
+    <rect width="100" height="56" class="tile" />
     <svg x="41" y="10" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
     <text x="50" y="44" class="tile-name">Download</text>
   </g>
 
   <!-- 13. Branch -->
   <g transform="translate(464, 110)">
-    <rect width="100" height="56" rx="8" class="tile" />
-    <svg x="41" y="10" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>
+    <rect width="100" height="56" class="tile" />
+    <svg x="41" y="10" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>
     <text x="50" y="44" class="tile-name">Branch</text>
   </g>
 
   <!-- 14. Commit -->
   <g transform="translate(574, 110)">
-    <rect width="100" height="56" rx="8" class="tile" />
-    <svg x="41" y="10" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2"><circle cx="12" cy="12" r="4"/><line x1="1.05" y1="12" x2="7" y2="12"/><line x1="17.01" y1="12" x2="22.96" y2="12"/></svg>
+    <rect width="100" height="56" class="tile" />
+    <svg x="41" y="10" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2"><circle cx="12" cy="12" r="4"/><line x1="1.05" y1="12" x2="7" y2="12"/><line x1="17.01" y1="12" x2="22.96" y2="12"/></svg>
     <text x="50" y="44" class="tile-name">Commit</text>
   </g>
 
   <!-- 15. PR -->
   <g transform="translate(684, 110)">
-    <rect width="100" height="56" rx="8" class="tile" />
-    <svg x="41" y="10" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7"/><line x1="6" y1="9" x2="6" y2="21"/></svg>
+    <rect width="100" height="56" class="tile" />
+    <svg x="41" y="10" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7"/><line x1="6" y1="9" x2="6" y2="21"/></svg>
     <text x="50" y="44" class="tile-name">Pull Req</text>
   </g>
 
   <!-- 16. Bug -->
   <g transform="translate(794, 110)">
-    <rect width="100" height="56" rx="8" class="tile" />
-    <svg x="41" y="10" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2"><rect width="8" height="14" x="8" y="6" rx="4"/><path d="m19 7-3 2"/><path d="m5 7 3 2"/><path d="m19 19-3-2"/><path d="m5 19 3-2"/><path d="M20 13h-4"/><path d="M4 13h4"/><path d="m10 4 1 2"/><path d="m14 4-1 2"/></svg>
+    <rect width="100" height="56" class="tile" />
+    <svg x="41" y="10" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2"><rect width="8" height="14" x="8" y="6" rx="4"/><path d="m19 7-3 2"/><path d="m5 7 3 2"/><path d="m19 19-3-2"/><path d="m5 19 3-2"/><path d="M20 13h-4"/><path d="M4 13h4"/><path d="m10 4 1 2"/><path d="m14 4-1 2"/></svg>
     <text x="50" y="44" class="tile-name">Bug</text>
   </g>
 
   <!-- ROW 3 (Icons 17 to 24) -->
   <!-- 17. Server -->
   <g transform="translate(24, 176)">
-    <rect width="100" height="56" rx="8" class="tile" />
+    <rect width="100" height="56" class="tile" />
     <svg x="41" y="10" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2"><rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
     <text x="50" y="44" class="tile-name">Server</text>
   </g>
 
   <!-- 18. Database -->
   <g transform="translate(134, 176)">
-    <rect width="100" height="56" rx="8" class="tile" />
+    <rect width="100" height="56" class="tile" />
     <svg x="41" y="10" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
     <text x="50" y="44" class="tile-name">Database</text>
   </g>
 
   <!-- 19. CPU -->
   <g transform="translate(244, 176)">
-    <rect width="100" height="56" rx="8" class="tile" />
+    <rect width="100" height="56" class="tile" />
     <svg x="41" y="10" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2"><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M9 1v3"/><path d="M15 1v3"/><path d="M9 20v3"/><path d="M15 20v3"/><path d="M20 9h3"/><path d="M20 15h3"/><path d="M1 9h3"/><path d="M1 15h3"/></svg>
     <text x="50" y="44" class="tile-name">CPU</text>
   </g>
 
   <!-- 20. Activity -->
   <g transform="translate(354, 176)">
-    <rect width="100" height="56" rx="8" class="tile" />
-    <svg x="41" y="10" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+    <rect width="100" height="56" class="tile" />
+    <svg x="41" y="10" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
     <text x="50" y="44" class="tile-name">Activity</text>
   </g>
 
   <!-- 21. Shield -->
   <g transform="translate(464, 176)">
-    <rect width="100" height="56" rx="8" class="tile" />
-    <svg x="41" y="10" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    <rect width="100" height="56" class="tile" />
+    <svg x="41" y="10" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
     <text x="50" y="44" class="tile-name">Shield</text>
   </g>
 
   <!-- 22. Lock -->
   <g transform="translate(574, 176)">
-    <rect width="100" height="56" rx="8" class="tile" />
-    <svg x="41" y="10" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    <rect width="100" height="56" class="tile" />
+    <svg x="41" y="10" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
     <text x="50" y="44" class="tile-name">Lock</text>
   </g>
 
   <!-- 23. Refresh -->
   <g transform="translate(684, 176)">
-    <rect width="100" height="56" rx="8" class="tile" />
+    <rect width="100" height="56" class="tile" />
     <svg x="41" y="10" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 21h5v-5"/></svg>
     <text x="50" y="44" class="tile-name">Refresh</text>
   </g>
 
   <!-- 24. Settings -->
   <g transform="translate(794, 176)">
-    <rect width="100" height="56" rx="8" class="tile" />
+    <rect width="100" height="56" class="tile" />
     <svg x="41" y="10" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
     <text x="50" y="44" class="tile-name">Settings</text>
   </g>
