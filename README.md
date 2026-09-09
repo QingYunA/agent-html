@@ -95,7 +95,7 @@ When asking LLMs (Claude Code, Pi, Codex, ChatGPT) to generate an HTML dashboard
 - **The CDN trap:** The model injects `<script src="https://cdn.tailwindcss.com"></script>` and external Google Fonts. It looks acceptable at first glance, but breaks completely in air-gapped corporate intranets, takes 2 seconds to parse, causes flash-of-unstyled-content (FOUC), and rots over time when CDN endpoints change.
 - **The visual slop trap:** If you forbid CDNs, the model hallucinates raw inline CSS with garish colors, harsh pure-black borders, random 30px paddings, broken alignment, and zero dark mode support.
 
-`agent-html` fixes this by packaging a tight ~75-line native CSS token sheet and 4 battle-tested layout archetypes. Double-click any generated file in Finder, and it renders instantly with enterprise-grade polish.
+`agent-html` fixes this by packaging a tight ~75-line native CSS token sheet and 6 battle-tested layout archetypes. Double-click any generated file in Finder, and it renders instantly with enterprise-grade polish.
 
 ---
 
