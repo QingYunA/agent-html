@@ -163,7 +163,7 @@ Beyond full-page archetypes, `agent-html` packages production-grade **atomic pri
 ### 1. Button System (Buttons Matrix)
 
 <p align="center">
-  <img src="assets/arsenal/buttons.svg" alt="agent-html button system & status badges" width="100%">
+  <img src="assets/arsenal/en/buttons.svg" alt="agent-html button system & status badges" width="100%">
 </p>
 
 Semantic variants aligned with shadcn/ui standards, complete with `:hover`, `:active`, and `:disabled` micro-interactions:
@@ -194,7 +194,7 @@ Semantic variants aligned with shadcn/ui standards, complete with `:hover`, `:ac
 ### 2. Zero-CDN Pure SVG Charts
 
 <p align="center">
-  <img src="assets/arsenal/charts.svg" alt="agent-html 6 zero-CDN pure SVG charts" width="100%">
+  <img src="assets/arsenal/en/charts.svg" alt="agent-html 6 zero-CDN pure SVG charts" width="100%">
 </p>
 
 Zero external JS chart libraries required. Uses standard inline SVG for crisp, Retina-sharp rendering that never breaks:
@@ -246,7 +246,7 @@ Zero external JS chart libraries required. Uses standard inline SVG for crisp, R
 ### 3. 24 Curated Engineering Vector Icons
 
 <p align="center">
-  <img src="assets/arsenal/icons.svg" alt="agent-html 24 curated vector icons" width="100%">
+  <img src="assets/arsenal/en/icons.svg" alt="agent-html 24 curated vector icons" width="100%">
 </p>
 
 Designed with `stroke="currentColor"` to automatically inherit font size and color in light and dark modes:
