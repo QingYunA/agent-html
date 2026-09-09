@@ -162,6 +162,10 @@ ln -sf ../../../.agents/skills/agent-html ~/.pi/agent/skills/agent-html
 
 ### 1. 按钮与操作体系 (Buttons Matrix)
 
+<p align="center">
+  <img src="assets/arsenal/buttons.svg" alt="agent-html 按钮体系与状态徽章" width="100%">
+</p>
+
 采用与 shadcn/ui 一致的语义变体与尺寸规范，内置 `:hover`、`:active`、`:disabled` 微动效：
 
 | 变体名称 | 核心类名 | 视觉语义 | 典型应用场景 |
@@ -188,6 +192,10 @@ ln -sf ../../../.agents/skills/agent-html ~/.pi/agent/skills/agent-html
 ---
 
 ### 2. 零 CDN 纯原生 SVG 图表库 (Zero-CDN Pure SVG Charts)
+
+<p align="center">
+  <img src="assets/arsenal/charts.svg" alt="agent-html 6 大原生 SVG 图表" width="100%">
+</p>
 
 无需引入 Chart.js / ECharts 等动辄数百 KB 的外部脚本，利用纯原生 HTML + SVG 即可绘制企业级工业质感图表，Retina 视网膜高清无损：
 
@@ -244,6 +252,10 @@ ln -sf ../../../.agents/skills/agent-html ~/.pi/agent/skills/agent-html
 ---
 
 ### 3. 精选 24 纯矢量 Lucide 风格图标 (Curated Vector Icons)
+
+<p align="center">
+  <img src="assets/arsenal/icons.svg" alt="agent-html 24 个研发运维纯矢量图标" width="100%">
+</p>
 
 采用 `stroke="currentColor"` 设计，自动继承宿主字号与文字颜色，杜绝 Web Font 图标断网白屏问题：
 
