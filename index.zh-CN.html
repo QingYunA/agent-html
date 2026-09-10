@@ -754,8 +754,8 @@
       </a>
 
       <nav class="nav-links">
-        <a href="#archetypes" class="nav-link">六大母版</a>
-        <a href="#components" class="nav-link">组件军火库</a>
+        <a href="#components" class="nav-link">组件库</a>
+        <a href="#archetypes" class="nav-link">常用模板</a>
         <a href="#cookbook" class="nav-link">Prompt 菜谱</a>
         <a href="index.html" class="nav-link" style="display: inline-flex; align-items: center; gap: 4px;" title="Switch to English">🌐 English</a>
         <a href="https://github.com/QingYunA/agent-html" target="_blank" rel="noopener" class="btn btn-outline btn-sm">
@@ -797,8 +797,8 @@
           </button>
         </div>
 
-        <a href="#archetypes" class="btn btn-primary btn-lg">浏览 6 套常用母版</a>
-        <a href="#components" class="btn btn-outline btn-lg">查看基础组件</a>
+        <a href="#components" class="btn btn-primary btn-lg">进入组件库</a>
+        <a href="#archetypes" class="btn btn-outline btn-lg">查看 6 大场景模板</a>
       </div>
     </section>
 
@@ -822,233 +822,12 @@
       </div>
     </section>
 
-    <!-- The 6 Structural Archetypes Interactive Showcase -->
-    <section id="archetypes">
-      <div class="section-header">
-        <div class="section-tag">常用布局模板</div>
-        <h2 class="section-title">6 套开箱即用的布局模板</h2>
-        <p class="section-desc">大模型自由发挥容易排版错乱。直接套用现成结构，清晰又省心。</p>
-      </div>
-
-      <div class="archetype-container">
-        <!-- Tab Bar -->
-        <div class="archetype-tabs" id="archetypeTabs">
-          <button class="archetype-tab-btn active" data-archetype="report">
-            <span class="tab-num">母版 01</span>
-            <span class="tab-name">长文档与审查报告</span>
-          </button>
-          <button class="archetype-tab-btn" data-archetype="dashboard">
-            <span class="tab-num">母版 02</span>
-            <span class="tab-name">监控大盘与数据表</span>
-          </button>
-          <button class="archetype-tab-btn" data-archetype="inspector">
-            <span class="tab-num">母版 03</span>
-            <span class="tab-name">双栏工作台审查器</span>
-          </button>
-          <button class="archetype-tab-btn" data-archetype="compare">
-            <span class="tab-num">母版 04</span>
-            <span class="tab-name">并排横向对比矩阵</span>
-          </button>
-          <button class="archetype-tab-btn" data-archetype="timeline">
-            <span class="tab-num">母版 05</span>
-            <span class="tab-name">事件时间轴编年史</span>
-          </button>
-          <button class="archetype-tab-btn" data-archetype="kanban">
-            <span class="tab-num">母版 06</span>
-            <span class="tab-name">敏捷分拣拖拽看板</span>
-          </button>
-        </div>
-
-        <!-- Archetype 1: Report -->
-        <div class="archetype-content active" id="pane-report">
-          <div class="archetype-info-row">
-            <div class="archetype-info-left">
-              <h3>单栏长文档与系统评估报告母版</h3>
-              <p>860px 居中标准阅读视口，针对技术评审、架构审查、面试评估与打印 PDF 深度优化。具备元数据标头、评分栏、结论 Callout、折叠手风琴与一键导出 Markdown。</p>
-            </div>
-            <div class="archetype-actions">
-              <a href="templates/zh/report.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
-                <span>在线预览全屏</span>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-              </a>
-              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('zh/report')">复制源码</button>
-            </div>
-          </div>
-          <div class="archetype-preview-frame">
-            <img src="assets/screenshots/zh/report.png" alt="中文报告母版预览">
-          </div>
-        </div>
-
-        <!-- Archetype 2: Dashboard -->
-        <div class="archetype-content" id="pane-dashboard">
-          <div class="archetype-info-row">
-            <div class="archetype-info-left">
-              <h3>业务指标监控与实时过滤数据大盘</h3>
-              <p>宽屏流式响应式网格布局。内置 4 列 KPI 统计卡片、纯原生响应式 SVG 走势图与柱状图、双重实时过滤工具条（搜索+状态下拉）、原生模态弹窗与一键复制表格 Markdown。</p>
-            </div>
-            <div class="archetype-actions">
-              <a href="templates/zh/dashboard.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
-                <span>在线预览全屏</span>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-              </a>
-              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('zh/dashboard')">复制源码</button>
-            </div>
-          </div>
-          <div class="archetype-preview-frame">
-            <img src="assets/screenshots/zh/dashboard.png" alt="中文大盘母版预览">
-          </div>
-        </div>
-
-        <!-- Archetype 3: Inspector -->
-        <div class="archetype-content" id="pane-inspector">
-          <div class="archetype-info-row">
-            <div class="archetype-info-left">
-              <h3>左右双栏工作台与数据审查器 (100vh)</h3>
-              <p>视口充满型工作台应用。左侧 320px 边栏支持快速检索过滤用例列表，右侧详情区动态响应渲染选中条目属性、人工审查裁决操作组（通过/修复/拒绝），以及一键将裁决结论复制发回终端 Agent。</p>
-            </div>
-            <div class="archetype-actions">
-              <a href="templates/zh/inspector.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
-                <span>在线预览全屏</span>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-              </a>
-              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('zh/inspector')">复制源码</button>
-            </div>
-          </div>
-          <div class="archetype-preview-frame">
-            <img src="assets/screenshots/zh/inspector.png" alt="中文工作台母版预览">
-          </div>
-        </div>
-
-        <!-- Archetype 4: Compare -->
-        <div class="archetype-content" id="pane-compare">
-          <div class="archetype-info-row">
-            <div class="archetype-info-left">
-              <h3>并排横向对比与 A/B 评测矩阵</h3>
-              <p>双栏左右并排对比布局（基准方案 vs 升级挑战方案）。内置核心胜出判定 Callout、参数规格对决、输出快照对比、量化 Delta 差异对照表以及一键复制对比 Markdown 摘要。</p>
-            </div>
-            <div class="archetype-actions">
-              <a href="templates/zh/compare.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
-                <span>在线预览全屏</span>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-              </a>
-              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('zh/compare')">复制源码</button>
-            </div>
-          </div>
-          <div class="archetype-preview-frame">
-            <img src="assets/screenshots/zh/compare.png" alt="中文对比矩阵母版预览">
-          </div>
-        </div>
-
-        <!-- Archetype 5: Timeline -->
-        <div class="archetype-content" id="pane-timeline">
-          <div class="archetype-info-row">
-            <div class="archetype-info-left">
-              <h3>事件垂直时间轴与突发故障编年史</h3>
-              <p>高信息密度单轨垂直时间线。具备语义化状态圆点（故障、警告、恢复、信息）、精确时间戳与操作人标签、可展开诊断日志，以及一键将时间线完整复制为 Markdown。</p>
-            </div>
-            <div class="archetype-actions">
-              <a href="templates/zh/timeline.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
-                <span>在线预览全屏</span>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-              </a>
-              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('zh/timeline')">复制源码</button>
-            </div>
-          </div>
-          <div class="archetype-preview-frame">
-            <img src="assets/screenshots/zh/timeline.png" alt="中文时间轴母版预览">
-          </div>
-        </div>
-
-        <!-- Archetype 6: Kanban -->
-        <div class="archetype-content" id="pane-kanban">
-          <div class="archetype-info-row">
-            <div class="archetype-info-left">
-              <h3>任务缺陷分拣与敏捷拖拽看板</h3>
-              <p>4 列分类流转看板（Backlog、进行中、阻塞阻断、已完成）。零外部库依赖，纯原生 HTML5 Drag & Drop（~35 行原生 JS 驱动），提供一键复制分拣结果回发 Agent 闭环。</p>
-            </div>
-            <div class="archetype-actions">
-              <a href="templates/zh/kanban.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
-                <span>在线预览全屏</span>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-              </a>
-              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('zh/kanban')">复制源码</button>
-            </div>
-          </div>
-          <div class="archetype-preview-frame">
-            <img src="assets/screenshots/zh/kanban.png" alt="中文看板母版预览">
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Why Not Tailwind CDN vs Why Not Ad-hoc CSS -->
-    <section>
-      <div class="section-header">
-        <div class="section-tag">工程设计哲学</div>
-        <h2 class="section-title">为什么坚决追求零 CDN 自包含？</h2>
-        <p class="section-desc">对比 AI Agent 生成前端页面的三种典型实现路径。</p>
-      </div>
-
-      <div class="contrast-grid">
-        <div class="contrast-card">
-          <div>
-            <div class="contrast-badge" style="color: var(--err);">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-              <span>CDN 依赖陷阱</span>
-            </div>
-            <div class="contrast-title">Tailwind CDN 运行时</div>
-            <div class="contrast-desc">模型习惯注入 <code>&lt;script src="cdn.tailwindcss.com"&gt;</code> 与远程字体。</div>
-          </div>
-          <ul class="contrast-list">
-            <li class="bad">✕ 企业离线环境 / 隔离机房彻底白屏失效</li>
-            <li class="bad">✕ 2 秒 JS 运行时解析开销，伴随严重排版闪烁 (FOUC)</li>
-            <li class="bad">✕ 触发严格企业内网的内容安全策略 (CSP) 拦截</li>
-            <li class="bad">✕ 外部 CDN 节点漂移失效导致长期归档文件损坏</li>
-          </ul>
-        </div>
-
-        <div class="contrast-card">
-          <div>
-            <div class="contrast-badge" style="color: var(--warn);">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-              <span>AI 视觉塑料陷阱</span>
-            </div>
-            <div class="contrast-title">随意手写内联 CSS</div>
-            <div class="contrast-desc">禁用 CDN 后，大模型容易自由发挥产生不可控的视觉漂移。</div>
-          </div>
-          <ul class="contrast-list">
-            <li class="bad">✕ 产生不协调的纯黑 1px 粗暴边框与失衡留白</li>
-            <li class="bad">✕ 表格列宽失衡，缺少移动端自适应</li>
-            <li class="bad">✕ 零暗黑模式支持，夜晚查看极其刺眼</li>
-            <li class="bad">✕ 每次会话自由命名 CSS 类，完全无法复用</li>
-          </ul>
-        </div>
-
-        <div class="contrast-card featured">
-          <div>
-            <div class="contrast-badge" style="color: var(--ok);">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>agent-html 标准规范</span>
-            </div>
-            <div class="contrast-title">原生微 CSS 变量底座</div>
-            <div class="contrast-desc">~75 行纯原生 CSS 变量体系与经过实战检验的标准语义类。</div>
-          </div>
-          <ul class="contrast-list">
-            <li class="good">✓ 100% 离线自包含，双击访达 0ms 瞬间秒开</li>
-            <li class="good">✓ 零依赖、零 npm 构建链，永久可用</li>
-            <li class="good">✓ 精准复刻 shadcn Zinc 冷灰高级中性美学</li>
-            <li class="good">✓ 5 行原生脚本驱动平滑深浅模式双切换</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
     <!-- Component Arsenal (Interactive Playground) -->
     <section id="components">
       <div class="section-header">
-        <div class="section-tag">基础组件</div>
-        <h2 class="section-title">基础原子组件与矢量图表</h2>
-        <p class="section-desc">开箱即用的 HTML 片段：按钮体系、胶囊徽章、原生微交互、6 大纯原生 SVG 图表与 24 个矢量图标。</p>
+        <div class="section-tag">开箱即用</div>
+        <h2 class="section-title">原子按钮与组件库</h2>
+        <p class="section-desc">无需 AI 盲猜类名与样式。所有原子按钮、徽章、指标卡、图表与原生交互组件零依赖、纯原生、即抄即跑。</p>
       </div>
 
       <div class="arsenal-grid">
@@ -1445,6 +1224,227 @@
     </section>
 
 
+    <!-- The 6 Structural Archetypes Interactive Showcase -->
+    <section id="archetypes">
+      <div class="section-header">
+        <div class="section-tag">常用布局模板</div>
+        <h2 class="section-title">6 套开箱即用的布局模板</h2>
+        <p class="section-desc">大模型自由发挥容易排版错乱。直接套用现成结构，清晰又省心。</p>
+      </div>
+
+      <div class="archetype-container">
+        <!-- Tab Bar -->
+        <div class="archetype-tabs" id="archetypeTabs">
+          <button class="archetype-tab-btn active" data-archetype="report">
+            <span class="tab-num">母版 01</span>
+            <span class="tab-name">线上事故复盘报告</span>
+          </button>
+          <button class="archetype-tab-btn" data-archetype="dashboard">
+            <span class="tab-num">母版 02</span>
+            <span class="tab-name">API 消耗与成本看板</span>
+          </button>
+          <button class="archetype-tab-btn" data-archetype="inspector">
+            <span class="tab-num">母版 03</span>
+            <span class="tab-name">Agent 运行日志审查</span>
+          </button>
+          <button class="archetype-tab-btn" data-archetype="compare">
+            <span class="tab-num">母版 04</span>
+            <span class="tab-name">DeepSeek vs GPT-4o 选型对比</span>
+          </button>
+          <button class="archetype-tab-btn" data-archetype="timeline">
+            <span class="tab-num">母版 05</span>
+            <span class="tab-name">服务恢复时间线</span>
+          </button>
+          <button class="archetype-tab-btn" data-archetype="kanban">
+            <span class="tab-num">母版 06</span>
+            <span class="tab-name">Bug 分拣与需求看板</span>
+          </button>
+        </div>
+
+        <!-- Archetype 1: Report -->
+        <div class="archetype-content active" id="pane-report">
+          <div class="archetype-info-row">
+            <div class="archetype-info-left">
+              <h3>线上事故复盘报告 (Production Postmortem & RFC)</h3>
+              <p>860px 居中标准阅读视口，针对技术评审、架构审查、面试评估与打印 PDF 深度优化。具备元数据标头、评分栏、结论 Callout、折叠手风琴与一键导出 Markdown。</p>
+            </div>
+            <div class="archetype-actions">
+              <a href="templates/zh/report.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+                <span>在线预览全屏</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('zh/report')">复制源码</button>
+            </div>
+          </div>
+          <div class="archetype-preview-frame">
+            <img src="assets/screenshots/zh/report.png" alt="中文报告母版预览">
+          </div>
+        </div>
+
+        <!-- Archetype 2: Dashboard -->
+        <div class="archetype-content" id="pane-dashboard">
+          <div class="archetype-info-row">
+            <div class="archetype-info-left">
+              <h3>API 消耗与成本看板 (API Billing & Latency Analytics)</h3>
+              <p>宽屏流式响应式网格布局。内置 4 列 KPI 统计卡片、纯原生响应式 SVG 走势图与柱状图、双重实时过滤工具条（搜索+状态下拉）、原生模态弹窗与一键复制表格 Markdown。</p>
+            </div>
+            <div class="archetype-actions">
+              <a href="templates/zh/dashboard.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+                <span>在线预览全屏</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('zh/dashboard')">复制源码</button>
+            </div>
+          </div>
+          <div class="archetype-preview-frame">
+            <img src="assets/screenshots/zh/dashboard.png" alt="中文大盘母版预览">
+          </div>
+        </div>
+
+        <!-- Archetype 3: Inspector -->
+        <div class="archetype-content" id="pane-inspector">
+          <div class="archetype-info-row">
+            <div class="archetype-info-left">
+              <h3>Agent 运行日志审查 (Agent Trace & Tool Call Inspector)</h3>
+              <p>视口充满型工作台应用。左侧 320px 边栏支持快速检索过滤用例列表，右侧详情区动态响应渲染选中条目属性、人工审查裁决操作组（通过/修复/拒绝），以及一键将裁决结论复制发回终端 Agent。</p>
+            </div>
+            <div class="archetype-actions">
+              <a href="templates/zh/inspector.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+                <span>在线预览全屏</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('zh/inspector')">复制源码</button>
+            </div>
+          </div>
+          <div class="archetype-preview-frame">
+            <img src="assets/screenshots/zh/inspector.png" alt="中文工作台母版预览">
+          </div>
+        </div>
+
+        <!-- Archetype 4: Compare -->
+        <div class="archetype-content" id="pane-compare">
+          <div class="archetype-info-row">
+            <div class="archetype-info-left">
+              <h3>DeepSeek vs GPT-4o 选型对比 (Model Benchmark & Cost Comparison)</h3>
+              <p>双栏左右并排对比布局（基准方案 vs 升级挑战方案）。内置核心胜出判定 Callout、参数规格对决、输出快照对比、量化 Delta 差异对照表以及一键复制对比 Markdown 摘要。</p>
+            </div>
+            <div class="archetype-actions">
+              <a href="templates/zh/compare.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+                <span>在线预览全屏</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('zh/compare')">复制源码</button>
+            </div>
+          </div>
+          <div class="archetype-preview-frame">
+            <img src="assets/screenshots/zh/compare.png" alt="中文对比矩阵母版预览">
+          </div>
+        </div>
+
+        <!-- Archetype 5: Timeline -->
+        <div class="archetype-content" id="pane-timeline">
+          <div class="archetype-info-row">
+            <div class="archetype-info-left">
+              <h3>服务恢复时间线 (Incident Response & Recovery Timeline)</h3>
+              <p>高信息密度单轨垂直时间线。具备语义化状态圆点（故障、警告、恢复、信息）、精确时间戳与操作人标签、可展开诊断日志，以及一键将时间线完整复制为 Markdown。</p>
+            </div>
+            <div class="archetype-actions">
+              <a href="templates/zh/timeline.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+                <span>在线预览全屏</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('zh/timeline')">复制源码</button>
+            </div>
+          </div>
+          <div class="archetype-preview-frame">
+            <img src="assets/screenshots/zh/timeline.png" alt="中文时间轴母版预览">
+          </div>
+        </div>
+
+        <!-- Archetype 6: Kanban -->
+        <div class="archetype-content" id="pane-kanban">
+          <div class="archetype-info-row">
+            <div class="archetype-info-left">
+              <h3>Bug 分拣与需求看板 (Bug Triage & Agile Kanban)</h3>
+              <p>4 列分类流转看板（Backlog、进行中、阻塞阻断、已完成）。零外部库依赖，纯原生 HTML5 Drag & Drop（~35 行原生 JS 驱动），提供一键复制分拣结果回发 Agent 闭环。</p>
+            </div>
+            <div class="archetype-actions">
+              <a href="templates/zh/kanban.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+                <span>在线预览全屏</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('zh/kanban')">复制源码</button>
+            </div>
+          </div>
+          <div class="archetype-preview-frame">
+            <img src="assets/screenshots/zh/kanban.png" alt="中文看板母版预览">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why Not Tailwind CDN vs Why Not Ad-hoc CSS -->
+    <section>
+      <div class="section-header">
+        <div class="section-tag">工程设计哲学</div>
+        <h2 class="section-title">为什么坚决追求零 CDN 自包含？</h2>
+        <p class="section-desc">对比 AI Agent 生成前端页面的三种典型实现路径。</p>
+      </div>
+
+      <div class="contrast-grid">
+        <div class="contrast-card">
+          <div>
+            <div class="contrast-badge" style="color: var(--err);">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+              <span>CDN 依赖陷阱</span>
+            </div>
+            <div class="contrast-title">Tailwind CDN 运行时</div>
+            <div class="contrast-desc">模型习惯注入 <code>&lt;script src="cdn.tailwindcss.com"&gt;</code> 与远程字体。</div>
+          </div>
+          <ul class="contrast-list">
+            <li class="bad">✕ 企业离线环境 / 隔离机房彻底白屏失效</li>
+            <li class="bad">✕ 2 秒 JS 运行时解析开销，伴随严重排版闪烁 (FOUC)</li>
+            <li class="bad">✕ 触发严格企业内网的内容安全策略 (CSP) 拦截</li>
+            <li class="bad">✕ 外部 CDN 节点漂移失效导致长期归档文件损坏</li>
+          </ul>
+        </div>
+
+        <div class="contrast-card">
+          <div>
+            <div class="contrast-badge" style="color: var(--warn);">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <span>AI 视觉塑料陷阱</span>
+            </div>
+            <div class="contrast-title">随意手写内联 CSS</div>
+            <div class="contrast-desc">禁用 CDN 后，大模型容易自由发挥产生不可控的视觉漂移。</div>
+          </div>
+          <ul class="contrast-list">
+            <li class="bad">✕ 产生不协调的纯黑 1px 粗暴边框与失衡留白</li>
+            <li class="bad">✕ 表格列宽失衡，缺少移动端自适应</li>
+            <li class="bad">✕ 零暗黑模式支持，夜晚查看极其刺眼</li>
+            <li class="bad">✕ 每次会话自由命名 CSS 类，完全无法复用</li>
+          </ul>
+        </div>
+
+        <div class="contrast-card featured">
+          <div>
+            <div class="contrast-badge" style="color: var(--ok);">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>agent-html 标准规范</span>
+            </div>
+            <div class="contrast-title">原生微 CSS 变量底座</div>
+            <div class="contrast-desc">~75 行纯原生 CSS 变量体系与经过实战检验的标准语义类。</div>
+          </div>
+          <ul class="contrast-list">
+            <li class="good">✓ 100% 离线自包含，双击访达 0ms 瞬间秒开</li>
+            <li class="good">✓ 零依赖、零 npm 构建链，永久可用</li>
+            <li class="good">✓ 精准复刻 shadcn Zinc 冷灰高级中性美学</li>
+            <li class="good">✓ 5 行原生脚本驱动平滑深浅模式双切换</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
     <!-- Prompt Cookbook Section -->
     <section id="cookbook">
       <div class="section-header">
@@ -1481,7 +1481,7 @@
         <div class="prompt-card">
           <div class="prompt-text">“制作一个 4 列敏捷任务分拣拖拽看板，对这 20 个 Bug 工单按优先级进行分拣流转。支持纯原生 HTML5 跨列拖拽，并提供一键复制分拣决策回终端机制。”</div>
           <div class="prompt-footer">
-            <span>触发母版：母版 06 (敏捷分拣拖拽看板)</span>
+            <span>触发母版：母版 06 (Bug 分拣与需求看板)</span>
             <button class="btn btn-outline btn-sm" onclick="copyText(this, '制作一个 4 列敏捷任务分拣拖拽看板，对这 20 个 Bug 工单按优先级进行分拣流转。支持纯原生 HTML5 跨列拖拽，并提供一键复制分拣决策回终端机制。')">复制指令</button>
           </div>
         </div>
@@ -1619,7 +1619,7 @@ npx agent-html check dashboard.html</code></pre>
     // Copy Raw Template HTML
     async function copyTemplateSource(name) {
       try {
-        const res = await fetch(`templates/${name}.html`);
+        const res = await fetch(`templates/zh/${name}.html`);
         if (!res.ok) throw new Error('Failed to fetch');
         const text = await res.text();
         await navigator.clipboard.writeText(text);

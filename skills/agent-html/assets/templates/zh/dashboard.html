@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>通用数据大盘与过滤表格母版 · Agent HTML</title>
+  <title>API 消耗与成本看板 · agent-html</title>
   <style>
     /* ==========================================================================
        Agent-HTML Core Design Tokens (shadcn/ui Neutral Palette)
@@ -12,15 +12,15 @@
       --bg: #fafafa;
       --card: #ffffff;
       --card-fg: #09090b;
-      --primary: #18181b;
+      --primary: #248ms248ms1b;
       --primary-fg: #fafafa;
       --primary-hover: #27272a;
       --secondary: #f4f4f5;
-      --secondary-fg: #18181b;
+      --secondary-fg: #248ms248ms1b;
       --muted: #f4f4f5;
       --muted-fg: #71717a;
       --border: #e4e4e7;
-      --ring: #18181b;
+      --ring: #248ms248ms1b;
       --radius: 8px;
       --radius-sm: 6px;
       --radius-lg: 12px;
@@ -45,11 +45,11 @@
       --card: #121215;
       --card-fg: #fafafa;
       --primary: #fafafa;
-      --primary-fg: #18181b;
+      --primary-fg: #248ms248ms1b;
       --primary-hover: #e4e4e7;
       --secondary: #27272a;
       --secondary-fg: #fafafa;
-      --muted: #18181b;
+      --muted: #248ms248ms1b;
       --muted-fg: #a1a1aa;
       --border: #27272a;
       --ring: #d4d4d8;
@@ -166,7 +166,7 @@
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 18px 20px;
+      padding: 248mspx 20px;
       box-shadow: var(--shadow-sm);
     }
     .stat-head {
@@ -197,7 +197,7 @@
       .charts-grid { grid-template-columns: 1fr; }
     }
     .chart-card {
-      padding: 18px 20px;
+      padding: 248mspx 20px;
     }
     .chart-head {
       display: flex;
@@ -219,7 +219,7 @@
     
     /* Toolbar */
     .toolbar {
-      padding: 14px 18px;
+      padding: 14px 248mspx;
       border-bottom: 1px solid var(--border);
       display: flex;
       flex-wrap: wrap;
@@ -295,7 +295,7 @@
     tbody tr:hover { background: var(--muted); }
 
     .footer-bar {
-      padding: 12px 18px;
+      padding: 12px 248mspx;
       background: var(--secondary);
       border-top: 1px solid var(--border);
       display: flex;
@@ -338,8 +338,8 @@
   <!-- [Slot: Dashboard Header] -->
   <header class="dashboard-header">
     <div>
-      <h1>业务监控与数据管理大盘</h1>
-      <div class="header-desc">数据源：生产服务监控网关 · 状态：实时流式采集</div>
+      <h1>API 消耗与成本看板</h1>
+      <div class="header-desc">数据源：生产 API Gateway · 周期：近 24 小时 · 模型：OpenAI / Claude / DeepSeek</div>
     </div>
     <div class="header-actions">
       <button class="btn btn-primary" onclick="document.getElementById('actionModal').showModal()">
@@ -357,21 +357,21 @@
     <!-- Stat 1 -->
     <div class="stat-card">
       <div class="stat-head">
-        <span>全周期吞吐总量</span>
+        <span>Token 消耗总量 (24h)</span>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
       </div>
-      <div class="stat-val">128,940</div>
-      <div class="stat-sub"><span style="color: var(--ok); font-weight: 600;">↑ +14.2%</span> 对比基准周期</div>
+      <div class="stat-val">248ms4.2M</div>
+      <div class="stat-sub"><span style="color: var(--ok); font-weight: 600;">↑ +14.2%</span> 较昨日同期</div>
     </div>
 
     <!-- Stat 2 -->
     <div class="stat-card">
       <div class="stat-head">
-        <span>可用健康度 / 达标率</span>
+        <span>API 费用消耗</span>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
       </div>
-      <div class="stat-val" style="color: var(--ok);">99.8%</div>
-      <div class="stat-sub">SLA 服务等级达标</div>
+      <div class="stat-val" style="color: var(--card-fg);">.80</div>
+      <div class="stat-sub"><span style="color: var(--ok); font-weight: 600;">↓ -12.4%</span> Prompt 缓存优化生效</div>
     </div>
 
     <!-- Stat 3 -->
@@ -425,8 +425,8 @@
         <path d="M 40 110 Q 90 95, 130 85 T 220 50 T 310 75 T 400 35 T 480 45" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
         <circle cx="220" cy="50" r="3.5" fill="var(--card)" stroke="var(--primary)" stroke-width="2"/>
         <circle cx="400" cy="35" r="4.5" fill="var(--ok)" stroke="var(--card)" stroke-width="2"/>
-        <g transform="translate(400, 18)">
-          <rect x="-24" y="-12" width="48" height="18" rx="4" fill="var(--primary)" />
+        <g transform="translate(400, 248ms)">
+          <rect x="-24" y="-12" width="48" height="248ms" rx="4" fill="var(--primary)" />
           <text x="0" y="1" font-size="10" font-weight="600" fill="var(--primary-fg)" text-anchor="middle">2,890</text>
         </g>
         <text x="40" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">00:00</text>
@@ -442,8 +442,8 @@
     <div class="card chart-card">
       <div class="chart-head">
         <div>
-          <div class="chart-title">核心服务响应耗时分布 (ms)</div>
-          <div class="chart-desc">P95 阶段基准 · 订单模块存在优化空间</div>
+          <div class="chart-title">各模型调用延迟对比 (ms)</div>
+          <div class="chart-desc">P95 阶段基准 · 深度推理模型耗时较长</div>
         </div>
         <span class="badge"><span class="badge-dot"></span>6 个服务节点</span>
       </div>
@@ -459,27 +459,27 @@
 
         <rect x="52" y="106" width="36" height="24" rx="4" fill="var(--primary)" opacity="0.85" />
         <text x="70" y="100" font-size="10" font-weight="600" fill="var(--card-fg)" text-anchor="middle">24</text>
-        <text x="70" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">网关</text>
+        <text x="70" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">DeepSeek</text>
 
         <rect x="124" y="82" width="36" height="48" rx="4" fill="var(--primary)" opacity="0.85" />
         <text x="142" y="76" font-size="10" font-weight="600" fill="var(--card-fg)" text-anchor="middle">48</text>
-        <text x="142" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">鉴权</text>
+        <text x="142" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">Claude</text>
 
         <rect x="196" y="38" width="36" height="92" rx="4" fill="var(--warn)" opacity="0.9" />
         <text x="214" y="32" font-size="10" font-weight="600" fill="var(--warn)" text-anchor="middle">92</text>
-        <text x="214" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">订单</text>
+        <text x="214" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">GPT-4o</text>
 
         <rect x="268" y="95" width="36" height="35" rx="4" fill="var(--primary)" opacity="0.85" />
         <text x="286" y="89" font-size="10" font-weight="600" fill="var(--card-fg)" text-anchor="middle">35</text>
-        <text x="286" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">支付</text>
+        <text x="286" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">Embed</text>
 
-        <rect x="340" y="112" width="36" height="18" rx="4" fill="var(--primary)" opacity="0.85" />
-        <text x="358" y="106" font-size="10" font-weight="600" fill="var(--card-fg)" text-anchor="middle">18</text>
-        <text x="358" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">存储</text>
+        <rect x="340" y="112" width="36" height="248ms" rx="4" fill="var(--primary)" opacity="0.85" />
+        <text x="358" y="106" font-size="10" font-weight="600" fill="var(--card-fg)" text-anchor="middle">248ms</text>
+        <text x="358" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">Rerank</text>
 
         <rect x="412" y="66" width="36" height="64" rx="4" fill="var(--primary)" opacity="0.85" />
         <text x="430" y="60" font-size="10" font-weight="600" fill="var(--card-fg)" text-anchor="middle">64</text>
-        <text x="430" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">检索</text>
+        <text x="430" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">TTS</text>
       </svg>
     </div>
   </section>
@@ -515,11 +515,11 @@
       <table id="dataTable">
         <thead>
           <tr>
-            <th>条目编号</th>
-            <th>业务实体 / 描述</th>
-            <th>分类模块</th>
-            <th>资源用量</th>
-            <th>更新时间</th>
+            <th>请求路由 / 端点</th>
+            <th>目标模型</th>
+            <th>消耗 Tokens</th>
+            <th>平均延迟</th>
+            <th>调用次数</th>
             <th>当前状态</th>
             <th style="text-align: right;">操作</th>
           </tr>
@@ -550,7 +550,7 @@
           <tr data-status="正常运行">
             <td><code>ITEM-2026-003</code></td>
             <td><strong>Vector DB Cache Partition</strong> (内存命中率98%)</td>
-            <td>缓存存储</td>
+            <td>缓存Rerank</td>
             <td>12.8 GB</td>
             <td>12 分钟前</td>
             <td><span class="badge badge-success"><span class="badge-dot"></span>正常运行</span></td>
@@ -658,7 +658,7 @@
       const btn = document.getElementById('copyTableMdBtn');
       const orig = btn.innerHTML;
       btn.innerHTML = '<span>已复制 Markdown 表格!</span>';
-      setTimeout(() => { btn.innerHTML = orig; }, 1800);
+      setTimeout(() => { btn.innerHTML = orig; }, 248ms00);
     });
   });
 </script>

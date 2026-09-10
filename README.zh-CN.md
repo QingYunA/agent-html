@@ -76,7 +76,8 @@ npx skills add QingYunA/agent-html -g
 npx agent-html open
 
 # 快速导出指定通用母版代码到本地文件
-npx agent-html template dashboard > my-dashboard.html
+npx agent-html snippet button
+npx agent-html template dashboard > api-dashboard.html
 npx agent-html template kanban > my-kanban.html
 ```
 
@@ -131,12 +132,12 @@ ln -sf ../../../.agents/skills/agent-html ~/.pi/agent/skills/agent-html
 
 | 布局母版 | 模板文件路径 | 核心适用场景 | 关键原生特性 |
 | :--- | :--- | :--- | :--- |
-| **01. 长文档审查报告** | [`templates/zh/report.html`](templates/zh/report.html) | 技术评审、面试评估、RFC 说明书 | 悬浮目录（TOC ScrollSpy）、达标评分卡、可折叠手风琴、打印优化 |
-| **02. 监控大盘数据表** | [`templates/zh/dashboard.html`](templates/zh/dashboard.html) | 资源监控、Token 用量、工单大盘 | 4 列 KPI 卡、纯原生 SVG 趋势图/柱状图、实时搜索双重过滤表 |
-| **03. 双栏工作台审查器** | [`templates/zh/inspector.html`](templates/zh/inspector.html) | Trace 回溯、JSONL 查看、调试器 | 100vh 满屏、左侧实时检索、右侧动态联动、人工裁决按钮组 |
-| **04. 并排横向对比矩阵** | [`templates/zh/compare.html`](templates/zh/compare.html) | 模型 A/B 测、Prompt 改版 diff | 左右双方案并排比对、胜出裁决 Callout、量化 Delta 差异表 |
-| **05. 时间轴与故障编年史** | [`templates/zh/timeline.html`](templates/zh/timeline.html) | 突发事故复盘、版本发布路线图 | 单轨垂直时间线、语义状态圆点、诊断日志展开、一键复制 MD |
-| **06. 敏捷分拣拖拽看板** | [`templates/zh/kanban.html`](templates/zh/kanban.html) | 需求优先级、Bug 分拣流转 | 纯原生 HTML5 Drag & Drop 跨列拖拽、一键复制看板决策回 Agent |
+| **01. 线上事故复盘报告** | [`templates/zh/report.html`](templates/zh/report.html) | 技术评审、面试评估、RFC 说明书 | 悬浮目录（TOC ScrollSpy）、达标评分卡、可折叠手风琴、打印优化 |
+| **02. API 消耗与成本看板** | [`templates/zh/dashboard.html`](templates/zh/dashboard.html) | 资源监控、Token 用量、工单大盘 | 4 列 KPI 卡、纯原生 SVG 趋势图/柱状图、实时搜索双重过滤表 |
+| **03. Agent 运行日志审查** | [`templates/zh/inspector.html`](templates/zh/inspector.html) | Trace 回溯、JSONL 查看、调试器 | 100vh 满屏、左侧实时检索、右侧动态联动、人工裁决按钮组 |
+| **04. DeepSeek vs GPT-4o 选型对比** | [`templates/zh/compare.html`](templates/zh/compare.html) | 模型 A/B 测、Prompt 改版 diff | 左右双方案并排比对、胜出裁决 Callout、量化 Delta 差异表 |
+| **05. 服务恢复时间线** | [`templates/zh/timeline.html`](templates/zh/timeline.html) | 突发事故复盘、版本发布路线图 | 单轨垂直时间线、语义状态圆点、诊断日志展开、一键复制 MD |
+| **06. Bug 分拣与需求看板** | [`templates/zh/kanban.html`](templates/zh/kanban.html) | 需求优先级、Bug 分拣流转 | 纯原生 HTML5 Drag & Drop 跨列拖拽、一键复制看板决策回 Agent |
 
 <details>
 <summary><strong>📸 点击展开查看全部 6 大母版高清大图</strong></summary>
@@ -164,7 +165,7 @@ ln -sf ../../../.agents/skills/agent-html ~/.pi/agent/skills/agent-html
 
 ---
 
-## 原生原子能力矩阵 (Atomic Capabilities & Component Arsenal)
+## 原生原子组件库 (Atomic Component Library)
 
 除了宏观整页级母版，`agent-html` 将常用界面元素提炼为即拷即用的**基础原子组件**与**零 CDN 纯原生矢量图表**。100% 离线自包含、零外部依赖、自动适配深浅双主题：
 

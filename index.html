@@ -515,7 +515,7 @@
     .contrast-list li.bad { color: var(--err); }
     .contrast-list li.good { color: var(--ok); font-weight: 500; }
 
-    /* Interactive Component Arsenal (Playground) */
+    /* Interactive Component Library (Playground) */
     .arsenal-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -822,193 +822,10 @@
       </div>
     </section>
 
-    <!-- The 6 Structural Archetypes Interactive Showcase -->
-    <section id="archetypes">
-      <div class="section-header">
-        <div class="section-tag">Layout Templates</div>
-        <h2 class="section-title">6 Common Layout Templates</h2>
-        <p class="section-desc">Pick a layout that fits your output instead of letting models invent messy ad-hoc structures.</p>
-      </div>
-
-      <div class="archetype-container">
-        <!-- Tab Bar -->
-        <div class="archetype-tabs" id="archetypeTabs">
-          <button class="archetype-tab-btn active" data-archetype="report">
-            <span class="tab-num">Archetype 01</span>
-            <span class="tab-name">Document & Report</span>
-          </button>
-          <button class="archetype-tab-btn" data-archetype="dashboard">
-            <span class="tab-num">Archetype 02</span>
-            <span class="tab-name">Analytics Dashboard</span>
-          </button>
-          <button class="archetype-tab-btn" data-archetype="inspector">
-            <span class="tab-num">Archetype 03</span>
-            <span class="tab-name">Master-Detail Workbench</span>
-          </button>
-          <button class="archetype-tab-btn" data-archetype="compare">
-            <span class="tab-num">Archetype 04</span>
-            <span class="tab-name">Side-by-Side Comparison</span>
-          </button>
-          <button class="archetype-tab-btn" data-archetype="timeline">
-            <span class="tab-num">Archetype 05</span>
-            <span class="tab-name">Event Timeline</span>
-          </button>
-          <button class="archetype-tab-btn" data-archetype="kanban">
-            <span class="tab-num">Archetype 06</span>
-            <span class="tab-name">Triage Kanban</span>
-          </button>
-        </div>
-
-        <!-- Archetype 1: Report -->
-        <div class="archetype-content active" id="pane-report">
-          <div class="archetype-info-row">
-            <div class="archetype-info-left">
-              <h3>Single-Column Document & Executive Report</h3>
-              <p>Centered 860px reading container optimized for executive reviews, audit memos, architecture RFCs, and print-to-PDF workflows. Features metadata headers, score cards, callouts, and native details accordions.</p>
-            </div>
-            <div class="archetype-actions">
-              <a href="templates/en/report.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
-                <span>Open Live Demo</span>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-              </a>
-              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('en/report')">Copy HTML</button>
-            </div>
-          </div>
-          <div class="archetype-preview-frame">
-            <img src="assets/screenshots/en/report.png" alt="Report Archetype Preview">
-          </div>
-        </div>
-
-        <!-- Archetype 2: Dashboard -->
-        <div class="archetype-content" id="pane-dashboard">
-          <div class="archetype-info-row">
-            <div class="archetype-info-left">
-              <h3>Analytics Dashboard & Real-Time Data Grid</h3>
-              <p>Wide-screen fluid layout with a 4-column KPI stat grid, pure-SVG area and bar charts, dual-filter toolbar (search + status dropdown), and a native modal dialog for create/edit operations.</p>
-            </div>
-            <div class="archetype-actions">
-              <a href="templates/en/dashboard.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
-                <span>Open Live Demo</span>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-              </a>
-              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('en/dashboard')">Copy HTML</button>
-            </div>
-          </div>
-          <div class="archetype-preview-frame">
-            <img src="assets/screenshots/en/dashboard.png" alt="Dashboard Archetype Preview">
-          </div>
-        </div>
-
-        <!-- Archetype 3: Inspector -->
-        <div class="archetype-content" id="pane-inspector">
-          <div class="archetype-info-row">
-            <div class="archetype-info-left">
-              <h3>Master-Detail Split Workbench (100vh)</h3>
-              <p>App-like layout occupying full viewport height without page scroll. Left sidebar filters items, right detail pane updates dynamically with 3-column property grids, verdict actions, and syntax-styled code blocks.</p>
-            </div>
-            <div class="archetype-actions">
-              <a href="templates/en/inspector.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
-                <span>Open Live Demo</span>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-              </a>
-              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('en/inspector')">Copy HTML</button>
-            </div>
-          </div>
-          <div class="archetype-preview-frame">
-            <img src="assets/screenshots/en/inspector.png" alt="Inspector Archetype Preview">
-          </div>
-        </div>
-
-        <!-- Archetype 4: Compare -->
-        <div class="archetype-content" id="pane-compare">
-          <div class="archetype-info-row">
-            <div class="archetype-info-left">
-              <h3>Side-by-Side Comparison & A/B Eval Matrix</h3>
-              <p>Two-column split view (Baseline vs. Challenger) with verdict callout, parameter specs, sample payload outputs, and a quantitative delta matrix table. Perfect for model evals and prompt revisions.</p>
-            </div>
-            <div class="archetype-actions">
-              <a href="templates/en/compare.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
-                <span>Open Live Demo</span>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-              </a>
-              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('en/compare')">Copy HTML</button>
-            </div>
-          </div>
-          <div class="archetype-preview-frame">
-            <img src="assets/screenshots/en/compare.png" alt="Compare Archetype Preview">
-          </div>
-        </div>
-
-        <!-- Archetype 5: Timeline -->
-        <div class="archetype-content" id="pane-timeline">
-          <div class="archetype-info-row">
-            <div class="archetype-info-left">
-              <h3>Vertical Event Timeline & Incident Postmortem</h3>
-              <p>High-density single-track vertical timeline with semantic status nodes (Error, Warning, Success, Info), exact timestamps, operator tags, expandable diagnosis logs, and one-click "Copy as Markdown" export.</p>
-            </div>
-            <div class="archetype-actions">
-              <a href="templates/en/timeline.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
-                <span>Open Live Demo</span>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-              </a>
-              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('en/timeline')">Copy HTML</button>
-            </div>
-          </div>
-          <div class="archetype-preview-frame">
-            <img src="assets/screenshots/en/timeline.png" alt="Timeline Archetype Preview">
-          </div>
-        </div>
-
-        <!-- Archetype 6: Kanban -->
-        <div class="archetype-content" id="pane-kanban">
-          <div class="archetype-info-row">
-            <div class="archetype-info-left">
-              <h3>Triage & Agile Kanban Board (Native Drag & Drop)</h3>
-              <p>4-column task categorization board (Backlog, Progress, Blocked, Done). Zero external dependencies, pure HTML5 drag-and-drop. Features a "Copy Triage Decisions to Agent" button to close the interactive human-in-the-loop workflow.</p>
-            </div>
-            <div class="archetype-actions">
-              <a href="templates/en/kanban.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
-                <span>Open Live Demo</span>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-              </a>
-              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('en/kanban')">Copy HTML</button>
-            </div>
-          </div>
-          <div class="archetype-preview-frame">
-            <img src="assets/screenshots/en/kanban.png" alt="Kanban Archetype Preview">
-          </div>
-        </div>
-              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('kanban')">Copy HTML</button>
-            </div>
-          </div>
-          <div class="archetype-preview-frame" style="padding: 20px; background: var(--bg);">
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
-              <div style="background: var(--card); border: 1px solid var(--border); padding: 10px; border-radius: 6px;">
-                <div style="font-size: 12px; font-weight: 600; margin-bottom: 6px;">Backlog (2)</div>
-                <div style="padding: 6px 8px; background: var(--secondary); border: 1px solid var(--border); border-radius: 4px; font-size: 11px;">TASK-401: V1 deprecation</div>
-              </div>
-              <div style="background: var(--card); border: 1px solid var(--border); padding: 10px; border-radius: 6px;">
-                <div style="font-size: 12px; font-weight: 600; margin-bottom: 6px; color: var(--info);">In Progress (2)</div>
-                <div style="padding: 6px 8px; background: var(--secondary); border: 1px solid var(--border); border-radius: 4px; font-size: 11px;">TASK-403: DNS dynamic routing</div>
-              </div>
-              <div style="background: var(--card); border: 1px solid var(--border); padding: 10px; border-radius: 6px;">
-                <div style="font-size: 12px; font-weight: 600; margin-bottom: 6px; color: var(--err);">Blocked (1)</div>
-                <div style="padding: 6px 8px; background: var(--secondary); border: 1px solid var(--border); border-radius: 4px; font-size: 11px;">TASK-405: TCP handshake timeout</div>
-              </div>
-              <div style="background: var(--card); border: 1px solid var(--border); padding: 10px; border-radius: 6px;">
-                <div style="font-size: 12px; font-weight: 600; margin-bottom: 6px; color: var(--ok);">Done (3)</div>
-                <div style="padding: 6px 8px; background: var(--secondary); border: 1px solid var(--border); border-radius: 4px; font-size: 11px;">TASK-406: 3x stress baseline</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Component Arsenal (Interactive Playground) -->
+    <!-- Component Library (Interactive Playground) -->
     <section id="components">
       <div class="section-header">
-        <div class="section-tag">UI Snippets</div>
+        <div class="section-tag">Ready to Use</div>
         <h2 class="section-title">Basic Components & Vector Icons</h2>
         <p class="section-desc">Test the live atomic components and copy-paste snippets directly into your projects.</p>
       </div>
@@ -1412,6 +1229,189 @@
     </section>
 
 
+    <!-- The 6 Structural Archetypes Interactive Showcase -->
+    <section id="archetypes">
+      <div class="section-header">
+        <div class="section-tag">Layout Templates</div>
+        <h2 class="section-title">6 Common Layout Templates</h2>
+        <p class="section-desc">Pick a layout that fits your output instead of letting models invent messy ad-hoc structures.</p>
+      </div>
+
+      <div class="archetype-container">
+        <!-- Tab Bar -->
+        <div class="archetype-tabs" id="archetypeTabs">
+          <button class="archetype-tab-btn active" data-archetype="report">
+            <span class="tab-num">Archetype 01</span>
+            <span class="tab-name">Incident Postmortem & Report</span>
+          </button>
+          <button class="archetype-tab-btn" data-archetype="dashboard">
+            <span class="tab-num">Archetype 02</span>
+            <span class="tab-name">API Usage & Cost Dashboard</span>
+          </button>
+          <button class="archetype-tab-btn" data-archetype="inspector">
+            <span class="tab-num">Archetype 03</span>
+            <span class="tab-name">Agent Trace & Log Inspector</span>
+          </button>
+          <button class="archetype-tab-btn" data-archetype="compare">
+            <span class="tab-num">Archetype 04</span>
+            <span class="tab-name">DeepSeek vs GPT-4o Comparison</span>
+          </button>
+          <button class="archetype-tab-btn" data-archetype="timeline">
+            <span class="tab-num">Archetype 05</span>
+            <span class="tab-name">Service Recovery Timeline</span>
+          </button>
+          <button class="archetype-tab-btn" data-archetype="kanban">
+            <span class="tab-num">Archetype 06</span>
+            <span class="tab-name">Bug Triage & Task Kanban</span>
+          </button>
+        </div>
+
+        <!-- Archetype 1: Report -->
+        <div class="archetype-content active" id="pane-report">
+          <div class="archetype-info-row">
+            <div class="archetype-info-left">
+              <h3>Single-Column Document & Executive Report</h3>
+              <p>Centered 860px reading container optimized for executive reviews, audit memos, architecture RFCs, and print-to-PDF workflows. Features metadata headers, score cards, callouts, and native details accordions.</p>
+            </div>
+            <div class="archetype-actions">
+              <a href="templates/en/report.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+                <span>Open Live Demo</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('en/report')">Copy HTML</button>
+            </div>
+          </div>
+          <div class="archetype-preview-frame">
+            <img src="assets/screenshots/en/report.png" alt="Report Archetype Preview">
+          </div>
+        </div>
+
+        <!-- Archetype 2: Dashboard -->
+        <div class="archetype-content" id="pane-dashboard">
+          <div class="archetype-info-row">
+            <div class="archetype-info-left">
+              <h3>API Usage & Cost Dashboard & Real-Time Data Grid</h3>
+              <p>Wide-screen fluid layout with a 4-column KPI stat grid, pure-SVG area and bar charts, dual-filter toolbar (search + status dropdown), and a native modal dialog for create/edit operations.</p>
+            </div>
+            <div class="archetype-actions">
+              <a href="templates/en/dashboard.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+                <span>Open Live Demo</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('en/dashboard')">Copy HTML</button>
+            </div>
+          </div>
+          <div class="archetype-preview-frame">
+            <img src="assets/screenshots/en/dashboard.png" alt="Dashboard Archetype Preview">
+          </div>
+        </div>
+
+        <!-- Archetype 3: Inspector -->
+        <div class="archetype-content" id="pane-inspector">
+          <div class="archetype-info-row">
+            <div class="archetype-info-left">
+              <h3>Master-Detail Split Workbench (100vh)</h3>
+              <p>App-like layout occupying full viewport height without page scroll. Left sidebar filters items, right detail pane updates dynamically with 3-column property grids, verdict actions, and syntax-styled code blocks.</p>
+            </div>
+            <div class="archetype-actions">
+              <a href="templates/en/inspector.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+                <span>Open Live Demo</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('en/inspector')">Copy HTML</button>
+            </div>
+          </div>
+          <div class="archetype-preview-frame">
+            <img src="assets/screenshots/en/inspector.png" alt="Inspector Archetype Preview">
+          </div>
+        </div>
+
+        <!-- Archetype 4: Compare -->
+        <div class="archetype-content" id="pane-compare">
+          <div class="archetype-info-row">
+            <div class="archetype-info-left">
+              <h3>DeepSeek vs GPT-4o Comparison & A/B Eval Matrix</h3>
+              <p>Two-column split view (Baseline vs. Challenger) with verdict callout, parameter specs, sample payload outputs, and a quantitative delta matrix table. Perfect for model evals and prompt revisions.</p>
+            </div>
+            <div class="archetype-actions">
+              <a href="templates/en/compare.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+                <span>Open Live Demo</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('en/compare')">Copy HTML</button>
+            </div>
+          </div>
+          <div class="archetype-preview-frame">
+            <img src="assets/screenshots/en/compare.png" alt="Compare Archetype Preview">
+          </div>
+        </div>
+
+        <!-- Archetype 5: Timeline -->
+        <div class="archetype-content" id="pane-timeline">
+          <div class="archetype-info-row">
+            <div class="archetype-info-left">
+              <h3>Vertical Service Recovery Timeline & Incident Postmortem</h3>
+              <p>High-density single-track vertical timeline with semantic status nodes (Error, Warning, Success, Info), exact timestamps, operator tags, expandable diagnosis logs, and one-click "Copy as Markdown" export.</p>
+            </div>
+            <div class="archetype-actions">
+              <a href="templates/en/timeline.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+                <span>Open Live Demo</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('en/timeline')">Copy HTML</button>
+            </div>
+          </div>
+          <div class="archetype-preview-frame">
+            <img src="assets/screenshots/en/timeline.png" alt="Timeline Archetype Preview">
+          </div>
+        </div>
+
+        <!-- Archetype 6: Kanban -->
+        <div class="archetype-content" id="pane-kanban">
+          <div class="archetype-info-row">
+            <div class="archetype-info-left">
+              <h3>Triage & Agile Kanban Board (Native Drag & Drop)</h3>
+              <p>4-column task categorization board (Backlog, Progress, Blocked, Done). Zero external dependencies, pure HTML5 drag-and-drop. Features a "Copy Triage Decisions to Agent" button to close the interactive human-in-the-loop workflow.</p>
+            </div>
+            <div class="archetype-actions">
+              <a href="templates/en/kanban.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+                <span>Open Live Demo</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('en/kanban')">Copy HTML</button>
+            </div>
+          </div>
+          <div class="archetype-preview-frame">
+            <img src="assets/screenshots/en/kanban.png" alt="Kanban Archetype Preview">
+          </div>
+        </div>
+              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('kanban')">Copy HTML</button>
+            </div>
+          </div>
+          <div class="archetype-preview-frame" style="padding: 20px; background: var(--bg);">
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+              <div style="background: var(--card); border: 1px solid var(--border); padding: 10px; border-radius: 6px;">
+                <div style="font-size: 12px; font-weight: 600; margin-bottom: 6px;">Backlog (2)</div>
+                <div style="padding: 6px 8px; background: var(--secondary); border: 1px solid var(--border); border-radius: 4px; font-size: 11px;">TASK-401: V1 deprecation</div>
+              </div>
+              <div style="background: var(--card); border: 1px solid var(--border); padding: 10px; border-radius: 6px;">
+                <div style="font-size: 12px; font-weight: 600; margin-bottom: 6px; color: var(--info);">In Progress (2)</div>
+                <div style="padding: 6px 8px; background: var(--secondary); border: 1px solid var(--border); border-radius: 4px; font-size: 11px;">TASK-403: DNS dynamic routing</div>
+              </div>
+              <div style="background: var(--card); border: 1px solid var(--border); padding: 10px; border-radius: 6px;">
+                <div style="font-size: 12px; font-weight: 600; margin-bottom: 6px; color: var(--err);">Blocked (1)</div>
+                <div style="padding: 6px 8px; background: var(--secondary); border: 1px solid var(--border); border-radius: 4px; font-size: 11px;">TASK-405: TCP handshake timeout</div>
+              </div>
+              <div style="background: var(--card); border: 1px solid var(--border); padding: 10px; border-radius: 6px;">
+                <div style="font-size: 12px; font-weight: 600; margin-bottom: 6px; color: var(--ok);">Done (3)</div>
+                <div style="padding: 6px 8px; background: var(--secondary); border: 1px solid var(--border); border-radius: 4px; font-size: 11px;">TASK-406: 3x stress baseline</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Prompt Cookbook Section -->
     <section id="cookbook">
       <div class="section-header">
@@ -1586,7 +1586,7 @@ npx agent-html check dashboard.html</code></pre>
     // Copy Raw Template HTML
     async function copyTemplateSource(name) {
       try {
-        const res = await fetch(`templates/${name}.html`);
+        const res = await fetch(`templates/en/${name}.html`);
         if (!res.ok) throw new Error('Failed to fetch');
         const text = await res.text();
         await navigator.clipboard.writeText(text);
