@@ -1,55 +1,122 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
   <defs>
-    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#09090b" />
-      <stop offset="50%" stop-color="#121215" />
+    <!-- Background: Pure Zinc Obsidian with subtle lighting -->
+    <radialGradient id="bgGlow" cx="50%" cy="0%" r="90%">
+      <stop offset="0%" stop-color="#18181b" />
+      <stop offset="45%" stop-color="#0f0f11" />
       <stop offset="100%" stop-color="#09090b" />
+    </radialGradient>
+
+    <!-- Metallic Chamfer Rim: 1px micro-precision bezel -->
+    <linearGradient id="bezelGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#71717a" stop-opacity="0.75" />
+      <stop offset="35%" stop-color="#27272a" stop-opacity="0.3" />
+      <stop offset="70%" stop-color="#52525b" stop-opacity="0.6" />
+      <stop offset="100%" stop-color="#18181b" stop-opacity="0.4" />
     </linearGradient>
-    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#52525b" stop-opacity="0.8" />
-      <stop offset="50%" stop-color="#27272a" stop-opacity="0.3" />
-      <stop offset="100%" stop-color="#3f3f46" stop-opacity="0.7" />
+
+    <!-- Inner Plate Inset Shadow / Highlight -->
+    <linearGradient id="innerEdge" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.08" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.6" />
     </linearGradient>
-    <radialGradient id="ambientGlow" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#6366f1" stop-opacity="0.28" />
-      <stop offset="60%" stop-color="#0ea5e9" stop-opacity="0.08" />
+
+    <!-- Deep Ambient Luminescence: Electric Indigo & Cyan Halo -->
+    <radialGradient id="coreAura" cx="50%" cy="52%" r="48%">
+      <stop offset="0%" stop-color="#6366f1" stop-opacity="0.22" />
+      <stop offset="50%" stop-color="#06b6d4" stop-opacity="0.06" />
       <stop offset="100%" stop-color="#09090b" stop-opacity="0" />
     </radialGradient>
-    <linearGradient id="bracketGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+
+    <!-- Angle Brackets: Laser-cut Titanium Precision Gradient -->
+    <linearGradient id="bracketLeftGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#38bdf8" />
-      <stop offset="60%" stop-color="#6366f1" />
-      <stop offset="100%" stop-color="#a855f7" />
+      <stop offset="50%" stop-color="#6366f1" />
+      <stop offset="100%" stop-color="#818cf8" />
     </linearGradient>
+
+    <linearGradient id="bracketRightGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#818cf8" />
+      <stop offset="50%" stop-color="#6366f1" />
+      <stop offset="100%" stop-color="#38bdf8" />
+    </linearGradient>
+
+    <!-- AI Core Intelligence Diamond / Star Gradient -->
     <linearGradient id="sparkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#f43f5e" />
-      <stop offset="50%" stop-color="#ec4899" />
-      <stop offset="100%" stop-color="#8b5cf6" />
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="35%" stop-color="#e0e7ff" />
+      <stop offset="70%" stop-color="#818cf8" />
+      <stop offset="100%" stop-color="#4f46e5" />
     </linearGradient>
-    <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
-      <feGaussianBlur stdDeviation="14" result="blur" />
-      <feMerge>
-        <feMergeNode in="blur" />
-        <feMergeNode in="SourceGraphic" />
-      </feMerge>
+
+    <!-- Drop Shadow for Geometric Layers -->
+    <filter id="bracketShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000000" flood-opacity="0.6" />
+      <feDropShadow dx="0" dy="0" stdDeviation="20" flood-color="#6366f1" flood-opacity="0.28" />
+    </filter>
+
+    <filter id="sparkGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="0" stdDeviation="12" flood-color="#818cf8" flood-opacity="0.8" />
+      <feDropShadow dx="0" dy="0" stdDeviation="24" flood-color="#38bdf8" flood-opacity="0.4" />
     </filter>
   </defs>
 
-  <rect x="8" y="8" width="496" height="496" rx="112" fill="url(#bgGrad)" />
-  <rect x="8" y="8" width="496" height="496" rx="112" fill="none" stroke="url(#borderGrad)" stroke-width="2.5" />
-  <circle cx="256" cy="256" r="180" fill="url(#ambientGlow)" />
+  <!-- Base Squircle Container (Industrial Zinc Tile, R=120px) -->
+  <rect x="12" y="12" width="488" height="488" rx="120" fill="url(#bgGlow)" />
+  
+  <!-- Subtle Inset Specular Highlight on Surface -->
+  <rect x="14" y="14" width="484" height="484" rx="118" fill="none" stroke="url(#innerEdge)" stroke-width="1.5" />
+  
+  <!-- Precision Metallic Bezel Rim -->
+  <rect x="12" y="12" width="488" height="488" rx="120" fill="none" stroke="url(#bezelGrad)" stroke-width="2" />
 
-  <g>
-    <!-- Left Bracket < -->
-    <path d="M 172 170 L 98 256 L 172 342" fill="none" stroke="url(#bracketGrad)" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" />
-    <!-- Right Bracket > -->
-    <path d="M 340 170 L 414 256 L 340 342" fill="none" stroke="url(#bracketGrad)" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" />
-    <!-- Subtle HTML Slash -->
-    <line x1="284" y1="160" x2="228" y2="352" stroke="#52525b" stroke-width="14" stroke-linecap="round" stroke-opacity="0.35" />
-    <!-- AI Spark Core -->
-    <path d="M 256 145 Q 256 225 298 256 Q 256 287 256 367 Q 256 287 214 256 Q 256 225 256 145 Z" fill="url(#sparkGrad)" filter="url(#softGlow)" />
-    <!-- Core Dots -->
-    <circle cx="256" cy="256" r="7" fill="#ffffff" />
-    <circle cx="218" cy="188" r="3.5" fill="#38bdf8" opacity="0.8" />
-    <circle cx="294" cy="324" r="3.5" fill="#ec4899" opacity="0.8" />
+  <!-- Ambient Internal Glow Behind the Symbol -->
+  <circle cx="256" cy="256" r="190" fill="url(#coreAura)" />
+
+  <!-- Geometric Grid Accent: Subdued Architectural Coordinate Crosshairs -->
+  <g stroke="#27272a" stroke-width="1" stroke-dasharray="3 6" opacity="0.65">
+    <line x1="256" y1="64" x2="256" y2="448" />
+    <line x1="64" y1="256" x2="448" y2="256" />
+    <circle cx="256" cy="256" r="130" fill="none" />
+  </g>
+
+  <!-- Central Emblem: Fusion of HTML Brackets and Agent Intelligence Spark -->
+  <g filter="url(#bracketShadow)">
+    <!-- Left Angle Bracket < -->
+    <path d="M 186 168 L 102 256 L 186 344" 
+          fill="none" 
+          stroke="url(#bracketLeftGrad)" 
+          stroke-width="28" 
+          stroke-linecap="round" 
+          stroke-linejoin="round" />
+
+    <!-- Right Angle Bracket > -->
+    <path d="M 326 168 L 410 256 L 326 344" 
+          fill="none" 
+          stroke="url(#bracketRightGrad)" 
+          stroke-width="28" 
+          stroke-linecap="round" 
+          stroke-linejoin="round" />
+
+    <!-- Pure Architecture Forward Slash: Precision 45-degree Minimalist Pillar -->
+    <line x1="282" y1="162" x2="230" y2="350" 
+          stroke="#3f3f46" 
+          stroke-width="12" 
+          stroke-linecap="round" 
+          opacity="0.45" />
+
+    <!-- Central AI Agent Spark (Four-Pointed Astroid Diamond Star) -->
+    <path d="M 256 160 Q 256 226 294 256 Q 256 286 256 352 Q 256 286 218 256 Q 256 226 256 160 Z" 
+          fill="url(#sparkGrad)" 
+          filter="url(#sparkGlow)" />
+
+    <!-- Core Focal Point: High-Purity White Node -->
+    <circle cx="256" cy="256" r="7.5" fill="#ffffff" />
+
+    <!-- Satellite Satellite Energy Nodes -->
+    <circle cx="256" cy="192" r="3" fill="#ffffff" opacity="0.85" />
+    <circle cx="256" cy="320" r="3" fill="#818cf8" opacity="0.85" />
+    <circle cx="222" cy="256" r="3" fill="#38bdf8" opacity="0.85" />
+    <circle cx="290" cy="256" r="3" fill="#818cf8" opacity="0.85" />
   </g>
 </svg>
