@@ -18,8 +18,8 @@
  *   node scripts/validate.mjs --all
  */
 
-import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
-import { resolve, join, basename } from 'node:path';
+import { readFileSync, existsSync, readdirSync, realpathSync } from 'node:fs';
+import { resolve, join, relative } from 'node:path';
 import { exit, argv, stdout, stderr } from 'node:process';
 
 const args = argv.slice(2);
@@ -40,7 +40,11 @@ function findHtmlFiles(dir) {
     if (entry.isDirectory()) {
       files = files.concat(findHtmlFiles(full));
     } else if (entry.isFile() && entry.name.endsWith('.html')) {
-      files.push(full);
+      try {
+        files.push(realpathSync(full));
+      } catch {
+        files.push(resolve(full));
+      }
     }
   }
   return files;
@@ -64,13 +68,17 @@ if (args.includes('--all')) {
         stderr.write(`❌ 找不到文件: ${a}\n`);
         exit(1);
       }
-      targetFiles.push(p);
+      try {
+        targetFiles.push(realpathSync(p));
+      } catch {
+        targetFiles.push(p);
+      }
     }
   }
 }
 
-// 去重
-const uniqueFiles = Array.from(new Set(targetFiles));
+// 基于真实物理路径精准去重并按路径排序
+const uniqueFiles = Array.from(new Set(targetFiles)).sort();
 if (uniqueFiles.length === 0) {
   stderr.write('未指定待校验的 HTML 文件。\n');
   exit(1);
@@ -82,7 +90,7 @@ let totalWarnings = 0;
 stdout.write(`\n🔍 开始执行 Agent HTML 单文件静态自验规范检查 (${uniqueFiles.length} 个文件)...\n\n`);
 
 for (const file of uniqueFiles) {
-  const rel = basename(file);
+  const rel = relative(process.cwd(), file) || file;
   const content = readFileSync(file, 'utf8');
   const errors = [];
   const warnings = [];

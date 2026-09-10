@@ -34,7 +34,7 @@
   <a href="#the-problem">The Problem</a> ·
   <a href="#what-you-get">What You Get</a> ·
   <a href="#the-6-archetypes">The 6 Archetypes</a> ·
-  <a href="#atomic-capabilities--component-arsenal">Atomic Arsenal</a> ·
+  <a href="#atomic-capabilities--component-arsenal">Component Library</a> ·
   <a href="#prompt-triggers">Prompt Triggers</a> ·
   <a href="#star-history">Star History</a>
 </p>
@@ -76,7 +76,8 @@ No build step or Node.js server required. Explore the component gallery (or test
 npx agent-html open
 
 # Extract any raw archetype directly to a file
-npx agent-html template dashboard > my-dashboard.html
+npx agent-html snippet button
+npx agent-html template dashboard > api-dashboard.html
 npx agent-html template kanban > my-kanban.html
 ```
 
@@ -131,12 +132,12 @@ Rather than rigid business screens, `agent-html` provides 6 fundamental layout s
 
 | Archetype | Template Path | Best For | Key Capabilities |
 | :--- | :--- | :--- | :--- |
-| **01. Document & Report** | [`templates/en/report.html`](templates/en/report.html) | Technical reviews, RFCs, audits | TOC ScrollSpy, KPI score overview, details accordion, print CSS |
-| **02. Analytics Dashboard** | [`templates/en/dashboard.html`](templates/en/dashboard.html) | Metrics monitoring, billing | 4 KPI cards, native SVG area & bar charts, filterable table |
-| **03. Master-Detail Workbench** | [`templates/en/inspector.html`](templates/en/inspector.html) | Trace inspection, prompt debugging | 100vh split screen, item filtering, JSON payload viewer, review actions |
-| **04. Side-by-Side Comparison** | [`templates/en/compare.html`](templates/en/compare.html) | Model A/B testing, prompt diffs | Dual baseline vs challenger cards, delta comparison matrix |
-| **05. Event Timeline** | [`templates/en/timeline.html`](templates/en/timeline.html) | Incident postmortems, changelogs | Single-track vertical timeline, status dots, diagnostic logs |
-| **06. Triage Kanban** | [`templates/en/kanban.html`](templates/en/kanban.html) | Bug triage, backlog grooming | 4-column drag & drop, status badges, agent feedback loop |
+| **01. Incident Postmortem Report** | [`templates/en/report.html`](templates/en/report.html) | Technical reviews, RFCs, audits | TOC ScrollSpy, KPI score overview, details accordion, print CSS |
+| **02. API Usage & Cost Dashboard** | [`templates/en/dashboard.html`](templates/en/dashboard.html) | Metrics monitoring, billing | 4 KPI cards, native SVG area & bar charts, filterable table |
+| **03. Agent Trace & Log Inspector** | [`templates/en/inspector.html`](templates/en/inspector.html) | Trace inspection, prompt debugging | 100vh split screen, item filtering, JSON payload viewer, review actions |
+| **04. DeepSeek vs GPT-4o Comparison** | [`templates/en/compare.html`](templates/en/compare.html) | Model A/B testing, prompt diffs | Dual baseline vs challenger cards, delta comparison matrix |
+| **05. Service Recovery Timeline** | [`templates/en/timeline.html`](templates/en/timeline.html) | Incident postmortems, changelogs | Single-track vertical timeline, status dots, diagnostic logs |
+| **06. Bug Triage & Task Kanban** | [`templates/en/kanban.html`](templates/en/kanban.html) | Bug triage, backlog grooming | 4-column drag & drop, status badges, agent feedback loop |
 
 <details>
 <summary><strong>📸 Click to view full-resolution static screenshots for all 6 archetypes</strong></summary>
@@ -145,16 +146,16 @@ Rather than rigid business screens, `agent-html` provides 6 fundamental layout s
 #### 01. Document & Executive Report
 <p align="center"><img src="assets/screenshots/en/report.png" alt="Report Template" width="100%"></p>
 
-#### 02. Analytics Dashboard & Data Grid
+#### 02. API Usage & Cost Dashboard & Data Grid
 <p align="center"><img src="assets/screenshots/en/dashboard.png" alt="Dashboard Template" width="100%"></p>
 
-#### 03. Master-Detail Workbench & Inspector
+#### 03. Agent Trace & Log Inspector & Inspector
 <p align="center"><img src="assets/screenshots/en/inspector.png" alt="Inspector Template" width="100%"></p>
 
-#### 04. Side-by-Side Comparison Matrix
+#### 04. DeepSeek vs GPT-4o Comparison Matrix
 <p align="center"><img src="assets/screenshots/en/compare.png" alt="Compare Template" width="100%"></p>
 
-#### 05. Event Timeline & Incident Postmortem
+#### 05. Service Recovery Timeline & Incident Postmortem
 <p align="center"><img src="assets/screenshots/en/timeline.png" alt="Timeline Template" width="100%"></p>
 
 #### 06. Triage & Agile Kanban Board
@@ -164,7 +165,7 @@ Rather than rigid business screens, `agent-html` provides 6 fundamental layout s
 
 ---
 
-## Atomic Capabilities & Component Arsenal
+## Atomic Component Library
 
 Beyond full-page archetypes, `agent-html` packages production-grade **atomic primitives** and **zero-CDN pure SVG charts**. 100% offline, zero npm, zero external CDN, and instant dark mode support:
 

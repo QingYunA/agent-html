@@ -10,6 +10,9 @@
     "validate": "node scripts/validate.mjs --all",
     "test": "node scripts/validate.mjs --all"
   },
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "keywords": [
     "agent-skill",
     "skills",
