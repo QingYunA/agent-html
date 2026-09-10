@@ -1396,7 +1396,7 @@
           <div>
             <div class="contrast-badge" style="color: var(--err);">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-              <span>CDN 依赖陷阱</span>
+              <span>方案 A：引入外部 CDN</span>
             </div>
             <div class="contrast-title">引入 Tailwind CDN</div>
             <div class="contrast-desc">AI 喜欢加上 <code>&lt;script src="cdn.tailwindcss.com"&gt;</code>。</div>
@@ -1413,7 +1413,7 @@
           <div>
             <div class="contrast-badge" style="color: var(--warn);">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-              <span>AI 视觉塑料陷阱</span>
+              <span>方案 B：让 AI 随意手写 CSS</span>
             </div>
             <div class="contrast-title">让 AI 随意手写 CSS</div>
             <div class="contrast-desc">不给规范时，AI 自由发挥出来的样式通常很难看。</div>
@@ -1430,7 +1430,7 @@
           <div>
             <div class="contrast-badge" style="color: var(--ok);">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>agent-html 方式</span>
+              <span>方案 C：agent-html (推荐)</span>
             </div>
             <div class="contrast-title">精简的原生 CSS</div>
             <div class="contrast-desc">大约 75 行原生 CSS 变量与常用的基础样式类。</div>
@@ -1455,50 +1455,50 @@
 
       <div class="prompt-grid">
         <div class="prompt-card">
-          <div class="prompt-text">“不要输出 Markdown 墙。把这次系统架构审查的结论做成一个单文件可视化 HTML 报告，包含达标评分卡、执行摘要 Callout、可折叠的细项手风琴，并支持打印为 PDF。”</div>
+          <div class="prompt-text">“把这次线上事故复盘的分析结论做成一个单文件 HTML 报告，包含事故等级、影响范围、核心根因与改进措施，支持打印为 PDF。”</div>
           <div class="prompt-footer">
-            <span>触发母版：母版 01 (长文档审查报告)</span>
-            <button class="btn btn-outline btn-sm" onclick="copyText(this, '不要输出 Markdown 墙。把这次系统架构审查的结论做成一个单文件可视化 HTML 报告，包含达标评分卡、执行摘要 Callout、可折叠的细项手风琴，并支持打印为 PDF。')">复制指令</button>
+            <span>推荐模板：Report 报告</span>
+            <button class="btn btn-outline btn-sm" onclick="copyText(this, '把这次线上事故复盘的分析结论做成一个单文件 HTML 报告，包含事故等级、影响范围、核心根因与改进措施，支持打印为 PDF。')">复制指令</button>
           </div>
         </div>
 
         <div class="prompt-card">
-          <div class="prompt-text">“生成一个单文件 HTML 监控看板，展示生产 API 延迟与吞吐大盘。包含 4 列 KPI 统计卡、纯前端实时搜索过滤表格，以及原生弹窗交互。”</div>
+          <div class="prompt-text">“生成一个单文件 HTML 数据面板，展示 API 消耗与成本大盘。包含 4 列核心指标卡、走势图和可搜索过滤的明细表格。”</div>
           <div class="prompt-footer">
-            <span>触发母版：母版 02 (数据监控大盘)</span>
-            <button class="btn btn-outline btn-sm" onclick="copyText(this, '生成一个单文件 HTML 监控看板，展示生产 API 延迟与吞吐大盘。包含 4 列 KPI 统计卡、纯前端实时搜索过滤表格，以及原生弹窗交互。')">复制指令</button>
+            <span>推荐模板：Dashboard 数据面板</span>
+            <button class="btn btn-outline btn-sm" onclick="copyText(this, '生成一个单文件 HTML 数据面板，展示 API 消耗与成本大盘。包含 4 列核心指标卡、走势图和可搜索过滤的明细表格。')">复制指令</button>
           </div>
         </div>
 
         <div class="prompt-card">
-          <div class="prompt-text">“记录今天网关故障的突发事故复盘与时间轴编年史。单轨垂直时间线排版，带有明确时间戳、操作人标签，并支持一键复制为 Markdown 归档。”</div>
+          <div class="prompt-text">“把今天生产事故的恢复过程整理成时间线页面，按时间先后列出每个操作节点，支持折叠查看详细日志，带一键复制 Markdown。”</div>
           <div class="prompt-footer">
-            <span>触发母版：母版 05 (时间轴与故障编年史)</span>
-            <button class="btn btn-outline btn-sm" onclick="copyText(this, '记录今天网关故障的突发事故复盘与时间轴编年史。单轨垂直时间线排版，带有明确时间戳、操作人标签，并支持一键复制为 Markdown 归档。')">复制指令</button>
+            <span>推荐模板：Timeline 时间线</span>
+            <button class="btn btn-outline btn-sm" onclick="copyText(this, '把今天生产事故的恢复过程整理成时间线页面，按时间先后列出每个操作节点，支持折叠查看详细日志，带一键复制 Markdown。')">复制指令</button>
           </div>
         </div>
 
         <div class="prompt-card">
-          <div class="prompt-text">“制作一个 4 列敏捷任务分拣拖拽看板，对这 20 个 Bug 工单按优先级进行分拣流转。支持纯原生 HTML5 跨列拖拽，并提供一键复制分拣决策回终端机制。”</div>
+          <div class="prompt-text">“做一个任务看板页面来分拣这批 Bug，支持拖拽卡片调整优先级，能一键把最终分拣结果复制回终端。”</div>
           <div class="prompt-footer">
-            <span>触发母版：母版 06 (Bug 分拣与需求看板)</span>
-            <button class="btn btn-outline btn-sm" onclick="copyText(this, '制作一个 4 列敏捷任务分拣拖拽看板，对这 20 个 Bug 工单按优先级进行分拣流转。支持纯原生 HTML5 跨列拖拽，并提供一键复制分拣决策回终端机制。')">复制指令</button>
+            <span>推荐模板：Kanban 看板</span>
+            <button class="btn btn-outline btn-sm" onclick="copyText(this, '做一个任务看板页面来分拣这批 Bug，支持拖拽卡片调整优先级，能一键把最终分拣结果复制回终端。')">复制指令</button>
           </div>
         </div>
 
         <div class="prompt-card">
-          <div class="prompt-text">“制作一个模型 A 与模型 B（或 Prompt v1 vs v2）的横向并排对比评测矩阵。左侧基准右侧挑战者，下方列出量化差异 Delta 对照表与最终胜出判定。”</div>
+          <div class="prompt-text">“做个 DeepSeek 和 GPT-4o 的选型对比页面，左边放 DeepSeek，右边放 GPT-4o，包含指标差异对比和最终选型建议。”</div>
           <div class="prompt-footer">
-            <span>触发母版：母版 04 (并排对比矩阵)</span>
-            <button class="btn btn-outline btn-sm" onclick="copyText(this, '制作一个模型 A 与模型 B（或 Prompt v1 vs v2）的横向并排对比评测矩阵。左侧基准右侧挑战者，下方列出量化差异 Delta 对照表与最终胜出判定。')">复制指令</button>
+            <span>推荐模板：Compare 对比</span>
+            <button class="btn btn-outline btn-sm" onclick="copyText(this, '做个 DeepSeek 和 GPT-4o 的选型对比页面，左边放 DeepSeek，右边放 GPT-4o，包含指标差异对比和最终选型建议。')">复制指令</button>
           </div>
         </div>
 
         <div class="prompt-card">
-          <div class="prompt-text">“为这次排障调试会话创建一个左右双栏的 Master-Detail 查看器。左侧支持搜索过滤用例列表，右侧展示格式化 JSON Payload 并带有一键复制按钮。”</div>
+          <div class="prompt-text">“把 Agent 的这次运行日志做成左右双栏的工作台页面，左边是日志会话列表与搜索，右边查看工具调用的具体数据与审查结论。”</div>
           <div class="prompt-footer">
-            <span>触发母版：母版 03 (双栏审查工作台)</span>
-            <button class="btn btn-outline btn-sm" onclick="copyText(this, '为这次排障调试会话创建一个左右双栏的 Master-Detail 查看器。左侧支持搜索过滤用例列表，右侧展示格式化 JSON Payload 并带有一键复制按钮。')">复制指令</button>
+            <span>推荐模板：Inspector 审查工作台</span>
+            <button class="btn btn-outline btn-sm" onclick="copyText(this, '把 Agent 的这次运行日志做成左右双栏的工作台页面，左边是日志会话列表与搜索，右边查看工具调用的具体数据与审查结论。')">复制指令</button>
           </div>
         </div>
       </div>
@@ -1508,10 +1508,10 @@
     <section style="margin-bottom: 80px;">
       <div class="code-box">
         <button class="code-copy-btn" onclick="copyCodeBlock(this)">复制命令</button>
-        <pre><code># 1. 通过 skills.sh 官方生态一键安装（支持 Claude Code, Pi, Cursor, Codex 等）
+        <pre><code># 1. 一键安装 Skill（支持 Claude Code, Pi, Cursor, Codex 等）
 npx skills add QingYunA/agent-html -g
 
-# 2. 或使用独立 CLI 在任意工程中导出指定母版
+# 2. 也可以用 CLI 直接导出模板
 npx agent-html template dashboard > dashboard.html
 npx agent-html check dashboard.html</code></pre>
       </div>
@@ -1527,12 +1527,12 @@ npx agent-html check dashboard.html</code></pre>
       </div>
 
       <div class="footer-links">
-        <a href="templates/zh/report.html" target="_blank">长文档报告</a>
-        <a href="templates/zh/dashboard.html" target="_blank">监控大盘</a>
-        <a href="templates/zh/inspector.html" target="_blank">双栏工作台</a>
-        <a href="templates/zh/compare.html" target="_blank">对比矩阵</a>
-        <a href="templates/zh/timeline.html" target="_blank">时间轴</a>
-        <a href="templates/zh/kanban.html" target="_blank">敏捷看板</a>
+        <a href="templates/zh/report.html" target="_blank">Report 报告</a>
+        <a href="templates/zh/dashboard.html" target="_blank">Dashboard 数据面板</a>
+        <a href="templates/zh/inspector.html" target="_blank">Inspector 审查工作台</a>
+        <a href="templates/zh/compare.html" target="_blank">Compare 对比</a>
+        <a href="templates/zh/timeline.html" target="_blank">Timeline 时间线</a>
+        <a href="templates/zh/kanban.html" target="_blank">Kanban 看板</a>
         <a href="https://linux.do" target="_blank">LINUX DO</a>
         <a href="https://github.com/QingYunA/agent-html" target="_blank">GitHub</a>
       </div>
