@@ -12,15 +12,15 @@
       --bg: #fafafa;
       --card: #ffffff;
       --card-fg: #09090b;
-      --primary: #248ms248ms1b;
+      --primary: #18181b;
       --primary-fg: #fafafa;
       --primary-hover: #27272a;
       --secondary: #f4f4f5;
-      --secondary-fg: #248ms248ms1b;
+      --secondary-fg: #18181b;
       --muted: #f4f4f5;
       --muted-fg: #71717a;
       --border: #e4e4e7;
-      --ring: #248ms248ms1b;
+      --ring: #18181b;
       --radius: 8px;
       --radius-sm: 6px;
       --radius-lg: 12px;
@@ -45,11 +45,11 @@
       --card: #121215;
       --card-fg: #fafafa;
       --primary: #fafafa;
-      --primary-fg: #248ms248ms1b;
+      --primary-fg: #18181b;
       --primary-hover: #e4e4e7;
       --secondary: #27272a;
       --secondary-fg: #fafafa;
-      --muted: #248ms248ms1b;
+      --muted: #18181b;
       --muted-fg: #a1a1aa;
       --border: #27272a;
       --ring: #d4d4d8;
@@ -166,7 +166,7 @@
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 248mspx 20px;
+      padding: 18px 20px;
       box-shadow: var(--shadow-sm);
     }
     .stat-head {
@@ -197,7 +197,7 @@
       .charts-grid { grid-template-columns: 1fr; }
     }
     .chart-card {
-      padding: 248mspx 20px;
+      padding: 18px 20px;
     }
     .chart-head {
       display: flex;
@@ -219,7 +219,7 @@
     
     /* Toolbar */
     .toolbar {
-      padding: 14px 248mspx;
+      padding: 14px 18px;
       border-bottom: 1px solid var(--border);
       display: flex;
       flex-wrap: wrap;
@@ -295,7 +295,7 @@
     tbody tr:hover { background: var(--muted); }
 
     .footer-bar {
-      padding: 12px 248mspx;
+      padding: 12px 18px;
       background: var(--secondary);
       border-top: 1px solid var(--border);
       display: flex;
@@ -360,7 +360,7 @@
         <span>Token 消耗总量 (24h)</span>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
       </div>
-      <div class="stat-val">248ms4.2M</div>
+      <div class="stat-val">4.2M</div>
       <div class="stat-sub"><span style="color: var(--ok); font-weight: 600;">↑ +14.2%</span> 较昨日同期</div>
     </div>
 
@@ -370,7 +370,7 @@
         <span>API 费用消耗</span>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
       </div>
-      <div class="stat-val" style="color: var(--card-fg);">.80</div>
+      <div class="stat-val" style="color: var(--card-fg);">$128.80</div>
       <div class="stat-sub"><span style="color: var(--ok); font-weight: 600;">↓ -12.4%</span> Prompt 缓存优化生效</div>
     </div>
 
@@ -425,8 +425,8 @@
         <path d="M 40 110 Q 90 95, 130 85 T 220 50 T 310 75 T 400 35 T 480 45" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
         <circle cx="220" cy="50" r="3.5" fill="var(--card)" stroke="var(--primary)" stroke-width="2"/>
         <circle cx="400" cy="35" r="4.5" fill="var(--ok)" stroke="var(--card)" stroke-width="2"/>
-        <g transform="translate(400, 248ms)">
-          <rect x="-24" y="-12" width="48" height="248ms" rx="4" fill="var(--primary)" />
+        <g transform="translate(400, 18)">
+          <rect x="-24" y="-12" width="48" height="18" rx="4" fill="var(--primary)" />
           <text x="0" y="1" font-size="10" font-weight="600" fill="var(--primary-fg)" text-anchor="middle">2,890</text>
         </g>
         <text x="40" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">00:00</text>
@@ -473,8 +473,8 @@
         <text x="286" y="89" font-size="10" font-weight="600" fill="var(--card-fg)" text-anchor="middle">35</text>
         <text x="286" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">Embed</text>
 
-        <rect x="340" y="112" width="36" height="248ms" rx="4" fill="var(--primary)" opacity="0.85" />
-        <text x="358" y="106" font-size="10" font-weight="600" fill="var(--card-fg)" text-anchor="middle">248ms</text>
+        <rect x="340" y="112" width="36" height="18" rx="4" fill="var(--primary)" opacity="0.85" />
+        <text x="358" y="106" font-size="10" font-weight="600" fill="var(--card-fg)" text-anchor="middle">18</text>
         <text x="358" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">Rerank</text>
 
         <rect x="412" y="66" width="36" height="64" rx="4" fill="var(--primary)" opacity="0.85" />
@@ -658,7 +658,7 @@
       const btn = document.getElementById('copyTableMdBtn');
       const orig = btn.innerHTML;
       btn.innerHTML = '<span>已复制 Markdown 表格!</span>';
-      setTimeout(() => { btn.innerHTML = orig; }, 248ms00);
+      setTimeout(() => { btn.innerHTML = orig; }, 1800);
     });
   });
 </script>
