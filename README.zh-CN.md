@@ -5,9 +5,9 @@
 # agent-html
 
 <p>
-  <strong>专为 AI Agent 打造的零依赖单文件 HTML 设计系统与技能</strong><br>
-  深度复刻 shadcn/ui 极简中性美学 · 100% 离线自包含 · 0 npm 依赖 · 0 外部 CDN<br>
-  专为 Claude Code、Pi、Codex、Cursor 全局适配
+  <strong>专为 AI Agent 打造的零依赖单文件 HTML 设计系统与组件库</strong><br>
+  复刻 shadcn/ui 极简风格 · 100% 离线可用 · 0 npm 依赖 · 0 外部 CDN<br>
+  已适配 Claude Code、Pi、Codex、Cursor 等主流工具
 </p>
 
 <p>
@@ -32,10 +32,10 @@
 <p>
   <a href="#快速安装与上手">快速安装</a> ·
   <a href="#解决什么痛点">痛点</a> ·
-  <a href="#核心价值">核心价值</a> ·
-  <a href="#六大通用布局母版">六大母版</a> ·
-  <a href="#原生原子能力矩阵">原子能力</a> ·
-  <a href="#提示词触发示例">提示词</a> ·
+  <a href="#核心优势">核心优势</a> ·
+  <a href="#六大真实场景模板">六大模板</a> ·
+  <a href="#常用基础组件">基础组件</a> ·
+  <a href="#提示词示例">提示词</a> ·
   <a href="#star-history">Star History</a>
 </p>
 
@@ -67,17 +67,21 @@ npx skills add QingYunA/agent-html
 npx skills add QingYunA/agent-html -g
 ```
 
-### 2. 免装即开 CLI 体验
+### 2. 免安装 CLI 体验
 
-无需安装 Node.js 服务，直接打开画廊或导出生产级母版（亦可直接访问在线演示站 [**agent-html-bice.vercel.app**](https://agent-html-bice.vercel.app)）：
+无需安装，直接在浏览器打开组件库，或者直接导出模板代码（也可以直接看在线 Demo：[**agent-html-bice.vercel.app**](https://agent-html-bice.vercel.app)）：
 
 ```bash
-# 直接在默认浏览器打开组件画廊
-npx agent-html open
+# 在浏览器打开中文组件库
+npx agent-html open --zh
 
-# 快速导出指定通用母版代码到本地文件
+# 快速获取常用原子组件代码（直接复制用，不用自己手写）
 npx agent-html snippet button
+npx agent-html snippet metric-card
+
+# 快速导出常用的场景模板
 npx agent-html template dashboard > api-dashboard.html
+npx agent-html template report > incident-report.html
 npx agent-html template kanban > my-kanban.html
 ```
 
@@ -100,127 +104,127 @@ ln -sf ../../../.agents/skills/agent-html ~/.pi/agent/skills/agent-html
 
 ## 解决什么痛点？
 
-让大模型（Claude Code, Pi, Codex, ChatGPT）生成 HTML 报表或看板时，99% 的输出都会掉进两个典型陷阱：
+让大模型（Claude Code, Pi, Codex, Cursor）写 HTML 页面时，基本都会遇到这两个问题：
 
-- **CDN 依赖陷阱**：模型习惯注入 `<script src="https://cdn.tailwindcss.com"></script>` 和谷歌字体。初看还行，但只要放到企业内网、隔离机房（Air-gapped）就彻底白屏，初次加载耗时 2 秒并伴随严重的排版闪烁（FOUC），过段时间 CDN 链接失效整个文件就烂掉了。
-- **AI 视觉垃圾陷阱**：如果不让它用 CDN，模型就会手写内联 CSS——生成刺眼的纯黑边框、30px 不协调的留白、粗糙的高饱和度色块，且没有任何暗黑模式支持。
+- **依赖外部 CDN**：模型动不动就加上 `<script src="https://cdn.tailwindcss.com"></script>` 和 Google 字体。在公司内网或者没网的环境下直接白屏打不开，而且第一次打开加载慢、页面还会闪烁，时间一长 CDN 失效文件就废了。
+- **手写样式不好看**：如果不准它用 CDN，模型就会自己手写内嵌 CSS——生成粗糙的黑边框、奇怪的间距、刺眼的高饱和度颜色，而且基本都不支持暗色模式。
 
-`agent-html` 彻底终结了这个两难局面：提炼了一套仅 ~75 行的原生 CSS 变量基座与 6 套经过实战检验的空间布局母版。生成的 HTML 文件双击秒开，自带高级企业级质感。
-
----
-
-## 核心价值
-
-- **零依赖自包含**：0 个 npm 包、0 行构建脚本、0 个外部 CDN。双击即可在任何离线环境秒开。
-- **Zinc 冷灰中性色阶**：精准复刻 shadcn/ui 的设计变量体系。1px 微细边框、精细圆角、高信息密度。
-- **六大通用空间布局母版**：收敛长文档报告、宽屏监控大盘、双栏审查工作台、并排对比矩阵、事件时间轴、敏捷任务看板六大泛化骨架。
-- **原生明暗双模式**：CSS 变量原生自适应系统偏好，内置 5 行原生 JS 切换开关。
-- **闭环反馈设计**：提供“一键导出 Markdown”与“复制审查结论至终端 Agent”机制，拒绝单向死胡同页面。
-- **确定性自验检查器（`scripts/validate.mjs`）**：Agent 在将 HTML 呈现给人类前，自动运行检查标签对称性、零 CDN 泄漏与移动端视口配置。
-- **24 个内联纯矢量 SVG**：精选 Lucide 风格矢量图标，继承字体颜色，不依赖图标字体库。
-- **零 CDN 纯原生图表**：纯 SVG 面积走势图、柱状分布图、复合环形占比图、水平排行榜。
+`agent-html` 就是为了解决这个问题：整理了一套 70 多行的基础 CSS 变量，加上 6 套贴合真实开发场景的开箱即用模板。生成的 HTML 单文件双击就能秒开，干净好看，完全离线可用。
 
 ---
 
-## 六大通用布局母版
+## 核心优势
 
-摆脱具体的业务限制，`agent-html` 将界面提炼为 6 套带有清晰 `<!-- [Slot: ...] -->` 插槽注释的基础空间骨架：
+- **真正零依赖**：不需要装 npm 包，不需要打包构建，不加载任何外部 CDN。双击 HTML 文件直接秒开，离线也能用。
+- **干净耐看的设计**：参考 shadcn/ui 的设计风格。微细边框、舒适圆角、统一的中性灰调。
+- **6 套贴合真实场景的模板**：复盘报告、API 成本看板、工作台审查、模型对比、故障时间线、Bug 看板。
+- **原生暗色模式**：自动跟随系统切换深浅色，自带纯原生 JS 切换按钮。
+- **方便把结果复制回终端**：页面里带有一键复制 Markdown 和结论的功能，方便直接贴回终端给 Agent 继续处理。
+- **内置离线自检脚本（`scripts/validate.mjs`）**：在交给用户前，自动检查标签闭合、是否有外部 CDN 依赖和移动端视口配置。
+- **24 个纯 SVG 图标**：不用图标库字体，图标颜色自动跟随文字，断网不丢图标。
+- **纯 SVG 图表**：不需要引入任何图表库，用纯 SVG 绘制折线走势图、柱状图、环形图。
+
+---
+
+## 六大真实场景模板
+
+告别虚构的演示数据，`agent-html` 提供 6 套真实工程师高频使用的场景模板，每套都带有清晰的结构注释：
 
 <p align="center">
-  <img src="assets/screenshots/zh/preview.gif" alt="agent-html 6 大布局母版动态预览" width="100%">
+  <img src="assets/screenshots/zh/preview.gif" alt="agent-html 6 大模板预览" width="100%">
 </p>
 
-| 布局母版 | 模板文件路径 | 核心适用场景 | 关键原生特性 |
+| 模板 | 文件路径 | 真实业务场景 | 包含的关键功能 |
 | :--- | :--- | :--- | :--- |
-| **01. Report 报告** | [`templates/zh/report.html`](templates/zh/report.html) | 技术评审、面试评估、RFC 说明书 | 悬浮目录（TOC ScrollSpy）、达标评分卡、可折叠手风琴、打印优化 |
-| **02. Dashboard 数据面板** | [`templates/zh/dashboard.html`](templates/zh/dashboard.html) | 资源监控、Token 用量、工单大盘 | 4 列 KPI 卡、纯原生 SVG 趋势图/柱状图、实时搜索双重过滤表 |
-| **03. Inspector 审查工作台** | [`templates/zh/inspector.html`](templates/zh/inspector.html) | Trace 回溯、JSONL 查看、调试器 | 100vh 满屏、左侧实时检索、右侧动态联动、人工裁决按钮组 |
-| **04. Compare 对比** | [`templates/zh/compare.html`](templates/zh/compare.html) | 模型 A/B 测、Prompt 改版 diff | 左右双方案并排比对、胜出裁决 Callout、量化 Delta 差异表 |
-| **05. Timeline 时间线** | [`templates/zh/timeline.html`](templates/zh/timeline.html) | 突发事故复盘、版本发布路线图 | 单轨垂直时间线、语义状态圆点、诊断日志展开、一键复制 MD |
-| **06. Kanban 看板** | [`templates/zh/kanban.html`](templates/zh/kanban.html) | 需求优先级、Bug 分拣流转 | 纯原生 HTML5 Drag & Drop 跨列拖拽、一键复制看板决策回 Agent |
+| **Report 报告** | [`templates/zh/report.html`](templates/zh/report.html) | 线上事故复盘报告 (P0 Postmortem)、技术 RFC | 目录滚动高亮、结论打分卡、折叠详情、打印优化 |
+| **Dashboard 数据面板** | [`templates/zh/dashboard.html`](templates/zh/dashboard.html) | API 消耗与成本看板、Token 用量分析 | 4 列指标卡、原生 SVG 趋势图/柱状图、带搜索的过滤表格 |
+| **Inspector 审查工作台** | [`templates/zh/inspector.html`](templates/zh/inspector.html) | Agent 运行日志审查、Tool Payload 调试 | 左右分栏、左侧筛选日志、右侧查看详情、人工审批按钮组 |
+| **Compare 对比** | [`templates/zh/compare.html`](templates/zh/compare.html) | DeepSeek vs GPT-4o 选型对比、Prompt 效果评估 | 左右方案对照、胜出结论提示框、量化指标差异表 |
+| **Timeline 时间线** | [`templates/zh/timeline.html`](templates/zh/timeline.html) | 服务恢复时间线、版本发布日志 | 垂直时间轴、状态标记、日志折叠、一键复制 Markdown |
+| **Kanban 看板** | [`templates/zh/kanban.html`](templates/zh/kanban.html) | Bug 分拣与需求看板、任务排期 | 原生拖拽卡片、任务优先级标签、复制看板状态回终端 |
 
 <details>
-<summary><strong>📸 点击展开查看全部 6 大母版高清大图</strong></summary>
+<summary><strong>📸 点击展开查看全部 6 大模板大图</strong></summary>
 <br>
 
-#### 01. 单栏长文档与评估审查报告
-<p align="center"><img src="assets/screenshots/zh/report.png" alt="报告母版" width="100%"></p>
+#### 01. Report 报告
+<p align="center"><img src="assets/screenshots/zh/report.png" alt="Report 报告模板" width="100%"></p>
 
-#### 02. 数据大盘与过滤表格
-<p align="center"><img src="assets/screenshots/zh/dashboard.png" alt="数据大盘母版" width="100%"></p>
+#### 02. Dashboard 数据面板
+<p align="center"><img src="assets/screenshots/zh/dashboard.png" alt="Dashboard 数据面板模板" width="100%"></p>
 
-#### 03. 左右双栏工作台与审查器
-<p align="center"><img src="assets/screenshots/zh/inspector.png" alt="工作台母版" width="100%"></p>
+#### 03. Inspector 审查工作台
+<p align="center"><img src="assets/screenshots/zh/inspector.png" alt="Inspector 审查工作台模板" width="100%"></p>
 
-#### 04. 并排横向对比与评测矩阵
-<p align="center"><img src="assets/screenshots/zh/compare.png" alt="对比矩阵母版" width="100%"></p>
+#### 04. Compare 对比
+<p align="center"><img src="assets/screenshots/zh/compare.png" alt="Compare 对比模板" width="100%"></p>
 
-#### 05. 事件时间轴与故障编年史
-<p align="center"><img src="assets/screenshots/zh/timeline.png" alt="时间轴母版" width="100%"></p>
+#### 05. Timeline 时间线
+<p align="center"><img src="assets/screenshots/zh/timeline.png" alt="Timeline 时间线模板" width="100%"></p>
 
-#### 06. 任务分拣与敏捷拖拽看板
-<p align="center"><img src="assets/screenshots/zh/kanban.png" alt="敏捷看板母版" width="100%"></p>
+#### 06. Kanban 看板
+<p align="center"><img src="assets/screenshots/zh/kanban.png" alt="Kanban 看板模板" width="100%"></p>
 
 </details>
 
 ---
 
-## 原生原子组件库 (Atomic Component Library)
+## 常用基础组件
 
-除了宏观整页级母版，`agent-html` 将常用界面元素提炼为即拷即用的**基础原子组件**与**零 CDN 纯原生矢量图表**。100% 离线自包含、零外部依赖、自动适配深浅双主题：
+除了完整的页面模板，`agent-html` 还整理了常用的**基础组件**与**纯原生 SVG 图表**，方便直接拿去拼装。同样 100% 离线自包含、零外部依赖、自动支持深浅色主题：
 
-### 1. 按钮与操作体系 (Buttons Matrix)
+### 1. 按钮组件 (Buttons)
 
 <p align="center">
   <img src="assets/arsenal/zh/buttons.svg" alt="agent-html 按钮体系与状态徽章" width="100%">
 </p>
 
-采用与 shadcn/ui 一致的语义变体与尺寸规范，内置 `:hover`、`:active`、`:disabled` 微动效：
+和 shadcn/ui 保持一致的命名与尺寸规范，自带悬浮、点击与禁用态：
 
-| 变体名称 | 核心类名 | 视觉语义 | 典型应用场景 |
+| 类型 | 类名 | 视觉样式 | 常见用途 |
 | :--- | :--- | :--- | :--- |
-| **Primary 主要操作** | `.btn.btn-primary` | 高对比实体色块 | 提交表单、放行准入、确认执行 |
-| **Secondary 次要辅助** | `.btn.btn-secondary` | 低饱和中性底色 | 取消操作、返回列表、次级筛选 |
-| **Outline 轮廓边框** | `.btn.btn-outline` | 1px 细微边界 | 导出报表、复制结果、查看详情 |
-| **Ghost 幽灵按钮** | `.btn.btn-ghost` | 平时不占视觉，悬浮出底色 | 表格行内操作、面包屑、次级链接 |
-| **Destructive 危险操作**| `.btn.btn-destructive`| 语义化警示红色 | 阻断上线、删除资源、终止流水线 |
-| **带图标按钮** | `.btn` 内嵌 `<svg>` | 图标 + 文字联动 | 下载报告、刷新状态、搜索执行 |
-| **正方形图标按钮** | `.btn.btn-icon` | 32x32px 等宽图标 | 主题切换、系统设置、展开折叠 |
+| **主要按钮 (Primary)** | `.btn.btn-primary` | 高对比黑白底色 | 提交表单、保存设置、确认执行 |
+| **次要按钮 (Secondary)** | `.btn.btn-secondary` | 低饱和灰色底色 | 取消操作、返回上一页、二级筛选 |
+| **边框按钮 (Outline)** | `.btn.btn-outline` | 1px 浅灰细边框 | 导出报表、复制内容、查看详情 |
+| **幽灵按钮 (Ghost)** | `.btn.btn-ghost` | 平时不显示边框与底色，悬浮时高亮 | 表格行内操作、面包屑、文字链接 |
+| **危险按钮 (Destructive)**| `.btn.btn-destructive`| 醒目的警示红色 | 删除数据、终止任务、下线服务 |
+| **带图标按钮** | `.btn` 内嵌 `<svg>` | 图标加文字排版 | 下载文件、刷新页面、搜索内容 |
+| **正方形图标按钮** | `.btn.btn-icon` | 32x32px 正方形小按钮 | 切换暗色模式、系统设置、展开折叠 |
 
 ```html
-<!-- 常用按钮代码片段（开箱即用） -->
+<!-- 常用按钮代码（直接复制使用） -->
 <button class="btn btn-primary">确认发布</button>
 <button class="btn btn-secondary">返回上一步</button>
 <button class="btn btn-outline btn-sm">
   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
   <span>下载 PDF 报告</span>
 </button>
-<button class="btn btn-destructive btn-sm">阻断上线</button>
+<button class="btn btn-destructive btn-sm">终止任务</button>
 ```
 
 ---
 
-### 2. 零 CDN 纯原生 SVG 图表库 (Zero-CDN Pure SVG Charts)
+### 2. 纯 SVG 原生图表 (Pure SVG Charts)
 
 <p align="center">
   <img src="assets/arsenal/zh/charts.svg" alt="agent-html 6 大原生 SVG 图表" width="100%">
 </p>
 
-无需引入 Chart.js / ECharts 等动辄数百 KB 的外部脚本，利用纯原生 HTML + SVG 即可绘制企业级工业质感图表，Retina 视网膜高清无损：
+不需要引入 ECharts 或 Chart.js 这类几百 KB 的外部脚本，用几十行纯 SVG 就能画出清晰耐看、高清不模糊的数据图表：
 
-| 图表形态 | 原生绘制原理 | 核心优势 | 效果预览 / 适用场景 |
+| 图表类型 | 绘制方式 | 特点 | 常见用途 |
 | :--- | :--- | :--- | :--- |
-| **📈 面积走势图 (Area Trend)** | `path` 贝塞尔平滑曲线 + `linearGradient` 渐变填充 | 毫秒级加载，平滑过渡 | API 24h 吞吐量 (TPS)、延迟趋势分析 |
-| **📊 阶段耗时柱状图 (Histogram)** | `rect` 圆角矩形 + 顶部数值文本标注 | 精准直观，高对比度 | P95/P99 阶段耗时分布、错误码分布统计 |
-| **🍩 复合环形占比图 (Donut Chart)** | `circle` + `stroke-dasharray` 虚线偏移行程 | 零 JS 计算，纯 CSS 驱动 | 集群节点健康度、资源类型配比全景 |
-| **📉 双线流量对冲图 (Dual-Line)** | 实线主趋势 + 虚线对照组对比 | 双维度时序同步对照 | 入向 vs 出向带宽、基准 vs 实验流量 |
-| **📑 水平耗时排行榜 (Ranking Bar)** | `border-radius: 9999px` 胶囊进度条与阈值色 | 空间利用率极高 | 慢 SQL 排行、微服务首字延迟 (TTFT) |
-| **⏱️ 半环水位仪表盘 (Capacity Gauge)** | 半圆弧行程切割 + 渐变警戒色 | 醒目直观的水位预警 | 显存/内存占用水位、API 速率限制配额 |
+| **📈 面积走势图 (Area Trend)** | `path` 曲线 + 渐变填充 | 加载极快，过渡自然 | API 请求量、耗时趋势分析 |
+| **📊 耗时分布柱状图 (Histogram)** | `rect` 圆角矩形 + 顶部数值 | 直观对比高低数值 | P95/P99 耗时分布、错误码分布 |
+| **🍩 环形占比图 (Donut Chart)** | `circle` 配合虚线偏移 | 不需要写 JS，纯样式控制 | 节点健康状态、资源分类占比 |
+| **📉 双线对比图 (Dual-Line)** | 实线与虚线对照 | 同步对比两个维度的趋势 | 上行 vs 下行流量、优化前 vs 优化后对比 |
+| **📑 耗时排行榜 (Ranking Bar)** | 胶囊进度条 + 数值条 | 节省空间，清晰直观 | 慢接口排行、微服务首字延迟 (TTFT) |
+| **⏱️ 水位仪表盘 (Capacity Gauge)** | 半圆弧行程切割 + 警戒色 | 直观展示使用百分比 | 内存/显存水位、API 调用限额 |
 
 <details>
-<summary><strong>展开查看典型原生 SVG 图表实现代码（即拷即用）</strong></summary>
+<summary><strong>展开查看常用 SVG 图表代码（直接复制使用）</strong></summary>
 
-#### A. 渐变平滑折线走势图 (Area Trend Curve)
+#### A. 平滑面积折线图
 ```html
 <svg viewBox="0 0 400 95" style="width: 100%; height: 85px; overflow: visible;">
   <defs>
@@ -229,27 +233,27 @@ ln -sf ../../../.agents/skills/agent-html ~/.pi/agent/skills/agent-html
       <stop offset="100%" stop-color="var(--chart-indigo)" stop-opacity="0.0"/>
     </linearGradient>
   </defs>
-  <!-- 半透明填充底色 -->
+  <!-- 渐变填充底色 -->
   <path d="M 0 70 Q 55 30, 110 52 T 210 36 T 310 18 T 400 28 L 400 95 L 0 95 Z" fill="url(#areaGrad)"/>
-  <!-- 核心数据平滑折线 -->
+  <!-- 数据折线 -->
   <path d="M 0 70 Q 55 30, 110 52 T 210 36 T 310 18 T 400 28" fill="none" stroke="var(--chart-indigo)" stroke-width="2.5" stroke-linecap="round"/>
-  <!-- 数据高亮点 -->
+  <!-- 高亮数据点 -->
   <circle cx="210" cy="36" r="3" fill="var(--card)" stroke="var(--chart-indigo)" stroke-width="2"/>
   <circle cx="310" cy="18" r="3.5" fill="var(--chart-indigo)" stroke="var(--card)" stroke-width="2"/>
 </svg>
 ```
 
-#### B. 复合环形多段占比图 (Multi-Segment Donut Chart)
+#### B. 环形占比图
 ```html
-<!-- 半径 r=54，周长 2*PI*54 ≈ 339.3，通过 stroke-dasharray 切割多段占比 -->
+<!-- 半径 r=54，周长 2*PI*54 ≈ 339.3，通过 stroke-dasharray 控制各段长短 -->
 <svg viewBox="0 0 160 160" style="width: 120px; height: 120px;">
-  <!-- 底槽 -->
+  <!-- 底色圆环 -->
   <circle cx="80" cy="80" r="54" fill="none" stroke="var(--secondary)" stroke-width="18"/>
-  <!-- 正常段 (65%): 339.3 * 0.65 ≈ 220.5 -->
+  <!-- 正常状态 (65%): 339.3 * 0.65 ≈ 220.5 -->
   <circle cx="80" cy="80" r="54" fill="none" stroke="var(--chart-emerald)" stroke-width="18" stroke-dasharray="220.5 339.3" stroke-dashoffset="0" transform="rotate(-90 80 80)"/>
-  <!-- 预警段 (25%): 339.3 * 0.25 ≈ 84.8 -->
+  <!-- 警告状态 (25%): 339.3 * 0.25 ≈ 84.8 -->
   <circle cx="80" cy="80" r="54" fill="none" stroke="var(--chart-amber)" stroke-width="18" stroke-dasharray="84.8 339.3" stroke-dashoffset="-220.5" transform="rotate(-90 80 80)"/>
-  <!-- 异常段 (10%): 339.3 * 0.10 ≈ 33.9 -->
+  <!-- 异常状态 (10%): 339.3 * 0.10 ≈ 33.9 -->
   <circle cx="80" cy="80" r="54" fill="none" stroke="var(--chart-rose)" stroke-width="18" stroke-dasharray="33.9 339.3" stroke-dashoffset="-305.3" transform="rotate(-90 80 80)"/>
   <text x="80" y="77" text-anchor="middle" font-size="16" font-weight="700" fill="var(--card-fg)">1,280</text>
   <text x="80" y="93" text-anchor="middle" font-size="9" fill="var(--muted-fg)">Nodes</text>
@@ -260,39 +264,39 @@ ln -sf ../../../.agents/skills/agent-html ~/.pi/agent/skills/agent-html
 
 ---
 
-### 3. 精选 24 纯矢量 Lucide 风格图标 (Curated Vector Icons)
+### 3. 24 个纯矢量 SVG 图标 (Vector Icons)
 
 <p align="center">
   <img src="assets/arsenal/zh/icons.svg" alt="agent-html 24 个研发运维纯矢量图标" width="100%">
 </p>
 
-采用 `stroke="currentColor"` 设计，自动继承宿主字号与文字颜色，杜绝 Web Font 图标断网白屏问题：
+使用 `stroke="currentColor"`，图标颜色自动跟随文字颜色，断网或离线环境下也不会丢图标：
 
-| 图标分类 | 覆盖图标清单 | 研发/审查典型应用 |
+| 分类 | 图标名称 | 常见用途 |
 | :--- | :--- | :--- |
-| **系统与检索** | `Search (搜索)` · `Terminal (终端)` · `Settings (设置)` · `Activity (监控心跳)` | 全文搜索、命令行执行结果、系统参数设置、探活心跳 |
-| **研发与协作** | `Branch (分支)` · `Commit (提交)` · `PR (合并请求)` · `Bug (缺陷漏洞)` | Git 变更审查、Trace 缺陷追踪、版本发布日志 |
-| **状态与判定** | `Check (成功)` · `Alert (告警)` · `Shield (安全防护)` · `Lock (访问控制)` | 准入达标徽章、漏洞阻断警示、RBAC 鉴权提示 |
-| **数据与操作** | `Copy (复制)` · `Download (下载)` · `Calendar (日历)` · `Filter (过滤)` · `Refresh (刷新)` | 一键回传 Agent、导出 PDF/CSV、时间区间筛选 |
-| **基础设施** | `Server (服务器)` · `Database (数据库)` · `CPU (处理器)` · `External (外链)` | 拓扑节点监控、慢查询排查、计算集群负载、参考文档跳转 |
+| **系统与搜索** | `Search (搜索)` · `Terminal (终端)` · `Settings (设置)` · `Activity (监控心跳)` | 全文搜索、命令行输出、系统配置、服务心跳 |
+| **代码与协作** | `Branch (分支)` · `Commit (提交)` · `PR (合并请求)` · `Bug (缺陷)` | Git 变更记录、Trace 日志排查、版本更新 |
+| **状态与判定** | `Check (成功)` · `Alert (告警)` · `Shield (安全)` · `Lock (锁定)` | 验收通过状态、告警提示、安全与权限控制 |
+| **数据与操作** | `Copy (复制)` · `Download (下载)` · `Calendar (日历)` · `Filter (筛选)` · `Refresh (刷新)` | 复制结论给 Agent、导出文件、时间范围筛选 |
+| **基础设置** | `Server (服务器)` · `Database (数据库)` · `CPU (处理器)` · `External (外链)` | 节点监控、慢 SQL 排查、集群负载、参考链接 |
 
 ```html
-<!-- 使用示例：直接内嵌，字色自动跟随父级 -->
+<!-- 使用方法：直接嵌入 HTML，图标颜色跟随文字 -->
 <span style="display: inline-flex; align-items: center; gap: 6px; color: var(--ok);">
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-  <span>测试套件全部通过</span>
+  <span>全部测试通过</span>
 </span>
 ```
 
 ---
 
-## 提示词触发示例
+## 提示词示例
 
-安装完成后，以下日常指令将自动触发 `agent-html` Skill：
-- *“帮我做个单文件 HTML 监控看板，展示集群延迟和吞吐量趋势图”*
-- *“生成一份技术面试评估报告，单文件 HTML，排版要高级，支持直接打印”*
-- *“做一个模型 A 和模型 B 的横向对比矩阵页面”*
-- *“不要输出 markdown 墙，把这次架构评审结果做成可视化单文件页面”*
+安装后，平时你可以直接这样对你的 AI 助手说：
+- *“做个单文件的 HTML 监控面板，展示接口延迟和请求量趋势图”*
+- *“生成一份事故复盘报告的 HTML，支持目录高亮和打印”*
+- *“帮我做一个 DeepSeek 和 GPT-4o 的对比页面”*
+- *“把这段 Agent 的运行日志整理成左右分栏的审查页面”*
 
 ---
 

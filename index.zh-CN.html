@@ -776,15 +776,15 @@
     <section class="hero">
       <a href="https://github.com/QingYunA/agent-html" target="_blank" rel="noopener" class="hero-announcement">
         <span class="badge-dot" style="background: var(--ok);"></span>
-        <span>一个让 Agent 输出干净单文件 HTML 的小 Skill</span>
+        <span>零依赖、零 CDN 的单文件 HTML 设计系统</span>
         <span style="color: var(--muted-fg);">→</span>
       </a>
 
-      <h1>让 Coding Agent 生成干净好看的单文件 HTML</h1>
+      <h1>让 AI 生成干净、好看的单文件 HTML</h1>
       
       <p>
-        本质就是个轻量 Skill，教大模型输出不带 CDN 依赖、自带微 CSS 的单文件 HTML。<br>
-        借鉴 shadcn 的冷灰色调与 1px 细线，告别大模型自由发挥时的粗糙塑料感。
+        不用安装 npm 依赖，不用引用外部 CDN。<br>
+        自带深浅色模式与常用组件，双击直接打开，断网也能正常用。
       </p>
 
       <div class="hero-cta">
@@ -805,47 +805,47 @@
     <!-- Key Highlights Bar -->
     <section class="metrics-bar">
       <div class="metric-item">
-        <div class="metric-val" style="color: var(--ok);">0 npm</div>
-        <div class="metric-label">零外部构建流程，没有任何 node_modules</div>
+        <div class="metric-val" style="color: var(--ok);">0 npm 依赖</div>
+        <div class="metric-label">不用打包构建，没有 node_modules</div>
       </div>
       <div class="metric-item">
-        <div class="metric-val">100% 离线</div>
-        <div class="metric-label">双击直接在浏览器打开，内网绝不白屏</div>
+        <div class="metric-val">100% 纯离线</div>
+        <div class="metric-label">双击直接打开，断网也能看</div>
       </div>
       <div class="metric-item">
         <div class="metric-val">6 套模板</div>
-        <div class="metric-label">长文档、监控大盘、双栏工作台、对比、时间轴、看板</div>
+        <div class="metric-label">报告、大盘、工作台、对比、时间线、看板</div>
       </div>
       <div class="metric-item">
         <div class="metric-val" style="color: var(--info);">Agent Skill</div>
-        <div class="metric-label">支持 Claude Code、Cursor、Pi、Codex 等</div>
+        <div class="metric-label">支持 Claude Code、Cursor、Pi 等</div>
       </div>
     </section>
 
     <!-- Component Arsenal (Interactive Playground) -->
     <section id="components">
       <div class="section-header">
-        <div class="section-tag">开箱即用</div>
-        <h2 class="section-title">原子按钮与组件库</h2>
-        <p class="section-desc">无需 AI 盲猜类名与样式。所有原子按钮、徽章、指标卡、图表与原生交互组件零依赖、纯原生、即抄即跑。</p>
+        <div class="section-tag">组件库</div>
+        <h2 class="section-title">常用按钮与基础组件</h2>
+        <p class="section-desc">不用猜类名，纯原生 HTML/CSS。复制就能用，省去 AI 自己瞎写样式。</p>
       </div>
 
       <div class="arsenal-grid">
         <!-- 1. Buttons & Badges -->
         <div class="arsenal-box">
           <div class="arsenal-title">
-            <span>按钮体系与状态徽章</span>
-            <span class="badge badge-success"><span class="badge-dot"></span>交互可用</span>
+            <span>按钮与标签</span>
+            <span class="badge badge-success"><span class="badge-dot"></span>常用</span>
           </div>
-          <div class="arsenal-desc">覆盖 Primary、Secondary、Outline、Ghost、Destructive 以及图标尺寸变体。</div>
+          <div class="arsenal-desc">提供主要、次要、边框、幽灵、危险等常用按钮样式与状态标签。</div>
           
           <div style="font-size: 11px; font-weight: 600; color: var(--muted-fg); margin-bottom: 6px;">按钮变体</div>
           <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px;">
-            <button class="btn btn-primary btn-sm">主要按钮 (Primary)</button>
-            <button class="btn btn-secondary btn-sm">辅助按钮 (Secondary)</button>
-            <button class="btn btn-outline btn-sm">线框轮廓 (Outline)</button>
-            <button class="btn btn-ghost btn-sm">幽灵悬浮 (Ghost)</button>
-            <button class="btn btn-destructive btn-sm">危险操作 (Destructive)</button>
+            <button class="btn btn-primary btn-sm">主要按钮</button>
+            <button class="btn btn-secondary btn-sm">次要按钮</button>
+            <button class="btn btn-outline btn-sm">边框按钮</button>
+            <button class="btn btn-ghost btn-sm">幽灵按钮</button>
+            <button class="btn btn-destructive btn-sm">危险按钮</button>
           </div>
 
           <div style="font-size: 11px; font-weight: 600; color: var(--muted-fg); margin-bottom: 6px;">带图标与尺寸组合</div>
@@ -876,16 +876,16 @@
         <!-- 2. Micro-Interactive Primitives -->
         <div class="arsenal-box">
           <div class="arsenal-title">
-            <span>原生微交互基元</span>
-            <span class="badge badge-info">原生 DOM</span>
+            <span>原生弹窗与折叠</span>
+            <span class="badge badge-info">纯 HTML</span>
           </div>
-          <div class="arsenal-desc">零依赖原生弹窗、手风琴折叠面板与决策结论提示框。</div>
+          <div class="arsenal-desc">纯原生标签实现，自带遮罩与键盘交互，不需要引入任何 JS 库。</div>
 
           <!-- Native Dialog Button -->
           <div style="margin-top: 14px; display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: var(--secondary); border: 1px solid var(--border); border-radius: var(--radius-sm);">
             <div>
-              <div style="font-size: 13px; font-weight: 600;">原生 &lt;dialog&gt; 模态弹窗</div>
-              <div style="font-size: 11px; color: var(--muted-fg);">自带背景虚化遮罩、ESC 自动关闭、0 第三方库</div>
+              <div style="font-size: 13px; font-weight: 600;">原生弹窗 (&lt;dialog&gt;)</div>
+              <div style="font-size: 11px; color: var(--muted-fg);">自带虚化遮罩，按 ESC 自动关闭</div>
             </div>
             <button class="btn btn-outline btn-sm" onclick="document.getElementById('playgroundDialogZh').showModal()">打开弹窗演示</button>
           </div>
@@ -893,11 +893,11 @@
           <!-- Native Accordion Details -->
           <details style="margin-top: 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 12px; background: var(--secondary);">
             <summary style="font-size: 12px; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none;">
-              <span>可折叠 &lt;details&gt; 诊断日志手风琴</span>
+              <span>折叠面板 (&lt;details&gt;)</span>
               <span style="color: var(--muted-fg);">▾</span>
             </summary>
             <div style="font-size: 12px; color: var(--muted-fg); margin-top: 6px; line-height: 1.5;">
-              无需任何 JavaScript，用于超长排障 Trace 日志、执行细节、长文本折叠等场景。
+              无需任何 JavaScript，展开收起内容。
             </div>
           </details>
 
@@ -905,8 +905,8 @@
           <div style="margin-top: 10px; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--ok-border); background: var(--ok-bg); font-size: 12px; display: flex; gap: 8px; align-items: flex-start;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ok)" stroke-width="2" style="margin-top: 2px; flex-shrink: 0;"><polyline points="20 6 9 17 4 12"/></svg>
             <div>
-              <strong style="color: var(--ok); display: block;">执行摘要提示框 (Callout)</strong>
-              <span style="color: var(--card-fg);">突出展示架构评审结论、安全性检测判定或灰度发布准入意见。</span>
+              <strong style="color: var(--ok); display: block;">提示框 (Callout)</strong>
+              <span style="color: var(--card-fg);">醒目展示结论、重要提醒或风险提示。</span>
             </div>
           </div>
         </div>
@@ -914,10 +914,10 @@
         <!-- 3. Pure SVG Charts (6 Core Formats) -->
         <div class="arsenal-box" style="grid-column: span 2;">
           <div class="arsenal-title">
-            <span>零 CDN 纯原生 SVG 图表（6 大核心形态）</span>
-            <span class="badge badge-info">零外部库 · 精准调色</span>
+            <span>纯原生 SVG 图表</span>
+            <span class="badge badge-info">0 外部图表库</span>
           </div>
-          <div class="arsenal-desc">基于原生 SVG 矢量曲线绘制。100% 离线自包含、零 JS 图表库依赖、Retina 高清视网膜渲染、自动适配深浅主题。</div>
+          <div class="arsenal-desc">纯 SVG 绘制，不需要 ECharts 或 Chart.js。高清不模糊，自动适配深浅色。</div>
 
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-top: 14px;">
             <!-- Chart 1: Area Trend Curve -->
@@ -1063,8 +1063,8 @@
         <!-- 4. Real-time Filterable Table -->
         <div class="arsenal-box" style="grid-column: span 2;">
           <div class="arsenal-title">
-            <span>纯前端实时过滤数据表</span>
-            <input type="text" id="demoSearchZh" placeholder="输入关键词即时过滤行..." style="font-size: 12px; height: 28px; padding: 0 10px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--bg); color: var(--card-fg); outline: none; width: 220px;">
+            <span>可实时搜索的数据表</span>
+            <input type="text" id="demoSearchZh" placeholder="输入关键词即时搜索..." style="font-size: 12px; height: 28px; padding: 0 10px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--bg); color: var(--card-fg); outline: none; width: 220px;">
           </div>
           <div class="arsenal-desc">5 行纯原生 JavaScript，不需要引入任何前端框架即可实现客户端毫秒级检索。</div>
 
@@ -1117,10 +1117,10 @@
       <!-- Curated SVG Icon Grid (24 Icons) -->
       <div class="arsenal-box" style="margin-bottom: 72px;">
         <div class="arsenal-title">
-          <span>精选 24 研发与运维纯矢量 Lucide 风格图标</span>
-          <span style="font-size: 12px; color: var(--muted-fg);">点击任意图标即可将 SVG 代码复制至剪贴板</span>
+          <span>24 个常用矢量图标</span>
+          <span style="font-size: 12px; color: var(--muted-fg);">点击任意图标直接复制 SVG 代码</span>
         </div>
-        <div class="arsenal-desc">采用 <code>stroke="currentColor"</code>，能够随父级字色自动适配深浅主题。零字体依赖，100% 离线可用。</div>
+        <div class="arsenal-desc">颜色随文字颜色自动变化，自动支持深浅色模式，零字体依赖。</div>
 
         <div class="icon-grid">
           <div class="icon-tile" data-name="搜索 (Search)" onclick="copySvgCode(this)">
@@ -1227,9 +1227,9 @@
     <!-- The 6 Structural Archetypes Interactive Showcase -->
     <section id="archetypes">
       <div class="section-header">
-        <div class="section-tag">常用布局模板</div>
-        <h2 class="section-title">6 套开箱即用的布局模板</h2>
-        <p class="section-desc">大模型自由发挥容易排版错乱。直接套用现成结构，清晰又省心。</p>
+        <div class="section-tag">场景模板</div>
+        <h2 class="section-title">6 套常用场景模板</h2>
+        <p class="section-desc">直接套用现成页面结构，干净省心，不用从头设计。</p>
       </div>
 
       <div class="archetype-container">
@@ -1266,7 +1266,7 @@
           <div class="archetype-info-row">
             <div class="archetype-info-left">
               <h3>Report 报告</h3>
-              <p>860px 居中标准阅读视口，针对技术评审、架构审查、面试评估与打印 PDF 深度优化。具备元数据标头、评分栏、结论 Callout、折叠手风琴与一键导出 Markdown。</p>
+              <p>单栏文档布局。自带目录导航、评分栏、折叠手风琴与导出 Markdown，适合写评审报告、复盘纪要、说明文档。</p>
             </div>
             <div class="archetype-actions">
               <a href="templates/zh/report.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
@@ -1286,7 +1286,7 @@
           <div class="archetype-info-row">
             <div class="archetype-info-left">
               <h3>Dashboard 数据面板</h3>
-              <p>宽屏流式响应式网格布局。内置 4 列 KPI 统计卡片、纯原生响应式 SVG 走势图与柱状图、双重实时过滤工具条（搜索+状态下拉）、原生模态弹窗与一键复制表格 Markdown。</p>
+              <p>宽屏数据大盘。自带统计指标卡、SVG 趋势图、可实时搜索过滤的数据表格，适合做业务监控、Token 消耗与成本分析。</p>
             </div>
             <div class="archetype-actions">
               <a href="templates/zh/dashboard.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
@@ -1306,7 +1306,7 @@
           <div class="archetype-info-row">
             <div class="archetype-info-left">
               <h3>Inspector 审查工作台</h3>
-              <p>视口充满型工作台应用。左侧 320px 边栏支持快速检索过滤用例列表，右侧详情区动态响应渲染选中条目属性、人工审查裁决操作组（通过/修复/拒绝），以及一键将裁决结论复制发回终端 Agent。</p>
+              <p>全屏双栏工作台。左边选列表，右边看详情与处理操作，适合做日志追溯、Prompt 调试、人工审核。</p>
             </div>
             <div class="archetype-actions">
               <a href="templates/zh/inspector.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
@@ -1326,7 +1326,7 @@
           <div class="archetype-info-row">
             <div class="archetype-info-left">
               <h3>Compare 对比</h3>
-              <p>双栏左右并排对比布局（基准方案 vs 升级挑战方案）。内置核心胜出判定 Callout、参数规格对决、输出快照对比、量化 Delta 差异对照表以及一键复制对比 Markdown 摘要。</p>
+              <p>左右并排对比。自带结论提示、参数对比、差异对比表格，适合做大模型评测、方案选型与版本对比。</p>
             </div>
             <div class="archetype-actions">
               <a href="templates/zh/compare.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
@@ -1346,7 +1346,7 @@
           <div class="archetype-info-row">
             <div class="archetype-info-left">
               <h3>Timeline 时间线</h3>
-              <p>高信息密度单轨垂直时间线。具备语义化状态圆点（故障、警告、恢复、信息）、精确时间戳与操作人标签、可展开诊断日志，以及一键将时间线完整复制为 Markdown。</p>
+              <p>单轨垂直时间轴。带状态圆点、时间戳与可折叠日志，适合排查故障记录、发版历史与路线图。</p>
             </div>
             <div class="archetype-actions">
               <a href="templates/zh/timeline.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
@@ -1366,7 +1366,7 @@
           <div class="archetype-info-row">
             <div class="archetype-info-left">
               <h3>Kanban 看板</h3>
-              <p>4 列分类流转看板（Backlog、进行中、阻塞阻断、已完成）。零外部库依赖，纯原生 HTML5 Drag & Drop（~35 行原生 JS 驱动），提供一键复制分拣结果回发 Agent 闭环。</p>
+              <p>多列任务看板。纯原生拖拽排序，支持一键复制结果，适合做需求流转、Bug 分拣与任务管理。</p>
             </div>
             <div class="archetype-actions">
               <a href="templates/zh/kanban.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
@@ -1386,9 +1386,9 @@
     <!-- Why Not Tailwind CDN vs Why Not Ad-hoc CSS -->
     <section>
       <div class="section-header">
-        <div class="section-tag">工程设计哲学</div>
-        <h2 class="section-title">为什么坚决追求零 CDN 自包含？</h2>
-        <p class="section-desc">对比 AI Agent 生成前端页面的三种典型实现路径。</p>
+        <div class="section-tag">对比</div>
+        <h2 class="section-title">为什么不引 CDN，也不让 AI 随意写 CSS？</h2>
+        <p class="section-desc">看下三种常见方式的区别：</p>
       </div>
 
       <div class="contrast-grid">
@@ -1398,14 +1398,14 @@
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
               <span>CDN 依赖陷阱</span>
             </div>
-            <div class="contrast-title">Tailwind CDN 运行时</div>
-            <div class="contrast-desc">模型习惯注入 <code>&lt;script src="cdn.tailwindcss.com"&gt;</code> 与远程字体。</div>
+            <div class="contrast-title">引入 Tailwind CDN</div>
+            <div class="contrast-desc">AI 喜欢加上 <code>&lt;script src="cdn.tailwindcss.com"&gt;</code>。</div>
           </div>
           <ul class="contrast-list">
-            <li class="bad">✕ 企业离线环境 / 隔离机房彻底白屏失效</li>
-            <li class="bad">✕ 2 秒 JS 运行时解析开销，伴随严重排版闪烁 (FOUC)</li>
-            <li class="bad">✕ 触发严格企业内网的内容安全策略 (CSP) 拦截</li>
-            <li class="bad">✕ 外部 CDN 节点漂移失效导致长期归档文件损坏</li>
+            <li class="bad">✕ 断网或内网环境下直接白屏</li>
+            <li class="bad">✕ 打开有明显卡顿和排版闪烁</li>
+            <li class="bad">✕ 容易被浏览器的安全策略 (CSP) 拦截</li>
+            <li class="bad">✕ CDN 链接一旦失效，历史文件就坏了</li>
           </ul>
         </div>
 
@@ -1415,14 +1415,14 @@
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
               <span>AI 视觉塑料陷阱</span>
             </div>
-            <div class="contrast-title">随意手写内联 CSS</div>
-            <div class="contrast-desc">禁用 CDN 后，大模型容易自由发挥产生不可控的视觉漂移。</div>
+            <div class="contrast-title">让 AI 随意手写 CSS</div>
+            <div class="contrast-desc">不给规范时，AI 自由发挥出来的样式通常很难看。</div>
           </div>
           <ul class="contrast-list">
-            <li class="bad">✕ 产生不协调的纯黑 1px 粗暴边框与失衡留白</li>
-            <li class="bad">✕ 表格列宽失衡，缺少移动端自适应</li>
-            <li class="bad">✕ 零暗黑模式支持，夜晚查看极其刺眼</li>
-            <li class="bad">✕ 每次会话自由命名 CSS 类，完全无法复用</li>
+            <li class="bad">✕ 边框生硬、间距混乱、没有设计感</li>
+            <li class="bad">✕ 表格挤成一团，手机上没法看</li>
+            <li class="bad">✕ 没有暗黑模式，晚上查看很刺眼</li>
+            <li class="bad">✕ 每次生成的类名都随机乱变，没法维护</li>
           </ul>
         </div>
 
@@ -1430,16 +1430,16 @@
           <div>
             <div class="contrast-badge" style="color: var(--ok);">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>agent-html 标准规范</span>
+              <span>agent-html 方式</span>
             </div>
-            <div class="contrast-title">原生微 CSS 变量底座</div>
-            <div class="contrast-desc">~75 行纯原生 CSS 变量体系与经过实战检验的标准语义类。</div>
+            <div class="contrast-title">精简的原生 CSS</div>
+            <div class="contrast-desc">大约 75 行原生 CSS 变量与常用的基础样式类。</div>
           </div>
           <ul class="contrast-list">
-            <li class="good">✓ 100% 离线自包含，双击访达 0ms 瞬间秒开</li>
-            <li class="good">✓ 零依赖、零 npm 构建链，永久可用</li>
-            <li class="good">✓ 精准复刻 shadcn Zinc 冷灰高级中性美学</li>
-            <li class="good">✓ 5 行原生脚本驱动平滑深浅模式双切换</li>
+            <li class="good">✓ 纯离线单文件，双击秒开</li>
+            <li class="good">✓ 零依赖，不需要打包构建</li>
+            <li class="good">✓ 干净耐看的 shadcn 风格灰色调</li>
+            <li class="good">✓ 自带平滑好用的深浅色切换</li>
           </ul>
         </div>
       </div>
