@@ -132,12 +132,12 @@ ln -sf ../../../.agents/skills/agent-html ~/.pi/agent/skills/agent-html
 
 | 布局母版 | 模板文件路径 | 核心适用场景 | 关键原生特性 |
 | :--- | :--- | :--- | :--- |
-| **01. 线上事故复盘报告** | [`templates/zh/report.html`](templates/zh/report.html) | 技术评审、面试评估、RFC 说明书 | 悬浮目录（TOC ScrollSpy）、达标评分卡、可折叠手风琴、打印优化 |
-| **02. API 消耗与成本看板** | [`templates/zh/dashboard.html`](templates/zh/dashboard.html) | 资源监控、Token 用量、工单大盘 | 4 列 KPI 卡、纯原生 SVG 趋势图/柱状图、实时搜索双重过滤表 |
-| **03. Agent 运行日志审查** | [`templates/zh/inspector.html`](templates/zh/inspector.html) | Trace 回溯、JSONL 查看、调试器 | 100vh 满屏、左侧实时检索、右侧动态联动、人工裁决按钮组 |
-| **04. DeepSeek vs GPT-4o 选型对比** | [`templates/zh/compare.html`](templates/zh/compare.html) | 模型 A/B 测、Prompt 改版 diff | 左右双方案并排比对、胜出裁决 Callout、量化 Delta 差异表 |
-| **05. 服务恢复时间线** | [`templates/zh/timeline.html`](templates/zh/timeline.html) | 突发事故复盘、版本发布路线图 | 单轨垂直时间线、语义状态圆点、诊断日志展开、一键复制 MD |
-| **06. Bug 分拣与需求看板** | [`templates/zh/kanban.html`](templates/zh/kanban.html) | 需求优先级、Bug 分拣流转 | 纯原生 HTML5 Drag & Drop 跨列拖拽、一键复制看板决策回 Agent |
+| **01. Report 报告** | [`templates/zh/report.html`](templates/zh/report.html) | 技术评审、面试评估、RFC 说明书 | 悬浮目录（TOC ScrollSpy）、达标评分卡、可折叠手风琴、打印优化 |
+| **02. Dashboard 数据面板** | [`templates/zh/dashboard.html`](templates/zh/dashboard.html) | 资源监控、Token 用量、工单大盘 | 4 列 KPI 卡、纯原生 SVG 趋势图/柱状图、实时搜索双重过滤表 |
+| **03. Inspector 审查工作台** | [`templates/zh/inspector.html`](templates/zh/inspector.html) | Trace 回溯、JSONL 查看、调试器 | 100vh 满屏、左侧实时检索、右侧动态联动、人工裁决按钮组 |
+| **04. Compare 对比** | [`templates/zh/compare.html`](templates/zh/compare.html) | 模型 A/B 测、Prompt 改版 diff | 左右双方案并排比对、胜出裁决 Callout、量化 Delta 差异表 |
+| **05. Timeline 时间线** | [`templates/zh/timeline.html`](templates/zh/timeline.html) | 突发事故复盘、版本发布路线图 | 单轨垂直时间线、语义状态圆点、诊断日志展开、一键复制 MD |
+| **06. Kanban 看板** | [`templates/zh/kanban.html`](templates/zh/kanban.html) | 需求优先级、Bug 分拣流转 | 纯原生 HTML5 Drag & Drop 跨列拖拽、一键复制看板决策回 Agent |
 
 <details>
 <summary><strong>📸 点击展开查看全部 6 大母版高清大图</strong></summary>

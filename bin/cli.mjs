@@ -146,13 +146,13 @@ Snippet names available:
   - svg-chart     Zero-dependency pure SVG area line chart
   - modal         Native HTML5 <dialog> modal with backdrop
 
-Layout Templates (Real-world scenarios):
-  - dashboard     API 消耗与成本看板 (API usage & billing analytics)
-  - report        线上事故复盘报告 (Production postmortem & RFC)
-  - compare       DeepSeek vs GPT-4o 选型对比 (Model benchmark & cost comparison)
-  - inspector     Agent 运行日志审查 (Agent session logs & tool call inspector)
-  - timeline      服务恢复时间线 (Incident response & deployment timeline)
-  - kanban        Bug 分拣与需求看板 (Bug triage & agile kanban board)
+Layout Templates (6 套模板):
+  - report        Report 报告 (单栏文档 / 事故复盘)
+  - dashboard     Dashboard 数据面板 (指标大盘 / API 消耗)
+  - inspector     Inspector 审查工作台 (双栏查看 / 日志追溯)
+  - compare       Compare 对比 (并排对比 / 选型矩阵)
+  - timeline      Timeline 时间线 (时序编年 / 服务恢复)
+  - kanban        Kanban 看板 (敏捷任务 / Bug 分拣)
 
 Examples:
   npx agent-html open
@@ -195,13 +195,13 @@ switch (cmd) {
 
   case 'list': {
     console.log(`
-Available 6 Layout Templates (Real-world scenarios):
-  1. dashboard  API 消耗与成本看板 (API usage, latency, tokens & cost breakdown)
-  2. report     线上事故复盘报告 (Production postmortem, root cause, timeline & RFC)
-  3. compare    DeepSeek vs GPT-4o 选型对比 (Model benchmark score & inference cost)
-  4. inspector  Agent 运行日志审查 (Agent session trace, tool payload & human review)
-  5. timeline   服务恢复时间线 (Incident response chronicle & deployment log)
-  6. kanban     Bug 分拣与需求看板 (Bug triage, priority & agile kanban board)
+Available 6 Layout Templates:
+  1. report     Report 报告 (单栏文档 / 审查复盘)
+  2. dashboard  Dashboard 数据面板 (指标大盘 / 过滤表格)
+  3. inspector  Inspector 审查工作台 (双栏查看 / 日志审查)
+  4. compare    Compare 对比 (并排横向对比 / 矩阵)
+  5. timeline   Timeline 时间线 (时序编年 / 事故记录)
+  6. kanban     Kanban 看板 (任务流转 / 缺陷分拣)
 
 Languages available:
   - English:  npx agent-html template en/<name> (or --en)
