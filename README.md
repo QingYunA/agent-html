@@ -132,12 +132,12 @@ Rather than rigid business screens, `agent-html` provides 6 fundamental layout s
 
 | Archetype | Template Path | Best For | Key Capabilities |
 | :--- | :--- | :--- | :--- |
-| **01. Incident Postmortem Report** | [`templates/en/report.html`](templates/en/report.html) | Technical reviews, RFCs, audits | TOC ScrollSpy, KPI score overview, details accordion, print CSS |
-| **02. API Usage & Cost Dashboard** | [`templates/en/dashboard.html`](templates/en/dashboard.html) | Metrics monitoring, billing | 4 KPI cards, native SVG area & bar charts, filterable table |
-| **03. Agent Trace & Log Inspector** | [`templates/en/inspector.html`](templates/en/inspector.html) | Trace inspection, prompt debugging | 100vh split screen, item filtering, JSON payload viewer, review actions |
-| **04. DeepSeek vs GPT-4o Comparison** | [`templates/en/compare.html`](templates/en/compare.html) | Model A/B testing, prompt diffs | Dual baseline vs challenger cards, delta comparison matrix |
-| **05. Service Recovery Timeline** | [`templates/en/timeline.html`](templates/en/timeline.html) | Incident postmortems, changelogs | Single-track vertical timeline, status dots, diagnostic logs |
-| **06. Bug Triage & Task Kanban** | [`templates/en/kanban.html`](templates/en/kanban.html) | Bug triage, backlog grooming | 4-column drag & drop, status badges, agent feedback loop |
+| **01. Report** | [`templates/en/report.html`](templates/en/report.html) | Technical reviews, RFCs, audits | TOC ScrollSpy, KPI score overview, details accordion, print CSS |
+| **02. Dashboard** | [`templates/en/dashboard.html`](templates/en/dashboard.html) | Metrics monitoring, billing | 4 KPI cards, native SVG area & bar charts, filterable table |
+| **03. Inspector** | [`templates/en/inspector.html`](templates/en/inspector.html) | Trace inspection, prompt debugging | 100vh split screen, item filtering, JSON payload viewer, review actions |
+| **04. Compare** | [`templates/en/compare.html`](templates/en/compare.html) | Model A/B testing, prompt diffs | Dual baseline vs challenger cards, delta comparison matrix |
+| **05. Timeline** | [`templates/en/timeline.html`](templates/en/timeline.html) | Incident postmortems, changelogs | Single-track vertical timeline, status dots, diagnostic logs |
+| **06. Kanban** | [`templates/en/kanban.html`](templates/en/kanban.html) | Bug triage, backlog grooming | 4-column drag & drop, status badges, agent feedback loop |
 
 <details>
 <summary><strong>📸 Click to view full-resolution static screenshots for all 6 archetypes</strong></summary>
