@@ -326,6 +326,12 @@
     .form-item label { display: block; font-size: 12px; font-weight: 500; margin-bottom: 4px; }
     .dialog-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; }
 
+    @media print {
+      body { background: #fff; padding: 0; }
+      .header-actions, .toolbar, .btn, .btn-icon, .input-wrap, .select { display: none !important; }
+      .container { max-width: 100% !important; }
+      .card, .stat-card, .chart-card { break-inside: avoid; }
+    }
     @media (max-width: 768px) {
       .toolbar { flex-direction: column; align-items: stretch; }
       .toolbar-left { max-width: 100%; }
@@ -573,6 +579,8 @@
       </table>
     </div>
 
+    <div id="emptyState" style="display:none; padding:24px; text-align:center; font-size:13px; color:var(--muted-fg);">暂无匹配记录</div>
+
     <div class="footer-bar">
       <span id="recordCount">显示 4 条记录</span>
       <span>每页显示 10 条 · 纯前端即时渲染</span>
@@ -618,6 +626,7 @@
   const statusFilter = document.getElementById('statusFilter');
   const table = document.getElementById('dataTable');
   const countSpan = document.getElementById('recordCount');
+  const emptyState = document.getElementById('emptyState');
 
   function applyFilter() {
     const q = searchInput.value.toLowerCase().trim();
@@ -639,6 +648,7 @@
     });
 
     countSpan.textContent = `显示 ${visible} 条记录`;
+    emptyState.style.display = visible === 0 ? 'block' : 'none';
   }
 
   searchInput.addEventListener('input', applyFilter);

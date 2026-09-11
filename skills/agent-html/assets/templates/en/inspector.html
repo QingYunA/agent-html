@@ -271,6 +271,7 @@
       font-size: 11px;
       cursor: pointer;
     }
+    /* @lint-allow: DARK_MODE_LEAK — 复制按钮悬浮在恒为深色的 .code-box 表面上（底色固定深色、不随主题反转），故此处深色底 + 白字是刻意为之 */
     .copy-btn:hover { background: #3f3f46; color: #fff; }
 
     /* Review Action Bar */
@@ -283,6 +284,17 @@
       align-items: center;
     }
 
+    /* Print / PDF export: release the 100vh two-pane constraint, flow as one column, hide action buttons but keep list + detail data */
+    @media print {
+      body { background: #fff; padding: 0; height: auto; overflow: visible; }
+      .btn, .copy-btn { display: none !important; }
+      .workspace { display: block; overflow: visible; }
+      .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border); }
+      .sidebar-search { display: none !important; }
+      .item-list { overflow: visible; }
+      .detail-pane { overflow: visible; padding: 0; }
+      .item-row, .detail-card { break-inside: avoid; }
+    }
     @media (max-width: 768px) {
       .workspace { flex-direction: column; }
       .sidebar { width: 100%; height: 240px; }
@@ -302,7 +314,7 @@
     <div style="display: flex; gap: 8px;">
       <button class="btn btn-primary" onclick="copyDecisionsToAgent()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-        <span id="copyDecisionsBtn">Copy Review Decisions</span>
+        <span id="exportDecisionBtn">Copy Review Decisions</span>
       </button>
       <button id="themeToggle" class="btn" title="Toggle theme">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1 -9 -9Z"/></svg>
@@ -317,6 +329,7 @@
       <div class="sidebar-search">
         <input type="text" id="filterInput" class="search-input" placeholder="Filter by ID, status, or name...">
       </div>
+      <div id="emptyState" style="display:none; padding:24px; text-align:center; font-size:13px; color:var(--muted-fg);">No matching records</div>
       <ul class="item-list" id="itemList">
         <li class="item-row active" data-id="ITEM-101" data-status="PASS" data-name="Primary Egress Health Check" data-time="10:30:12" data-duration="140ms">
           <div class="item-top">
@@ -468,6 +481,9 @@
         dBadge.className = `badge badge-${st === 'PASS' ? 'success' : st === 'FAIL' ? 'danger' : 'warning'}`;
         dBadge.innerHTML = `<span class="badge-dot"></span>${st}`;
 
+        // @lint-allow: NO_RANDOM — 仅为新打开的条目生成唯一 trace_id，不参与任何图形或演示数据
+        const traceId = `tr-${Math.random().toString(16).slice(2, 10)}`;
+
         dJson.innerHTML = `<code>${JSON.stringify({
   item_id: id,
   name: name,
@@ -475,19 +491,24 @@
   duration: dur,
   timestamp: time,
   node: "worker-node-primary",
-  trace_id: `tr-${Math.random().toString(16).slice(2, 10)}`
+  trace_id: traceId
 }, null, 2)}</code>`;
       });
     });
 
     // Filter List
     const filterInput = document.getElementById('filterInput');
+    const emptyState = document.getElementById('emptyState');
     filterInput.addEventListener('input', (e) => {
       const q = e.target.value.toLowerCase().trim();
+      let visible = 0;
       rows.forEach(r => {
         const txt = r.textContent.toLowerCase();
-        r.style.display = (!q || txt.includes(q)) ? '' : 'none';
+        const hit = !q || txt.includes(q);
+        r.style.display = hit ? '' : 'none';
+        if (hit) visible++;
       });
+      emptyState.style.display = visible === 0 ? 'block' : 'none';
     });
 
     // Copy Code Helper
@@ -510,7 +531,7 @@
 - ITEM-103: PASS (Cache Warmup Scheduler)
 - ITEM-104: WARN (Quota Utilization Spike: add memory limiter threshold)`;
       navigator.clipboard.writeText(decisions).then(() => {
-        const btn = document.getElementById('copyDecisionsBtn');
+        const btn = document.getElementById('exportDecisionBtn');
         btn.textContent = 'Copied to Agent!';
         setTimeout(() => { btn.textContent = 'Copy Review Decisions'; }, 1500);
       });

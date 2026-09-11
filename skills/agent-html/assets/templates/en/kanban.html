@@ -228,6 +228,15 @@
       color: var(--muted-fg);
     }
 
+    @media print {
+      body { background: #fff; padding: 0; height: auto; overflow: visible; }
+      .actions { display: none !important; }
+      .container { max-width: 100% !important; overflow: visible; }
+      .kanban-board { grid-template-columns: repeat(4, 1fr) !important; overflow: visible; }
+      .kanban-col { overflow: visible; break-inside: avoid; }
+      .cards-container { overflow: visible; }
+      .card-item { break-inside: avoid; }
+    }
     @media (max-width: 900px) {
       .kanban-board { grid-template-columns: repeat(2, 300px); }
     }
@@ -245,7 +254,7 @@
     <div class="actions">
       <button class="btn btn-primary" onclick="copyTriageDecisions()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-        <span id="copyKanbanBtn">Copy Decisions to Agent</span>
+        <span id="exportKanbanBtn">Copy Decisions to Agent</span>
       </button>
       <button id="themeToggle" class="btn" title="Toggle theme">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1 -9 -9Z"/></svg>
@@ -378,7 +387,7 @@
 - Blocked: TASK-103 (Cloudflare DNS Failover Route: waiting on API token)
 - Done: TASK-101 (Zero-CDN HTML Validator Engine)`;
     navigator.clipboard.writeText(md).then(() => {
-      const btn = document.getElementById('copyKanbanBtn');
+      const btn = document.getElementById('exportKanbanBtn');
       btn.textContent = 'Copied to Agent!';
       setTimeout(() => { btn.textContent = 'Copy Decisions to Agent'; }, 1500);
     });

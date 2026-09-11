@@ -280,8 +280,20 @@
       font-size: 11px;
       cursor: pointer;
     }
+    /* @lint-allow: DARK_MODE_LEAK — 复制按钮悬浮在恒为深色的 .code-box 表面上（底色固定深色、不随主题反转），故此处深色底 + 白字是刻意为之 */
     .copy-btn:hover { background: #3f3f46; color: #fff; }
 
+    /* 打印/导出 PDF：解除 100vh 与双栏约束，单栏纵向铺开，隐藏操作按钮但保留列表与详情数据 */
+    @media print {
+      body { background: #fff; padding: 0; height: auto; overflow: visible; }
+      .btn, .copy-btn { display: none !important; }
+      .workspace { display: block; overflow: visible; }
+      .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border); }
+      .sidebar-search { display: none !important; }
+      .item-list { overflow: visible; }
+      .detail-pane { overflow: visible; padding: 0; }
+      .item-row, .detail-card { break-inside: avoid; }
+    }
     @media (max-width: 768px) {
       .workspace { flex-direction: column; }
       .sidebar { width: 100%; height: 240px; }
@@ -316,6 +328,7 @@
       <div class="sidebar-search">
         <input type="text" id="filterInput" class="search-input" placeholder="过滤编号、状态或名称...">
       </div>
+      <div id="emptyState" style="display:none; padding:24px; text-align:center; font-size:13px; color:var(--muted-fg);">暂无匹配记录</div>
       <ul class="item-list" id="itemList">
         <li class="item-row active" data-id="ITEM-101" data-status="PASS" data-name="主链路网络健康探活" data-time="10:30:12" data-duration="140ms">
           <div class="item-top">
@@ -466,6 +479,9 @@
         dBadge.className = `badge badge-${st === 'PASS' ? 'success' : st === 'FAIL' ? 'danger' : 'warning'}`;
         dBadge.innerHTML = `<span class="badge-dot"></span>${st}`;
 
+        // @lint-allow: NO_RANDOM — 仅为新打开的条目生成唯一 trace_id，不参与任何图形或演示数据
+        const traceId = `tr-${Math.random().toString(16).slice(2, 10)}`;
+
         dJson.innerHTML = `<code>${JSON.stringify({
   item_id: id,
   name: name,
@@ -473,19 +489,24 @@
   duration: dur,
   timestamp: time,
   node: "worker-node-primary",
-  trace_id: `tr-${Math.random().toString(16).slice(2, 10)}`
+  trace_id: traceId
 }, null, 2)}</code>`;
       });
     });
 
     // Filter List
     const filterInput = document.getElementById('filterInput');
+    const emptyState = document.getElementById('emptyState');
     filterInput.addEventListener('input', (e) => {
       const q = e.target.value.toLowerCase().trim();
+      let visible = 0;
       rows.forEach(r => {
         const txt = r.textContent.toLowerCase();
-        r.style.display = (!q || txt.includes(q)) ? '' : 'none';
+        const hit = !q || txt.includes(q);
+        r.style.display = hit ? '' : 'none';
+        if (hit) visible++;
       });
+      emptyState.style.display = visible === 0 ? 'block' : 'none';
     });
 
     // Copy Code Helper

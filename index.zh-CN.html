@@ -634,6 +634,7 @@
       font-size: 11px;
       cursor: pointer;
     }
+    /* @lint-allow: DARK_MODE_LEAK — 复制按钮悬浮在恒为深色的代码块表面上（.code-block 底色固定为深色、不随主题反转），故此处深色底 + 白字是刻意为之 */
     .code-copy-btn:hover { background: #3f3f46; color: #fff; }
 
     /* Prompt Cookbook Grid */
@@ -1110,6 +1111,7 @@
                 </tr>
               </tbody>
             </table>
+            <div id="demoEmptyState" style="display: none; padding: 28px 16px; text-align: center; font-size: 13px; color: var(--muted-fg);">暂无匹配记录</div>
           </div>
         </div>
       </div>
@@ -1663,13 +1665,18 @@ npx agent-html check dashboard.html</code></pre>
     // Table Search Filter Demo
     const searchInput = document.getElementById('demoSearchZh');
     const table = document.getElementById('demoTableZh');
+    const emptyState = document.getElementById('demoEmptyState');
     searchInput?.addEventListener('input', (e) => {
       const q = e.target.value.toLowerCase().trim();
       const rows = table.querySelectorAll('tbody tr');
+      let visibleRows = 0;
       rows.forEach(row => {
         const text = row.textContent.toLowerCase();
-        row.style.display = (!q || text.includes(q)) ? '' : 'none';
+        const match = !q || text.includes(q);
+        row.style.display = match ? '' : 'none';
+        if (match) visibleRows++;
       });
+      emptyState.style.display = visibleRows === 0 ? 'block' : 'none';
     });
   </script>
 </body>

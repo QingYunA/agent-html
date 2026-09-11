@@ -321,6 +321,12 @@
     .form-item label { display: block; font-size: 12px; font-weight: 500; margin-bottom: 4px; }
     .dialog-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; }
 
+    @media print {
+      body { background: #fff; padding: 0; }
+      .header-actions, .toolbar, .btn, .input-wrap, .select { display: none !important; }
+      .container { max-width: 100% !important; }
+      .card, .stat-card, .chart-card { break-inside: avoid; }
+    }
     @media (max-width: 768px) {
       .charts-row { grid-template-columns: 1fr; }
       .toolbar { flex-direction: column; align-items: stretch; }
@@ -405,8 +411,8 @@
       <svg viewBox="0 0 500 130" style="width: 100%; height: 110px; overflow: visible;">
         <defs>
           <linearGradient id="chartAreaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stop-color="#18181b" stop-opacity="0.25"/>
-            <stop offset="100%" stop-color="#18181b" stop-opacity="0.0"/>
+            <stop offset="0%" stop-color="var(--primary)" stop-opacity="0.22"/>
+            <stop offset="100%" stop-color="var(--primary)" stop-opacity="0.00"/>
           </linearGradient>
         </defs>
         <!-- Horizontal gridlines -->
@@ -494,7 +500,7 @@
       <div style="display: flex; gap: 8px;">
         <button class="btn btn-sm" onclick="copyTableMarkdown()">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-          <span id="copyTableText">Copy (MD)</span>
+          <span id="copyTableMdBtn">Copy (MD)</span>
         </button>
         <button class="btn btn-sm" onclick="alert('Export CSV triggered')">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -565,6 +571,8 @@
       </table>
     </div>
 
+    <div id="emptyState" style="display:none; padding:24px; text-align:center; font-size:13px; color:var(--muted-fg);">No matching records</div>
+
     <div class="footer-bar">
       <span id="recordCount">Showing 4 records</span>
       <span>10 records per page · Client-side instant filter</span>
@@ -606,6 +614,7 @@
   const statusFilter = document.getElementById('statusFilter');
   const table = document.getElementById('dataTable');
   const countSpan = document.getElementById('recordCount');
+  const emptyState = document.getElementById('emptyState');
 
   function applyFilter() {
     const q = searchInput.value.toLowerCase().trim();
@@ -627,6 +636,7 @@
     });
 
     countSpan.textContent = `Showing ${visible} records`;
+    emptyState.style.display = visible === 0 ? 'block' : 'none';
   }
 
   searchInput.addEventListener('input', applyFilter);
@@ -641,7 +651,7 @@
 | ITEM-2026-003 | Vector DB Cache Partition | Cache Tier | 12.8 GB | Healthy |
 | ITEM-2026-004 | Batch Data Ingestion Pipeline | Sync Service | 850 GB total | Finished |`;
     navigator.clipboard.writeText(md).then(() => {
-      const btn = document.getElementById('copyTableText');
+      const btn = document.getElementById('copyTableMdBtn');
       btn.textContent = 'Copied!';
       setTimeout(() => { btn.textContent = 'Copy (MD)'; }, 1500);
     });

@@ -230,8 +230,8 @@ Languages available:
       tPath = resolve(rootDir, `templates/en/${tName}.html`);
     } else {
       const enPath = resolve(rootDir, `templates/en/${tName}.html`);
-      const rootPath = resolve(rootDir, `templates/${tName}.html`);
-      tPath = existsSync(enPath) ? enPath : rootPath;
+      const zhPath = resolve(rootDir, `templates/zh/${tName}.html`);
+      tPath = existsSync(enPath) ? enPath : zhPath;
     }
 
     if (!existsSync(tPath)) {
@@ -248,7 +248,7 @@ Languages available:
       console.error('Error: Please specify HTML file to validate');
       process.exit(1);
     }
-    const valScript = resolve(rootDir, 'scripts/validate.mjs');
+    const valScript = resolve(rootDir, 'skills/agent-html/scripts/validate.mjs');
     execSync(`node "${valScript}" "${target}"`, { stdio: 'inherit' });
     break;
   }
