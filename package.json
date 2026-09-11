@@ -7,8 +7,13 @@
     "agent-html": "./bin/cli.mjs"
   },
   "scripts": {
-    "validate": "node scripts/validate.mjs --all",
-    "test": "node scripts/validate.mjs --all"
+    "validate": "node skills/agent-html/scripts/validate.mjs --all",
+    "test:rules": "node scripts/test-rules.mjs",
+    "test:smoke": "node skills/agent-html/scripts/smoke.mjs && node skills/agent-html/scripts/smoke.mjs --selftest",
+    "test": "npm run validate && node scripts/test-rules.mjs",
+    "test:all": "npm test && npm run test:smoke",
+    "eval": "node scripts/run-evals.mjs",
+    "eval:score": "node scripts/run-evals.mjs --score-only"
   },
   "engines": {
     "node": ">=18.0.0"
