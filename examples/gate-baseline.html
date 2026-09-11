@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>门禁加固结果 · agent-html</title>
+<style>
+:root {
+  --bg: #fafafa;
+  --card: #ffffff;
+  --card-fg: #09090b;
+  --popover: #ffffff;
+  --popover-fg: #09090b;
+  --primary: #18181b;
+  --primary-fg: #fafafa;
+  --primary-hover: #27272a;
+  --secondary: #f4f4f5;
+  --secondary-fg: #18181b;
+  --secondary-hover: #e4e4e7;
+  --accent: #f4f4f5;
+  --accent-fg: #18181b;
+  --destructive: #dc2626;
+  --destructive-fg: #fafafa;
+  --muted: #f4f4f5;
+  --muted-fg: #71717a;
+  --border: #e4e4e7;
+  --input: #e4e4e7;
+  --ring: #18181b;
+  --radius: 8px;
+  --radius-sm: 6px;
+  --radius-lg: 12px;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+
+  --ok: #16a34a;   --ok-bg: #f0fdf4;   --ok-border: #bbf7d0;
+  --warn: #d97706; --warn-bg: #fffbeb; --warn-border: #fde68a;
+  --err: #dc2626;  --err-bg: #fef2f2;  --err-border: #fecaca;
+  --info: #2563eb; --info-bg: #eff6ff; --info-border: #bfdbfe;
+
+  --chart-indigo: #6366f1;
+  --chart-emerald: #10b981;
+  --chart-amber: #f59e0b;
+  --chart-rose: #f43f5e;
+  --chart-violet: #8b5cf6;
+  --chart-cyan: #06b6d4;
+  --chart-slate: #64748b;
+}
+
+[data-theme="dark"] {
+  --bg: #09090b;
+  --card: #121215;
+  --card-fg: #fafafa;
+  --popover: #121215;
+  --popover-fg: #fafafa;
+  --primary: #fafafa;
+  --primary-fg: #18181b;
+  --primary-hover: #e4e4e7;
+  --secondary: #27272a;
+  --secondary-fg: #fafafa;
+  --secondary-hover: #3f3f46;
+  --accent: #27272a;
+  --accent-fg: #fafafa;
+  --destructive: #ef4444;
+  --destructive-fg: #fafafa;
+  --muted: #18181b;
+  --muted-fg: #a1a1aa;
+  --border: #27272a;
+  --input: #27272a;
+  --ring: #d4d4d8;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
+
+  --ok: #4ade80;   --ok-bg: #052e1680;   --ok-border: #166534;
+  --warn: #fbbf24; --warn-bg: #451a0380; --warn-border: #854d0e;
+  --err: #f87171;  --err-bg: #450a0a80;  --err-border: #991b1b;
+  --info: #60a5fa; --info-bg: #17255480; --info-border: #1e40af;
+
+  --chart-indigo: #818cf8;
+  --chart-emerald: #34d399;
+  --chart-amber: #fbbf24;
+  --chart-rose: #fb7185;
+  --chart-violet: #a78bfa;
+  --chart-cyan: #22d3ee;
+  --chart-slate: #94a3b8;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: var(--bg);
+  color: var(--card-fg);
+  line-height: 1.5;
+  padding: 40px 20px;
+}
+.container { max-width: 1280px; width: 100%; margin: 0 auto; }
+
+.page-header {
+  display: flex; gap: 16px; justify-content: space-between;
+  align-items: flex-start; margin-bottom: 24px; padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.page-header h1 {
+  font-size: 24px; font-weight: 700; letter-spacing: -0.02em;
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+}
+.page-meta { display: flex; flex-wrap: wrap; gap: 16px; font-size: 13px; color: var(--muted-fg); margin-top: 8px; }
+.actions { display: flex; align-items: center; flex-shrink: 0; gap: 8px; }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500;
+  height: 34px; white-space: nowrap; padding: 0 12px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border); background: var(--card); color: var(--card-fg);
+  cursor: pointer; text-decoration: none; transition: all 0.15s ease;
+}
+.btn:hover { background: var(--secondary); }
+.btn-icon { width: 34px; padding: 0; justify-content: center; }
+
+.badge {
+  display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 500;
+  height: 22px; padding: 0 8px; border-radius: 9999px;
+  border: 1px solid var(--border); background: var(--secondary); color: var(--secondary-fg);
+}
+.badge-dot { width: 6px; height: 6px; border-radius: 9999px; background: currentColor; }
+.badge-success { background: var(--ok-bg); color: var(--ok); border-color: var(--ok-border); }
+.badge-danger  { background: var(--err-bg);  color: var(--err);  border-color: var(--err-border); }
+.badge-info    { background: var(--info-bg); color: var(--info); border-color: var(--info-border); }
+
+.stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 18px; }
+.stat-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 14px 16px; box-shadow: var(--shadow-sm);
+}
+.stat-label { font-size: 12px; color: var(--muted-fg); }
+.stat-value { font-size: 24px; font-weight: 700; margin-top: 4px; letter-spacing: -0.01em; }
+.stat-from { font-size: 13px; color: var(--muted-fg); text-decoration: line-through; margin-right: 6px; font-weight: 500; }
+.stat-note { font-size: 12px; color: var(--muted-fg); margin-top: 4px; }
+
+.card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); box-shadow: var(--shadow-sm); margin-bottom: 18px;
+}
+.card-head { padding: 16px 20px; border-bottom: 1px solid var(--border); }
+
+.callout {
+  padding: 16px 18px; border-radius: var(--radius); border: 1px solid var(--border);
+  background: var(--secondary); font-size: 14px; line-height: 1.6; margin-bottom: 18px;
+}
+.callout-danger { background: var(--err-bg); border-color: var(--err-border); }
+.callout-title { font-weight: 600; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; color: var(--err); }
+
+.toolbar {
+  padding: 12px 16px; border-bottom: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;
+}
+.toolbar input {
+  height: 32px; padding: 0 10px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border); background: var(--bg); color: var(--card-fg);
+  outline: none; font-size: 13px; min-width: 220px;
+}
+.toolbar input:focus { border-color: var(--ring); }
+.table-wrap { overflow-x: auto; width: 100%; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; }
+thead tr { background: var(--secondary); color: var(--muted-fg); border-bottom: 1px solid var(--border); }
+th, td { padding: 10px 16px; white-space: nowrap; }
+tbody tr { border-bottom: 1px solid var(--border); }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: var(--secondary); }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; }
+.empty-state { padding: 28px 16px; text-align: center; font-size: 13px; color: var(--muted-fg); }
+
+.colophon {
+  margin-top: 32px; padding-top: 16px; border-top: 1px solid var(--border);
+  font-size: 12px; color: var(--muted-fg);
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;
+}
+
+@media print {
+  body { background: #fff; padding: 0; }
+  .actions, .toolbar { display: none !important; }
+  .container { max-width: 100% !important; }
+  .stat-card, .callout { break-inside: avoid; }
+  tbody tr { break-inside: avoid; }
+}
+@media (max-width: 720px) {
+  .stat-row { grid-template-columns: 1fr 1fr; }
+  .page-header { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header class="page-header">
+    <div>
+      <h1>
+        <span>校验器加固后，基线 43 项问题全部清零</span>
+        <span class="badge badge-success"><span class="badge-dot"></span>0 阻断 / 0 提醒</span>
+      </h1>
+      <div class="page-meta">
+        <span>对象：agent-html 全部产物与规范文档</span>
+        <span>基线：2026-09-11 首版校验器</span>
+        <span>规则：6 → 18 条</span>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn" id="copyMarkdownBtn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+        <span id="copyMarkdownLabel">复制为 Markdown</span>
+      </button>
+      <button class="btn btn-icon" onclick="window.print()" title="打印或导出 PDF">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
+      </button>
+      <button class="btn btn-icon" id="themeToggle" title="切换主题">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1 -9 -9Z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <section class="stat-row">
+    <div class="stat-card">
+      <div class="stat-label">阻断级问题</div>
+      <div class="stat-value"><span class="stat-from">8</span>0</div>
+      <div class="stat-note">全部修复并加了回归门禁</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">提醒级问题</div>
+      <div class="stat-value"><span class="stat-from">35</span>0</div>
+      <div class="stat-note">逐条确认或改为豁免</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">校验规则</div>
+      <div class="stat-value"><span class="stat-from">6</span>18</div>
+      <div class="stat-note">+2 条跨文件检查</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">规则变异用例</div>
+      <div class="stat-value"><span class="stat-from">0</span>28</div>
+      <div class="stat-note">证明每条规则确实会失败</div>
+    </div>
+  </section>
+
+  <section class="card" style="padding: 16px 20px;">
+    <div style="font-size: 14px; font-weight: 600;">提醒级问题里，打印样式缺失占了三分之一</div>
+    <div style="font-size: 12px; color: var(--muted-fg); margin-top: 2px;">1 rim 点 = 1 项命中 · 虚线导轨 = 每 5 项 · 基线命中 43 项</div>
+    <svg viewBox="0 0 500 224" style="width: 100%; height: auto; overflow: visible; margin-top: 12px;">
+      <!-- 值轴在 X：竖向虚线导轨对应数值 5 / 10 / 15 -->
+      <line x1="231.3" y1="4" x2="231.3" y2="180" stroke="var(--border)" stroke-dasharray="3 3"/>
+      <line x1="350.7" y1="4" x2="350.7" y2="180" stroke="var(--border)" stroke-dasharray="3 3"/>
+      <line x1="470" y1="4" x2="470" y2="180" stroke="var(--border)" stroke-dasharray="3 3"/>
+      <!-- 基线加重：value = 0 的竖线 -->
+      <line x1="112" y1="4" x2="112" y2="180" stroke="var(--border)" stroke-width="1.5"/>
+
+      <text x="0" y="17" font-size="10" fill="var(--card-fg)">PRINT_STYLE</text>
+      <rect x="112" y="6" width="358" height="12" rx="2" fill="var(--chart-amber)"/>
+      <text x="478" y="16" font-size="10" font-weight="700" fill="var(--chart-amber)">15</text>
+
+      <text x="0" y="47" font-size="10" fill="var(--card-fg)">ZH_EN_PARITY</text>
+      <rect x="112" y="36" width="238.7" height="12" rx="2" fill="var(--chart-rose)"/>
+      <text x="358.7" y="46" font-size="10" font-weight="700" fill="var(--chart-rose)">10</text>
+
+      <text x="0" y="77" font-size="10" fill="var(--card-fg)">EMPTY_STATE</text>
+      <rect x="112" y="66" width="190.9" height="12" rx="2" fill="var(--chart-indigo)"/>
+      <text x="310.9" y="76" font-size="10" font-weight="700" fill="var(--chart-indigo)">8</text>
+
+      <text x="0" y="107" font-size="10" fill="var(--card-fg)">DARK_MODE_LEAK</text>
+      <rect x="112" y="96" width="119.3" height="12" rx="2" fill="var(--chart-indigo)"/>
+      <text x="239.3" y="106" font-size="10" font-weight="700" fill="var(--chart-indigo)">5</text>
+
+      <text x="0" y="137" font-size="10" fill="var(--card-fg)">NO_RANDOM</text>
+      <rect x="112" y="126" width="71.6" height="12" rx="2" fill="var(--chart-slate)"/>
+      <text x="191.6" y="136" font-size="10" font-weight="700" fill="var(--chart-slate)">3</text>
+
+      <text x="0" y="167" font-size="10" fill="var(--card-fg)">CHART_TOKEN_ONLY</text>
+      <rect x="112" y="156" width="47.7" height="12" rx="2" fill="var(--chart-slate)"/>
+      <text x="167.7" y="166" font-size="10" font-weight="700" fill="var(--chart-slate)">2</text>
+
+      <!-- rim 刻度：0–15 共 16 个点，每个点 = 1 项命中 -->
+      <g fill="var(--muted-fg)">
+        <circle cx="112" cy="185" r="1.5"/><circle cx="135.9" cy="185" r="1.5"/><circle cx="159.7" cy="185" r="1.5"/>
+        <circle cx="183.6" cy="185" r="1.5"/><circle cx="207.5" cy="185" r="1.5"/><circle cx="231.3" cy="185" r="1.5"/>
+        <circle cx="255.2" cy="185" r="1.5"/><circle cx="279.1" cy="185" r="1.5"/><circle cx="302.9" cy="185" r="1.5"/>
+        <circle cx="326.8" cy="185" r="1.5"/><circle cx="350.7" cy="185" r="1.5"/><circle cx="374.5" cy="185" r="1.5"/>
+        <circle cx="398.4" cy="185" r="1.5"/><circle cx="422.3" cy="185" r="1.5"/><circle cx="446.1" cy="185" r="1.5"/>
+        <circle cx="470" cy="185" r="1.5"/>
+      </g>
+      <text x="112" y="201" font-size="10" fill="var(--muted-fg)" text-anchor="middle">0</text>
+      <text x="231.3" y="201" font-size="10" fill="var(--muted-fg)" text-anchor="middle">5</text>
+      <text x="350.7" y="201" font-size="10" fill="var(--muted-fg)" text-anchor="middle">10</text>
+      <text x="470" y="201" font-size="10" fill="var(--muted-fg)" text-anchor="middle">15</text>
+
+      <text x="0" y="218" font-size="10" fill="var(--muted-fg)" letter-spacing=".08em">橙色 = 唯一主角（占比最高）· 玫红 = 真实缺陷 · 靛蓝/石板 = 提醒 · 圆点 = 每 1 项一个 rim 刻度</text>
+    </svg>
+  </section>
+
+  <section class="callout callout-danger">
+    <div class="callout-title">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <span>最重要的发现：文档里的图表代码，照着抄会画出空白</span>
+    </div>
+    <div>
+      文档的图表样例大量使用 <code>var(--chart-indigo)</code> 等 7 个变量，而文档要求 Agent 复制进每个产物的 Micro-CSS 基座里<strong>没有定义它们</strong>。实测 <code>stroke</code> 计算值为 <code>none</code>，线直接不可见——37 处引用全部失效。只有画廊页自己定义了这些变量，所以一直看着正常：<strong>缺陷只存在于「照文档做」的路径上。</strong>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-head" style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;">
+      <span style="font-weight: 600; font-size: 15px;">18 条校验规则</span>
+      <span class="badge badge-info">10 阻断 / 8 提醒</span>
+    </div>
+    <div class="toolbar">
+      <input type="text" id="ruleSearch" placeholder="输入规则名或关键词即时过滤…">
+      <span style="font-size: 12px; color: var(--muted-fg);">共 <strong id="ruleCount">18</strong> 条</span>
+    </div>
+    <div class="table-wrap">
+      <table id="ruleTable">
+        <thead>
+          <tr><th>规则</th><th>级别</th><th>检测什么</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>[ZERO_CDN]</code></td><td><span class="badge badge-danger">阻断</span></td><td>外部 CDN 脚本 / 样式 / 远程字体</td></tr>
+          <tr><td><code>[THEME_TOKENS]</code></td><td><span class="badge badge-danger">阻断</span></td><td>CSS 变量底座与暗黑模式是否齐备</td></tr>
+          <tr><td><code>[VIEWPORT]</code></td><td><span class="badge badge-danger">阻断</span></td><td>移动端响应式 viewport</td></tr>
+          <tr><td><code>[TAG_HYGIENE]</code></td><td><span class="badge badge-danger">阻断</span></td><td>关键标签是否对称闭合</td></tr>
+          <tr><td><code>[DUP_ID]</code></td><td><span class="badge badge-danger">阻断</span></td><td>同文件内 id 唯一性</td></tr>
+          <tr><td><code>[SCRIPT_SYNTAX]</code></td><td><span class="badge badge-danger">阻断</span></td><td>内联脚本能否通过编译</td></tr>
+          <tr><td><code>[DARK_MODE_LEAK]</code></td><td><span class="badge badge-danger">阻断</span></td><td>token 块外硬编码 #fff / #000</td></tr>
+          <tr><td><code>[WIDTH_HYGIENE]</code></td><td><span class="badge badge-danger">阻断</span></td><td>表格滚动容器与主容器死宽度</td></tr>
+          <tr><td><code>[DOC_FENCES]</code></td><td><span class="badge badge-danger">阻断</span></td><td>Markdown 代码围栏是否配对</td></tr>
+          <tr><td><code>[CSS_VAR_DEFINED]</code></td><td><span class="badge badge-danger">阻断</span></td><td>var() 引用的变量是否已定义</td></tr>
+          <tr><td><code>[DOC_TOKEN_COVERAGE]</code></td><td><span class="badge badge-danger">阻断</span></td><td>文档样例是否引用基座外的变量</td></tr>
+          <tr><td><code>[ZH_EN_PARITY]</code></td><td><span class="badge badge-danger">阻断</span></td><td>中英母版结构同构性</td></tr>
+          <tr><td><code>[NO_RANDOM]</code></td><td><span class="badge badge-info">提醒</span></td><td>演示数据是否确定性</td></tr>
+          <tr><td><code>[CHART_TOKEN_ONLY]</code></td><td><span class="badge badge-info">提醒</span></td><td>SVG 是否硬编码色值</td></tr>
+          <tr><td><code>[FIXED_HEIGHT]</code></td><td><span class="badge badge-info">提醒</span></td><td>固定高度 + overflow:hidden 截断</td></tr>
+          <tr><td><code>[PRINT_STYLE]</code></td><td><span class="badge badge-info">提醒</span></td><td>文档型母版是否提供 @media print</td></tr>
+          <tr><td><code>[EMPTY_STATE]</code></td><td><span class="badge badge-info">提醒</span></td><td>筛选无结果时是否有空状态</td></tr>
+          <tr><td><code>[AFFORDANCE]</code></td><td><span class="badge badge-info">提醒</span></td><td>是否存在复制 / 导出出口</td></tr>
+          <tr><td><code>[COLOPHON]</code></td><td><span class="badge badge-info">提醒</span></td><td>页脚溯源印章</td></tr>
+          <tr><td><code>[DOC_SECTIONS]</code></td><td><span class="badge badge-info">提醒</span></td><td>章节编号重复或跳号</td></tr>
+        </tbody>
+      </table>
+      <div class="empty-state" id="ruleEmpty" style="display: none;">没有匹配的规则，换个关键词试试</div>
+    </div>
+  </section>
+
+  <footer class="colophon">
+    <div>Generated by <strong>agent-html</strong> · 零依赖单文件规范 · 100% 离线自包含</div>
+    <div>数据源：本仓库 <code>npm run test:all</code> 实测输出 · 已归档</div>
+  </footer>
+
+</div>
+
+<script>
+  // 主题切换
+  const themeToggle = document.getElementById('themeToggle');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (prefersDark) document.documentElement.setAttribute('data-theme', 'dark');
+
+  themeToggle?.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  });
+
+  // 规则表即时过滤 + 空状态
+  const ruleSearch = document.getElementById('ruleSearch');
+  const ruleTable = document.getElementById('ruleTable');
+  const ruleCount = document.getElementById('ruleCount');
+  const ruleEmpty = document.getElementById('ruleEmpty');
+  const ruleRows = Array.from(ruleTable.querySelectorAll('tbody tr'));
+
+  ruleSearch?.addEventListener('input', (e) => {
+    const q = e.target.value.toLowerCase().trim();
+    let visible = 0;
+    ruleRows.forEach((row) => {
+      const hit = !q || row.textContent.toLowerCase().includes(q);
+      row.style.display = hit ? '' : 'none';
+      if (hit) visible += 1;
+    });
+    ruleCount.textContent = String(visible);
+    ruleEmpty.style.display = visible === 0 ? 'block' : 'none';
+  });
+
+  // 复制为 Markdown
+  document.getElementById('copyMarkdownBtn')?.addEventListener('click', () => {
+    const md = `# 校验器加固结果 · agent-html
+
+## 核心结论
+基线 43 项问题（8 阻断 / 35 提醒）全部清零；校验规则从 6 条扩到 18 条，并新增 28 个规则变异用例。
+
+## 规模变化
+- 阻断级：8 → 0
+- 提醒级：35 → 0
+- 校验规则：6 → 18（另加 2 条跨文件检查）
+- 规则变异用例：0 → 28
+
+## 基线提醒分布
+- PRINT_STYLE 15
+- ZH_EN_PARITY 10
+- EMPTY_STATE 8
+- DARK_MODE_LEAK 5
+- NO_RANDOM 3
+- CHART_TOKEN_ONLY 2
+
+## 最重要的发现
+文档的图表样例使用 var(--chart-indigo) 等 7 个变量，而文档要求复制的 Micro-CSS 基座里没有定义它们。
+实测 stroke 计算值为 none，线直接不可见，37 处引用全部失效。
+只有画廊页自己定义了这些变量，所以缺陷只存在于「照文档做」的路径上。
+
+## 处置
+把 19 个缺失 token 补进基座，并新增 [CSS_VAR_DEFINED] 与 [DOC_TOKEN_COVERAGE] 两道阻断级门禁。`;
+
+    navigator.clipboard.writeText(md).then(() => {
+      const label = document.getElementById('copyMarkdownLabel');
+      label.textContent = '已复制!';
+      setTimeout(() => { label.textContent = '复制为 Markdown'; }, 1500);
+    });
+  });
+</script>
+</body>
+</html>

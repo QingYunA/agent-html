@@ -1,3 +1,11 @@
+# macOS
 .DS_Store
 */.DS_Store
 */*/.DS_Store
+
+# 过程产物：执行计划与 lint 基线记录。
+# 保留在本地作为审计轨迹，但不随仓库分发、也不参与站点部署。
+docs/
+
+# 技能评测运行产物
+agent-html-workspace/
