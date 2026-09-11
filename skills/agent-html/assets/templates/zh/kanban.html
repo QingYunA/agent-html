@@ -274,6 +274,13 @@
       gap: 8px;
     }
 
+    @media print {
+      body { background: #fff; padding: 0; min-height: auto; }
+      .actions { display: none !important; }
+      .wrapper { max-width: 100% !important; }
+      .board-grid { grid-template-columns: repeat(4, 1fr) !important; }
+      .kanban-col, .card-item { break-inside: avoid; }
+    }
     @media (max-width: 992px) {
       .board-grid { grid-template-columns: repeat(2, 1fr); }
     }

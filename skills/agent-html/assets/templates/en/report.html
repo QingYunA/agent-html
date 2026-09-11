@@ -76,12 +76,66 @@
       line-height: 1.5;
       padding: 40px 20px;
     }
-    .container {
-      max-width: 1280px; width: 100%; transition: max-width 0.2s ease;
+    .layout-wrapper {
+      max-width: 1400px; width: 100%; transition: max-width 0.2s ease;
       margin: 0 auto;
+      display: flex;
+      gap: 36px;
+      justify-content: center;
+    }
+    .container {
+      flex: 1;
+      max-width: 1200px; width: 100%; transition: max-width 0.2s ease;
+      min-width: 0;
     }
 
-    body.fluid-mode .container { max-width: 96% !important; }
+    body.fluid-mode .layout-wrapper { max-width: 96% !important; }
+    body.fluid-mode .container { max-width: 100% !important; }
+
+    /* Sticky Table of Contents Rail */
+    .toc-rail {
+      width: 200px;
+      flex-shrink: 0;
+      display: none;
+    }
+    @media (min-width: 1080px) {
+      .toc-rail { display: block; }
+    }
+    .toc-sticky {
+      position: sticky;
+      top: 40px;
+      font-size: 13px;
+    }
+    .toc-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted-fg);
+      margin-bottom: 12px;
+      padding-left: 10px;
+    }
+    .toc-link {
+      display: block;
+      color: var(--muted-fg);
+      text-decoration: none;
+      padding: 6px 10px;
+      border-left: 2px solid transparent;
+      margin-bottom: 4px;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      transition: all 0.15s ease;
+    }
+    .toc-link:hover {
+      color: var(--card-fg);
+      background: var(--secondary);
+    }
+    .toc-link.active {
+      color: var(--primary);
+      font-weight: 600;
+      border-left-color: var(--primary);
+      background: var(--secondary);
+    }
+
     /* Header */
     .report-header {
       display: flex;
@@ -252,9 +306,23 @@
     .property-label { font-weight: 600; font-size: 11px; color: var(--muted-fg); }
     .property-value { font-size: 13px; color: var(--card-fg); margin-top: 2px; }
 
+    .colophon {
+      margin-top: 40px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--muted-fg);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
     @media print {
       body { background: #fff; padding: 0; }
-      .actions { display: none; }
+      .actions, .toc-rail { display: none !important; }
+      .container { max-width: 100% !important; }
       details { break-inside: avoid; }
       details[open] { margin-bottom: 10px; }
     }
@@ -267,7 +335,21 @@
 </head>
 <body>
 
-<div class="container">
+<div class="layout-wrapper">
+  <!-- [Sticky Table of Contents Rail] -->
+  <aside class="toc-rail">
+    <div class="toc-sticky">
+      <div class="toc-title">Contents (TOC)</div>
+      <nav id="tocNav">
+        <a href="#kpi-section" class="toc-link active">1. KPI Overview</a>
+        <a href="#summary-section" class="toc-link">2. Executive Summary</a>
+        <a href="#checklist-section" class="toc-link">3. Evaluation Checklist</a>
+        <a href="#colophon-section" class="toc-link">4. Sign-off &amp; Provenance</a>
+      </nav>
+    </div>
+  </aside>
+
+  <div class="container">
   <!-- [Slot: Report Header] -->
   <header class="report-header">
     <div class="report-title-box">
@@ -296,7 +378,7 @@
       </button>
       <button class="btn" onclick="copyMarkdownReport()" title="Copy as clean Markdown">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-        <span id="copyBtnText">Copy Markdown</span>
+        <span id="copyMarkdownBtn">Copy Markdown</span>
       </button>
       <button class="btn" onclick="window.print()" title="Print or save as PDF">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
@@ -309,7 +391,7 @@
   </header>
 
   <!-- [Slot: KPI Score Overview] -->
-  <section class="stat-row">
+  <section id="kpi-section" class="stat-row">
     <div class="stat-mini">
       <div class="stat-mini-label">Compliance Score</div>
       <div class="stat-mini-val" style="color: var(--ok);">23 mins <span style="font-size: 13px; font-weight: normal; color: var(--muted-fg);">14:12 - 14:35</span></div>
@@ -329,7 +411,7 @@
   </section>
 
   <!-- [Slot: Executive Summary Callout] -->
-  <section class="callout callout-success">
+  <section id="summary-section" class="callout callout-success">
     <div class="callout-title">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
       <span>Executive Summary & Release Decision</span>
@@ -338,10 +420,10 @@
   </section>
 
   <!-- [Slot: Dimension Breakdown / Detailed Sections] -->
-  <section class="card">
+  <section id="checklist-section" class="card">
     <div class="card-header">
       <span>Evaluation Dimensions & Detailed Findings</span>
-      <span class="badge badge-info">3 Core Assessment Areas</span>
+      <span class="badge badge-info">6 Core Assessment Areas</span>
     </div>
     <div>
       <!-- Section 1 -->
@@ -395,10 +477,67 @@
           <p>Static code analysis detected 3 potential null-pointer dereferences in edge fallback handlers; non-blocking guard clauses have been deployed.</p>
         </div>
       </details>
+
+      <!-- Section 4 -->
+      <details>
+        <summary>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span>4. End-to-End Load Testing & Throughput Bottlenecks</span>
+            <span class="badge badge-success">Good (92)</span>
+          </div>
+          <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="accordion-inner">
+          <p>Sustained 3x peak traffic for 90 minutes with p99 latency held under 240ms. The only saturation point observed was the shared connection pool.</p>
+          <div class="property-grid">
+            <div class="property-box">
+              <div class="property-label">Bottleneck</div>
+              <div class="property-value">Connection pool exhausted at 3x peak; headroom capped near 4x.</div>
+            </div>
+            <div class="property-box">
+              <div class="property-label">Action Item</div>
+              <div class="property-value">Raise pool ceiling and add adaptive queueing before the next release.</div>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- Section 5 -->
+      <details>
+        <summary>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span>5. Production Canary Rollout & Rollback Runbook</span>
+            <span class="badge badge-success">Excellent (96)</span>
+          </div>
+          <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="accordion-inner">
+          <p>Rollout proceeds 1% &rarr; 10% &rarr; 50% &rarr; 100% with automated regression gates at each step. Rollback is a single command and completes within the 5-minute error budget.</p>
+        </div>
+      </details>
+
+      <!-- Section 6 -->
+      <details>
+        <summary>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span>6. Review Board Sign-off & Release Decision</span>
+            <span class="badge badge-success">Approved</span>
+          </div>
+          <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="accordion-inner">
+          <p>All five preceding dimensions cleared their thresholds with no open blockers. The review board grants conditional approval, contingent on the connection-pool action item above being scheduled.</p>
+        </div>
+      </details>
     </div>
   </section>
 
-  <!-- [Colophon: agent-html design system v1.0.0 · generated at 2026-09-08 · zero-dependency standalone] -->
+  <!-- [Slot: Colophon / Provenance] -->
+  <footer id="colophon-section" class="colophon">
+    <div>Generated by <strong>agent-html</strong> · zero-dependency single-file spec · 100% offline self-contained</div>
+    <div>Timestamp: 2026-09-08 · Baseline: Project Alpha (main@v2.4.0-RC3) · Status: Archived</div>
+  </footer>
+  </div>
 </div>
 
 <script>
@@ -428,11 +567,82 @@ Following rigorous architectural verification, the core event-driven pipelines, 
 - Security Compliance: 100%`;
 
     navigator.clipboard.writeText(md).then(() => {
-      const btn = document.getElementById('copyBtnText');
+      const btn = document.getElementById('copyMarkdownBtn');
       btn.textContent = 'Copied!';
       setTimeout(() => { btn.textContent = 'Copy Markdown'; }, 1500);
     });
   }
+
+  // Interactive Sticky TOC Navigation & ScrollSpy
+  const tocLinks = document.querySelectorAll('.toc-link');
+  let isManualScrolling = false;
+  let scrollTimer = null;
+
+  function setActiveToc(id) {
+    tocLinks.forEach(link => {
+      const match = link.getAttribute('href') === '#' + id;
+      link.classList.toggle('active', match);
+    });
+  }
+
+  // 1. Explicit Click Handler: Immediate feedback & smooth scroll
+  tocLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetId = link.getAttribute('href').slice(1);
+      const targetEl = document.getElementById(targetId);
+      if (!targetEl) return;
+
+      setActiveToc(targetId);
+      isManualScrolling = true;
+      clearTimeout(scrollTimer);
+
+      targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      history.pushState(null, '', '#' + targetId);
+
+      // Re-enable IntersectionObserver after smooth scroll settles
+      scrollTimer = setTimeout(() => {
+        isManualScrolling = false;
+      }, 800);
+    });
+  });
+
+  // 2. Initial Hash on Page Load
+  if (window.location.hash) {
+    const initId = window.location.hash.slice(1);
+    const initEl = document.getElementById(initId);
+    if (initEl) {
+      setActiveToc(initId);
+      setTimeout(() => {
+        initEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
+  }
+
+  // 3. ScrollSpy using IntersectionObserver
+  const sections = ['kpi-section', 'summary-section', 'checklist-section', 'colophon-section'];
+  const observer = new IntersectionObserver((entries) => {
+    if (isManualScrolling) return;
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        setActiveToc(entry.target.getAttribute('id'));
+      }
+    });
+  }, { rootMargin: '-10% 0px -65% 0px' });
+
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) observer.observe(el);
+  });
+
+  // 4. Bottom of Page Fallback
+  window.addEventListener('scroll', () => {
+    if (isManualScrolling) return;
+    if ((window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 60)) {
+      setActiveToc('colophon-section');
+    }
+  }, { passive: true });
+
   function toggleWidth() {
     document.body.classList.toggle("fluid-mode");
   }

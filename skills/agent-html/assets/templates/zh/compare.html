@@ -278,6 +278,12 @@
     .delta-win { color: var(--ok); font-weight: 600; }
     .delta-lose { color: var(--err); font-weight: 600; }
 
+    @media print {
+      body { background: #fff; padding: 0; }
+      .actions, .btn, .btn-icon { display: none !important; }
+      .container { max-width: 100% !important; }
+      .card, .column-card, .callout-verdict { break-inside: avoid; }
+    }
     @media (max-width: 768px) {
       .compare-grid { grid-template-columns: 1fr; }
       .compare-header { flex-direction: column; gap: 12px; }

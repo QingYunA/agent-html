@@ -243,6 +243,33 @@
       overflow-x: auto;
     }
 
+    details {
+      margin-top: 12px;
+      border-top: 1px dashed var(--border);
+      padding-top: 8px;
+    }
+    summary {
+      list-style: none;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted-fg);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      user-select: none;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary:hover { color: var(--card-fg); }
+
+    @media print {
+      body { background: #fff; padding: 0; }
+      .actions { display: none !important; }
+      .container { max-width: 100% !important; }
+      .timeline-event, .event-card { break-inside: avoid; }
+      details { break-inside: avoid; }
+      details[open] { margin-bottom: 8px; }
+    }
     @media (max-width: 640px) {
       .stat-row { grid-template-columns: 1fr 1fr; }
       .timeline-header { flex-direction: column; gap: 12px; }
@@ -268,7 +295,7 @@
     <div class="actions">
       <button class="btn" onclick="copyMarkdownTimeline()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-        <span id="copyTimelineBtn">Copy (MD)</span>
+        <span id="copyTimelineMdBtn">Copy (MD)</span>
       </button>
       <button id="themeToggle" class="btn" title="Toggle theme">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1 -9 -9Z"/></svg>
@@ -309,6 +336,12 @@
         <div class="event-body">
           Failover cluster in us-west fully assumed traffic. Latency returned to 38ms baseline. Incident marked resolved.
         </div>
+        <details>
+          <summary>View health-check recovery snapshot</summary>
+          <div class="event-log">[OK]  ingress-gw us-west-02 healthy: 48/48 nodes
+[OK]  p99 latency 38ms (baseline), error rate 0.00%
+[INFO] Incident INC-2026-0908 marked RESOLVED by @sre-oncall</div>
+        </details>
       </div>
     </div>
 
@@ -323,10 +356,13 @@
         <div class="event-body">
           SRE team executed Runbook #104. Edge CDN redirected 100% of ingress requests to secondary availability zone.
         </div>
-        <div class="event-log">
+        <details>
+          <summary>View executed operations log</summary>
+          <div class="event-log">
 [ACTION] Cloudflare route drain: applied zone us-east-01 -> weight: 0
 [STATUS] 200 OK: Traffic migrated to us-west-02
-        </div>
+          </div>
+        </details>
       </div>
     </div>
 
@@ -364,7 +400,7 @@
 - **14:18 UTC** [MITIGATED] Initiated Automated Traffic Drain to Backup Region
 - **14:00 UTC** [OUTAGE] Database Connection Pool Exhaustion Triggered`;
     navigator.clipboard.writeText(md).then(() => {
-      const btn = document.getElementById('copyTimelineBtn');
+      const btn = document.getElementById('copyTimelineMdBtn');
       btn.textContent = 'Copied!';
       setTimeout(() => { btn.textContent = 'Copy (MD)'; }, 1500);
     });
