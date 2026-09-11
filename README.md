@@ -218,35 +218,13 @@ Zero external JS chart libraries required. Uses standard inline SVG for crisp, R
 | **⏱️ Semi-Circle Gauge** | Semi-circle stroke arc with gradient | Immediate threshold alert | Memory watermark, API rate-limit quota |
 
 <details>
-<summary><strong>Expand to view sample SVG chart code snippets</strong></summary>
+<summary><strong>Where is the SVG chart code?</strong></summary>
 
-#### A. Gradient Area Trend Curve
-```html
-<svg viewBox="0 0 400 95" style="width: 100%; height: 85px; overflow: visible;">
-  <defs>
-    <linearGradient id="areaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="var(--chart-indigo)" stop-opacity="0.25"/>
-      <stop offset="100%" stop-color="var(--chart-indigo)" stop-opacity="0.0"/>
-    </linearGradient>
-  </defs>
-  <path d="M 0 70 Q 55 30, 110 52 T 210 36 T 310 18 T 400 28 L 400 95 L 0 95 Z" fill="url(#areaGrad)"/>
-  <path d="M 0 70 Q 55 30, 110 52 T 210 36 T 310 18 T 400 28" fill="none" stroke="var(--chart-indigo)" stroke-width="2.5" stroke-linecap="round"/>
-  <circle cx="210" cy="36" r="3" fill="var(--card)" stroke="var(--chart-indigo)" stroke-width="2"/>
-  <circle cx="310" cy="18" r="3.5" fill="var(--chart-indigo)" stroke="var(--card)" stroke-width="2"/>
-</svg>
-```
+The full, canonical code for all six chart forms lives in **one place** — [`skills/agent-html/references/components.md`](skills/agent-html/references/components.md), section 6.
 
-#### B. Multi-Segment Donut Chart
-```html
-<svg viewBox="0 0 160 160" style="width: 120px; height: 120px;">
-  <circle cx="80" cy="80" r="54" fill="none" stroke="var(--secondary)" stroke-width="18"/>
-  <circle cx="80" cy="80" r="54" fill="none" stroke="var(--chart-emerald)" stroke-width="18" stroke-dasharray="220.5 339.3" stroke-dashoffset="0" transform="rotate(-90 80 80)"/>
-  <circle cx="80" cy="80" r="54" fill="none" stroke="var(--chart-amber)" stroke-width="18" stroke-dasharray="84.8 339.3" stroke-dashoffset="-220.5" transform="rotate(-90 80 80)"/>
-  <circle cx="80" cy="80" r="54" fill="none" stroke="var(--chart-rose)" stroke-width="18" stroke-dasharray="33.9 339.3" stroke-dashoffset="-305.3" transform="rotate(-90 80 80)"/>
-  <text x="80" y="77" text-anchor="middle" font-size="16" font-weight="700" fill="var(--card-fg)">1,280</text>
-  <text x="80" y="93" text-anchor="middle" font-size="9" fill="var(--muted-fg)">Nodes</text>
-</svg>
-```
+It is deliberately **not duplicated here**. Two hand-copied versions of the same snippet always drift apart, and a stale copy in a README is worse than no copy: an agent that copies it produces a broken chart. (We learned this the hard way — see `skills/agent-html/references/failures.md` **F-014**.)
+
+Each chart there ships with the **four-part contract**: a conclusion-style title, a subtitle stating the unit contract (`1 rim dot = 300 TPS`), the body, and an uppercase encoding caption. The contract itself is specified in [`SKILL.md`](skills/agent-html/SKILL.md).
 
 </details>
 

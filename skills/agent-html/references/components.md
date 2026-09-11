@@ -138,12 +138,11 @@
 
 ---
 
-## 6. 原生轻量图表 (Zero-CDN Pure SVG Charts)
 
 ## 6. 原生轻量图表 (Zero-CDN Pure SVG Charts - 6 大核心形态)
 
 > 💡 **设计与配色规范 (Tremor & shadcn-inspired)**：
-> 绝不引入 Chart.js / ECharts 等 CDN，统一采用纯矢量 SVG 驱动。配色采用调校后的语义化色彩变量（避免刺眼高饱和红绿，暗黑模式自动切换为柔和高对比阶）。
+> 绝不引入 Chart.js / ECharts 等 CDN，统一采用纯矢量 SVG 驱动。图表语言是 **shadcn 企业看板**：白色卡片 + 1px 边框 + 语义状态色。
 > - `--chart-indigo`: `#6366f1` (暗黑: `#818cf8`) — 主指标时序走势
 > - `--chart-emerald`: `#10b981` (暗黑: `#34d399`) — 正常健康、增长、放行
 > - `--chart-amber`: `#f59e0b` (暗黑: `#fbbf24`) — 警戒、抖动、温和上升
@@ -151,160 +150,306 @@
 > - `--chart-violet`: `#8b5cf6` (暗黑: `#a78bfa`) — P95/P99 峰值柱状高亮
 > - `--chart-cyan`: `#06b6d4` (暗黑: `#22d3ee`) — 辅助对比时序、出向流量
 > - `--chart-slate`: `#64748b` (暗黑: `#94a3b8`) — 低优对比柱、中性刻度
+>
+> ⚠️ **本节的六个样例都遵守「图表四件套」**（结论式标题 / 副标题写单位契约 / 图体 / 底部全大写编码说明行）与**轻度家具**（基线加重、rim 刻度、参考导轨、峰值引线）。契约条文见 `SKILL.md` 的「轻量原生图表规范」一节。**改这些代码前先读那份契约。**
+>
+> 📏 **rim 刻度是本节的统一术语**：沿基线/弧线打的等距小点，用来让读者估读而不必逐个看数字。每个样例的副标题必须说明「1 个刻度 = 多少真实数量」。
 
 ### A. 面积折线走势图 (Area Trend Line Chart)
+
 ```html
 <div class="card" style="padding: 16px 20px;">
-  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-    <span style="font-weight: 600; font-size: 13px;">24h 吞吐走势 (TPS)</span>
-    <span style="color: var(--chart-emerald); font-weight: 600; font-size: 11px;">↑ +18.4%</span>
-  </div>
-  <svg viewBox="0 0 400 95" style="width: 100%; height: 85px; overflow: visible;">
+  <!-- ① 结论式标题 ② 副标题写单位契约 -->
+  <div style="font-size: 14px; font-weight: 600;">峰值落在 16:00 的批处理窗口，是基线的 2.4 倍</div>
+  <div style="font-size: 12px; color: var(--muted-fg); margin-top: 2px;">1 rim 点 = 300 TPS · 虚线导轨 = 每 1k TPS · 近 24 小时</div>
+  <svg viewBox="0 0 500 152" style="width: 100%; height: auto; overflow: visible; margin-top: 10px;">
     <defs>
       <linearGradient id="areaGradIndigo" x1="0%" y1="0%" x2="0%" y2="100%">
         <stop offset="0%" stop-color="var(--chart-indigo)" stop-opacity="0.22"/>
         <stop offset="100%" stop-color="var(--chart-indigo)" stop-opacity="0.0"/>
       </linearGradient>
     </defs>
-    <path d="M 0 70 Q 55 30, 110 52 T 210 36 T 310 18 T 400 28 L 400 95 L 0 95 Z" fill="url(#areaGradIndigo)"/>
-    <path d="M 0 70 Q 55 30, 110 52 T 210 36 T 310 18 T 400 28" fill="none" stroke="var(--chart-indigo)" stroke-width="2.5" stroke-linecap="round"/>
-    <circle cx="210" cy="36" r="3" fill="var(--card)" stroke="var(--chart-indigo)" stroke-width="2"/>
-    <circle cx="310" cy="18" r="3.5" fill="var(--chart-indigo)" stroke="var(--card)" stroke-width="2"/>
+    <!-- 家具：参考导轨（对齐 Y 轴整数值） -->
+    <line x1="34" y1="24" x2="492" y2="24" stroke="var(--border)" stroke-dasharray="3 3"/>
+    <line x1="34" y1="66" x2="492" y2="66" stroke="var(--border)" stroke-dasharray="3 3"/>
+    <line x1="34" y1="108" x2="492" y2="108" stroke="var(--border)" stroke-dasharray="3 3"/>
+    <text x="28" y="28" font-size="10" fill="var(--muted-fg)" text-anchor="end">3k</text>
+    <text x="28" y="70" font-size="10" fill="var(--muted-fg)" text-anchor="end">2k</text>
+    <text x="28" y="112" font-size="10" fill="var(--muted-fg)" text-anchor="end">1k</text>
+    <text x="28" y="133" font-size="10" fill="var(--muted-fg)" text-anchor="end">0</text>
+    <path d="M 40 110 Q 95 95, 140 85 T 240 50 T 340 75 T 430 30 T 486 45 L 486 130 L 40 130 Z" fill="url(#areaGradIndigo)"/>
+    <path d="M 40 110 Q 95 95, 140 85 T 240 50 T 340 75 T 430 30 T 486 45" fill="none" stroke="var(--chart-indigo)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- 家具：基线加重（1px 实线，区别于上方虚线导轨） -->
+    <line x1="34" y1="130" x2="492" y2="130" stroke="var(--border)" stroke-width="1.5"/>
+    <!-- 家具：rim 刻度 -->
+    <g fill="var(--muted-fg)">
+      <circle cx="40" cy="135" r="1.5"/><circle cx="114" cy="135" r="1.5"/><circle cx="188" cy="135" r="1.5"/>
+      <circle cx="262" cy="135" r="1.5"/><circle cx="336" cy="135" r="1.5"/><circle cx="410" cy="135" r="1.5"/>
+      <circle cx="486" cy="135" r="1.5"/>
+    </g>
+    <!-- 家具：峰值引线（气泡不悬空） -->
+    <line x1="430" y1="30" x2="430" y2="17" stroke="var(--chart-indigo)" stroke-width="1" stroke-dasharray="2 2"/>
+    <circle cx="430" cy="30" r="4" fill="var(--chart-indigo)" stroke="var(--card)" stroke-width="2"/>
+    <g transform="translate(430, 9)">
+      <rect x="-26" y="-11" width="52" height="17" rx="4" fill="var(--primary)"/>
+      <text x="0" y="1.5" font-size="10" font-weight="600" fill="var(--primary-fg)" text-anchor="middle">2,890</text>
+    </g>
+    <text x="40" y="150" font-size="10" fill="var(--muted-fg)" text-anchor="middle">00:00</text>
+    <text x="188" y="150" font-size="10" fill="var(--muted-fg)" text-anchor="middle">08:00</text>
+    <text x="336" y="150" font-size="10" fill="var(--muted-fg)" text-anchor="middle">16:00</text>
+    <text x="486" y="150" font-size="10" fill="var(--muted-fg)" text-anchor="middle">24:00</text>
   </svg>
+  <!-- ④ 底部编码说明行 -->
+  <div style="font-size: 10px; letter-spacing: .08em; color: var(--muted-fg); margin-top: 8px;">蓝色 = 吞吐量时序 · 虚线导轨 = 每 1k TPS · 圆点 = 每 300 TPS 一个 rim 刻度 · 气泡 = 当日峰值</div>
 </div>
 ```
 
 ### B. 阶段耗时垂直柱状图 (Column Histogram)
+
 ```html
 <div class="card" style="padding: 16px 20px;">
-  <div style="display: flex; justify-content: space-between; align-items: center; font-size: 13px; margin-bottom: 8px;">
-    <span style="font-weight: 600;">各阶段响应延迟分布 (ms)</span>
-    <span class="badge" style="font-size: 10px; height: 18px;">P95</span>
-  </div>
-  <svg viewBox="0 0 400 95" style="width: 100%; height: 85px; overflow: visible;">
-    <rect x="25" y="60" width="38" height="32" rx="4" fill="var(--chart-slate)" opacity="0.6"/>
-    <text x="44" y="54" font-size="10" font-weight="600" fill="var(--muted-fg)" text-anchor="middle">24ms</text>
-    <rect x="100" y="40" width="38" height="52" rx="4" fill="var(--chart-indigo)" opacity="0.8"/>
-    <text x="119" y="34" font-size="10" font-weight="600" fill="var(--card-fg)" text-anchor="middle">48ms</text>
-    <rect x="175" y="18" width="38" height="74" rx="4" fill="var(--chart-violet)" opacity="0.95"/>
-    <text x="194" y="12" font-size="10" font-weight="700" fill="var(--chart-violet)" text-anchor="middle">92ms</text>
-    <rect x="250" y="50" width="38" height="42" rx="4" fill="var(--chart-indigo)" opacity="0.8"/>
-    <text x="269" y="44" font-size="10" font-weight="600" fill="var(--card-fg)" text-anchor="middle">35ms</text>
-    <rect x="325" y="68" width="38" height="24" rx="4" fill="var(--chart-slate)" opacity="0.6"/>
-    <text x="344" y="62" font-size="10" font-weight="600" fill="var(--muted-fg)" text-anchor="middle">18ms</text>
+  <div style="font-size: 14px; font-weight: 600;">订单服务吃掉了 62% 的延迟预算，是第二名的 1.9 倍</div>
+  <div style="font-size: 12px; color: var(--muted-fg); margin-top: 2px;">1 rim 点 = 10ms · 虚线导轨 = 每 40ms · P95 基准 · 6 个服务模块</div>
+  <svg viewBox="0 0 500 150" style="width: 100%; height: auto; overflow: visible; margin-top: 10px;">
+    <line x1="30" y1="24" x2="490" y2="24" stroke="var(--border)" stroke-dasharray="3 3"/>
+    <line x1="30" y1="62" x2="490" y2="62" stroke="var(--border)" stroke-dasharray="3 3"/>
+    <line x1="30" y1="100" x2="490" y2="100" stroke="var(--border)" stroke-dasharray="3 3"/>
+    <text x="24" y="28" font-size="10" fill="var(--muted-fg)" text-anchor="end">120</text>
+    <text x="24" y="66" font-size="10" fill="var(--muted-fg)" text-anchor="end">80</text>
+    <text x="24" y="104" font-size="10" fill="var(--muted-fg)" text-anchor="end">40</text>
+    <text x="24" y="125" font-size="10" fill="var(--muted-fg)" text-anchor="end">0</text>
+    <rect x="52" y="106" width="36" height="19" rx="4" fill="var(--chart-slate)"/>
+    <text x="70" y="100" font-size="10" font-weight="600" fill="var(--muted-fg)" text-anchor="middle">24ms</text>
+    <text x="70" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">网关</text>
+    <rect x="124" y="85" width="36" height="40" rx="4" fill="var(--chart-indigo)"/>
+    <text x="142" y="79" font-size="10" font-weight="600" fill="var(--card-fg)" text-anchor="middle">48ms</text>
+    <text x="142" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">鉴权</text>
+    <!-- 唯一主角：橙色只给最高项 -->
+    <rect x="196" y="36" width="36" height="89" rx="4" fill="var(--chart-amber)"/>
+    <line x1="214" y1="36" x2="214" y2="22" stroke="var(--chart-amber)" stroke-width="1" stroke-dasharray="2 2"/>
+    <text x="214" y="16" font-size="10" font-weight="700" fill="var(--chart-amber)" text-anchor="middle">92ms</text>
+    <text x="214" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">订单</text>
+    <rect x="268" y="97" width="36" height="28" rx="4" fill="var(--chart-indigo)"/>
+    <text x="286" y="91" font-size="10" font-weight="600" fill="var(--card-fg)" text-anchor="middle">35ms</text>
+    <text x="286" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">支付</text>
+    <rect x="340" y="112" width="36" height="13" rx="4" fill="var(--chart-slate)"/>
+    <text x="358" y="106" font-size="10" font-weight="600" fill="var(--muted-fg)" text-anchor="middle">18ms</text>
+    <text x="358" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">存储</text>
+    <rect x="412" y="67" width="36" height="58" rx="4" fill="var(--chart-indigo)"/>
+    <text x="430" y="61" font-size="10" font-weight="600" fill="var(--card-fg)" text-anchor="middle">64ms</text>
+    <text x="430" y="145" font-size="10" fill="var(--muted-fg)" text-anchor="middle">检索</text>
+    <line x1="30" y1="125" x2="490" y2="125" stroke="var(--border)" stroke-width="1.5"/>
+    <g fill="var(--muted-fg)">
+      <circle cx="30" cy="130" r="1.5"/><circle cx="107" cy="130" r="1.5"/><circle cx="184" cy="130" r="1.5"/>
+      <circle cx="261" cy="130" r="1.5"/><circle cx="338" cy="130" r="1.5"/><circle cx="415" cy="130" r="1.5"/>
+      <circle cx="490" cy="130" r="1.5"/>
+    </g>
   </svg>
+  <div style="font-size: 10px; letter-spacing: .08em; color: var(--muted-fg); margin-top: 8px;">柱长 = P95 实测耗时 · 橙色 = 本轮唯一主角（最高项）· 其余灰阶 = 耗时高低 · 圆点 = 每 10ms 一个 rim 刻度</div>
 </div>
 ```
 
 ### C. 复合环形占比分布图 (Multi-Segment Donut Chart)
+
 ```html
 <div class="card" style="padding: 16px 20px;">
-  <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px;">
-    <span style="font-weight: 600;">节点健康度全景分布</span>
-    <span class="badge badge-success">99.8% 达标</span>
-  </div>
-  <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
-    <svg viewBox="0 0 160 160" style="width: 82px; height: 82px; flex-shrink: 0;">
-      <circle cx="80" cy="80" r="54" fill="none" stroke="var(--secondary)" stroke-width="18"/>
-      <!-- 周长 2*PI*54 ≈ 339.3 -->
-      <circle cx="80" cy="80" r="54" fill="none" stroke="var(--chart-emerald)" stroke-width="18" stroke-dasharray="220.5 339.3" stroke-dashoffset="0" transform="rotate(-90 80 80)"/>
-      <circle cx="80" cy="80" r="54" fill="none" stroke="var(--chart-amber)" stroke-width="18" stroke-dasharray="84.8 339.3" stroke-dashoffset="-220.5" transform="rotate(-90 80 80)"/>
-      <circle cx="80" cy="80" r="54" fill="none" stroke="var(--chart-rose)" stroke-width="18" stroke-dasharray="33.9 339.3" stroke-dashoffset="-305.3" transform="rotate(-90 80 80)"/>
-      <text x="80" y="77" text-anchor="middle" font-size="16" font-weight="700" fill="var(--card-fg)">1,280</text>
-      <text x="80" y="93" text-anchor="middle" font-size="9" fill="var(--muted-fg)">Nodes</text>
+  <div style="font-size: 14px; font-weight: 600;">99.8% 的节点健康，红段是唯一的降级来源</div>
+  <div style="font-size: 12px; color: var(--muted-fg); margin-top: 2px;">1 rim 刻度 = 1 个百分点 · 整环 = 100% · 采样 14:20</div>
+  <div style="display: flex; align-items: center; gap: 16px; margin-top: 10px;">
+    <svg viewBox="0 0 170 170" style="width: 96px; height: 96px; flex-shrink: 0;">
+      <!-- 家具：整环 rim 刻度（100 根，密到形成刻度圈） -->
+      <g stroke="var(--border)" stroke-width="2">
+        <line x1="85" y1="6" x2="85" y2="12" transform="rotate(0 85 85)"/>
+        <line x1="85" y1="6" x2="85" y2="12" transform="rotate(9 85 85)"/>
+        <line x1="85" y1="6" x2="85" y2="12" transform="rotate(18 85 85)"/>
+        <line x1="85" y1="6" x2="85" y2="12" transform="rotate(27 85 85)"/>
+        <line x1="85" y1="6" x2="85" y2="12" transform="rotate(36 85 85)"/>
+        <line x1="85" y1="6" x2="85" y2="12" transform="rotate(45 85 85)"/>
+        <line x1="85" y1="6" x2="85" y2="12" transform="rotate(54 85 85)"/>
+        <line x1="85" y1="6" x2="85" y2="12" transform="rotate(63 85 85)"/>
+        <line x1="85" y1="6" x2="85" y2="12" transform="rotate(72 85 85)"/>
+        <line x1="85" y1="6" x2="85" y2="12" transform="rotate(81 85 85)"/>
+        <line x1="85" y1="6" x2="85" y2="12" transform="rotate(90 85 85)"/>
+        <line x1="85" y1="6" x2="85" y2="12" transform="rotate(99 85 85)"/>
+        <line x1="85" y1="6" x2="85" y2="12" transform="rotate(108 85 85)"/>
+        <line x1="85" y1="6" x2="85" y2="12" transform="rotate(117 85 85)"/>
+        <line x1="85" y1="6" x2="85" y2="12" transform="rotate(126 85 85)"/>
+        <line x1="85" y1="6" x2="85" y2="12" transform="rotate(135 85 85)"/>
+        <line x1="85" y1="6" x2="85" y2="12" transform="rotate(144 85 85)"/>
+        <line x1="85" y1="6" x2="85" y2="12" transform="rotate(153 85 85)"/>
+        <line x1="85" y1="6" x2="85" y2="12" transform="rotate(162 85 85)"/>
+        <line x1="85" y1="6" x2="85" y2="12" transform="rotate(171 85 85)"/>
+        <line x1="85" y1="6" x2="85" y2="12" transform="rotate(180 85 85)"/>
+        <line x1="85" y1="6" x2="85" y2="12" transform="rotate(189 85 85)"/>
+        <line x1="85" y1="6" x2="85" y2="12" transform="rotate(198 85 85)"/>
+        <line x1="85" y1="6" x2="85" y2="12" transform="rotate(207 85 85)"/>
+        <line x1="85" y1="6" x2="85" y2="12" transform="rotate(216 85 85)"/>
+        <line x1="85" y1="6" x2="85" y2="12" transform="rotate(225 85 85)"/>
+        <line x1="85" y1="6" x2="85" y2="12" transform="rotate(234 85 85)"/>
+        <line x1="85" y1="6" x2="85" y2="12" transform="rotate(243 85 85)"/>
+        <line x1="85" y1="6" x2="85" y2="12" transform="rotate(252 85 85)"/>
+        <line x1="85" y1="6" x2="85" y2="12" transform="rotate(261 85 85)"/>
+        <line x1="85" y1="6" x2="85" y2="12" transform="rotate(270 85 85)"/>
+        <line x1="85" y1="6" x2="85" y2="12" transform="rotate(279 85 85)"/>
+        <line x1="85" y1="6" x2="85" y2="12" transform="rotate(288 85 85)"/>
+        <line x1="85" y1="6" x2="85" y2="12" transform="rotate(297 85 85)"/>
+        <line x1="85" y1="6" x2="85" y2="12" transform="rotate(306 85 85)"/>
+        <line x1="85" y1="6" x2="85" y2="12" transform="rotate(315 85 85)"/>
+        <line x1="85" y1="6" x2="85" y2="12" transform="rotate(324 85 85)"/>
+        <line x1="85" y1="6" x2="85" y2="12" transform="rotate(333 85 85)"/>
+        <line x1="85" y1="6" x2="85" y2="12" transform="rotate(342 85 85)"/>
+        <line x1="85" y1="6" x2="85" y2="12" transform="rotate(351 85 85)"/>
+      </g>
+      <!-- 环体：周长 2*PI*56 ≈ 351.9 -->
+      <circle cx="85" cy="85" r="56" fill="none" stroke="var(--secondary)" stroke-width="18"/>
+      <circle cx="85" cy="85" r="56" fill="none" stroke="var(--chart-emerald)" stroke-width="18" stroke-dasharray="228.7 351.9" stroke-dashoffset="0" transform="rotate(-90 85 85)"/>
+      <circle cx="85" cy="85" r="56" fill="none" stroke="var(--chart-amber)" stroke-width="18" stroke-dasharray="87.9 351.9" stroke-dashoffset="-228.7" transform="rotate(-90 85 85)"/>
+      <circle cx="85" cy="85" r="56" fill="none" stroke="var(--chart-rose)" stroke-width="18" stroke-dasharray="35.2 351.9" stroke-dashoffset="-316.6" transform="rotate(-90 85 85)"/>
+      <text x="85" y="82" text-anchor="middle" font-size="20" font-weight="700" fill="var(--card-fg)">1,280</text>
+      <text x="85" y="98" text-anchor="middle" font-size="9" fill="var(--muted-fg)" letter-spacing=".06em">NODES · 100%</text>
     </svg>
-    <div style="font-size: 11px; display: flex; flex-direction: column; gap: 4px; flex: 1;">
-      <div style="display: flex; justify-content: space-between;"><span style="color: var(--chart-emerald); font-weight: 500;">● 65% 正常运行</span><strong>832</strong></div>
-      <div style="display: flex; justify-content: space-between;"><span style="color: var(--chart-amber); font-weight: 500;">● 25% 负载预警</span><strong>320</strong></div>
-      <div style="display: flex; justify-content: space-between;"><span style="color: var(--chart-rose); font-weight: 500;">● 10% 异常降级</span><strong>128</strong></div>
+    <div style="font-size: 12px; display: flex; flex-direction: column; gap: 7px; flex: 1; min-width: 0;">
+      <div style="display: flex; justify-content: space-between; gap: 8px;"><span style="color: var(--chart-emerald); white-space: nowrap;">● 65% 正常运行</span><strong>832</strong></div>
+      <div style="display: flex; justify-content: space-between; gap: 8px;"><span style="color: var(--chart-amber); white-space: nowrap;">● 25% 负载预警</span><strong>320</strong></div>
+      <div style="display: flex; justify-content: space-between; gap: 8px;"><span style="color: var(--chart-rose); white-space: nowrap;">● 10% 异常降级</span><strong>128</strong></div>
     </div>
   </div>
+  <div style="font-size: 10px; letter-spacing: .08em; color: var(--muted-fg); margin-top: 10px;">环外刻度 = 每 1 个百分点 · 绿/黄/红 = 正常 / 预警 / 降级 · 圆心 = 节点总量</div>
 </div>
 ```
 
 ### D. 双线时序对比图 (Dual-Line Ingress vs Egress)
+
 ```html
 <div class="card" style="padding: 16px 20px;">
-  <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-bottom: 6px;">
-    <span style="font-weight: 600;">出入网络流量对冲</span>
-    <div style="display: flex; gap: 8px; font-size: 10px;">
-      <span style="color: var(--chart-indigo);">— 入向 1.4G</span>
-      <span style="color: var(--chart-cyan);">┄ 出向 860M</span>
-    </div>
-  </div>
-  <svg viewBox="0 0 400 95" style="width: 100%; height: 85px; overflow: visible;">
-    <defs>
-      <linearGradient id="dualAreaGradRef" x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stop-color="var(--chart-indigo)" stop-opacity="0.16"/>
-        <stop offset="100%" stop-color="var(--chart-indigo)" stop-opacity="0.0"/>
-      </linearGradient>
-    </defs>
-    <path d="M 0 55 Q 60 25, 120 40 T 240 25 T 340 15 T 400 30 L 400 95 L 0 95 Z" fill="url(#dualAreaGradRef)"/>
-    <path d="M 0 55 Q 60 25, 120 40 T 240 25 T 340 15 T 400 30" fill="none" stroke="var(--chart-indigo)" stroke-width="2.5" stroke-linecap="round"/>
-    <path d="M 0 75 Q 60 60, 120 68 T 240 48 T 340 40 T 400 52" fill="none" stroke="var(--chart-cyan)" stroke-width="2" stroke-dasharray="4 4" stroke-linecap="round"/>
-    <circle cx="340" cy="15" r="3.5" fill="var(--chart-indigo)" stroke="var(--card)" stroke-width="2"/>
-    <circle cx="340" cy="40" r="3" fill="var(--chart-cyan)" stroke="var(--card)" stroke-width="1.5"/>
+  <div style="font-size: 14px; font-weight: 600;">入向流量回落时，出向在 14:00 追平并反超</div>
+  <div style="font-size: 12px; color: var(--muted-fg); margin-top: 2px;">1 rim 点 = 10 分钟 · 实线 = 入向 · 虚线 = 出向 · 近 24 小时</div>
+  <svg viewBox="0 0 500 150" style="width: 100%; height: auto; overflow: visible; margin-top: 10px;">
+    <line x1="34" y1="30" x2="490" y2="30" stroke="var(--border)" stroke-dasharray="3 3"/>
+    <line x1="34" y1="70" x2="490" y2="70" stroke="var(--border)" stroke-dasharray="3 3"/>
+    <line x1="34" y1="110" x2="490" y2="110" stroke="var(--border)" stroke-dasharray="3 3"/>
+    <text x="28" y="34" font-size="10" fill="var(--muted-fg)" text-anchor="end">8G</text>
+    <text x="28" y="74" font-size="10" fill="var(--muted-fg)" text-anchor="end">4G</text>
+    <text x="28" y="114" font-size="10" fill="var(--muted-fg)" text-anchor="end">0</text>
+    <path d="M 44 44 L 110 38 L 176 52 L 242 68 L 308 92 L 374 108 L 440 118 L 486 122" fill="none" stroke="var(--chart-indigo)" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M 44 116 L 110 112 L 176 104 L 242 92 L 308 74 L 374 56 L 440 40 L 486 34" fill="none" stroke="var(--chart-cyan)" stroke-width="2.5" stroke-dasharray="6 4" stroke-linecap="round"/>
+    <!-- 交叉点标注：这才是这张图要讲的结论 -->
+    <line x1="300" y1="80" x2="300" y2="20" stroke="var(--muted-fg)" stroke-width="1" stroke-dasharray="2 2"/>
+    <circle cx="300" cy="80" r="4" fill="var(--card)" stroke="var(--card-fg)" stroke-width="2"/>
+    <text x="300" y="14" font-size="10" font-weight="600" fill="var(--card-fg)" text-anchor="middle">14:00 交叉</text>
+    <line x1="34" y1="126" x2="490" y2="126" stroke="var(--border)" stroke-width="1.5"/>
+    <g fill="var(--muted-fg)">
+      <circle cx="44" cy="131" r="1.5"/><circle cx="118" cy="131" r="1.5"/><circle cx="192" cy="131" r="1.5"/>
+      <circle cx="266" cy="131" r="1.5"/><circle cx="340" cy="131" r="1.5"/><circle cx="414" cy="131" r="1.5"/>
+      <circle cx="486" cy="131" r="1.5"/>
+    </g>
+    <text x="44" y="148" font-size="10" fill="var(--muted-fg)" text-anchor="middle">00:00</text>
+    <text x="192" y="148" font-size="10" fill="var(--muted-fg)" text-anchor="middle">08:00</text>
+    <text x="340" y="148" font-size="10" fill="var(--muted-fg)" text-anchor="middle">16:00</text>
+    <text x="486" y="148" font-size="10" fill="var(--muted-fg)" text-anchor="middle">24:00</text>
   </svg>
+  <div style="font-size: 10px; letter-spacing: .08em; color: var(--muted-fg); margin-top: 8px;">实线 = 入向流量 · 虚线 = 出向流量 · 交叉点 = 收支平衡时刻 · 圆点 = 每 10 分钟一个 rim 刻度</div>
 </div>
 ```
 
 ### E. 水平耗时对比排行榜 (Horizontal Ranking Bar)
+
 ```html
 <div class="card" style="padding: 16px 20px;">
-  <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px;">
-    <span style="font-weight: 600;">核心模块耗时排行</span>
-    <span style="font-size: 10px; color: var(--muted-fg);">P95 ms</span>
+  <div style="font-size: 14px; font-weight: 600;">连接池等待是第二名的 2.8 倍，且已越过 P95 上限</div>
+  <div style="font-size: 12px; color: var(--muted-fg); margin-top: 2px;">1 rim 点 = 40ms · 轨道全长 = P95 上限 320ms · 3 个采样点</div>
+  <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 12px; font-size: 12px;">
+    <div>
+      <div style="display: flex; justify-content: space-between; margin-bottom: 4px;"><span>1. 数据库连接池等待 (DB Pool)</span><strong>280ms</strong></div>
+      <svg viewBox="0 0 400 14" style="width: 100%; height: 14px; overflow: visible;">
+        <rect x="0" y="4" width="400" height="6" rx="3" fill="var(--secondary)"/>
+        <rect x="0" y="4" width="350" height="6" rx="3" fill="var(--chart-rose)"/>
+        <!-- rim 刻度：每 40ms 一个 -->
+        <g fill="var(--muted-fg)">
+          <circle cx="50" cy="11" r="1.5"/><circle cx="100" cy="11" r="1.5"/><circle cx="150" cy="11" r="1.5"/>
+          <circle cx="200" cy="11" r="1.5"/><circle cx="250" cy="11" r="1.5"/><circle cx="300" cy="11" r="1.5"/>
+          <circle cx="350" cy="11" r="1.5"/><circle cx="400" cy="11" r="1.5"/>
+        </g>
+        <line x1="320" y1="0" x2="320" y2="14" stroke="var(--chart-amber)" stroke-width="2"/>
+      </svg>
+    </div>
+    <div>
+      <div style="display: flex; justify-content: space-between; margin-bottom: 4px;"><span>2. 模型首字生成 (LLM First Token)</span><strong>195ms</strong></div>
+      <svg viewBox="0 0 400 14" style="width: 100%; height: 14px; overflow: visible;">
+        <rect x="0" y="4" width="400" height="6" rx="3" fill="var(--secondary)"/>
+        <rect x="0" y="4" width="244" height="6" rx="3" fill="var(--chart-indigo)"/>
+        <g fill="var(--muted-fg)">
+          <circle cx="50" cy="11" r="1.5"/><circle cx="100" cy="11" r="1.5"/><circle cx="150" cy="11" r="1.5"/>
+          <circle cx="200" cy="11" r="1.5"/><circle cx="250" cy="11" r="1.5"/><circle cx="300" cy="11" r="1.5"/>
+          <circle cx="350" cy="11" r="1.5"/><circle cx="400" cy="11" r="1.5"/>
+        </g>
+        <line x1="320" y1="0" x2="320" y2="14" stroke="var(--chart-amber)" stroke-width="2"/>
+      </svg>
+    </div>
+    <div>
+      <div style="display: flex; justify-content: space-between; margin-bottom: 4px;"><span>3. 网关鉴权解析 (Auth Gateway)</span><strong>48ms</strong></div>
+      <svg viewBox="0 0 400 14" style="width: 100%; height: 14px; overflow: visible;">
+        <rect x="0" y="4" width="400" height="6" rx="3" fill="var(--secondary)"/>
+        <rect x="0" y="4" width="60" height="6" rx="3" fill="var(--chart-slate)"/>
+        <g fill="var(--muted-fg)">
+          <circle cx="50" cy="11" r="1.5"/><circle cx="100" cy="11" r="1.5"/><circle cx="150" cy="11" r="1.5"/>
+          <circle cx="200" cy="11" r="1.5"/><circle cx="250" cy="11" r="1.5"/><circle cx="300" cy="11" r="1.5"/>
+          <circle cx="350" cy="11" r="1.5"/><circle cx="400" cy="11" r="1.5"/>
+        </g>
+        <line x1="320" y1="0" x2="320" y2="14" stroke="var(--chart-amber)" stroke-width="2"/>
+      </svg>
+    </div>
   </div>
-  <div style="display: flex; flex-direction: column; gap: 6px; font-size: 11px;">
-    <div>
-      <div style="display: flex; justify-content: space-between; margin-bottom: 2px;"><span>DB Pool Wait</span><strong style="color: var(--chart-rose);">280ms</strong></div>
-      <div style="background: var(--secondary); height: 6px; border-radius: 9999px; overflow: hidden;"><div style="background: var(--chart-rose); width: 85%; height: 100%;"></div></div>
-    </div>
-    <div>
-      <div style="display: flex; justify-content: space-between; margin-bottom: 2px;"><span>LLM Stream First Token</span><strong style="color: var(--chart-amber);">195ms</strong></div>
-      <div style="background: var(--secondary); height: 6px; border-radius: 9999px; overflow: hidden;"><div style="background: var(--chart-amber); width: 62%; height: 100%;"></div></div>
-    </div>
-    <div>
-      <div style="display: flex; justify-content: space-between; margin-bottom: 2px;"><span>Auth Gateway JWT</span><strong style="color: var(--chart-indigo);">48ms</strong></div>
-      <div style="background: var(--secondary); height: 6px; border-radius: 9999px; overflow: hidden;"><div style="background: var(--chart-indigo); width: 22%; height: 100%;"></div></div>
-    </div>
-    <div>
-      <div style="display: flex; justify-content: space-between; margin-bottom: 2px;"><span>Asset Cache Edge</span><strong style="color: var(--chart-emerald);">12ms</strong></div>
-      <div style="background: var(--secondary); height: 6px; border-radius: 9999px; overflow: hidden;"><div style="background: var(--chart-emerald); width: 8%; height: 100%;"></div></div>
-    </div>
-  </div>
+  <div style="font-size: 10px; letter-spacing: .08em; color: var(--muted-fg); margin-top: 12px;">轨道 = 0 → P95 上限 320ms · 填充 = 实测耗时 · 琥珀竖线 = 预警阈值 · 圆点 = 每 40ms 一个 rim 刻度</div>
 </div>
 ```
 
 ### F. 半环水位仪表盘 (Semi-Circle Capacity Gauge)
+
 ```html
 <div class="card" style="padding: 16px 20px;">
-  <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-bottom: 4px;">
-    <span style="font-weight: 600;">集群内存负载水位</span>
-    <span class="badge badge-warning" style="font-size: 10px; height: 18px;">Normal</span>
-  </div>
-  <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-    <svg viewBox="0 0 180 100" style="width: 140px; height: 78px; overflow: visible;">
-      <defs>
-        <linearGradient id="gaugeGradRef" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stop-color="var(--chart-emerald)"/>
-          <stop offset="60%" stop-color="var(--chart-indigo)"/>
-          <stop offset="100%" stop-color="var(--chart-amber)"/>
-        </linearGradient>
-      </defs>
-      <!-- 半圆周长 = 204.2 -->
-      <circle cx="90" cy="90" r="65" fill="none" stroke="var(--secondary)" stroke-width="16" stroke-dasharray="204.2 408.4" stroke-dashoffset="0" transform="rotate(-180 90 90)" stroke-linecap="round"/>
-      <circle cx="90" cy="90" r="65" fill="none" stroke="url(#gaugeGradRef)" stroke-width="16" stroke-dasharray="160.1 408.4" stroke-dashoffset="0" transform="rotate(-180 90 90)" stroke-linecap="round"/>
-      <text x="90" y="74" text-anchor="middle" font-size="18" font-weight="700" fill="var(--card-fg)">78.4%</text>
-      <text x="90" y="88" text-anchor="middle" font-size="9" fill="var(--muted-fg)">15.6 / 20 TB used</text>
-      <text x="25" y="98" font-size="9" fill="var(--muted-fg)" text-anchor="middle">0%</text>
-      <text x="155" y="98" font-size="9" fill="var(--muted-fg)" text-anchor="middle">100%</text>
-    </svg>
-  </div>
+  <div style="font-size: 14px; font-weight: 600;">配额还剩 38%，按当前消耗速率够用 11 天</div>
+  <div style="font-size: 12px; color: var(--muted-fg); margin-top: 2px;">1 rim 刻度 = 5 个百分点 · 20 个刻度 = 100% · 计算窗口 30 天</div>
+  <svg viewBox="0 0 220 130" style="width: 100%; max-width: 260px; height: auto; overflow: visible; margin-top: 10px;">
+    <!-- 底弧：半径 80，从 180° 到 360° -->
+    <path d="M 30 100 A 80 80 0 0 1 190 100" fill="none" stroke="var(--secondary)" stroke-width="16" stroke-linecap="round"/>
+    <!-- 水位弧：38% × 半圆周长(251.3) ≈ 95.5 -->
+    <path d="M 30 100 A 80 80 0 0 1 190 100" fill="none" stroke="var(--chart-indigo)" stroke-width="16" stroke-linecap="round"
+          stroke-dasharray="95.5 251.3"/>
+    <!-- 家具：rim 刻度（每 5% 一根，共 20 根） -->
+    <g stroke="var(--muted-fg)" stroke-width="1.5">
+      <line x1="30" y1="100" x2="36" y2="100" transform="rotate(0 110 100)"/>
+      <line x1="30" y1="100" x2="36" y2="100" transform="rotate(9 110 100)"/>
+      <line x1="30" y1="100" x2="36" y2="100" transform="rotate(18 110 100)"/>
+      <line x1="30" y1="100" x2="36" y2="100" transform="rotate(27 110 100)"/>
+      <line x1="30" y1="100" x2="36" y2="100" transform="rotate(36 110 100)"/>
+      <line x1="30" y1="100" x2="36" y2="100" transform="rotate(45 110 100)"/>
+      <line x1="30" y1="100" x2="36" y2="100" transform="rotate(54 110 100)"/>
+      <line x1="30" y1="100" x2="36" y2="100" transform="rotate(63 110 100)"/>
+      <line x1="30" y1="100" x2="36" y2="100" transform="rotate(72 110 100)"/>
+      <line x1="30" y1="100" x2="36" y2="100" transform="rotate(81 110 100)"/>
+      <line x1="30" y1="100" x2="36" y2="100" transform="rotate(90 110 100)"/>
+      <line x1="30" y1="100" x2="36" y2="100" transform="rotate(99 110 100)"/>
+      <line x1="30" y1="100" x2="36" y2="100" transform="rotate(108 110 100)"/>
+      <line x1="30" y1="100" x2="36" y2="100" transform="rotate(117 110 100)"/>
+      <line x1="30" y1="100" x2="36" y2="100" transform="rotate(126 110 100)"/>
+      <line x1="30" y1="100" x2="36" y2="100" transform="rotate(135 110 100)"/>
+      <line x1="30" y1="100" x2="36" y2="100" transform="rotate(144 110 100)"/>
+      <line x1="30" y1="100" x2="36" y2="100" transform="rotate(153 110 100)"/>
+      <line x1="30" y1="100" x2="36" y2="100" transform="rotate(162 110 100)"/>
+      <line x1="30" y1="100" x2="36" y2="100" transform="rotate(171 110 100)"/>
+    </g>
+    <!-- 预警阈值 25%：从右侧数第 5 根刻度 -->
+    <line x1="110" y1="100" x2="110" y2="20" stroke="var(--chart-amber)" stroke-width="1.5" stroke-dasharray="3 3" transform="rotate(135 110 100)"/>
+    <text x="110" y="86" text-anchor="middle" font-size="26" font-weight="700" fill="var(--card-fg)">38%</text>
+    <text x="110" y="104" text-anchor="middle" font-size="11" fill="var(--muted-fg)">剩余配额 · 约 11 天</text>
+    <text x="30" y="118" text-anchor="middle" font-size="10" fill="var(--muted-fg)">0%</text>
+    <text x="110" y="118" text-anchor="middle" font-size="10" fill="var(--muted-fg)">50%</text>
+    <text x="190" y="118" text-anchor="middle" font-size="10" fill="var(--muted-fg)">100%</text>
+  </svg>
+  <div style="font-size: 10px; letter-spacing: .08em; color: var(--muted-fg); margin-top: 8px;">弧长 = 已用配额 · 外圈刻度 = 每 5 个百分点 · 琥珀虚线 = 25% 预警阈值</div>
 </div>
 ```
-
----
 
 ## 7. 常用 24 个研发工程矢量图标 (Curated SVG Icons)
 

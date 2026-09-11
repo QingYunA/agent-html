@@ -222,43 +222,13 @@ ln -sf ../../../.agents/skills/agent-html ~/.pi/agent/skills/agent-html
 | **⏱️ 水位仪表盘 (Capacity Gauge)** | 半圆弧行程切割 + 警戒色 | 直观展示使用百分比 | 内存/显存水位、API 调用限额 |
 
 <details>
-<summary><strong>展开查看常用 SVG 图表代码（直接复制使用）</strong></summary>
+<summary><strong>SVG 图表代码在哪里？</strong></summary>
 
-#### A. 平滑面积折线图
-```html
-<svg viewBox="0 0 400 95" style="width: 100%; height: 85px; overflow: visible;">
-  <defs>
-    <linearGradient id="areaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="var(--chart-indigo)" stop-opacity="0.25"/>
-      <stop offset="100%" stop-color="var(--chart-indigo)" stop-opacity="0.0"/>
-    </linearGradient>
-  </defs>
-  <!-- 渐变填充底色 -->
-  <path d="M 0 70 Q 55 30, 110 52 T 210 36 T 310 18 T 400 28 L 400 95 L 0 95 Z" fill="url(#areaGrad)"/>
-  <!-- 数据折线 -->
-  <path d="M 0 70 Q 55 30, 110 52 T 210 36 T 310 18 T 400 28" fill="none" stroke="var(--chart-indigo)" stroke-width="2.5" stroke-linecap="round"/>
-  <!-- 高亮数据点 -->
-  <circle cx="210" cy="36" r="3" fill="var(--card)" stroke="var(--chart-indigo)" stroke-width="2"/>
-  <circle cx="310" cy="18" r="3.5" fill="var(--chart-indigo)" stroke="var(--card)" stroke-width="2"/>
-</svg>
-```
+六种图表形态的完整、正本代码只在一个地方：**[`skills/agent-html/references/components.md`](skills/agent-html/references/components.md) 第 6 节**。
 
-#### B. 环形占比图
-```html
-<!-- 半径 r=54，周长 2*PI*54 ≈ 339.3，通过 stroke-dasharray 控制各段长短 -->
-<svg viewBox="0 0 160 160" style="width: 120px; height: 120px;">
-  <!-- 底色圆环 -->
-  <circle cx="80" cy="80" r="54" fill="none" stroke="var(--secondary)" stroke-width="18"/>
-  <!-- 正常状态 (65%): 339.3 * 0.65 ≈ 220.5 -->
-  <circle cx="80" cy="80" r="54" fill="none" stroke="var(--chart-emerald)" stroke-width="18" stroke-dasharray="220.5 339.3" stroke-dashoffset="0" transform="rotate(-90 80 80)"/>
-  <!-- 警告状态 (25%): 339.3 * 0.25 ≈ 84.8 -->
-  <circle cx="80" cy="80" r="54" fill="none" stroke="var(--chart-amber)" stroke-width="18" stroke-dasharray="84.8 339.3" stroke-dashoffset="-220.5" transform="rotate(-90 80 80)"/>
-  <!-- 异常状态 (10%): 339.3 * 0.10 ≈ 33.9 -->
-  <circle cx="80" cy="80" r="54" fill="none" stroke="var(--chart-rose)" stroke-width="18" stroke-dasharray="33.9 339.3" stroke-dashoffset="-305.3" transform="rotate(-90 80 80)"/>
-  <text x="80" y="77" text-anchor="middle" font-size="16" font-weight="700" fill="var(--card-fg)">1,280</text>
-  <text x="80" y="93" text-anchor="middle" font-size="9" fill="var(--muted-fg)">Nodes</text>
-</svg>
-```
+这里**故意不再复制一份**。同一段代码存两份手抄副本迟早会漂移，而 README 里一份陈旧的副本比没有更糟——Agent 抄了它就会画出坏的图。（这个坑我们踩过，见 `skills/agent-html/references/failures.md` **F-014**。）
+
+那边的每张图都带**四件套**：结论式标题、写明单位契约的副标题（`1 rim 点 = 300 TPS`）、图体、全大写编码说明行。契约条文在 [`SKILL.md`](skills/agent-html/SKILL.md)。
 
 </details>
 
