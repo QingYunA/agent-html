@@ -12,22 +12,24 @@ if (!fs.existsSync(TEMP_DIR)) {
 
 const ORDER = ['report', 'dashboard', 'inspector', 'compare', 'timeline', 'kanban'];
 
-// Render 1280x860 @ 1x for smooth preview animation
+// Render at 1440x900 @ 2x (2880x1800 Retina) for crystal-clear typography and charts
 function renderFrame(lang, name, outPath) {
   const filePath = path.join(ROOT, `skills/agent-html/assets/templates/${lang}/${name}.html`);
-  const cmd = `"${CHROME}" --headless --disable-gpu --window-size=1280,860 --hide-scrollbars --screenshot="${outPath}" "file://${filePath}"`;
+  const cmd = `"${CHROME}" --headless --disable-gpu --window-size=1440,900 --force-device-scale-factor=2 --hide-scrollbars --screenshot="${outPath}" "file://${filePath}"`;
   execSync(cmd, { stdio: 'pipe' });
 }
 
 for (const lang of ['zh', 'en']) {
-  console.log(`🎬 Generating preview video & gif for [${lang}]...`);
+  console.log(`🎬 Generating Retina HD preview video & gif for [${lang}]...`);
   const langDir = path.join(TEMP_DIR, lang);
   if (!fs.existsSync(langDir)) fs.mkdirSync(langDir, { recursive: true });
 
-  // 1. Render base frames
+  // 1. Render 2x retina frames
   for (const name of ORDER) {
     const framePath = path.join(langDir, `${name}.png`);
+    process.stdout.write(`  Rendering ${name}... `);
     renderFrame(lang, name, framePath);
+    console.log('✅');
   }
 
   // 2. Build input list for ffmpeg with 2.5s duration per slide
@@ -43,15 +45,17 @@ for (const lang of ['zh', 'en']) {
   const mp4Out = path.join(ROOT, `assets/screenshots/${lang}/preview.mp4`);
   const gifOut = path.join(ROOT, `assets/screenshots/${lang}/preview.gif`);
 
-  // 3. Generate mp4
-  execSync(`ffmpeg -y -f concat -safe 0 -i "${listFile}" -vf "fps=24,format=yuv420p" -c:v libx264 -preset fast -crf 22 "${mp4Out}"`, { stdio: 'pipe' });
+  // 3. Generate high-definition MP4 (2880x1800 @ 30fps, slow preset, CRF 18 visually lossless)
+  console.log('  Encoding 2K Retina MP4 (H.264 CRF 18)...');
+  execSync(`/opt/homebrew/bin/ffmpeg -y -f concat -safe 0 -i "${listFile}" -vf "fps=30,format=yuv420p" -c:v libx264 -preset slow -crf 18 "${mp4Out}"`, { stdio: 'pipe' });
   console.log(`  ✅ Generated ${mp4Out}`);
 
-  // 4. Generate optimized gif (1000px width with palettegen for high quality & small file size)
+  // 4. Generate high-definition GIF (1200px width, lanczos filter, diff-based palette for crisp text)
+  console.log('  Encoding high-definition GIF (1200px lanczos)...');
   const palette = path.join(langDir, 'palette.png');
-  execSync(`ffmpeg -y -i "${mp4Out}" -vf "fps=12,scale=1000:-1:flags=lanczos,palettegen" "${palette}"`, { stdio: 'pipe' });
-  execSync(`ffmpeg -y -i "${mp4Out}" -i "${palette}" -filter_complex "fps=12,scale=1000:-1:flags=lanczos[x];[x][1:v]paletteuse" "${gifOut}"`, { stdio: 'pipe' });
+  execSync(`/opt/homebrew/bin/ffmpeg -y -i "${mp4Out}" -vf "fps=12,scale=1200:-1:flags=lanczos,palettegen=stats_mode=diff" "${palette}"`, { stdio: 'pipe' });
+  execSync(`/opt/homebrew/bin/ffmpeg -y -i "${mp4Out}" -i "${palette}" -filter_complex "fps=12,scale=1200:-1:flags=lanczos[x];[x][1:v]paletteuse=dither=bayer:bayer_scale=3" "${gifOut}"`, { stdio: 'pipe' });
   console.log(`  ✅ Generated ${gifOut}`);
 }
 
-console.log('🎉 All preview videos and gifs updated successfully!');
+console.log('🎉 All Retina preview videos and GIFs updated successfully!');
