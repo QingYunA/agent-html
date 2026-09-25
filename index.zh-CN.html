@@ -7,6 +7,19 @@
   <meta name="description" content="专为 AI Agent 打造的零依赖单文件 HTML 设计系统与技能。深度复刻 shadcn/ui 极简中性美学 · 100% 离线自包含 · 0 npm 依赖 · 0 外部 CDN · 专为 Claude Code、Pi、Codex、Cursor 全局适配。">
   <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
   
+  <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#09090b" media="(prefers-color-scheme: dark)">
+  <script>
+    (function () {
+      var d = document.documentElement;
+      d.classList.add('js');
+      try {
+        var t = localStorage.getItem('agent_html_theme');
+        var dark = t ? t === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        d.setAttribute('data-theme', dark ? 'dark' : 'light');
+      } catch (e) {}
+    })();
+  </script>
   <style>
     /* ==========================================================================
        agent-html Design Tokens (shadcn/ui Zinc-Neutral Palette)
@@ -741,9 +754,362 @@
       background: rgba(0, 0, 0, 0.45);
       backdrop-filter: blur(4px);
     }
+    /* ==========================================================================
+       Visual Refresh Layer — depth, motion & responsive polish (still 0 deps)
+       ========================================================================== */
+    ::selection { background: color-mix(in srgb, var(--chart-indigo) 24%, transparent); }
+    :focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; border-radius: 4px; }
+    body { font-feature-settings: "cv11", "ss01"; text-rendering: optimizeLegibility; }
+    section[id] { scroll-margin-top: 80px; }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.92em; }
+
+    /* @lint-allow: FIXED_HEIGHT — .page-glow is a purely decorative, aria-hidden backdrop with no content to clip */
+    /* Ambient page backdrop: dotted grid + soft brand glow behind the hero */
+    .page-glow {
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 820px;
+      pointer-events: none;
+      z-index: -1;
+      overflow: hidden;
+    }
+    .page-glow::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(var(--border) 1px, transparent 1px);
+      background-size: 22px 22px;
+      -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 20%, rgba(0,0,0,0.9), transparent 75%);
+              mask-image: radial-gradient(ellipse 70% 60% at 50% 20%, rgba(0,0,0,0.9), transparent 75%);
+    }
+    .page-glow::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: -220px;
+      width: 1100px;
+      height: 620px;
+      transform: translateX(-50%);
+      background:
+        radial-gradient(closest-side at 30% 55%, color-mix(in srgb, var(--chart-indigo) 22%, transparent), transparent),
+        radial-gradient(closest-side at 70% 45%, color-mix(in srgb, var(--chart-violet) 18%, transparent), transparent),
+        radial-gradient(closest-side at 50% 80%, color-mix(in srgb, var(--chart-cyan) 14%, transparent), transparent);
+      filter: blur(20px);
+      opacity: 0.9;
+    }
+    body { position: relative; isolation: isolate; }
+
+    /* Header: glass + elevation once the page scrolls */
+    header { background-color: color-mix(in srgb, var(--bg) 78%, transparent); border-bottom-color: transparent; }
+    [data-theme="dark"] header { background-color: color-mix(in srgb, var(--bg) 72%, transparent); }
+    header.scrolled { border-bottom-color: var(--border); box-shadow: 0 6px 24px -12px rgba(0, 0, 0, 0.18); }
+    .brand img { box-shadow: var(--shadow-sm); }
+    .nav-link { position: relative; padding: 6px 2px; }
+    .nav-link::after {
+      content: "";
+      position: absolute;
+      left: 2px; right: 2px; bottom: 0;
+      height: 1.5px;
+      background: currentColor;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.2s ease;
+    }
+    .nav-link:hover::after, .nav-link.active::after { transform: scaleX(1); }
+    .nav-link.active { color: var(--card-fg); }
+    .nav-lang::after { display: none; }
+    #themeIcon { transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    #themeToggle:hover #themeIcon { transform: rotate(-18deg) scale(1.08); }
+
+    /* Hero */
+    .hero { padding: 96px 0 40px; }
+    .hero-announcement {
+      background: color-mix(in srgb, var(--card) 80%, transparent);
+      box-shadow: var(--shadow-sm);
+      backdrop-filter: blur(6px);
+    }
+    .hero-announcement .badge-dot { box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok) 22%, transparent); animation: pulse-dot 2.4s ease-in-out infinite; }
+    @keyframes pulse-dot { 0%, 100% { box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok) 22%, transparent); } 50% { box-shadow: 0 0 0 6px color-mix(in srgb, var(--ok) 0%, transparent); } }
+    .hero h1 {
+      font-size: clamp(34px, 6vw, 64px);
+      line-height: 1.06;
+      letter-spacing: -0.045em;
+      background: linear-gradient(180deg, var(--card-fg) 30%, color-mix(in srgb, var(--card-fg) 62%, transparent));
+      -webkit-background-clip: text;
+              background-clip: text;
+      color: transparent;
+      padding-bottom: 4px;
+    }
+    .grad-text {
+      background: linear-gradient(92deg, var(--chart-indigo), var(--chart-violet) 45%, var(--chart-cyan));
+      -webkit-background-clip: text;
+              background-clip: text;
+      color: transparent;
+    }
+    .hero p { font-size: clamp(16px, 1.6vw, 19px); }
+    .install-pill { padding: 7px 7px 7px 16px; height: 42px; }
+    .btn-primary { box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.12) inset, var(--shadow); }
+    .btn-lg { height: 42px; }
+    .btn-lg:hover { transform: translateY(-1px); }
+
+    /* Hero showcase: live preview reel inside a browser window */
+    .hero-visual {
+      position: relative;
+      width: 100%;
+      max-width: 1040px;
+      margin: 12px auto 0;
+    }
+    .hero-visual::before {
+      content: "";
+      position: absolute;
+      inset: 8% 6% -4%;
+      background: linear-gradient(90deg, var(--chart-indigo), var(--chart-violet), var(--chart-cyan));
+      filter: blur(60px);
+      opacity: 0.28;
+      border-radius: 40px;
+      z-index: -1;
+    }
+    .window {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.25), var(--shadow-lg);
+      overflow: hidden;
+    }
+    .window-bar {
+      height: 38px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 14px;
+      background: var(--secondary);
+      border-bottom: 1px solid var(--border);
+    }
+    .window-dots { display: flex; gap: 6px; flex-shrink: 0; }
+    .window-dots i { width: 10px; height: 10px; border-radius: 9999px; background: var(--border); display: block; }
+    .window-dots i:nth-child(1) { background: var(--chart-rose); }
+    .window-dots i:nth-child(2) { background: var(--chart-amber); }
+    .window-dots i:nth-child(3) { background: var(--chart-emerald); }
+    .window-url {
+      flex: 1;
+      max-width: 420px;
+      margin: 0 auto;
+      height: 22px;
+      border-radius: 6px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--muted-fg);
+      font: 500 11px/20px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding: 0 10px;
+    }
+    .window-spacer { width: 42px; flex-shrink: 0; }
+    .window video, .window img { display: block; width: 100%; height: auto; background: var(--bg); }
+
+    /* Metrics */
+    .metrics-bar { margin: 72px 0 104px; }
+    .metric-item {
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    .metric-item::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--chart-indigo), var(--chart-violet), var(--chart-cyan));
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    .metric-item:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+    .metric-item:hover::before { opacity: 1; }
+    .metric-icon {
+      width: 34px; height: 34px;
+      display: grid; place-items: center;
+      border-radius: 9px;
+      background: var(--secondary);
+      border: 1px solid var(--border);
+      color: var(--card-fg);
+      margin-bottom: 14px;
+    }
+    .metric-icon svg { width: 17px; height: 17px; }
+
+    /* Section headings */
+    section[id], .section-block { margin-bottom: 104px; }
+    .section-header { margin-bottom: 44px; }
+    .section-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      border-radius: 9999px;
+      background: var(--ok-bg);
+      border: 1px solid var(--ok-border);
+      font-size: 11px;
+      margin-bottom: 14px;
+    }
+    .section-tag::before { content: ""; width: 5px; height: 5px; border-radius: 9999px; background: currentColor; }
+    .section-title { font-size: clamp(26px, 3.4vw, 38px); letter-spacing: -0.035em; line-height: 1.15; }
+    .section-desc { font-size: 16px; line-height: 1.6; }
+
+    /* Cards: consistent hover elevation */
+    .arsenal-box, .prompt-card, .contrast-card {
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    .arsenal-box { border-radius: var(--radius-lg); }
+    .arsenal-box:hover, .prompt-card:hover, .contrast-card:hover {
+      border-color: color-mix(in srgb, var(--card-fg) 18%, var(--border));
+      box-shadow: var(--shadow-md);
+    }
+    .prompt-card:hover, .contrast-card:hover { transform: translateY(-2px); }
+    .contrast-card.featured:hover { border-color: var(--ok); box-shadow: 0 0 0 1px var(--ok), var(--shadow-lg); }
+    .span-2 { grid-column: span 2; }
+    .arsenal-grid > *, .prompt-grid > *, .contrast-grid > *, .metrics-bar > * { min-width: 0; }
+    .arsenal-grid { margin-bottom: 20px; }
+    .icon-grid { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); }
+    .icon-tile { padding: 14px 6px; }
+    .icon-tile:hover { box-shadow: var(--shadow); }
+    .icon-tile:active { transform: scale(0.97); }
+    #demoSearch, #demoSearchZh { transition: border-color 0.15s, box-shadow 0.15s; }
+    #demoSearch:focus, #demoSearchZh:focus { border-color: var(--ring); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 14%, transparent); }
+
+    /* Archetype showcase */
+    .archetype-container { box-shadow: var(--shadow-lg); margin-bottom: 0; }
+    .archetype-tabs { padding: 6px; gap: 4px; scrollbar-width: none; }
+    .archetype-tabs::-webkit-scrollbar { display: none; }
+    .archetype-tab-btn { border-radius: var(--radius); border-bottom: none; padding: 12px 16px; min-width: 150px; }
+    .archetype-tab-btn.active { box-shadow: var(--shadow); }
+    .archetype-tab-btn.active .tab-num { color: var(--chart-indigo); opacity: 1; }
+    .archetype-content.active { animation: pane-in 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
+    @keyframes pane-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+    .archetype-preview-frame { border-radius: var(--radius-lg); box-shadow: var(--shadow-md); }
+    .archetype-preview-frame img { transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); transform-origin: top center; }
+    .archetype-preview-frame:hover img { transform: scale(1.012); }
+
+    /* Prompt cookbook */
+    .prompt-card { border-radius: var(--radius-lg); padding: 22px 22px 18px; }
+    .prompt-text { font-style: normal; font-size: 14px; line-height: 1.6; position: relative; padding-top: 26px; }
+    .prompt-text::before {
+      content: "\201C";
+      position: absolute;
+      top: -10px; left: -2px;
+      font: 700 44px/1 Georgia, "Times New Roman", serif;
+      color: var(--chart-indigo);
+      opacity: 0.55;
+    }
+    .prompt-footer > span {
+      display: inline-flex;
+      align-items: center;
+      height: 22px;
+      padding: 0 8px;
+      border-radius: 9999px;
+      background: var(--secondary);
+      border: 1px solid var(--border);
+      font-weight: 500;
+    }
+    .prompt-grid { margin-bottom: 0; }
+
+    /* Terminal code box */
+    .code-box {
+      padding: 56px 24px 24px;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+    .code-box::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 40px;
+      border-bottom: 1px solid #27272a;
+      background:
+        radial-gradient(circle at 20px 20px, #f43f5e 5px, transparent 5.5px),
+        radial-gradient(circle at 38px 20px, #f59e0b 5px, transparent 5.5px),
+        radial-gradient(circle at 56px 20px, #10b981 5px, transparent 5.5px);
+    }
+    .code-box pre { margin: 0; }
+    .code-copy-btn { top: 8px; right: 10px; transition: background 0.15s; }
+
+    /* Footer */
+    footer { background: color-mix(in srgb, var(--card) 70%, var(--bg)); padding: 40px 0; }
+    .footer-links { flex-wrap: wrap; gap: 8px 18px; }
+    .footer-links a { transition: color 0.15s; }
+
+    /* Toast */
+    #toast { border-radius: var(--radius); padding: 11px 16px; }
+
+    /* Scroll reveal (progressive: content stays visible without JS) */
+    .js .reveal { opacity: 0; transform: translateY(14px); transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+    .js .reveal.in { opacity: 1; transform: none; }
+
+    /* Back-to-top */
+    #toTop {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      width: 40px; height: 40px;
+      border-radius: 9999px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--card-fg);
+      box-shadow: var(--shadow-md);
+      display: grid; place-items: center;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      z-index: 60;
+    }
+    #toTop.show { opacity: 1; transform: none; pointer-events: auto; }
+    #toTop:hover { transform: translateY(-2px); }
+    #toast.show ~ #toTop { bottom: 76px; }
+
+    /* Responsive refinements */
+    @media (max-width: 900px) {
+      .span-2 { grid-column: auto; }
+      .nav-link:not(.nav-lang) { display: none; }
+      .hero { padding-top: 64px; }
+    }
+    @media (max-width: 640px) {
+      .container { padding: 0 16px; }
+      .nav-links { gap: 8px; }
+      .nav-gh-label { display: none; }
+      .hero { padding: 48px 0 24px; }
+      .hero-cta { flex-direction: column; align-items: stretch; width: 100%; }
+      .hero-cta > * { width: 100%; max-width: 100%; min-width: 0; }
+      .install-pill { justify-content: space-between; font-size: 12px; }
+      .install-pill #installCmd { flex: 1; min-width: 0; text-align: left; }
+      .install-pill #installCmd { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .metrics-bar { grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 48px 0 72px; }
+      .metric-item { padding: 16px; }
+      .metric-val { font-size: 20px; }
+      section[id], .section-block { margin-bottom: 72px; }
+      .arsenal-box { padding: 18px; }
+      .arsenal-title { flex-wrap: wrap; gap: 8px; }
+      #demoSearch, #demoSearchZh { width: 100% !important; }
+      .archetype-tabs { flex-direction: row; }
+      .archetype-tab-btn { min-width: 128px; }
+      .archetype-content { padding: 20px 16px; }
+      .window-url { font-size: 10px; }
+      .window-spacer { display: none; }
+      #toast { left: 16px; right: 16px; bottom: 16px; justify-content: center; }
+      #toTop { right: 16px; bottom: 16px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+      .js .reveal { opacity: 1; transform: none; }
+    }
+    .contrast-grid { margin-bottom: 0; }
   </style>
 </head>
 <body>
+  <div class="page-glow" aria-hidden="true"></div>
 
   <!-- Sticky Navbar -->
   <header>
@@ -758,12 +1124,12 @@
         <a href="#components" class="nav-link">组件库</a>
         <a href="#archetypes" class="nav-link">常用模板</a>
         <a href="#cookbook" class="nav-link">Prompt 菜谱</a>
-        <a href="index.html" class="nav-link" style="display: inline-flex; align-items: center; gap: 4px;" title="Switch to English">🌐 English</a>
+        <a href="index.html" class="nav-link nav-lang" style="display: inline-flex; align-items: center; gap: 4px;" title="Switch to English">🌐 English</a>
         <a href="https://github.com/QingYunA/agent-html" target="_blank" rel="noopener" class="btn btn-outline btn-sm">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
-          <span>GitHub</span>
+          <span class="nav-gh-label">GitHub</span>
         </a>
-        <button id="themeToggle" class="btn btn-outline btn-icon" title="切换主题 (浅色 / 暗黑)">
+        <button id="themeToggle" class="btn btn-outline btn-icon" aria-label="Toggle theme" title="切换主题 (浅色 / 暗黑)">
           <svg id="themeIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1 -9 -9Z"></path>
           </svg>
@@ -781,7 +1147,7 @@
         <span style="color: var(--muted-fg);">→</span>
       </a>
 
-      <h1>让 AI 生成干净、好看的单文件 HTML</h1>
+      <h1>让 AI 生成<span class="grad-text">干净、好看</span>的单文件 HTML</h1>
       
       <p>
         不用安装 npm 依赖，不用引用外部 CDN。<br>
@@ -801,23 +1167,40 @@
         <a href="#components" class="btn btn-primary btn-lg">进入组件库</a>
         <a href="#archetypes" class="btn btn-outline btn-lg">查看 6 大场景模板</a>
       </div>
+
+      <div class="hero-visual">
+        <div class="window">
+          <div class="window-bar">
+            <div class="window-dots"><i></i><i></i><i></i></div>
+            <div class="window-url">file:///~/reports/dashboard.html</div>
+            <div class="window-spacer"></div>
+          </div>
+          <video autoplay muted loop playsinline preload="metadata" poster="assets/screenshots/zh/dashboard.png" aria-label="6 套模板预览演示">
+            <source src="assets/screenshots/zh/preview.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
     </section>
 
     <!-- Key Highlights Bar -->
     <section class="metrics-bar">
       <div class="metric-item">
+        <div class="metric-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg></div>
         <div class="metric-val" style="color: var(--ok);">0 npm 依赖</div>
         <div class="metric-label">不用打包构建，没有 node_modules</div>
       </div>
       <div class="metric-item">
+        <div class="metric-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h.01"/><path d="M8.5 16.43a5 5 0 0 1 7 0"/><path d="M5 12.86a10 10 0 0 1 5.17-2.69"/><path d="M19 12.86a10 10 0 0 0-2-1.4"/><path d="M2 8.82a15 15 0 0 1 4.18-2.64"/><path d="M22 8.82a15 15 0 0 0-11.29-3.76"/><path d="m2 2 20 20"/></svg></div>
         <div class="metric-val">100% 纯离线</div>
         <div class="metric-label">双击直接打开，断网也能看</div>
       </div>
       <div class="metric-item">
+        <div class="metric-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg></div>
         <div class="metric-val">6 套模板</div>
         <div class="metric-label">报告、大盘、工作台、对比、时间线、看板</div>
       </div>
       <div class="metric-item">
+        <div class="metric-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.8L20 10l-5 3.6L16.8 20 12 16.4 7.2 20 9 13.6 4 10l6.1-1.2Z"/></svg></div>
         <div class="metric-val" style="color: var(--info);">Agent Skill</div>
         <div class="metric-label">支持 Claude Code、Cursor、Pi 等</div>
       </div>
@@ -913,7 +1296,7 @@
         </div>
 
         <!-- 3. Pure SVG Charts (6 Core Formats) -->
-        <div class="arsenal-box" style="grid-column: span 2;">
+        <div class="arsenal-box span-2">
           <div class="arsenal-title">
             <span>纯原生 SVG 图表</span>
             <span class="badge badge-info">0 外部图表库</span>
@@ -1062,7 +1445,7 @@
         </div>
 
         <!-- 4. Real-time Filterable Table -->
-        <div class="arsenal-box" style="grid-column: span 2;">
+        <div class="arsenal-box span-2">
           <div class="arsenal-title">
             <span>可实时搜索的数据表</span>
             <input type="text" id="demoSearchZh" placeholder="输入关键词即时搜索..." style="font-size: 12px; height: 28px; padding: 0 10px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--bg); color: var(--card-fg); outline: none; width: 220px;">
@@ -1117,7 +1500,7 @@
       </div>
 
       <!-- Curated SVG Icon Grid (24 Icons) -->
-      <div class="arsenal-box" style="margin-bottom: 72px;">
+      <div class="arsenal-box">
         <div class="arsenal-title">
           <span>24 个常用矢量图标</span>
           <span style="font-size: 12px; color: var(--muted-fg);">点击任意图标直接复制 SVG 代码</span>
@@ -1236,35 +1619,35 @@
 
       <div class="archetype-container">
         <!-- Tab Bar -->
-        <div class="archetype-tabs" id="archetypeTabs">
-          <button class="archetype-tab-btn active" data-archetype="report">
+        <div class="archetype-tabs" id="archetypeTabs" role="tablist">
+          <button class="archetype-tab-btn active" data-archetype="report" role="tab" aria-selected="true" aria-controls="pane-report" tabindex="0">
             <span class="tab-num">母版 01</span>
             <span class="tab-name">Report 报告</span>
           </button>
-          <button class="archetype-tab-btn" data-archetype="dashboard">
+          <button class="archetype-tab-btn" data-archetype="dashboard" role="tab" aria-selected="false" aria-controls="pane-dashboard" tabindex="-1">
             <span class="tab-num">母版 02</span>
             <span class="tab-name">Dashboard 数据面板</span>
           </button>
-          <button class="archetype-tab-btn" data-archetype="inspector">
+          <button class="archetype-tab-btn" data-archetype="inspector" role="tab" aria-selected="false" aria-controls="pane-inspector" tabindex="-1">
             <span class="tab-num">母版 03</span>
             <span class="tab-name">Inspector 审查工作台</span>
           </button>
-          <button class="archetype-tab-btn" data-archetype="compare">
+          <button class="archetype-tab-btn" data-archetype="compare" role="tab" aria-selected="false" aria-controls="pane-compare" tabindex="-1">
             <span class="tab-num">母版 04</span>
             <span class="tab-name">Compare 对比</span>
           </button>
-          <button class="archetype-tab-btn" data-archetype="timeline">
+          <button class="archetype-tab-btn" data-archetype="timeline" role="tab" aria-selected="false" aria-controls="pane-timeline" tabindex="-1">
             <span class="tab-num">母版 05</span>
             <span class="tab-name">Timeline 时间线</span>
           </button>
-          <button class="archetype-tab-btn" data-archetype="kanban">
+          <button class="archetype-tab-btn" data-archetype="kanban" role="tab" aria-selected="false" aria-controls="pane-kanban" tabindex="-1">
             <span class="tab-num">母版 06</span>
             <span class="tab-name">Kanban 看板</span>
           </button>
         </div>
 
         <!-- Archetype 1: Report -->
-        <div class="archetype-content active" id="pane-report">
+        <div class="archetype-content active" id="pane-report" role="tabpanel">
           <div class="archetype-info-row">
             <div class="archetype-info-left">
               <h3>Report 报告</h3>
@@ -1279,12 +1662,17 @@
             </div>
           </div>
           <div class="archetype-preview-frame">
+            <div class="window-bar">
+              <div class="window-dots"><i></i><i></i><i></i></div>
+              <div class="window-url">templates/zh/report.html</div>
+              <div class="window-spacer"></div>
+            </div>
             <img src="assets/screenshots/zh/report.png" alt="中文报告母版预览">
           </div>
         </div>
 
         <!-- Archetype 2: Dashboard -->
-        <div class="archetype-content" id="pane-dashboard">
+        <div class="archetype-content" id="pane-dashboard" role="tabpanel">
           <div class="archetype-info-row">
             <div class="archetype-info-left">
               <h3>Dashboard 数据面板</h3>
@@ -1299,12 +1687,17 @@
             </div>
           </div>
           <div class="archetype-preview-frame">
-            <img src="assets/screenshots/zh/dashboard.png" alt="中文大盘母版预览">
+            <div class="window-bar">
+              <div class="window-dots"><i></i><i></i><i></i></div>
+              <div class="window-url">templates/zh/dashboard.html</div>
+              <div class="window-spacer"></div>
+            </div>
+            <img src="assets/screenshots/zh/dashboard.png" loading="lazy" decoding="async" alt="中文大盘母版预览">
           </div>
         </div>
 
         <!-- Archetype 3: Inspector -->
-        <div class="archetype-content" id="pane-inspector">
+        <div class="archetype-content" id="pane-inspector" role="tabpanel">
           <div class="archetype-info-row">
             <div class="archetype-info-left">
               <h3>Inspector 审查工作台</h3>
@@ -1319,12 +1712,17 @@
             </div>
           </div>
           <div class="archetype-preview-frame">
-            <img src="assets/screenshots/zh/inspector.png" alt="中文工作台母版预览">
+            <div class="window-bar">
+              <div class="window-dots"><i></i><i></i><i></i></div>
+              <div class="window-url">templates/zh/inspector.html</div>
+              <div class="window-spacer"></div>
+            </div>
+            <img src="assets/screenshots/zh/inspector.png" loading="lazy" decoding="async" alt="中文工作台母版预览">
           </div>
         </div>
 
         <!-- Archetype 4: Compare -->
-        <div class="archetype-content" id="pane-compare">
+        <div class="archetype-content" id="pane-compare" role="tabpanel">
           <div class="archetype-info-row">
             <div class="archetype-info-left">
               <h3>Compare 对比</h3>
@@ -1339,12 +1737,17 @@
             </div>
           </div>
           <div class="archetype-preview-frame">
-            <img src="assets/screenshots/zh/compare.png" alt="中文对比矩阵母版预览">
+            <div class="window-bar">
+              <div class="window-dots"><i></i><i></i><i></i></div>
+              <div class="window-url">templates/zh/compare.html</div>
+              <div class="window-spacer"></div>
+            </div>
+            <img src="assets/screenshots/zh/compare.png" loading="lazy" decoding="async" alt="中文对比矩阵母版预览">
           </div>
         </div>
 
         <!-- Archetype 5: Timeline -->
-        <div class="archetype-content" id="pane-timeline">
+        <div class="archetype-content" id="pane-timeline" role="tabpanel">
           <div class="archetype-info-row">
             <div class="archetype-info-left">
               <h3>Timeline 时间线</h3>
@@ -1359,12 +1762,17 @@
             </div>
           </div>
           <div class="archetype-preview-frame">
-            <img src="assets/screenshots/zh/timeline.png" alt="中文时间轴母版预览">
+            <div class="window-bar">
+              <div class="window-dots"><i></i><i></i><i></i></div>
+              <div class="window-url">templates/zh/timeline.html</div>
+              <div class="window-spacer"></div>
+            </div>
+            <img src="assets/screenshots/zh/timeline.png" loading="lazy" decoding="async" alt="中文时间轴母版预览">
           </div>
         </div>
 
         <!-- Archetype 6: Kanban -->
-        <div class="archetype-content" id="pane-kanban">
+        <div class="archetype-content" id="pane-kanban" role="tabpanel">
           <div class="archetype-info-row">
             <div class="archetype-info-left">
               <h3>Kanban 看板</h3>
@@ -1379,14 +1787,19 @@
             </div>
           </div>
           <div class="archetype-preview-frame">
-            <img src="assets/screenshots/zh/kanban.png" alt="中文看板母版预览">
+            <div class="window-bar">
+              <div class="window-dots"><i></i><i></i><i></i></div>
+              <div class="window-url">templates/zh/kanban.html</div>
+              <div class="window-spacer"></div>
+            </div>
+            <img src="assets/screenshots/zh/kanban.png" loading="lazy" decoding="async" alt="中文看板母版预览">
           </div>
         </div>
       </div>
     </section>
 
     <!-- Why Not Tailwind CDN vs Why Not Ad-hoc CSS -->
-    <section>
+    <section class="section-block">
       <div class="section-header">
         <div class="section-tag">对比</div>
         <h2 class="section-title">为什么不引 CDN，也不让 AI 随意写 CSS？</h2>
@@ -1558,14 +1971,18 @@ npx agent-html check dashboard.html</code></pre>
     <span id="toastMsg">已复制到剪贴板！</span>
   </div>
 
+  <button id="toTop" type="button" aria-label="回到顶部" title="回到顶部">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+  </button>
+
   <script>
     // Theme Management
     const themeToggle = document.getElementById('themeToggle');
     const themeIcon = document.getElementById('themeIcon');
 
-    function applyTheme(isDark) {
+    function applyTheme(isDark, persist) {
       document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
-      localStorage.setItem('agent_html_theme', isDark ? 'dark' : 'light');
+      if (persist) { try { localStorage.setItem('agent_html_theme', isDark ? 'dark' : 'light'); } catch (e) {} }
       if (isDark) {
         themeIcon.innerHTML = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>';
       } else {
@@ -1573,13 +1990,11 @@ npx agent-html check dashboard.html</code></pre>
       }
     }
 
-    const savedTheme = localStorage.getItem('agent_html_theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    applyTheme(savedTheme ? savedTheme === 'dark' : prefersDark);
+    applyTheme(document.documentElement.getAttribute('data-theme') === 'dark', false);
 
     themeToggle?.addEventListener('click', () => {
       const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-      applyTheme(!isDark);
+      applyTheme(!isDark, true);
     });
 
     // Archetype Tab Switching
@@ -1587,8 +2002,10 @@ npx agent-html check dashboard.html</code></pre>
     archetypeTabs?.addEventListener('click', (e) => {
       const btn = e.target.closest('.archetype-tab-btn');
       if (!btn) return;
-      archetypeTabs.querySelectorAll('.archetype-tab-btn').forEach(b => b.classList.remove('active'));
+      archetypeTabs.querySelectorAll('.archetype-tab-btn').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); b.tabIndex = -1; });
       btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+      btn.tabIndex = 0;
 
       const targetId = 'pane-' + btn.getAttribute('data-archetype');
       document.querySelectorAll('.archetype-content').forEach(pane => pane.classList.remove('active'));
@@ -1621,7 +2038,7 @@ npx agent-html check dashboard.html</code></pre>
     // Copy Raw Template HTML
     async function copyTemplateSource(name) {
       try {
-        const res = await fetch(`templates/zh/${name}.html`);
+        const res = await fetch(`templates/${name}.html`);
         if (!res.ok) throw new Error('Failed to fetch');
         const text = await res.text();
         await navigator.clipboard.writeText(text);
@@ -1677,6 +2094,64 @@ npx agent-html check dashboard.html</code></pre>
         if (match) visibleRows++;
       });
       emptyState.style.display = visibleRows === 0 ? 'block' : 'none';
+    });
+
+    // ---------- Visual refresh: header elevation, scroll-spy, reveal, back-to-top ----------
+    (function () {
+      const header = document.querySelector('header');
+      const toTop = document.getElementById('toTop');
+      const onScroll = () => {
+        const y = window.scrollY;
+        header?.classList.toggle('scrolled', y > 8);
+        toTop?.classList.toggle('show', y > 900);
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+      toTop?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+      if (!('IntersectionObserver' in window)) return;
+
+      // Highlight the nav link of the section currently in view
+      const links = [...document.querySelectorAll('.nav-link[href^="#"]')];
+      const spy = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          links.forEach((a) => a.classList.toggle('active', a.getAttribute('href') === '#' + entry.target.id));
+        });
+      }, { rootMargin: '-45% 0px -50% 0px' });
+      links.forEach((a) => { const s = document.querySelector(a.getAttribute('href')); if (s) spy.observe(s); });
+
+      // Fade cards and headings in as they enter the viewport
+      const targets = document.querySelectorAll('.section-header, .metric-item, .arsenal-box, .archetype-container, .contrast-card, .prompt-card, .code-box, .hero-visual');
+      const reveal = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('in');
+          reveal.unobserve(entry.target);
+        });
+      }, { rootMargin: '0px 0px -8% 0px' });
+      targets.forEach((el, i) => {
+        el.classList.add('reveal');
+        el.style.transitionDelay = (i % 4) * 60 + 'ms';
+        reveal.observe(el);
+      });
+    })();
+
+    // Keyboard support for the archetype tab list (Arrow / Home / End)
+    archetypeTabs?.addEventListener('keydown', (e) => {
+      const tabs = [...archetypeTabs.querySelectorAll('.archetype-tab-btn')];
+      const i = tabs.indexOf(document.activeElement);
+      if (i < 0) return;
+      let next = null;
+      if (e.key === 'ArrowRight') next = tabs[(i + 1) % tabs.length];
+      if (e.key === 'ArrowLeft') next = tabs[(i - 1 + tabs.length) % tabs.length];
+      if (e.key === 'Home') next = tabs[0];
+      if (e.key === 'End') next = tabs[tabs.length - 1];
+      if (!next) return;
+      e.preventDefault();
+      next.focus();
+      next.click();
+      next.scrollIntoView({ block: 'nearest', inline: 'nearest' });
     });
   </script>
 </body>
