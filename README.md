@@ -54,7 +54,7 @@
 <p align="center">
   <img src="assets/promo/agent-html-promo.webp" alt="agent-html 30-second promo: from a wall of Markdown to 7 single-file HTML templates" width="100%">
   <br>
-  <sub>🎬 30-second promo (plays inline) · <a href="assets/promo/agent-html-promo.mp4">download the 1080p MP4</a></sub>
+  <sub>🎬 30-second promo (plays inline, muted) · <a href="assets/promo/agent-html-promo.mp4">1080p MP4 with soundtrack</a></sub>
 </p>
 
 ---
