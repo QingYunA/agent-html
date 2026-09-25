@@ -137,6 +137,17 @@ const CASES = [
 
   /* ── 反向用例：这些**必须不报**，证明白名单与豁免生效 ── */
   {
+    label: '数据块：type="text/plain" 的原始 diff 不得被当作 JS 编译',
+    files: { 'datablock.html': BASE.replace('<script>', '<script type="text/plain" id="diffSource">\ndiff --git a/x b/x\n+ not javascript {\n</script>\n<script>') },
+    expect: [],
+    forbid: ['SCRIPT_SYNTAX'],
+  },
+  {
+    label: 'SCRIPT_SYNTAX：type="module" 仍是 JS，语法错误必须命中',
+    files: { 'module.html': BASE.replace('<script>', '<script type="module">').replace('function copyMd() {', 'function copyMd( {') },
+    expect: ['SCRIPT_SYNTAX'],
+  },
+  {
     label: '白名单：token 定义块与 @media print 内的颜色字面量不得报错',
     files: { 'allowlist.html': withStyle('  .x { color: var(--card-fg); }') },
     expect: [],
