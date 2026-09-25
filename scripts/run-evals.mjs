@@ -85,8 +85,8 @@ if (!EVALS.length) {
     for (const e of list) {
       if (!e.pattern) continue;
       try { new RegExp(e.pattern, 'gi'); } catch (err) { problems.push(`${where}：/${e.pattern}/ → ${err.message}`); }
-      if (!['has', 'count', 'absent'].includes(e.check)) {
-        problems.push(`${where}：带 pattern 但 check 不是 has/count/absent（当前 "${e.check}"）`);
+      if (!['has', 'count', 'absent', 'reply_has'].includes(e.check)) {
+        problems.push(`${where}：带 pattern 但 check 不是 has/count/absent/reply_has（当前 "${e.check}"）`);
       }
     }
   };
@@ -187,6 +187,27 @@ ${outPath}
 
 完成后只回复该文件路径，不要输出 HTML 源码本身。`;
 
+/* 判断型用例（mode: "judgment"）：不预设交付形式。
+   「要不要做成 HTML、做多大」本身就是被测对象——如果包装语强制写 HTML，
+   这一层判断永远测不到，评测集就只剩「会不会照抄母版」。 */
+const JUDGMENT_TAIL = (outPath) => `要求：由你判断最合适的交付形式。
+- 如果你判断应该交付 HTML，把它写成**单个自包含 HTML 文件**，保存到：${outPath}，然后只回复该文件路径；
+- 如果你判断不该做成 HTML，**不要创建任何文件**，直接在回复里给出答案。`;
+
+const PROMPT_JUDGMENT_WITH_SKILL = (task, outPath) => `${task}
+
+---
+请先完整阅读并严格遵循这个技能规范，再动手：
+${join(SKILL_DIR, 'SKILL.md')}
+
+（该技能引用的其它文件都相对它所在目录解析，例如 ${join(SKILL_DIR, 'references', 'components.md')}。）
+
+${JUDGMENT_TAIL(outPath)}`;
+
+const PROMPT_JUDGMENT_WITHOUT_SKILL = (task, outPath) => `${task}
+
+${JUDGMENT_TAIL(outPath)}`;
+
 const PROMPT_WITHOUT_SKILL = (task, outPath) => `${task}
 
 要求：把最终产物写成**单个自包含 HTML 文件**，保存到：
@@ -265,7 +286,19 @@ function smokeOk(file) {
 const CDN_RE = /<script\b[^>]*\bsrc\s*=\s*["'](?:https?:)?\/\/|<link\b[^>]*\bhref\s*=\s*["'](?:https?:)?\/\/|@import\s+(?:url\()?["'](?:https?:)?\/\//i;
 
 function evaluateExpectation(exp, ctx) {
-  const { content, file } = ctx;
+  const { content, file, reply } = ctx;
+  // 这三类判的是「交付形式」与「回复文本」，不依赖 HTML 产物是否存在
+  if (exp.check === 'no_artifact') {
+    return { text: exp.text, passed: !file, evidence: file ? `不该产出 HTML，却写了 ${relative(ctx.runDir, file)}` : '未产出 HTML（符合预期）' };
+  }
+  if (exp.check === 'artifact') {
+    return { text: exp.text, passed: !!file, evidence: file ? `产出 ${relative(ctx.runDir, file)}` : '未产出 HTML' };
+  }
+  if (exp.check === 'reply_has') {
+    if (reply == null) return { text: exp.text, passed: false, evidence: '缺少 agent-output.txt' };
+    const n = (reply.match(new RegExp(exp.pattern, 'gi')) || []).length;
+    return { text: exp.text, passed: n >= (exp.min ?? 1), evidence: `回复中匹配 ${n} 处 /${exp.pattern}/` };
+  }
   if (!content) return { text: exp.text, passed: false, evidence: '未找到产物文件' };
 
   switch (exp.check) {
@@ -277,11 +310,12 @@ function evaluateExpectation(exp, ctx) {
     case 'count': {
       const re = new RegExp(exp.pattern, 'gi');
       const n = (content.match(re) || []).length;
-      const min = exp.check === 'count' ? (exp.min ?? 1) : (exp.min ?? 1);
+      const min = exp.min ?? (exp.max != null ? 0 : 1);
+      const max = exp.max ?? Infinity;
       return {
         text: exp.text,
-        passed: n >= min,
-        evidence: `匹配 ${n} 处（要求 ≥${min}） /${exp.pattern}/`,
+        passed: n >= min && n <= max,
+        evidence: `匹配 ${n} 处（要求 ${exp.max != null ? `${min}–${max}` : `≥${min}`}） /${exp.pattern}/`,
       };
     }
     case 'absent': {
@@ -314,14 +348,20 @@ function evaluateExpectation(exp, ctx) {
   }
 }
 
-function scoreRun(runDir, expectations) {
+function scoreRun(runDir, expectations, defaults = []) {
   const file = pickArtifact(runDir);
   const content = file ? readFileSync(file, 'utf8') : null;
-  const results = expectations.map((exp) => {
+  const replyPath = join(runDir, 'agent-output.txt');
+  const reply = existsSync(replyPath) ? readFileSync(replyPath, 'utf8') : null;
+  // 通用条目只约束「做出来的 HTML」：没产出 HTML 时不适用；用例本就要求「不该做成 HTML」时，
+  // 做得再精致也是判断失误，不能让这些条目替错误答案挣分
+  const expectsNoHtml = expectations.some((e) => e.check === 'no_artifact');
+  const all = [...(file && !expectsNoHtml ? defaults : []), ...expectations];
+  const results = all.map((exp) => {
     if (exp.level === 'human' || !exp.check) {
       return { text: exp.text, passed: null, evidence: '需人工判定（看截图）' };
     }
-    return evaluateExpectation(exp, { content, file });
+    return evaluateExpectation(exp, { content, file, reply, runDir });
   });
 
   const graded = results.filter((r) => r.passed !== null);
@@ -355,7 +395,8 @@ const rows = [];
 
 for (const ev of EVALS) {
   const name = ev.name || `eval-${ev.id}`;
-  const expectations = [...DEFAULTS, ...(ev.expectations || [])];
+  const judgment = ev.mode === 'judgment';
+  const expectations = ev.expectations || [];
   const row = { id: ev.id, name, prompt: ev.prompt };
 
   for (const arm of ['with_skill', 'without_skill']) {
@@ -363,18 +404,21 @@ for (const ev of EVALS) {
 
     if (!SCORE_ONLY) {
       stdout.write(`  ▶ #${ev.id} ${name} · ${arm} … `);
-      const prompt = arm === 'with_skill'
-        ? PROMPT_WITH_SKILL(ev.prompt, join(runDir, 'outputs', 'artifact.html'))
-        : PROMPT_WITHOUT_SKILL(ev.prompt, join(runDir, 'outputs', 'artifact.html'));
+      const out = join(runDir, 'outputs', 'artifact.html');
+      const prompt = judgment
+        ? (arm === 'with_skill' ? PROMPT_JUDGMENT_WITH_SKILL(ev.prompt, out) : PROMPT_JUDGMENT_WITHOUT_SKILL(ev.prompt, out))
+        : (arm === 'with_skill' ? PROMPT_WITH_SKILL(ev.prompt, out) : PROMPT_WITHOUT_SKILL(ev.prompt, out));
       const meta = generate(runDir, prompt);
-      if (meta.artifacts_found === 0) {
+      if (meta.artifacts_found === 0 && judgment) {
+        stdout.write(`未产出 HTML（exit ${meta.exit_code}）——判断型用例，交由评分判定\n`);
+      } else if (meta.artifacts_found === 0) {
         stdout.write(`⚠️  未产出文件（exit ${meta.exit_code}）——见 agent-output.txt\n`);
       } else {
         stdout.write(`已生成 ${meta.artifacts_found} 个文件\n`);
       }
     }
 
-    row[arm] = scoreRun(runDir, expectations);
+    row[arm] = scoreRun(runDir, expectations, DEFAULTS);
   }
 
   const w = row.with_skill.summary;

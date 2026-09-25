@@ -10,7 +10,7 @@ if (!fs.existsSync(TEMP_DIR)) {
   fs.mkdirSync(TEMP_DIR, { recursive: true });
 }
 
-const ORDER = ['report', 'dashboard', 'inspector', 'compare', 'timeline', 'kanban'];
+const ORDER = ['report', 'dashboard', 'inspector', 'compare', 'timeline', 'kanban', 'review'];
 
 // Render at 1440x900 @ 2x (2880x1800 Retina) for crystal-clear typography and charts
 function renderFrame(lang, name, outPath) {

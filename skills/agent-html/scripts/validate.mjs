@@ -205,7 +205,11 @@ function analyze(rel, content) {
   let scriptIndex = 0;
   while ((m = SCRIPT_BLOCK_RE.exec(content))) {
     scriptIndex += 1;
-    if (!/\bsrc\s*=/i.test(m[0].slice(0, m[0].indexOf('>')))) {
+    const openTag = m[0].slice(0, m[0].indexOf('>'));
+    // 数据块（type="text/plain"、"application/json"、"text/template" 等）不是 JS，不参与语法编译与脚本类规则
+    const type = (openTag.match(/\btype\s*=\s*["']?([^"'\s>]+)/i) || [])[1];
+    const isJs = !type || /^(module|text\/javascript|application\/javascript)$/i.test(type);
+    if (isJs && !/\bsrc\s*=/i.test(openTag)) {
       scripts.push({ text: m[1], start: m.index + m[0].indexOf(m[1]), index: scriptIndex });
     }
   }

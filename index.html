@@ -7,6 +7,19 @@
   <meta name="description" content="Zero-dependency, single-file HTML design system & agent skill inspired by shadcn/ui. 100% offline. 0 npm packages. 0 external CDNs. Pre-scaffolded for Claude Code, Pi, Codex, and Cursor.">
   <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
   
+  <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#09090b" media="(prefers-color-scheme: dark)">
+  <script>
+    (function () {
+      var d = document.documentElement;
+      d.classList.add('js');
+      try {
+        var t = localStorage.getItem('agent_html_theme');
+        var dark = t ? t === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        d.setAttribute('data-theme', dark ? 'dark' : 'light');
+      } catch (e) {}
+    })();
+  </script>
   <style>
     /* ==========================================================================
        agent-html Design Tokens (shadcn/ui Zinc-Neutral Palette)
@@ -741,9 +754,393 @@
       background: rgba(0, 0, 0, 0.45);
       backdrop-filter: blur(4px);
     }
+    /* ==========================================================================
+       Visual Refresh Layer — depth, motion & responsive polish (still 0 deps)
+       ========================================================================== */
+    ::selection { background: color-mix(in srgb, var(--chart-indigo) 24%, transparent); }
+    :focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; border-radius: 4px; }
+    body { font-feature-settings: "cv11", "ss01"; text-rendering: optimizeLegibility; }
+    section[id] { scroll-margin-top: 80px; }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.92em; }
+
+    /* Ambient page backdrop: dotted grid + soft brand glow behind the hero */
+    .page-glow {
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 820px;
+      pointer-events: none;
+      z-index: -1;
+    }
+    .page-glow::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(var(--border) 1px, transparent 1px);
+      background-size: 22px 22px;
+      -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 20%, rgba(0,0,0,0.9), transparent 75%);
+              mask-image: radial-gradient(ellipse 70% 60% at 50% 20%, rgba(0,0,0,0.9), transparent 75%);
+    }
+    .page-glow::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: -220px;
+      width: min(1100px, 100%);
+      height: 620px;
+      transform: translateX(-50%);
+      background:
+        radial-gradient(closest-side at 30% 55%, color-mix(in srgb, var(--chart-indigo) 22%, transparent), transparent),
+        radial-gradient(closest-side at 70% 45%, color-mix(in srgb, var(--chart-violet) 18%, transparent), transparent),
+        radial-gradient(closest-side at 50% 80%, color-mix(in srgb, var(--chart-cyan) 14%, transparent), transparent);
+      filter: blur(20px);
+      opacity: 0.9;
+    }
+    body { position: relative; isolation: isolate; }
+
+    /* Header: glass + elevation once the page scrolls */
+    header { background-color: color-mix(in srgb, var(--bg) 78%, transparent); border-bottom-color: transparent; }
+    [data-theme="dark"] header { background-color: color-mix(in srgb, var(--bg) 72%, transparent); }
+    header.scrolled { border-bottom-color: var(--border); box-shadow: 0 6px 24px -12px rgba(0, 0, 0, 0.18); }
+    .brand img { box-shadow: var(--shadow-sm); }
+    .nav-link { position: relative; padding: 6px 2px; }
+    .nav-link::after {
+      content: "";
+      position: absolute;
+      left: 2px; right: 2px; bottom: 0;
+      height: 1.5px;
+      background: currentColor;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.2s ease;
+    }
+    .nav-link:hover::after, .nav-link.active::after { transform: scaleX(1); }
+    .nav-link.active { color: var(--card-fg); }
+    .nav-lang::after { display: none; }
+    #themeIcon { transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    #themeToggle:hover #themeIcon { transform: rotate(-18deg) scale(1.08); }
+
+    /* Hero */
+    .hero { padding: 96px 0 40px; }
+    .hero-announcement {
+      background: color-mix(in srgb, var(--card) 80%, transparent);
+      box-shadow: var(--shadow-sm);
+      backdrop-filter: blur(6px);
+    }
+    .hero-announcement .badge-dot { box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok) 22%, transparent); animation: pulse-dot 2.4s ease-in-out infinite; }
+    @keyframes pulse-dot { 0%, 100% { box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok) 22%, transparent); } 50% { box-shadow: 0 0 0 6px color-mix(in srgb, var(--ok) 0%, transparent); } }
+    .hero h1 {
+      font-size: clamp(34px, 6vw, 64px);
+      line-height: 1.06;
+      letter-spacing: -0.045em;
+      background: linear-gradient(180deg, var(--card-fg) 30%, color-mix(in srgb, var(--card-fg) 62%, transparent));
+      -webkit-background-clip: text;
+              background-clip: text;
+      color: transparent;
+      padding-bottom: 4px;
+    }
+    .grad-text {
+      background: linear-gradient(92deg, var(--chart-indigo), var(--chart-violet) 45%, var(--chart-cyan));
+      -webkit-background-clip: text;
+              background-clip: text;
+      color: transparent;
+    }
+    .hero p { font-size: clamp(16px, 1.6vw, 19px); }
+    .install-pill { padding: 7px 7px 7px 16px; height: 42px; }
+    .btn-primary { box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.12) inset, var(--shadow); }
+    .btn-lg { height: 42px; }
+    .btn-lg:hover { transform: translateY(-1px); }
+
+    /* Hero showcase: live preview reel inside a browser window */
+    .hero-visual {
+      position: relative;
+      width: 100%;
+      max-width: 1040px;
+      margin: 12px auto 0;
+    }
+    .hero-visual::before {
+      content: "";
+      position: absolute;
+      inset: 8% 6% -4%;
+      background: linear-gradient(90deg, var(--chart-indigo), var(--chart-violet), var(--chart-cyan));
+      filter: blur(60px);
+      opacity: 0.28;
+      border-radius: 40px;
+      z-index: -1;
+    }
+    .window {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.25), var(--shadow-lg);
+      overflow: hidden;
+    }
+    .window-bar {
+      height: 38px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 14px;
+      background: var(--secondary);
+      border-bottom: 1px solid var(--border);
+    }
+    .window-dots { display: flex; gap: 6px; flex-shrink: 0; }
+    .window-dots i { width: 10px; height: 10px; border-radius: 9999px; background: var(--border); display: block; }
+    .window-dots i:nth-child(1) { background: var(--chart-rose); }
+    .window-dots i:nth-child(2) { background: var(--chart-amber); }
+    .window-dots i:nth-child(3) { background: var(--chart-emerald); }
+    .window-url {
+      flex: 1;
+      max-width: 420px;
+      margin: 0 auto;
+      height: 22px;
+      border-radius: 6px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--muted-fg);
+      font: 500 11px/20px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding: 0 10px;
+    }
+    .window-spacer { width: 42px; flex-shrink: 0; }
+    .window video, .window img { display: block; width: 100%; height: auto; background: var(--bg); }
+
+    /* Metrics */
+    .metrics-bar { margin: 72px 0 104px; }
+    .metric-item {
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    .metric-item::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--chart-indigo), var(--chart-violet), var(--chart-cyan));
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    .metric-item:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+    .metric-item:hover::before { opacity: 1; }
+    .metric-icon {
+      width: 34px; height: 34px;
+      display: grid; place-items: center;
+      border-radius: 9px;
+      background: var(--secondary);
+      border: 1px solid var(--border);
+      color: var(--card-fg);
+      margin-bottom: 14px;
+    }
+    .metric-icon svg { width: 17px; height: 17px; }
+
+    /* Section headings */
+    section[id], .section-block { margin-bottom: 104px; }
+    .section-header { margin-bottom: 44px; }
+    .section-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      border-radius: 9999px;
+      background: var(--ok-bg);
+      border: 1px solid var(--ok-border);
+      font-size: 11px;
+      margin-bottom: 14px;
+    }
+    .section-tag::before { content: ""; width: 5px; height: 5px; border-radius: 9999px; background: currentColor; }
+    .section-title { font-size: clamp(26px, 3.4vw, 38px); letter-spacing: -0.035em; line-height: 1.15; }
+    .section-desc { font-size: 16px; line-height: 1.6; }
+
+    /* Cards: consistent hover elevation */
+    .arsenal-box, .prompt-card, .contrast-card {
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    .arsenal-box { border-radius: var(--radius-lg); }
+    .arsenal-box:hover, .prompt-card:hover, .contrast-card:hover {
+      border-color: color-mix(in srgb, var(--card-fg) 18%, var(--border));
+      box-shadow: var(--shadow-md);
+    }
+    .prompt-card:hover, .contrast-card:hover { transform: translateY(-2px); }
+    .contrast-card.featured:hover { border-color: var(--ok); box-shadow: 0 0 0 1px var(--ok), var(--shadow-lg); }
+    .span-2 { grid-column: span 2; }
+    .arsenal-grid > *, .prompt-grid > *, .contrast-grid > *, .metrics-bar > * { min-width: 0; }
+    .arsenal-grid { margin-bottom: 20px; }
+    .icon-grid { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); }
+    .icon-tile { padding: 14px 6px; }
+    .icon-tile:hover { box-shadow: var(--shadow); }
+    .icon-tile:active { transform: scale(0.97); }
+    #demoSearch, #demoSearchZh { transition: border-color 0.15s, box-shadow 0.15s; }
+    #demoSearch:focus, #demoSearchZh:focus { border-color: var(--ring); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 14%, transparent); }
+
+    /* Archetype showcase */
+    .archetype-container { box-shadow: var(--shadow-lg); margin-bottom: 0; }
+    .archetype-tabs { padding: 6px; gap: 4px; scrollbar-width: none; }
+    .archetype-tabs::-webkit-scrollbar { display: none; }
+    .archetype-tab-btn { border-radius: var(--radius); border-bottom: none; padding: 12px 16px; min-width: 150px; }
+    .archetype-tab-btn.active { box-shadow: var(--shadow); }
+    .archetype-tab-btn.active .tab-num { color: var(--chart-indigo); opacity: 1; }
+    .archetype-content.active { animation: pane-in 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
+    @keyframes pane-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+    .archetype-preview-frame { border-radius: var(--radius-lg); box-shadow: var(--shadow-md); }
+    .archetype-preview-frame img { transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); transform-origin: top center; }
+    .archetype-preview-frame:hover img { transform: scale(1.012); }
+
+    /* Prompt cookbook */
+    .prompt-card { border-radius: var(--radius-lg); padding: 22px 22px 18px; }
+    .prompt-text { font-style: normal; font-size: 14px; line-height: 1.6; position: relative; padding-top: 26px; }
+    .prompt-text::before {
+      content: "\201C";
+      position: absolute;
+      top: -10px; left: -2px;
+      font: 700 44px/1 Georgia, "Times New Roman", serif;
+      color: var(--chart-indigo);
+      opacity: 0.55;
+    }
+    .prompt-footer > span {
+      display: inline-flex;
+      align-items: center;
+      height: 22px;
+      padding: 0 8px;
+      border-radius: 9999px;
+      background: var(--secondary);
+      border: 1px solid var(--border);
+      font-weight: 500;
+    }
+    .prompt-grid { margin-bottom: 0; }
+
+    /* Terminal code box */
+    .code-box {
+      padding: 56px 24px 24px;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+    .code-box::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 40px;
+      border-bottom: 1px solid #27272a;
+      background:
+        radial-gradient(circle at 20px 20px, #f43f5e 5px, transparent 5.5px),
+        radial-gradient(circle at 38px 20px, #f59e0b 5px, transparent 5.5px),
+        radial-gradient(circle at 56px 20px, #10b981 5px, transparent 5.5px);
+    }
+    .code-box pre { margin: 0; }
+    .code-copy-btn { top: 8px; right: 10px; transition: background 0.15s; }
+
+    /* Footer */
+    footer { background: color-mix(in srgb, var(--card) 70%, var(--bg)); padding: 40px 0; }
+    .footer-links { flex-wrap: wrap; gap: 8px 18px; }
+    .footer-links a { transition: color 0.15s; }
+
+    /* Toast */
+    #toast { border-radius: var(--radius); padding: 11px 16px; }
+
+    /* Scroll reveal (progressive: content stays visible without JS) */
+    .js .reveal { opacity: 0; transform: translateY(14px); transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+    .js .reveal.in { opacity: 1; transform: none; }
+
+    /* Back-to-top */
+    #toTop {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      width: 40px; height: 40px;
+      border-radius: 9999px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--card-fg);
+      box-shadow: var(--shadow-md);
+      display: grid; place-items: center;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      z-index: 60;
+    }
+    #toTop.show { opacity: 1; transform: none; pointer-events: auto; }
+    #toTop:hover { transform: translateY(-2px); }
+    #toast.show ~ #toTop { bottom: 76px; }
+
+    /* Responsive refinements */
+    @media (max-width: 900px) {
+      .span-2 { grid-column: auto; }
+      .nav-link:not(.nav-lang) { display: none; }
+      .hero { padding-top: 64px; }
+    }
+    @media (max-width: 640px) {
+      .container { padding: 0 16px; }
+      .nav-links { gap: 8px; }
+      .nav-gh-label { display: none; }
+      .hero { padding: 48px 0 24px; }
+      .hero-cta { flex-direction: column; align-items: stretch; width: 100%; }
+      .hero-cta > * { width: 100%; max-width: 100%; min-width: 0; }
+      .install-pill { justify-content: space-between; font-size: 12px; }
+      .install-pill #installCmd { flex: 1; min-width: 0; text-align: left; }
+      .install-pill #installCmd { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .metrics-bar { grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 48px 0 72px; }
+      .metric-item { padding: 16px; }
+      .metric-val { font-size: 20px; }
+      section[id], .section-block { margin-bottom: 72px; }
+      .arsenal-box { padding: 18px; }
+      .arsenal-title { flex-wrap: wrap; gap: 8px; }
+      #demoSearch, #demoSearchZh { width: 100% !important; }
+      .archetype-tabs { flex-direction: row; }
+      .archetype-tab-btn { min-width: 128px; }
+      .archetype-content { padding: 20px 16px; }
+      .window-url { font-size: 10px; }
+      .window-spacer { display: none; }
+      #toast { left: 16px; right: 16px; bottom: 16px; justify-content: center; }
+      #toTop { right: 16px; bottom: 16px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+      .js .reveal { opacity: 1; transform: none; }
+    }
+    .contrast-grid { margin-bottom: 0; }
+    /* ---------- New components: tabs, form controls, chart tooltip ---------- */
+    .demo-split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; margin-top: 14px; }
+    .demo-tabs { display: inline-flex; gap: 4px; padding: 4px; background: var(--secondary); border: 1px solid var(--border); border-radius: var(--radius); }
+    .demo-tab { height: 30px; padding: 0 12px; border: none; border-radius: var(--radius-sm); background: transparent; color: var(--muted-fg); font-size: 13px; font-weight: 500; cursor: pointer; }
+    .demo-tab[aria-selected="true"] { background: var(--card); color: var(--card-fg); box-shadow: var(--shadow-sm); }
+    .demo-panel { margin-top: 10px; padding: 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--secondary); font-size: 13px; line-height: 1.55; min-height: 64px; }
+    .demo-panel[hidden] { display: none; }
+    .field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 11px; font-size: 12px; }
+    .field-label { font-weight: 600; }
+    .field-error { color: var(--err); }
+    .control { height: 32px; padding: 0 10px; font: inherit; font-size: 13px; border-radius: var(--radius-sm); border: 1px solid var(--input); background: var(--card); color: var(--card-fg); width: 100%; }
+    .control:focus { outline: none; border-color: var(--ring); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 14%, transparent); }
+    .control[aria-invalid="true"] { border-color: var(--err); }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .check { display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; margin-bottom: 6px; }
+    .check input { width: 16px; height: 16px; accent-color: var(--primary); }
+    .check .switch { appearance: none; -webkit-appearance: none; width: 34px; height: 20px; border-radius: 9999px; background: var(--border); position: relative; cursor: pointer; transition: background 0.15s; flex-shrink: 0; }
+    .check .switch::after { content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 9999px; background: var(--card); box-shadow: var(--shadow-sm); transition: transform 0.15s; }
+    .check .switch:checked { background: var(--primary); }
+    .check .switch:checked::after { transform: translateX(14px); }
+    .seg { display: inline-flex; align-self: flex-start; border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; background: var(--card); }
+    .seg label { position: relative; font-size: 12px; font-weight: 500; padding: 5px 11px; cursor: pointer; color: var(--muted-fg); border-left: 1px solid var(--border); }
+    .seg label:first-child { border-left: none; }
+    .seg input { position: absolute; opacity: 0; pointer-events: none; }
+    .seg label:has(input:focus-visible) { outline: 2px solid var(--ring); outline-offset: -2px; }
+    .seg label:has(input[value="approve"]:checked) { background: var(--ok-bg); color: var(--ok); }
+    .seg label:has(input[value="comment"]:checked) { background: var(--info-bg); color: var(--info); }
+    .seg label:has(input[value="changes"]:checked) { background: var(--err-bg); color: var(--err); }
+    #chartTip { position: fixed; z-index: 70; pointer-events: none; opacity: 0; transition: opacity 0.12s ease; background: var(--popover); color: var(--popover-fg); border: 1px solid var(--border); border-radius: var(--radius-sm); box-shadow: var(--shadow-md); padding: 6px 9px; font-size: 12px; white-space: nowrap; }
+    [data-tip] { cursor: default; }
+    @media (max-width: 900px) { .demo-split { grid-template-columns: minmax(0, 1fr); } }
+    .chart-wide { grid-column: span 2; }
+    @media (max-width: 760px) { .chart-wide { grid-column: auto; } }
   </style>
 </head>
 <body>
+  <div class="page-glow" aria-hidden="true"></div>
 
   <!-- Sticky Navbar -->
   <header>
@@ -758,12 +1155,12 @@
         <a href="#archetypes" class="nav-link">Archetypes</a>
         <a href="#components" class="nav-link">Components</a>
         <a href="#cookbook" class="nav-link">Cookbook</a>
-        <a href="index.zh-CN.html" class="nav-link" style="display: inline-flex; align-items: center; gap: 4px;" title="Switch to 简体中文">🌐 简体中文</a>
+        <a href="index.zh-CN.html" class="nav-link nav-lang" style="display: inline-flex; align-items: center; gap: 4px;" title="Switch to 简体中文">🌐 简体中文</a>
         <a href="https://github.com/QingYunA/agent-html" target="_blank" rel="noopener" class="btn btn-outline btn-sm">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
-          <span>GitHub</span>
+          <span class="nav-gh-label">GitHub</span>
         </a>
-        <button id="themeToggle" class="btn btn-outline btn-icon" title="Toggle Theme (Light / Dark)">
+        <button id="themeToggle" class="btn btn-outline btn-icon" aria-label="Toggle theme" title="Toggle Theme (Light / Dark)">
           <svg id="themeIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1 -9 -9Z"></path>
           </svg>
@@ -781,7 +1178,7 @@
         <span style="color: var(--muted-fg);">→</span>
       </a>
 
-      <h1>Clean, single-file HTML for your coding agents.</h1>
+      <h1>Clean, single-file HTML for your <span class="grad-text">coding agents.</span></h1>
       
       <p>
         A lightweight skill that teaches agents to output clean, zero-dependency HTML.<br>
@@ -798,26 +1195,43 @@
           </button>
         </div>
 
-        <a href="#archetypes" class="btn btn-primary btn-lg">Explore 6 Templates</a>
+        <a href="#archetypes" class="btn btn-primary btn-lg">Explore 7 Templates</a>
         <a href="#components" class="btn btn-outline btn-lg">Browse Components</a>
+      </div>
+
+      <div class="hero-visual">
+        <div class="window">
+          <div class="window-bar">
+            <div class="window-dots"><i></i><i></i><i></i></div>
+            <div class="window-url">file:///~/reports/dashboard.html</div>
+            <div class="window-spacer"></div>
+          </div>
+          <video autoplay muted loop playsinline preload="metadata" poster="assets/screenshots/en/dashboard.png" aria-label="Preview reel of the 6 built-in templates">
+            <source src="assets/screenshots/en/preview.mp4" type="video/mp4">
+          </video>
+        </div>
       </div>
     </section>
 
     <!-- Key Highlights Bar -->
     <section class="metrics-bar">
       <div class="metric-item">
+        <div class="metric-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg></div>
         <div class="metric-val" style="color: var(--ok);">0 npm</div>
         <div class="metric-label">No build step, no node_modules</div>
       </div>
       <div class="metric-item">
+        <div class="metric-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h.01"/><path d="M8.5 16.43a5 5 0 0 1 7 0"/><path d="M5 12.86a10 10 0 0 1 5.17-2.69"/><path d="M19 12.86a10 10 0 0 0-2-1.4"/><path d="M2 8.82a15 15 0 0 1 4.18-2.64"/><path d="M22 8.82a15 15 0 0 0-11.29-3.76"/><path d="m2 2 20 20"/></svg></div>
         <div class="metric-val">100% Offline</div>
         <div class="metric-label">Double-click to open anywhere, even without internet</div>
       </div>
       <div class="metric-item">
-        <div class="metric-val">6 Templates</div>
-        <div class="metric-label">Common layouts: reports, dashboards, timelines, and kanban</div>
+        <div class="metric-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg></div>
+        <div class="metric-val">7 Templates</div>
+        <div class="metric-label">Reports, dashboards, timelines, kanban, and code review</div>
       </div>
       <div class="metric-item">
+        <div class="metric-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.8L20 10l-5 3.6L16.8 20 12 16.4 7.2 20 9 13.6 4 10l6.1-1.2Z"/></svg></div>
         <div class="metric-val" style="color: var(--info);">Agent Skill</div>
         <div class="metric-label">Install once into Claude, Cursor, Pi, or Codex</div>
       </div>
@@ -915,10 +1329,10 @@
           </div>
         </div>
 
-        <!-- 2. Pure SVG Charts (6 Core Formats) -->
-        <div class="arsenal-box" style="grid-column: span 2;">
+        <!-- 2. Pure SVG Charts (8 Formats) -->
+        <div class="arsenal-box span-2">
           <div class="arsenal-title">
-            <span>Zero-CDN Pure SVG Charts (6 Core Formats)</span>
+            <span>Zero-CDN Pure SVG Charts (8 Formats)</span>
             <span class="badge badge-info">Zero Libraries · Calibrated Palette</span>
           </div>
           <div class="arsenal-desc">Lightweight vector data curves rendered with native SVG. 100% offline, zero JS libraries, Retina sharp, automatic dark mode adaptation.</div>
@@ -1063,11 +1477,33 @@
                 </svg>
               </div>
             </div>
+            <!-- Chart 7: Stacked Column -->
+            <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
+              <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-bottom: 8px;">
+                <span style="font-weight: 600;">Timeouts: the only growing error class</span>
+                <span class="badge badge-danger" style="font-size: 10px; height: 18px;">57% of W39</span>
+              </div>
+              <svg viewBox="0 0 400 95" style="width: 100%; height: 85px; overflow: visible;">
+                <line x1="20" y1="82" x2="400" y2="82" stroke="var(--border)"/>
+                <rect x="30" y="74.4" width="44" height="7.6" fill="var(--chart-slate)" data-tip="W35 · Auth 8"/><rect x="30" y="55.4" width="44" height="19.0" fill="var(--chart-indigo)" data-tip="W35 · Upstream 5xx 20"/><rect x="30" y="44.0" width="44" height="11.4" fill="var(--chart-rose)" data-tip="W35 · Timeout 12"/><text x="52" y="40.0" text-anchor="middle" font-size="12" font-weight="600" fill="var(--card-fg)">40</text><text x="52" y="94" text-anchor="middle" font-size="11" fill="var(--muted-fg)">W35</text><rect x="106" y="75.35" width="44" height="6.65" fill="var(--chart-slate)" data-tip="W36 · Auth 7"/><rect x="106" y="57.3" width="44" height="18.05" fill="var(--chart-indigo)" data-tip="W36 · Upstream 5xx 19"/><rect x="106" y="40.2" width="44" height="17.1" fill="var(--chart-rose)" data-tip="W36 · Timeout 18"/><text x="128" y="36.2" text-anchor="middle" font-size="12" font-weight="600" fill="var(--card-fg)">44</text><text x="128" y="94" text-anchor="middle" font-size="11" fill="var(--muted-fg)">W36</text><rect x="182" y="73.45" width="44" height="8.55" fill="var(--chart-slate)" data-tip="W37 · Auth 9"/><rect x="182" y="53.5" width="44" height="19.95" fill="var(--chart-indigo)" data-tip="W37 · Upstream 5xx 21"/><rect x="182" y="32.6" width="44" height="20.9" fill="var(--chart-rose)" data-tip="W37 · Timeout 22"/><text x="204" y="28.6" text-anchor="middle" font-size="12" font-weight="600" fill="var(--card-fg)">52</text><text x="204" y="94" text-anchor="middle" font-size="11" fill="var(--muted-fg)">W37</text><rect x="258" y="74.4" width="44" height="7.6" fill="var(--chart-slate)" data-tip="W38 · Auth 8"/><rect x="258" y="57.3" width="44" height="17.1" fill="var(--chart-indigo)" data-tip="W38 · Upstream 5xx 18"/><rect x="258" y="28.8" width="44" height="28.5" fill="var(--chart-rose)" data-tip="W38 · Timeout 30"/><text x="280" y="24.8" text-anchor="middle" font-size="12" font-weight="600" fill="var(--card-fg)">56</text><text x="280" y="94" text-anchor="middle" font-size="11" fill="var(--muted-fg)">W38</text><rect x="334" y="73.45" width="44" height="8.55" fill="var(--chart-slate)" data-tip="W39 · Auth 9"/><rect x="334" y="52.55" width="44" height="20.9" fill="var(--chart-indigo)" data-tip="W39 · Upstream 5xx 22"/><rect x="334" y="13.6" width="44" height="38.95" fill="var(--chart-rose)" data-tip="W39 · Timeout 41"/><text x="356" y="9.6" text-anchor="middle" font-size="12" font-weight="600" fill="var(--card-fg)">72</text><text x="356" y="94" text-anchor="middle" font-size="11" fill="var(--muted-fg)">W39</text>
+              </svg>
+              <div style="display: flex; gap: 10px; font-size: 10px; margin-top: 6px;"><span style="color: var(--chart-rose);">■ Timeout</span><span style="color: var(--chart-indigo);">■ Upstream 5xx</span><span style="color: var(--chart-slate);">■ Auth</span></div>
+            </div>
+
+            <!-- Chart 8: 7x24 Heatmap (rendered by script, hover for values) -->
+            <div class="chart-wide" style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
+              <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-bottom: 8px;">
+                <span style="font-weight: 600;">Builds peak weekdays 10–12</span>
+                <span class="badge" style="font-size: 10px; height: 18px;">hover a cell</span>
+              </div>
+              <svg id="heatDemo" viewBox="0 0 410 104" style="width: 100%; height: auto;" role="img" aria-label="Builds peak weekdays 10–12"></svg>
+            </div>
+
           </div>
         </div>
 
         <!-- 3. Real-time Filterable Table -->
-        <div class="arsenal-box" style="grid-column: span 2;">
+        <div class="arsenal-box span-2">
           <div class="arsenal-title">
             <span>Client-Side Filterable Data Table</span>
             <input type="text" id="demoSearch" placeholder="Filter rows in real-time..." style="font-size: 12px; height: 28px; padding: 0 10px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--bg); color: var(--card-fg); outline: none; width: 220px;">
@@ -1119,12 +1555,38 @@
             <div id="demoEmptyState" style="display: none; padding: 28px 16px; text-align: center; font-size: 13px; color: var(--muted-fg);">No matching records</div>
           </div>
         </div>
+
+        <!-- 5. Tabs & Form Controls -->
+        <div class="arsenal-box span-2">
+          <div class="arsenal-title">
+            <span>Tabs & Form Controls</span>
+            <span class="badge badge-success"><span class="badge-dot"></span>New · Copy back to agent</span>
+          </div>
+          <div class="arsenal-desc">Accessible tabs (arrow keys) and native, labelled form controls. Whatever a reviewer fills in can be copied straight back to the agent.</div>
+          <div class="demo-split">
+            <div>
+              <div class="demo-tabs" role="tablist" aria-label="Tabs & Form Controls"><button class="demo-tab" role="tab" id="dtab-0" aria-controls="dpanel-0" aria-selected="true">Overview</button><button class="demo-tab" role="tab" id="dtab-1" aria-controls="dpanel-1" aria-selected="false" tabindex="-1">Findings</button><button class="demo-tab" role="tab" id="dtab-2" aria-controls="dpanel-2" aria-selected="false" tabindex="-1">Settings</button></div>
+              <div class="demo-panel" role="tabpanel" id="dpanel-0" aria-labelledby="dtab-0">3 files changed · +44 −7 lines · 1 blocker, 1 major, 2 minor.</div><div class="demo-panel" role="tabpanel" id="dpanel-1" aria-labelledby="dtab-1" hidden>Blocker · src/middleware/rateLimit.ts:8 — every client shares one bucket behind the proxy.</div><div class="demo-panel" role="tabpanel" id="dpanel-2" aria-labelledby="dtab-2" hidden>Tabs use role="tablist", roving tabindex and ←/→ keys. Print styles expand every panel.</div>
+            </div>
+            <form id="demoForm" onsubmit="return false;">
+              <div class="field-row">
+                <div class="field"><label class="field-label" for="dOwner">Owner</label><input class="control" id="dOwner" name="owner" value="@lin.zhao"></div>
+                <div class="field"><label class="field-label" for="dPrio">Priority</label><select class="control" id="dPrio" name="priority"><option>P0 · Now</option><option selected>P1 · This sprint</option><option>P2 · Backlog</option></select></div>
+              </div>
+              <div class="field"><label class="field-label" for="dRelease">Target release</label><input class="control" id="dRelease" name="release" value="v2.3" aria-invalid="true" aria-describedby="dReleaseErr"><span class="field-error" id="dReleaseErr">v2.3 is frozen, pick v2.4 or later</span></div>
+              <div class="field"><span class="field-label" id="dVerdictLabel">Verdict</span><div class="seg" role="radiogroup" aria-labelledby="dVerdictLabel"><label><input type="radio" name="dverdict" value="approve">Approve</label><label><input type="radio" name="dverdict" value="comment" checked>Comment</label><label><input type="radio" name="dverdict" value="changes">Request changes</label></div></div>
+              <label class="check"><input type="checkbox" name="tests" checked>All tests pass locally</label>
+              <label class="check"><input type="checkbox" class="switch" role="switch" name="notify">Notify on-call after merge</label>
+              <button class="btn btn-primary btn-sm" type="button" id="demoFormCopy" style="margin-top: 6px;">Copy result to agent</button>
+            </form>
+          </div>
+        </div>
       </div>
 
-      <!-- Curated SVG Icon Grid (24 Icons) -->
-      <div class="arsenal-box" style="margin-bottom: 72px;">
+      <!-- Curated SVG Icon Grid (32 Icons) -->
+      <div class="arsenal-box">
         <div class="arsenal-title">
-          <span>24 Curated Engineering & DevOps Vector Icons</span>
+          <span>32 Curated Engineering & DevOps Vector Icons</span>
           <span style="font-size: 12px; color: var(--muted-fg);">Click any icon to copy its SVG code</span>
         </div>
         <div class="arsenal-desc">Vector icons designed with <code>stroke="currentColor"</code> that automatically inherit font color. Zero web fonts, 100% offline.</div>
@@ -1226,6 +1688,38 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
             <span>Settings</span>
           </div>
+          <div class="icon-tile" data-name="Plus" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+            <span>Plus</span>
+          </div>
+          <div class="icon-tile" data-name="Minus" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/></svg>
+            <span>Minus</span>
+          </div>
+          <div class="icon-tile" data-name="File" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span>File</span>
+          </div>
+          <div class="icon-tile" data-name="Folder" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>
+            <span>Folder</span>
+          </div>
+          <div class="icon-tile" data-name="Eye" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+            <span>Eye</span>
+          </div>
+          <div class="icon-tile" data-name="Comment" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <span>Comment</span>
+          </div>
+          <div class="icon-tile" data-name="Flag" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+            <span>Flag</span>
+          </div>
+          <div class="icon-tile" data-name="Clock" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span>Clock</span>
+          </div>
         </div>
       </div>
     </section>
@@ -1235,41 +1729,45 @@
     <section id="archetypes">
       <div class="section-header">
         <div class="section-tag">Layout Templates</div>
-        <h2 class="section-title">6 Common Layout Templates</h2>
+        <h2 class="section-title">7 Common Layout Templates</h2>
         <p class="section-desc">Pick a layout that fits your output instead of letting models invent messy ad-hoc structures.</p>
       </div>
 
       <div class="archetype-container">
         <!-- Tab Bar -->
-        <div class="archetype-tabs" id="archetypeTabs">
-          <button class="archetype-tab-btn active" data-archetype="report">
+        <div class="archetype-tabs" id="archetypeTabs" role="tablist">
+          <button class="archetype-tab-btn active" data-archetype="report" role="tab" aria-selected="true" aria-controls="pane-report" tabindex="0">
             <span class="tab-num">Archetype 01</span>
             <span class="tab-name">Report</span>
           </button>
-          <button class="archetype-tab-btn" data-archetype="dashboard">
+          <button class="archetype-tab-btn" data-archetype="dashboard" role="tab" aria-selected="false" aria-controls="pane-dashboard" tabindex="-1">
             <span class="tab-num">Archetype 02</span>
             <span class="tab-name">Dashboard</span>
           </button>
-          <button class="archetype-tab-btn" data-archetype="inspector">
+          <button class="archetype-tab-btn" data-archetype="inspector" role="tab" aria-selected="false" aria-controls="pane-inspector" tabindex="-1">
             <span class="tab-num">Archetype 03</span>
             <span class="tab-name">Inspector</span>
           </button>
-          <button class="archetype-tab-btn" data-archetype="compare">
+          <button class="archetype-tab-btn" data-archetype="compare" role="tab" aria-selected="false" aria-controls="pane-compare" tabindex="-1">
             <span class="tab-num">Archetype 04</span>
             <span class="tab-name">Compare</span>
           </button>
-          <button class="archetype-tab-btn" data-archetype="timeline">
+          <button class="archetype-tab-btn" data-archetype="timeline" role="tab" aria-selected="false" aria-controls="pane-timeline" tabindex="-1">
             <span class="tab-num">Archetype 05</span>
             <span class="tab-name">Timeline</span>
           </button>
-          <button class="archetype-tab-btn" data-archetype="kanban">
+          <button class="archetype-tab-btn" data-archetype="kanban" role="tab" aria-selected="false" aria-controls="pane-kanban" tabindex="-1">
             <span class="tab-num">Archetype 06</span>
             <span class="tab-name">Kanban</span>
+          </button>
+          <button class="archetype-tab-btn" data-archetype="review" role="tab" aria-selected="false" aria-controls="pane-review" tabindex="-1">
+            <span class="tab-num">Archetype 07</span>
+            <span class="tab-name">Review</span>
           </button>
         </div>
 
         <!-- Archetype 1: Report -->
-        <div class="archetype-content active" id="pane-report">
+        <div class="archetype-content active" id="pane-report" role="tabpanel">
           <div class="archetype-info-row">
             <div class="archetype-info-left">
               <h3>Single-Column Document & Executive Report</h3>
@@ -1284,12 +1782,17 @@
             </div>
           </div>
           <div class="archetype-preview-frame">
+            <div class="window-bar">
+              <div class="window-dots"><i></i><i></i><i></i></div>
+              <div class="window-url">templates/en/report.html</div>
+              <div class="window-spacer"></div>
+            </div>
             <img src="assets/screenshots/en/report.png" alt="Report Archetype Preview">
           </div>
         </div>
 
         <!-- Archetype 2: Dashboard -->
-        <div class="archetype-content" id="pane-dashboard">
+        <div class="archetype-content" id="pane-dashboard" role="tabpanel">
           <div class="archetype-info-row">
             <div class="archetype-info-left">
               <h3>API Usage & Cost Dashboard & Real-Time Data Grid</h3>
@@ -1304,12 +1807,17 @@
             </div>
           </div>
           <div class="archetype-preview-frame">
-            <img src="assets/screenshots/en/dashboard.png" alt="Dashboard Archetype Preview">
+            <div class="window-bar">
+              <div class="window-dots"><i></i><i></i><i></i></div>
+              <div class="window-url">templates/en/dashboard.html</div>
+              <div class="window-spacer"></div>
+            </div>
+            <img src="assets/screenshots/en/dashboard.png" loading="lazy" decoding="async" alt="Dashboard Archetype Preview">
           </div>
         </div>
 
         <!-- Archetype 3: Inspector -->
-        <div class="archetype-content" id="pane-inspector">
+        <div class="archetype-content" id="pane-inspector" role="tabpanel">
           <div class="archetype-info-row">
             <div class="archetype-info-left">
               <h3>Master-Detail Split Workbench (100vh)</h3>
@@ -1324,12 +1832,17 @@
             </div>
           </div>
           <div class="archetype-preview-frame">
-            <img src="assets/screenshots/en/inspector.png" alt="Inspector Archetype Preview">
+            <div class="window-bar">
+              <div class="window-dots"><i></i><i></i><i></i></div>
+              <div class="window-url">templates/en/inspector.html</div>
+              <div class="window-spacer"></div>
+            </div>
+            <img src="assets/screenshots/en/inspector.png" loading="lazy" decoding="async" alt="Inspector Archetype Preview">
           </div>
         </div>
 
         <!-- Archetype 4: Compare -->
-        <div class="archetype-content" id="pane-compare">
+        <div class="archetype-content" id="pane-compare" role="tabpanel">
           <div class="archetype-info-row">
             <div class="archetype-info-left">
               <h3>DeepSeek vs GPT-4o Comparison & A/B Eval Matrix</h3>
@@ -1344,12 +1857,17 @@
             </div>
           </div>
           <div class="archetype-preview-frame">
-            <img src="assets/screenshots/en/compare.png" alt="Compare Archetype Preview">
+            <div class="window-bar">
+              <div class="window-dots"><i></i><i></i><i></i></div>
+              <div class="window-url">templates/en/compare.html</div>
+              <div class="window-spacer"></div>
+            </div>
+            <img src="assets/screenshots/en/compare.png" loading="lazy" decoding="async" alt="Compare Archetype Preview">
           </div>
         </div>
 
         <!-- Archetype 5: Timeline -->
-        <div class="archetype-content" id="pane-timeline">
+        <div class="archetype-content" id="pane-timeline" role="tabpanel">
           <div class="archetype-info-row">
             <div class="archetype-info-left">
               <h3>Vertical Service Recovery Timeline & Incident Postmortem</h3>
@@ -1364,12 +1882,17 @@
             </div>
           </div>
           <div class="archetype-preview-frame">
-            <img src="assets/screenshots/en/timeline.png" alt="Timeline Archetype Preview">
+            <div class="window-bar">
+              <div class="window-dots"><i></i><i></i><i></i></div>
+              <div class="window-url">templates/en/timeline.html</div>
+              <div class="window-spacer"></div>
+            </div>
+            <img src="assets/screenshots/en/timeline.png" loading="lazy" decoding="async" alt="Timeline Archetype Preview">
           </div>
         </div>
 
         <!-- Archetype 6: Kanban -->
-        <div class="archetype-content" id="pane-kanban">
+        <div class="archetype-content" id="pane-kanban" role="tabpanel">
           <div class="archetype-info-row">
             <div class="archetype-info-left">
               <h3>Triage & Agile Kanban Board (Native Drag & Drop)</h3>
@@ -1384,32 +1907,100 @@
             </div>
           </div>
           <div class="archetype-preview-frame">
-            <img src="assets/screenshots/en/kanban.png" alt="Kanban Archetype Preview">
+            <div class="window-bar">
+              <div class="window-dots"><i></i><i></i><i></i></div>
+              <div class="window-url">templates/en/kanban.html</div>
+              <div class="window-spacer"></div>
+            </div>
+            <img src="assets/screenshots/en/kanban.png" loading="lazy" decoding="async" alt="Kanban Archetype Preview">
           </div>
         </div>
-              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('kanban')">Copy HTML</button>
+
+        <!-- Archetype 7: Review -->
+        <div class="archetype-content" id="pane-review" role="tabpanel">
+          <div class="archetype-info-row">
+            <div class="archetype-info-left">
+              <h3>Diff-Based Code Review & Per-File Verdicts</h3>
+              <p>Paste raw <code>git diff</code> output and it renders as a line-numbered unified diff. Findings are pinned to exact lines with severity and suggested changes, each file gets a verdict, and one click copies the whole review back to the agent.</p>
+            </div>
+            <div class="archetype-actions">
+              <a href="templates/en/review.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+                <span>Open Live Demo</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('en/review')">Copy HTML</button>
             </div>
           </div>
-          <div class="archetype-preview-frame" style="padding: 20px; background: var(--bg);">
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
-              <div style="background: var(--card); border: 1px solid var(--border); padding: 10px; border-radius: 6px;">
-                <div style="font-size: 12px; font-weight: 600; margin-bottom: 6px;">Backlog (2)</div>
-                <div style="padding: 6px 8px; background: var(--secondary); border: 1px solid var(--border); border-radius: 4px; font-size: 11px;">TASK-401: V1 deprecation</div>
-              </div>
-              <div style="background: var(--card); border: 1px solid var(--border); padding: 10px; border-radius: 6px;">
-                <div style="font-size: 12px; font-weight: 600; margin-bottom: 6px; color: var(--info);">In Progress (2)</div>
-                <div style="padding: 6px 8px; background: var(--secondary); border: 1px solid var(--border); border-radius: 4px; font-size: 11px;">TASK-403: DNS dynamic routing</div>
-              </div>
-              <div style="background: var(--card); border: 1px solid var(--border); padding: 10px; border-radius: 6px;">
-                <div style="font-size: 12px; font-weight: 600; margin-bottom: 6px; color: var(--err);">Blocked (1)</div>
-                <div style="padding: 6px 8px; background: var(--secondary); border: 1px solid var(--border); border-radius: 4px; font-size: 11px;">TASK-405: TCP handshake timeout</div>
-              </div>
-              <div style="background: var(--card); border: 1px solid var(--border); padding: 10px; border-radius: 6px;">
-                <div style="font-size: 12px; font-weight: 600; margin-bottom: 6px; color: var(--ok);">Done (3)</div>
-                <div style="padding: 6px 8px; background: var(--secondary); border: 1px solid var(--border); border-radius: 4px; font-size: 11px;">TASK-406: 3x stress baseline</div>
-              </div>
+          <div class="archetype-preview-frame">
+            <div class="window-bar">
+              <div class="window-dots"><i></i><i></i><i></i></div>
+              <div class="window-url">templates/en/review.html</div>
+              <div class="window-spacer"></div>
             </div>
+            <img src="assets/screenshots/en/review.png" loading="lazy" decoding="async" alt="Review Archetype Preview">
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why Not Tailwind CDN vs Why Not Ad-hoc CSS -->
+    <section class="section-block">
+      <div class="section-header">
+        <div class="section-tag">Why This Approach</div>
+        <h2 class="section-title">Why not a CDN, or just let the AI freestyle CSS?</h2>
+        <p class="section-desc">Three common ways agents ship HTML, and how they hold up.</p>
+      </div>
+
+      <div class="contrast-grid">
+        <div class="contrast-card">
+          <div>
+            <div class="contrast-badge" style="color: var(--err);">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+              <span>Option A: External CDN</span>
+            </div>
+            <div class="contrast-title">Pull in Tailwind CDN</div>
+            <div class="contrast-desc">Agents love to drop in <code>&lt;script src="cdn.tailwindcss.com"&gt;</code>.</div>
+          </div>
+          <ul class="contrast-list">
+            <li class="bad">✕ Blank page offline or on an intranet</li>
+            <li class="bad">✕ Visible lag and layout flash on open</li>
+            <li class="bad">✕ Easily blocked by Content Security Policy</li>
+            <li class="bad">✕ Old files break once the CDN link dies</li>
+          </ul>
+        </div>
+
+        <div class="contrast-card">
+          <div>
+            <div class="contrast-badge" style="color: var(--warn);">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <span>Option B: Freestyle CSS</span>
+            </div>
+            <div class="contrast-title">Let the AI hand-write CSS</div>
+            <div class="contrast-desc">Without a spec, improvised styles usually look rough.</div>
+          </div>
+          <ul class="contrast-list">
+            <li class="bad">✕ Harsh borders, chaotic spacing, no taste</li>
+            <li class="bad">✕ Cramped tables, unreadable on mobile</li>
+            <li class="bad">✕ No dark mode, glaring at night</li>
+            <li class="bad">✕ Random class names every run</li>
+          </ul>
+        </div>
+
+        <div class="contrast-card featured">
+          <div>
+            <div class="contrast-badge" style="color: var(--ok);">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Option C: agent-html (Recommended)</span>
+            </div>
+            <div class="contrast-title">Lean native CSS</div>
+            <div class="contrast-desc">About 75 lines of CSS variables and a handful of base classes.</div>
+          </div>
+          <ul class="contrast-list">
+            <li class="good">✓ Fully offline single file, opens instantly</li>
+            <li class="good">✓ Zero dependencies, no build step</li>
+            <li class="good">✓ Clean shadcn-style neutral palette</li>
+            <li class="good">✓ Smooth built-in light / dark switching</li>
+          </ul>
         </div>
       </div>
     </section>
@@ -1470,6 +2061,22 @@
             <button class="btn btn-outline btn-sm" onclick="copyText(this, 'Create a master-detail trace log viewer for this JSONL debugging session. Left sidebar filters cases, right detail pane displays formatted payloads with a copy button.')">Copy</button>
           </div>
         </div>
+
+        <div class="prompt-card">
+          <div class="prompt-text">"Review this PR diff and turn it into a visual review page. I want a verdict per file and line-level findings I can copy back to you to fix."</div>
+          <div class="prompt-footer">
+            <span>Triggers: Archetype 07 (Review)</span>
+            <button class="btn btn-outline btn-sm" onclick="copyText(this, 'Review this PR diff and turn it into a visual review page. I want a verdict per file and line-level findings I can copy back to you to fix.')">Copy</button>
+          </div>
+        </div>
+
+        <div class="prompt-card">
+          <div class="prompt-text">"Make me a pre-release checklist page: backups, feature flags, rollback drill, alerts, change ticket. Let me tick items, add an owner and notes, then copy the result back to you."</div>
+          <div class="prompt-footer">
+            <span>Triggers: Form Controls</span>
+            <button class="btn btn-outline btn-sm" onclick="copyText(this, 'Make me a pre-release checklist page: backups, feature flags, rollback drill, alerts, change ticket. Let me tick items, add an owner and notes, then copy the result back to you.')">Copy</button>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -1502,6 +2109,7 @@ npx agent-html check dashboard.html</code></pre>
         <a href="templates/en/compare.html" target="_blank">Compare</a>
         <a href="templates/en/timeline.html" target="_blank">Timeline</a>
         <a href="templates/en/kanban.html" target="_blank">Kanban</a>
+        <a href="templates/en/review.html" target="_blank">Review</a>
         <a href="https://linux.do" target="_blank">LINUX DO</a>
         <a href="https://github.com/QingYunA/agent-html" target="_blank">GitHub</a>
       </div>
@@ -1525,14 +2133,19 @@ npx agent-html check dashboard.html</code></pre>
     <span id="toastMsg">Copied to clipboard!</span>
   </div>
 
+  <div id="chartTip" role="tooltip"></div>
+  <button id="toTop" type="button" aria-label="Back to top" title="Back to top">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+  </button>
+
   <script>
     // Theme Management
     const themeToggle = document.getElementById('themeToggle');
     const themeIcon = document.getElementById('themeIcon');
 
-    function applyTheme(isDark) {
+    function applyTheme(isDark, persist) {
       document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
-      localStorage.setItem('agent_html_theme', isDark ? 'dark' : 'light');
+      if (persist) { try { localStorage.setItem('agent_html_theme', isDark ? 'dark' : 'light'); } catch (e) {} }
       if (isDark) {
         themeIcon.innerHTML = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>';
       } else {
@@ -1540,13 +2153,11 @@ npx agent-html check dashboard.html</code></pre>
       }
     }
 
-    const savedTheme = localStorage.getItem('agent_html_theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    applyTheme(savedTheme ? savedTheme === 'dark' : prefersDark);
+    applyTheme(document.documentElement.getAttribute('data-theme') === 'dark', false);
 
     themeToggle?.addEventListener('click', () => {
       const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-      applyTheme(!isDark);
+      applyTheme(!isDark, true);
     });
 
     // Archetype Tab Switching
@@ -1554,8 +2165,10 @@ npx agent-html check dashboard.html</code></pre>
     archetypeTabs?.addEventListener('click', (e) => {
       const btn = e.target.closest('.archetype-tab-btn');
       if (!btn) return;
-      archetypeTabs.querySelectorAll('.archetype-tab-btn').forEach(b => b.classList.remove('active'));
+      archetypeTabs.querySelectorAll('.archetype-tab-btn').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); b.tabIndex = -1; });
       btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+      btn.tabIndex = 0;
 
       const targetId = 'pane-' + btn.getAttribute('data-archetype');
       document.querySelectorAll('.archetype-content').forEach(pane => pane.classList.remove('active'));
@@ -1588,7 +2201,7 @@ npx agent-html check dashboard.html</code></pre>
     // Copy Raw Template HTML
     async function copyTemplateSource(name) {
       try {
-        const res = await fetch(`templates/en/${name}.html`);
+        const res = await fetch(`templates/${name}.html`);
         if (!res.ok) throw new Error('Failed to fetch');
         const text = await res.text();
         await navigator.clipboard.writeText(text);
@@ -1645,6 +2258,123 @@ npx agent-html check dashboard.html</code></pre>
       });
       emptyState.style.display = visibleRows === 0 ? 'block' : 'none';
     });
+
+    // ---------- Visual refresh: header elevation, scroll-spy, reveal, back-to-top ----------
+    (function () {
+      const header = document.querySelector('header');
+      const toTop = document.getElementById('toTop');
+      const onScroll = () => {
+        const y = window.scrollY;
+        header?.classList.toggle('scrolled', y > 8);
+        toTop?.classList.toggle('show', y > 900);
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+      toTop?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+      if (!('IntersectionObserver' in window)) return;
+
+      // Highlight the nav link of the section currently in view
+      const links = [...document.querySelectorAll('.nav-link[href^="#"]')];
+      const spy = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          links.forEach((a) => a.classList.toggle('active', a.getAttribute('href') === '#' + entry.target.id));
+        });
+      }, { rootMargin: '-45% 0px -50% 0px' });
+      links.forEach((a) => { const s = document.querySelector(a.getAttribute('href')); if (s) spy.observe(s); });
+
+      // Fade cards and headings in as they enter the viewport
+      const targets = document.querySelectorAll('.section-header, .metric-item, .arsenal-box, .archetype-container, .contrast-card, .prompt-card, .code-box, .hero-visual');
+      const reveal = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('in');
+          reveal.unobserve(entry.target);
+        });
+      }, { rootMargin: '0px 0px -8% 0px' });
+      targets.forEach((el, i) => {
+        el.classList.add('reveal');
+        el.style.transitionDelay = (i % 4) * 60 + 'ms';
+        reveal.observe(el);
+      });
+    })();
+
+    // Keyboard support for the archetype tab list (Arrow / Home / End)
+    archetypeTabs?.addEventListener('keydown', (e) => {
+      const tabs = [...archetypeTabs.querySelectorAll('.archetype-tab-btn')];
+      const i = tabs.indexOf(document.activeElement);
+      if (i < 0) return;
+      let next = null;
+      if (e.key === 'ArrowRight') next = tabs[(i + 1) % tabs.length];
+      if (e.key === 'ArrowLeft') next = tabs[(i - 1 + tabs.length) % tabs.length];
+      if (e.key === 'Home') next = tabs[0];
+      if (e.key === 'End') next = tabs[tabs.length - 1];
+      if (!next) return;
+      e.preventDefault();
+      next.focus();
+      next.click();
+      next.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    });
+
+    // ---------- New components demo: heatmap, shared tooltip, tabs, form copy-back ----------
+    (function () {
+      const svg = document.getElementById('heatDemo');
+      if (svg) {
+        const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        const shade = (v) => v >= 16 ? 'var(--chart-indigo)'
+          : v >= 12 ? 'color-mix(in srgb, var(--chart-indigo) 75%, var(--secondary))'
+          : v >= 8 ? 'color-mix(in srgb, var(--chart-indigo) 50%, var(--secondary))'
+          : v >= 4 ? 'color-mix(in srgb, var(--chart-indigo) 25%, var(--secondary))' : 'var(--secondary)';
+        let html = '';
+        days.forEach((day, d) => {
+          html += `<text x="26" y="${d * 13 + 10}" text-anchor="end" font-size="9" fill="var(--muted-fg)">${day}</text>`;
+          for (let h = 0; h < 24; h++) {
+            // Deterministic demo data (no Math.random): two weekday peaks, a quiet weekend
+            const peaks = d < 5 ? 14 * Math.exp(-((h - 10.5) ** 2) / 3) + 11 * Math.exp(-((h - 15.5) ** 2) / 3) : 3 * Math.exp(-((h - 14) ** 2) / 8);
+            const v = Math.round(peaks + (d < 5 ? 1 : 0) + ((d * 7 + h * 3) % 3));
+            html += `<rect x="${32 + h * 15.5}" y="${d * 13}" width="13" height="11" rx="2" style="fill: ${shade(v)}" data-tip="${day} ${h}:00 · ${v} builds"/>`;
+          }
+        });
+        [0, 6, 12, 18, 23].forEach((h) => { html += `<text x="${38 + h * 15.5}" y="102" text-anchor="middle" font-size="9" fill="var(--muted-fg)">${h}h</text>`; });
+        svg.innerHTML = html;
+      }
+
+      const tip = document.getElementById('chartTip');
+      document.addEventListener('pointermove', (e) => {
+        const el = e.target.closest?.('[data-tip]');
+        if (!el) { tip.style.opacity = 0; return; }
+        tip.textContent = el.getAttribute('data-tip');
+        tip.style.left = Math.min(e.clientX + 12, window.innerWidth - tip.offsetWidth - 8) + 'px';
+        tip.style.top = (e.clientY - tip.offsetHeight - 10) + 'px';
+        tip.style.opacity = 1;
+      });
+
+      const dtabs = [...document.querySelectorAll('.demo-tab')];
+      const selectTab = (tab) => dtabs.forEach((x) => {
+        const on = x === tab;
+        x.setAttribute('aria-selected', on);
+        x.tabIndex = on ? 0 : -1;
+        document.getElementById(x.getAttribute('aria-controls')).hidden = !on;
+      });
+      dtabs.forEach((x) => {
+        x.addEventListener('click', () => selectTab(x));
+        x.addEventListener('keydown', (e) => {
+          const step = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
+          if (!step) return;
+          const next = dtabs[(dtabs.indexOf(x) + step + dtabs.length) % dtabs.length];
+          selectTab(next); next.focus();
+        });
+      });
+
+      document.getElementById('demoFormCopy')?.addEventListener('click', () => {
+        const data = new FormData(document.getElementById('demoForm'));
+        const lines = ['### Review form'];
+        for (const key of ['owner', 'release', 'priority', 'verdict']) lines.push(`- ${key}: ${data.get(key === 'verdict' ? 'dverdict' : key)}`);
+        lines.push(`- tests: ${data.has('tests')}`, `- notify: ${data.has('notify')}`);
+        navigator.clipboard.writeText(lines.join('\n')).then(() => showToast('Form result copied to clipboard!'));
+      });
+    })();
   </script>
 </body>
 </html>

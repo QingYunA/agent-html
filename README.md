@@ -33,7 +33,7 @@
   <a href="#installation--quick-start">Installation</a> ·
   <a href="#the-problem">The Problem</a> ·
   <a href="#what-you-get">What You Get</a> ·
-  <a href="#the-6-archetypes">The 6 Archetypes</a> ·
+  <a href="#the-7-archetypes">The 7 Archetypes</a> ·
   <a href="#atomic-capabilities--component-arsenal">Component Library</a> ·
   <a href="#prompt-triggers">Prompt Triggers</a> ·
   <a href="#star-history">Star History</a>
@@ -105,7 +105,7 @@ When asking LLMs (Claude Code, Pi, Codex, ChatGPT) to generate an HTML dashboard
 - **The CDN trap:** The model injects `<script src="https://cdn.tailwindcss.com"></script>` and external Google Fonts. It looks acceptable at first glance, but breaks completely in air-gapped corporate intranets, takes 2 seconds to parse, causes flash-of-unstyled-content (FOUC), and rots over time when CDN endpoints change.
 - **The visual slop trap:** If you forbid CDNs, the model hallucinates raw inline CSS with garish colors, harsh pure-black borders, random 30px paddings, broken alignment, and zero dark mode support.
 
-`agent-html` fixes this by packaging a tight ~75-line native CSS token sheet and 6 battle-tested layout archetypes. Double-click any generated file in Finder, and it renders instantly with enterprise-grade polish.
+`agent-html` fixes this by packaging a tight ~75-line native CSS token sheet and 7 battle-tested layout archetypes. Double-click any generated file in Finder, and it renders instantly with enterprise-grade polish.
 
 ---
 
@@ -113,21 +113,23 @@ When asking LLMs (Claude Code, Pi, Codex, ChatGPT) to generate an HTML dashboard
 
 - **Zero dependencies:** No `node_modules`, no npm build step, no CDN links. Every file runs offline and standalone.
 - **Zinc-neutral design tokens:** A pure CSS variable port of shadcn/ui. 1px borders, subtle radii, clean typography, and high information density.
-- **6 structural layout archetypes:** Scaffolds for Reports, Dashboards, Workbenches, Side-by-Side Comparisons, Timelines, and Kanban Boards ready to copy.
+- **7 structural layout archetypes:** Scaffolds for Reports, Dashboards, Workbenches, Side-by-Side Comparisons, Timelines, Kanban Boards, and diff-based Code Reviews ready to copy.
 - **Native light & dark modes:** Seamless switching with CSS variables and a 5-line vanilla JS toggle.
 - **Closed-loop feedback:** Built-in "Copy as Markdown" and "Copy Review Decisions" affordances so static HTML files never become dead ends.
 - **Deterministic verification linter:** Includes `scripts/validate.mjs` so agents self-test tag symmetry, zero-CDN compliance, and viewport setup before presenting files to humans.
-- **24 curated vector SVGs:** Lucide-style inline vector icons with `stroke="currentColor"` that adapt to font colors without font files.
-- **Zero-CDN Pure SVG charts:** Area trend curves, column distributions, multi-segment donut ratio charts, and horizontal ranking bars.
+- **32 curated vector SVGs:** Lucide-style inline vector icons with `stroke="currentColor"` that adapt to font colors without font files.
+- **Zero-CDN Pure SVG charts:** Area trends, columns, donuts, dual lines, ranking bars, gauges, stacked columns, and 7×24 heatmaps, plus one shared hover tooltip.
+- **Tabs & form controls:** Accessible tabs, labelled inputs, selects, checkboxes, switches, and segmented radios that copy their values back to the agent.
+- **Judgment-first evals:** 12 eval cases, including ones where the right answer is *not* to make HTML.
 
 ---
 
-## The 6 Archetypes
+## The 7 Archetypes
 
-Rather than rigid business screens, `agent-html` provides 6 fundamental layout scaffolds with clear `<!-- [Slot: ...] -->` injection points:
+Rather than rigid business screens, `agent-html` provides 7 fundamental layout scaffolds with clear `<!-- [Slot: ...] -->` injection points:
 
 <p align="center">
-  <img src="assets/screenshots/en/preview.gif" alt="agent-html 6 Layout Archetypes Animated Preview" width="100%">
+  <img src="assets/screenshots/en/preview.gif" alt="agent-html layout archetypes animated preview" width="100%">
 </p>
 
 | Archetype | Template Path | Best For | Key Capabilities |
@@ -138,9 +140,10 @@ Rather than rigid business screens, `agent-html` provides 6 fundamental layout s
 | **04. Compare** | [`templates/en/compare.html`](templates/en/compare.html) | Model A/B testing, prompt diffs | Dual baseline vs challenger cards, delta comparison matrix |
 | **05. Timeline** | [`templates/en/timeline.html`](templates/en/timeline.html) | Incident postmortems, changelogs | Single-track vertical timeline, status dots, diagnostic logs |
 | **06. Kanban** | [`templates/en/kanban.html`](templates/en/kanban.html) | Bug triage, backlog grooming | 4-column drag & drop, status badges, agent feedback loop |
+| **07. Review** | [`templates/en/review.html`](templates/en/review.html) | PR & patch code review | Paste raw `git diff`, line-anchored findings with severity, per-file verdicts, copy review back to agent |
 
 <details>
-<summary><strong>📸 Click to view full-resolution static screenshots for all 6 archetypes</strong></summary>
+<summary><strong>📸 Click to view full-resolution static screenshots for all 7 archetypes</strong></summary>
 <br>
 
 #### 01. Document & Executive Report
@@ -160,6 +163,9 @@ Rather than rigid business screens, `agent-html` provides 6 fundamental layout s
 
 #### 06. Triage & Agile Kanban Board
 <p align="center"><img src="assets/screenshots/en/kanban.png" alt="Kanban Template" width="100%"></p>
+
+#### 07. Diff-Based Code Review
+<p align="center"><img src="assets/screenshots/en/review.png" alt="Review Template" width="100%"></p>
 
 </details>
 
@@ -203,7 +209,7 @@ Semantic variants aligned with shadcn/ui standards, complete with `:hover`, `:ac
 ### 2. Zero-CDN Pure SVG Charts
 
 <p align="center">
-  <img src="assets/arsenal/en/charts.svg" alt="agent-html 6 zero-CDN pure SVG charts" width="100%">
+  <img src="assets/arsenal/en/charts.svg" alt="agent-html zero-CDN pure SVG charts" width="100%">
 </p>
 
 Zero external JS chart libraries required. Uses standard inline SVG for crisp, Retina-sharp rendering that never breaks:
@@ -216,11 +222,13 @@ Zero external JS chart libraries required. Uses standard inline SVG for crisp, R
 | **📉 Dual-Line Ingress/Egress**| Solid line vs dashed comparator line | Dual-metric temporal correlation | Inbound vs outbound traffic, baseline vs test |
 | **📑 Horizontal Ranking Bar** | Pill progress bars with semantic colors | Maximum space efficiency | Slow query ranking, TTFT by model |
 | **⏱️ Semi-Circle Gauge** | Semi-circle stroke arc with gradient | Immediate threshold alert | Memory watermark, API rate-limit quota |
+| **🧱 Stacked Column** | Stacked `rect` segments from a zero baseline | Total and composition in one glance | Errors by category per week, cost by service |
+| **🟪 Heatmap (7×24)** | Grid of `rect` with a single-hue ordinal scale | Spots patterns across two dimensions | Builds by weekday × hour, errors by service × code |
 
 <details>
 <summary><strong>Where is the SVG chart code?</strong></summary>
 
-The full, canonical code for all six chart forms lives in **one place** — [`skills/agent-html/references/components.md`](skills/agent-html/references/components.md), section 6.
+The full, canonical code for all eight chart forms (and the shared `data-tip` hover tooltip) lives in **one place** — [`skills/agent-html/references/components.md`](skills/agent-html/references/components.md), section 6.
 
 It is deliberately **not duplicated here**. Two hand-copied versions of the same snippet always drift apart, and a stale copy in a README is worse than no copy: an agent that copies it produces a broken chart. (We learned this the hard way — see `skills/agent-html/references/failures.md` **F-014**.)
 
@@ -230,10 +238,10 @@ Each chart there ships with the **four-part contract**: a conclusion-style title
 
 ---
 
-### 3. 24 Curated Engineering Vector Icons
+### 3. 32 Curated Engineering Vector Icons
 
 <p align="center">
-  <img src="assets/arsenal/en/icons.svg" alt="agent-html 24 curated vector icons" width="100%">
+  <img src="assets/arsenal/en/icons.svg" alt="agent-html curated vector icons" width="100%">
 </p>
 
 Designed with `stroke="currentColor"` to automatically inherit font size and color in light and dark modes:
@@ -245,6 +253,7 @@ Designed with `stroke="currentColor"` to automatically inherit font size and col
 | **Status & Verdicts** | `Check` · `Alert` · `Shield` · `Lock` | Pass badges, critical blockers, security audits |
 | **Actions & Data** | `Copy` · `Download` · `Calendar` · `Filter` · `Refresh` | Copy back to Agent, PDF export, date ranges |
 | **Infrastructure** | `Server` · `Database` · `CPU` · `External` | Host metrics, slow queries, cluster CPU, RFC docs |
+| **Review & Docs** | `Plus` · `Minus` · `File` · `Folder` · `Eye` · `Comment` · `Flag` · `Clock` | Diff stats, file trees, review threads, due dates |
 
 ```html
 <!-- Automatic theme & color inheritance -->
@@ -270,7 +279,7 @@ will automatically trigger the `agent-html` skill and produce clean, zero-depend
 
 ## Atomic Components & Design Reference
 
-All atomic HTML slots (buttons, badges, callouts, KPI stat cards), 24 currentColor vector SVGs, zero-CDN pure SVG charts, and vanilla interaction scripts are documented in [skills/agent-html/references/components.md](skills/agent-html/references/components.md) and live-previewed in `index.html`.
+All atomic HTML slots (buttons, badges, callouts, KPI stat cards), tabs, form controls, 32 currentColor vector SVGs, zero-CDN pure SVG charts, and vanilla interaction scripts are documented in [skills/agent-html/references/components.md](skills/agent-html/references/components.md) and live-previewed in `index.html`.
 
 ---
 

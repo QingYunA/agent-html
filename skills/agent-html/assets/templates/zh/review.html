@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>代码审查 · feat(api): 按客户端限流 · agent-html</title>
+  <style>
+    /* ==========================================================================
+       Agent-HTML Core Design Tokens (shadcn/ui Neutral Palette)
+       ========================================================================== */
+    :root {
+      --bg: #fafafa;
+      --card: #ffffff;
+      --card-fg: #09090b;
+      --primary: #18181b;
+      --primary-fg: #fafafa;
+      --primary-hover: #27272a;
+      --secondary: #f4f4f5;
+      --secondary-fg: #18181b;
+      --muted: #f4f4f5;
+      --muted-fg: #71717a;
+      --border: #e4e4e7;
+      --ring: #18181b;
+      --radius: 8px;
+      --radius-sm: 6px;
+      --radius-lg: 12px;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+
+      --ok: #16a34a;   --ok-bg: #f0fdf4;   --ok-border: #bbf7d0;
+      --warn: #d97706; --warn-bg: #fffbeb; --warn-border: #fde68a;
+      --err: #dc2626;  --err-bg: #fef2f2;  --err-border: #fecaca;
+      --info: #2563eb; --info-bg: #eff6ff; --info-border: #bfdbfe;
+
+      /* Diff surfaces: tinted rows + stronger gutter, both theme-aware */
+      --diff-add: #ecfdf3;     --diff-add-gutter: #d1fadf;
+      --diff-del: #fef3f2;     --diff-del-gutter: #fee4e2;
+      --diff-hunk: #f1f5f9;
+    }
+
+    [data-theme="dark"] {
+      --bg: #09090b;
+      --card: #121215;
+      --card-fg: #fafafa;
+      --primary: #fafafa;
+      --primary-fg: #18181b;
+      --primary-hover: #e4e4e7;
+      --secondary: #27272a;
+      --secondary-fg: #fafafa;
+      --muted: #18181b;
+      --muted-fg: #a1a1aa;
+      --border: #27272a;
+      --ring: #d4d4d8;
+
+      --ok: #4ade80;   --ok-bg: #052e1680;   --ok-border: #166534;
+      --warn: #fbbf24; --warn-bg: #451a0380; --warn-border: #854d0e;
+      --err: #f87171;  --err-bg: #450a0a80;  --err-border: #991b1b;
+      --info: #60a5fa; --info-bg: #17255480; --info-border: #1e40af;
+
+      --diff-add: #0f2a1c;     --diff-add-gutter: #173d29;
+      --diff-del: #2d1414;     --diff-del-gutter: #4a1c1c;
+      --diff-hunk: #172033;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--card-fg);
+      line-height: 1.5;
+      padding: 28px 20px 40px;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container { max-width: 1380px; width: 100%; margin: 0 auto; }
+    code, pre, .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+
+    /* Buttons & badges */
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 13px; font-weight: 500; height: 34px; padding: 0 12px;
+      white-space: nowrap; border-radius: var(--radius-sm);
+      border: 1px solid var(--border); background: var(--card); color: var(--card-fg);
+      cursor: pointer; text-decoration: none; transition: background 0.15s ease;
+    }
+    .btn:hover { background: var(--secondary); }
+    .btn:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+    .btn-primary { background: var(--primary); color: var(--primary-fg); border-color: var(--primary); }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 12px; font-weight: 500; height: 22px; padding: 0 8px;
+      border-radius: 9999px; border: 1px solid var(--border);
+      background: var(--secondary); color: var(--secondary-fg); white-space: nowrap;
+    }
+    .badge-dot { width: 6px; height: 6px; border-radius: 9999px; background: currentColor; }
+    .badge-success { background: var(--ok-bg); color: var(--ok); border-color: var(--ok-border); }
+    .badge-warning { background: var(--warn-bg); color: var(--warn); border-color: var(--warn-border); }
+    .badge-danger  { background: var(--err-bg);  color: var(--err);  border-color: var(--err-border); }
+    .badge-info    { background: var(--info-bg); color: var(--info); border-color: var(--info-border); }
+
+    /* Header */
+    .review-header {
+      display: flex; gap: 16px; justify-content: space-between; align-items: flex-start;
+      padding-bottom: 18px; margin-bottom: 20px; border-bottom: 1px solid var(--border);
+    }
+    .review-header h1 {
+      font-size: 22px; font-weight: 700; letter-spacing: -0.02em;
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    }
+    .review-meta { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13px; color: var(--muted-fg); margin-top: 6px; }
+    .review-meta code { font-size: 12px; padding: 1px 6px; border-radius: 4px; background: var(--secondary); color: var(--card-fg); }
+    .actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+
+    /* Verdict callout + KPI row */
+    .callout {
+      padding: 14px 18px; border-radius: var(--radius); font-size: 14px; margin-bottom: 20px;
+      border: 1px solid var(--warn-border); background: var(--warn-bg);
+    }
+    .callout-head { font-weight: 600; color: var(--warn); display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+    .kpi-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-bottom: 20px; }
+    .kpi {
+      background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+      box-shadow: var(--shadow-sm); padding: 14px 16px;
+    }
+    .kpi-label { font-size: 12px; color: var(--muted-fg); }
+    .kpi-val { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; margin-top: 2px; }
+    .kpi-sub { font-size: 12px; color: var(--muted-fg); }
+    .progress { height: 6px; border-radius: 9999px; background: var(--secondary); margin-top: 8px; overflow: hidden; }
+    .progress > span { display: block; height: 100%; width: 0; background: var(--ok); border-radius: inherit; transition: width 0.3s ease; }
+
+    /* Two-pane layout */
+    .review-layout { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 20px; align-items: start; }
+    .card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); box-shadow: var(--shadow-sm);
+    }
+
+    /* File tree */
+    .file-tree { position: sticky; top: 16px; }
+    .tree-tools { padding: 12px; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 8px; }
+    .input, .select {
+      width: 100%; height: 32px; padding: 0 10px; font-size: 13px;
+      border-radius: var(--radius-sm); border: 1px solid var(--border);
+      background: var(--bg); color: var(--card-fg);
+    }
+    .tree-list { list-style: none; padding: 6px; max-height: calc(100vh - 180px); overflow-y: auto; }
+    .tree-item {
+      width: 100%; display: flex; align-items: center; gap: 8px; padding: 7px 8px;
+      border: none; background: transparent; color: var(--card-fg); text-align: left;
+      border-radius: var(--radius-sm); cursor: pointer; font-size: 12px;
+    }
+    .tree-item:hover { background: var(--secondary); }
+    .tree-item.active { background: var(--secondary); font-weight: 600; }
+    .tree-path { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .status-dot { width: 8px; height: 8px; border-radius: 9999px; flex-shrink: 0; background: var(--border); }
+    .status-dot.approve { background: var(--ok); }
+    .status-dot.comment { background: var(--info); }
+    .status-dot.changes { background: var(--err); }
+    .stat-add { color: var(--ok); font-weight: 600; font-size: 11px; }
+    .stat-del { color: var(--err); font-weight: 600; font-size: 11px; }
+    .empty-state { display: none; padding: 28px 16px; text-align: center; font-size: 13px; color: var(--muted-fg); }
+
+    /* Tabs */
+    .tabs { display: inline-flex; gap: 4px; padding: 4px; background: var(--secondary); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 14px; }
+    .tab {
+      height: 30px; padding: 0 12px; border: none; border-radius: var(--radius-sm);
+      background: transparent; color: var(--muted-fg); font-size: 13px; font-weight: 500; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .tab[aria-selected="true"] { background: var(--card); color: var(--card-fg); box-shadow: var(--shadow-sm); }
+    .tab-count { font-size: 11px; padding: 0 6px; border-radius: 9999px; background: var(--border); }
+    [role="tabpanel"][hidden] { display: none; }
+
+    /* File diff cards */
+    .file-card { margin-bottom: 16px; overflow: hidden; }
+    .file-card > summary {
+      list-style: none; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+      padding: 10px 14px; background: var(--secondary); border-bottom: 1px solid var(--border);
+      cursor: pointer; user-select: none;
+    }
+    .file-card > summary::-webkit-details-marker { display: none; }
+    .file-card:not([open]) > summary { border-bottom: none; }
+    .chevron { transition: transform 0.15s ease; color: var(--muted-fg); flex-shrink: 0; }
+    .file-card[open] .chevron { transform: rotate(90deg); }
+    .file-name { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; font-weight: 600; min-width: 0; overflow-wrap: anywhere; }
+    .spacer { flex: 1; }
+
+    /* Segmented radio control (per-file verdict) */
+    .segmented { display: inline-flex; border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; background: var(--card); }
+    .segmented label { position: relative; font-size: 12px; font-weight: 500; padding: 4px 10px; cursor: pointer; color: var(--muted-fg); border-left: 1px solid var(--border); }
+    .segmented label:first-child { border-left: none; }
+    .segmented input { position: absolute; opacity: 0; pointer-events: none; }
+    .segmented label:has(input:focus-visible) { outline: 2px solid var(--ring); outline-offset: -2px; }
+    .segmented label:has(input[value="approve"]:checked) { background: var(--ok-bg); color: var(--ok); }
+    .segmented label:has(input[value="comment"]:checked) { background: var(--info-bg); color: var(--info); }
+    .segmented label:has(input[value="changes"]:checked) { background: var(--err-bg); color: var(--err); }
+
+    /* Diff table */
+    .table-wrap { overflow-x: auto; width: 100%; }
+    table.diff { width: 100%; border-collapse: collapse; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 12px; line-height: 1.6; }
+    .diff td { padding: 0 10px; vertical-align: top; white-space: pre; }
+    .diff td.ln { width: 1%; min-width: 44px; text-align: right; color: var(--muted-fg); user-select: none; border-right: 1px solid var(--border); }
+    .diff td.sign { width: 1%; padding: 0 4px 0 10px; user-select: none; color: var(--muted-fg); }
+    .diff tr.add td { background: var(--diff-add); }
+    .diff tr.add td.ln { background: var(--diff-add-gutter); }
+    .diff tr.add td.sign { color: var(--ok); }
+    .diff tr.del td { background: var(--diff-del); }
+    .diff tr.del td.ln { background: var(--diff-del-gutter); }
+    .diff tr.del td.sign { color: var(--err); }
+    .diff tr.hunk td { background: var(--diff-hunk); color: var(--muted-fg); padding-top: 3px; padding-bottom: 3px; }
+    .diff tr.flagged td.ln { box-shadow: inset 3px 0 0 var(--warn); }
+
+    /* Inline finding thread */
+    .diff tr.thread td { white-space: normal; padding: 8px 12px 10px 108px; background: var(--card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    .finding { border: 1px solid var(--border); border-left-width: 3px; border-radius: var(--radius-sm); padding: 10px 12px; background: var(--card); max-width: 860px; }
+    .finding.blocker { border-left-color: var(--err); }
+    .finding.major { border-left-color: var(--warn); }
+    .finding.minor { border-left-color: var(--info); }
+    .finding.nit { border-left-color: var(--border); }
+    .finding-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+    .finding-body { font-size: 13px; color: var(--muted-fg); line-height: 1.55; }
+    .finding-body code { font-size: 12px; padding: 0 4px; border-radius: 4px; background: var(--secondary); color: var(--card-fg); }
+    .suggestion { margin-top: 8px; border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; }
+    .suggestion-head { font-size: 11px; font-weight: 600; color: var(--muted-fg); padding: 4px 10px; background: var(--secondary); border-bottom: 1px solid var(--border); }
+    .suggestion pre { margin: 0; padding: 8px 10px; font-size: 12px; background: var(--diff-add); overflow-x: auto; }
+
+    /* Findings list tab */
+    .findings-table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; }
+    .findings-table th { background: var(--secondary); color: var(--muted-fg); font-weight: 600; padding: 9px 14px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+    .findings-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    .findings-table tr:last-child td { border-bottom: none; }
+    .findings-table tbody tr:hover { background: var(--muted); }
+    .link-btn { border: none; background: none; color: var(--info); cursor: pointer; font: inherit; font-size: 12px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; padding: 0; text-align: left; }
+    .link-btn:hover { text-decoration: underline; }
+
+    .colophon { margin-top: 28px; padding-top: 14px; border-top: 1px solid var(--border); font-size: 12px; color: var(--muted-fg); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+
+    #toast {
+      position: fixed; bottom: 20px; right: 20px; z-index: 50;
+      background: var(--primary); color: var(--primary-fg);
+      font-size: 13px; padding: 10px 14px; border-radius: var(--radius);
+      opacity: 0; transform: translateY(12px); transition: all 0.2s ease; pointer-events: none;
+    }
+    #toast.show { opacity: 1; transform: none; }
+
+    @media (max-width: 960px) {
+      .review-layout { grid-template-columns: minmax(0, 1fr); }
+      .file-tree { position: static; }
+      .tree-list { max-height: 220px; }
+      .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 640px) {
+      body { padding: 18px 12px 28px; }
+      .review-header { flex-direction: column; }
+      .actions { flex-wrap: wrap; }
+      .diff tr.thread td { padding-left: 12px; }
+    }
+    @media print {
+      body { background: #fff; padding: 0; }
+      .actions, .file-tree, .tabs, .segmented, #toast { display: none !important; }
+      .review-layout { grid-template-columns: 1fr; }
+      [role="tabpanel"][hidden] { display: block !important; }
+      .file-card { break-inside: avoid; }
+      .diff td { white-space: pre-wrap; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- [插槽：审查头部 — PR 标题、总体结论、分支信息] -->
+  <header class="review-header">
+    <div>
+      <h1>
+        <span>feat(api): 按客户端限流</span>
+        <span id="overallBadge" class="badge badge-warning"><span class="badge-dot"></span>审查中</span>
+      </h1>
+      <div class="review-meta">
+        <span><code>feat/rate-limit</code> → <code>main</code></span>
+        <span>作者：@lin.zhao</span>
+        <span>审查人：Agent（静态阅读 + 跑测试）</span>
+        <span>头提交：<code>a3f9c1e</code></span>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-primary" id="copyReviewBtn" type="button">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+        <span>复制审查结论给 Agent</span>
+      </button>
+      <button class="btn" type="button" onclick="window.print()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
+        <span>打印 / PDF</span>
+      </button>
+      <button id="themeToggle" class="btn" type="button" title="切换主题" aria-label="切换主题">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1 -9 -9Z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- [插槽：结论提示条 — 一句话说清作者必须做什么] -->
+  <section class="callout">
+    <div class="callout-head">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <span>合并前有 1 个阻断项：限流按代理 IP 分桶</span>
+    </div>
+    <div>负载均衡之后所有请求的 <code>req.ip</code> 都相同，所有客户端共用同一个桶；桶表也从不清理。测试之所以通过，是因为直接调用了中间件，没有经过代理这一跳。</div>
+  </section>
+
+  <!-- [插槽：KPI 概览 — 由下方 diff 与发现项自动计算] -->
+  <section class="kpi-grid">
+    <div class="kpi"><div class="kpi-label">变更文件</div><div class="kpi-val" id="kpiFiles">–</div><div class="kpi-sub" id="kpiLines">–</div></div>
+    <div class="kpi"><div class="kpi-label">阻断项</div><div class="kpi-val" id="kpiBlock" style="color: var(--err);">–</div><div class="kpi-sub" id="kpiAll">–</div></div>
+    <div class="kpi"><div class="kpi-label">测试</div><div class="kpi-val" style="color: var(--ok);">14 / 14</div><div class="kpi-sub">本地通过 · 未覆盖代理场景</div></div>
+    <div class="kpi"><div class="kpi-label">已审文件</div><div class="kpi-val" id="kpiProgress">–</div><div class="progress"><span id="progressBar"></span></div></div>
+  </section>
+
+  <div class="review-layout">
+    <!-- [插槽：文件树 — 过滤 + 每个文件的结论圆点] -->
+    <aside class="card file-tree" aria-label="变更文件列表">
+      <div class="tree-tools">
+        <input id="fileFilter" class="input" type="search" placeholder="过滤文件…" aria-label="过滤文件">
+        <select id="scopeFilter" class="select" aria-label="显示范围">
+          <option value="all">全部文件</option>
+          <option value="findings">有发现项</option>
+          <option value="unreviewed">尚未审查</option>
+        </select>
+      </div>
+      <ul class="tree-list" id="treeList"></ul>
+      <div class="empty-state" id="treeEmpty">没有匹配的文件</div>
+    </aside>
+
+    <main>
+      <div class="tabs" role="tablist" aria-label="审查视图">
+        <button class="tab" role="tab" id="tab-files" aria-controls="panel-files" aria-selected="true">变更文件 <span class="tab-count" id="countFiles">0</span></button>
+        <button class="tab" role="tab" id="tab-findings" aria-controls="panel-findings" aria-selected="false" tabindex="-1">发现项 <span class="tab-count" id="countFindings">0</span></button>
+      </div>
+
+      <section id="panel-files" role="tabpanel" aria-labelledby="tab-files">
+        <div id="fileCards"></div>
+        <div class="card empty-state" id="filesEmpty">没有匹配的文件</div>
+      </section>
+
+      <section id="panel-findings" role="tabpanel" aria-labelledby="tab-findings" hidden>
+        <div class="card">
+          <div class="table-wrap">
+            <table class="findings-table">
+              <thead><tr><th>严重度</th><th>位置</th><th>发现项</th></tr></thead>
+              <tbody id="findingsBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="colophon">
+    <span>由 <strong>agent-html</strong> 生成 · 代码审查母版 · 零依赖单文件</span>
+    <span>对比：feat/rate-limit@a3f9c1e vs main@7be2d04 · 2026-09-24</span>
+  </footer>
+  <!-- [Colophon: agent-html design system v1.0.0 · generated at 2026-09-24 · zero-dependency standalone] -->
+</div>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<!-- [插槽：原始 Diff] 原样粘贴 `git diff` 输出。唯一需要转义的是字面量 "</script"，写成 "<\/script"。 -->
+<script type="text/plain" id="diffSource">
+diff --git a/src/middleware/rateLimit.ts b/src/middleware/rateLimit.ts
+--- a/src/middleware/rateLimit.ts
++++ b/src/middleware/rateLimit.ts
+@@ -1,13 +1,25 @@
+ import type { Request, Response, NextFunction } from 'express';
+-import { GLOBAL_LIMIT } from '../config/limits';
++import { limitFor, WINDOW_MS } from '../config/limits';
+
+-let count = 0;
+-setInterval(() => { count = 0; }, 60_000);
++type Bucket = { tokens: number; resetAt: number };
++const buckets = new Map<string, Bucket>();
+
+ export function rateLimit(req: Request, res: Response, next: NextFunction) {
+-  count += 1;
+-  if (count > GLOBAL_LIMIT) {
+-    return res.status(429).send('Too Many Requests');
++  const key = req.ip;
++  const now = Date.now();
++  let bucket = buckets.get(key);
++
++  if (!bucket || bucket.resetAt <= now) {
++    bucket = { tokens: limitFor(req.header('x-plan')), resetAt: now + WINDOW_MS };
++    buckets.set(key, bucket);
+   }
++
++  if (bucket.tokens <= 0) {
++    res.setHeader('Retry-After', Math.ceil((bucket.resetAt - now) / 1000));
++    return res.status(429).json({ error: 'rate_limited' });
++  }
++
++  bucket.tokens -= 1;
++  res.setHeader('X-RateLimit-Remaining', bucket.tokens);
+   next();
+ }
+diff --git a/src/config/limits.ts b/src/config/limits.ts
+--- a/src/config/limits.ts
++++ b/src/config/limits.ts
+@@ -1 +1,9 @@
+-export const GLOBAL_LIMIT = 600;
++export const WINDOW_MS = 60_000;
++
++const PLAN_LIMITS: Record<string, number> = {
++  free: 60,
++  pro: 600,
++  enterprise: 6000,
++};
++
++export const limitFor = (plan?: string) => PLAN_LIMITS[plan ?? 'free'] ?? 60;
+diff --git a/test/rateLimit.test.ts b/test/rateLimit.test.ts
+--- a/test/rateLimit.test.ts
++++ b/test/rateLimit.test.ts
+@@ -4,5 +4,17 @@ import { rateLimit } from '../src/middleware/rateLimit';
+ describe('rateLimit', () => {
+   it('allows requests under the limit', () => {
+     expect(run(rateLimit, { ip: '1.1.1.1' }).status).toBe(200);
+   });
++
++  it('returns 429 with Retry-After once the bucket is empty', () => {
++    const req = { ip: '2.2.2.2', header: () => 'free' };
++    for (let i = 0; i < 60; i++) run(rateLimit, req);
++    const res = run(rateLimit, req);
++    expect(res.status).toBe(429);
++    expect(res.headers['retry-after']).toBeDefined();
++  });
++
++  it('keeps separate buckets per client', () => {
++    expect(run(rateLimit, { ip: '3.3.3.3' }).status).toBe(200);
++  });
+ });
+diff --git a/README.md b/README.md
+--- a/README.md
++++ b/README.md
+@@ -41,3 +41,8 @@ Configuration
+ | Variable | Default | Description |
+ | --- | --- | --- |
+ | `PORT` | `3000` | HTTP port |
++
++### 限流
++
++按客户端每分钟限流：free 60、pro 600、enterprise 6000。
++超限返回 `429`，并带 `Retry-After` 响应头。
+</script>
+
+<script>
+  // [插槽：发现项] 每条发现项锚定到上方 diff 中某个文件的「新版本」行号。
+  // severity: blocker | major | minor | nit —— 只有 blocker 应当阻止合并。
+  const FINDINGS = [
+    {
+      file: 'src/middleware/rateLimit.ts', line: 8, severity: 'blocker',
+      title: '代理之后所有客户端共用一个桶',
+      body: '生产环境在 ALB 之后，且未开启 `trust proxy`，所以每个请求的 `req.ip` 都是负载均衡地址。一个高频客户端就能让所有人收到 429。',
+      suggestion: "const key = req.header('x-api-key') ?? req.ip;"
+    },
+    {
+      file: 'src/middleware/rateLimit.ts', line: 5, severity: 'major',
+      title: '桶表无限增长',
+      body: '过期条目只会被覆盖、从不删除，每个出现过的 key 都会在进程生命周期内常驻内存。',
+      suggestion: "setInterval(() => {\n  const now = Date.now();\n  for (const [k, b] of buckets) if (b.resetAt <= now) buckets.delete(k);\n}, WINDOW_MS).unref();"
+    },
+    {
+      file: 'src/middleware/rateLimit.ts', line: 13, severity: 'minor',
+      title: '套餐取自客户端可控的请求头',
+      body: '任何人都能发送 `x-plan: enterprise`。应从已鉴权的账户读取套餐，而不是从请求里读。'
+    },
+    {
+      file: 'test/rateLimit.test.ts', line: 18, severity: 'minor',
+      title: '测试没有覆盖「桶耗尽后另一个客户端」的场景',
+      body: '它只证明了新 IP 能拿到 200。应先耗尽 `2.2.2.2`，再断言 `3.3.3.3` 仍然通过——这正是上面那个阻断项会造成的回归。'
+    },
+    {
+      file: 'src/config/limits.ts', line: 9, severity: 'nit',
+      title: '兜底魔法数与 free 档重复',
+      body: '用 `PLAN_LIMITS.free` 代替重复的 `60`，避免两处漂移。'
+    }
+  ];
+
+  const SEVERITY = {
+    blocker: { label: '阻断', cls: 'badge-danger', rank: 0 },
+    major:   { label: '重要',   cls: 'badge-warning', rank: 1 },
+    minor:   { label: '次要',   cls: 'badge-info', rank: 2 },
+    nit:     { label: '细节',     cls: '', rank: 3 }
+  };
+  const VERDICTS = { approve: '通过', comment: '评论', changes: '要求修改' };
+
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const inlineCode = (s) => esc(s).replace(/`([^`]+)`/g, '<code>$1</code>');
+  const slug = (p) => 'file-' + p.replace(/[^a-z0-9]+/gi, '-').toLowerCase();
+
+  // ---------- Parse unified diff ----------
+  function parseDiff(text) {
+    const files = [];
+    let file = null, oldNo = 0, newNo = 0;
+    for (const raw of text.replace(/^\n/, '').split('\n')) {
+      if (raw.startsWith('diff --git ')) {
+        const m = raw.match(/ b\/(.+)$/);
+        file = { path: m ? m[1] : raw.slice(11), rows: [], add: 0, del: 0 };
+        files.push(file);
+        continue;
+      }
+      if (!file || raw.startsWith('--- ') || raw.startsWith('+++ ') || raw.startsWith('index ')) continue;
+      const hunk = raw.match(/^@@ -(\d+)(?:,\d+)? \+(\d+)(?:,\d+)? @@(.*)$/);
+      if (hunk) {
+        oldNo = +hunk[1]; newNo = +hunk[2];
+        file.rows.push({ type: 'hunk', text: raw });
+      } else if (raw.startsWith('+')) {
+        file.rows.push({ type: 'add', newNo: newNo++, text: raw.slice(1) }); file.add++;
+      } else if (raw.startsWith('-')) {
+        file.rows.push({ type: 'del', oldNo: oldNo++, text: raw.slice(1) }); file.del++;
+      } else if (raw.startsWith(' ') || raw === '') {
+        if (!file.rows.length) continue;
+        file.rows.push({ type: 'ctx', oldNo: oldNo++, newNo: newNo++, text: raw.slice(1) });
+      }
+    }
+    // drop trailing blank context produced by the final newline
+    files.forEach((f) => { while (f.rows.length && f.rows[f.rows.length - 1].type === 'ctx' && f.rows[f.rows.length - 1].text === '') f.rows.pop(); });
+    return files;
+  }
+
+  const FILES = parseDiff(document.getElementById('diffSource').textContent);
+  const findingsFor = (path) => FINDINGS.filter((f) => f.file === path);
+  const verdictOf = (i) => document.querySelector(`input[name="verdict-${i}"]:checked`)?.value || '';
+
+  // ---------- Render ----------
+  function findingHtml(f) {
+    const s = SEVERITY[f.severity] || SEVERITY.nit;
+    return `<div class="finding ${f.severity}">
+      <div class="finding-head"><span class="badge ${s.cls}">${s.label}</span><span>${esc(f.title)}</span></div>
+      <div class="finding-body">${inlineCode(f.body)}</div>
+      ${f.suggestion ? `<div class="suggestion"><div class="suggestion-head">建议修改</div><pre>${esc(f.suggestion)}</pre></div>` : ''}
+    </div>`;
+  }
+
+  function renderFiles() {
+    document.getElementById('fileCards').innerHTML = FILES.map((file, i) => {
+      const list = findingsFor(file.path);
+      const worst = list.slice().sort((a, b) => SEVERITY[a.severity].rank - SEVERITY[b.severity].rank)[0];
+      const rows = file.rows.map((r) => {
+        if (r.type === 'hunk') return `<tr class="hunk"><td class="ln"></td><td class="ln"></td><td colspan="2">${esc(r.text)}</td></tr>`;
+        const here = r.type !== 'del' ? list.filter((f) => f.line === r.newNo) : [];
+        const sign = r.type === 'add' ? '+' : r.type === 'del' ? '−' : ' ';
+        let html = `<tr class="${r.type}${here.length ? ' flagged' : ''}"><td class="ln">${r.oldNo ?? ''}</td><td class="ln">${r.newNo ?? ''}</td><td class="sign">${sign}</td><td>${esc(r.text)}</td></tr>`;
+        here.forEach((f) => { html += `<tr class="thread" id="${slug(file.path)}-L${f.line}"><td colspan="4">${findingHtml(f)}</td></tr>`; });
+        return html;
+      }).join('');
+      const radios = Object.entries(VERDICTS).map(([v, label]) =>
+        `<label><input type="radio" name="verdict-${i}" value="${v}">${label}</label>`).join('');
+      return `<details class="card file-card" id="${slug(file.path)}" data-index="${i}" open>
+        <summary>
+          <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+          <span class="file-name">${esc(file.path)}</span>
+          <span class="stat-add">+${file.add}</span><span class="stat-del">−${file.del}</span>
+          ${worst ? `<span class="badge ${SEVERITY[worst.severity].cls}">${list.length} 个发现项</span>` : ''}
+          <span class="spacer"></span>
+          <span class="segmented" role="radiogroup" aria-label="${esc(file.path)} 的审查结论">${radios}</span>
+        </summary>
+        <div class="table-wrap"><table class="diff">${rows}</table></div>
+      </details>`;
+    }).join('');
+
+    // Clicking a verdict must not toggle the surrounding details element
+    document.querySelectorAll('.segmented').forEach((el) => el.addEventListener('click', (e) => e.stopPropagation()));
+  }
+
+  function renderTree() {
+    document.getElementById('treeList').innerHTML = FILES.map((file, i) => {
+      const n = findingsFor(file.path).length;
+      return `<li><button class="tree-item" type="button" data-index="${i}" title="${esc(file.path)}">
+        <span class="status-dot" id="dot-${i}"></span>
+        <span class="tree-path">${esc(file.path)}</span>
+        ${n ? `<span class="badge" style="height: 18px; font-size: 11px;">${n}</span>` : ''}
+        <span class="stat-add">+${file.add}</span><span class="stat-del">−${file.del}</span>
+      </button></li>`;
+    }).join('');
+  }
+
+  function renderFindings() {
+    const sorted = FINDINGS.slice().sort((a, b) => SEVERITY[a.severity].rank - SEVERITY[b.severity].rank);
+    document.getElementById('findingsBody').innerHTML = sorted.map((f) => {
+      const s = SEVERITY[f.severity];
+      return `<tr><td><span class="badge ${s.cls}">${s.label}</span></td>
+        <td><button class="link-btn" type="button" data-jump="${slug(f.file)}-L${f.line}">${esc(f.file)}:${f.line}</button></td>
+        <td><strong>${esc(f.title)}</strong><div style="color: var(--muted-fg); font-size: 12px; margin-top: 2px;">${inlineCode(f.body)}</div></td></tr>`;
+    }).join('');
+  }
+
+  function updateSummary() {
+    const add = FILES.reduce((n, f) => n + f.add, 0);
+    const del = FILES.reduce((n, f) => n + f.del, 0);
+    const blockers = FINDINGS.filter((f) => f.severity === 'blocker').length;
+    const verdicts = FILES.map((_, i) => verdictOf(i));
+    const done = verdicts.filter(Boolean).length;
+    document.getElementById('kpiFiles').textContent = FILES.length;
+    document.getElementById('kpiLines').innerHTML = `<span class="stat-add">+${add}</span> <span class="stat-del">−${del}</span> 行`;
+    document.getElementById('kpiBlock').textContent = blockers;
+    document.getElementById('kpiAll').textContent = `共 ${FINDINGS.length} 个发现项`;
+    document.getElementById('kpiProgress').textContent = `${done} / ${FILES.length}`;
+    document.getElementById('progressBar').style.width = (FILES.length ? (done / FILES.length) * 100 : 0) + '%';
+    document.getElementById('countFiles').textContent = FILES.length;
+    document.getElementById('countFindings').textContent = FINDINGS.length;
+    verdicts.forEach((v, i) => { document.getElementById('dot-' + i).className = 'status-dot ' + v; });
+
+    const badge = document.getElementById('overallBadge');
+    const state = verdicts.includes('changes') ? ['要求修改', 'badge-danger']
+      : done === FILES.length && verdicts.every((v) => v === 'approve') ? ['已通过', 'badge-success']
+      : ['审查中', 'badge-warning'];
+    badge.className = 'badge ' + state[1];
+    badge.innerHTML = `<span class="badge-dot"></span>${state[0]}`;
+  }
+
+  // ---------- Filters (with empty state) ----------
+  function applyFilter() {
+    const q = document.getElementById('fileFilter').value.toLowerCase().trim();
+    const scope = document.getElementById('scopeFilter').value;
+    let visible = 0;
+    FILES.forEach((file, i) => {
+      const match = (!q || file.path.toLowerCase().includes(q))
+        && (scope !== 'findings' || findingsFor(file.path).length > 0)
+        && (scope !== 'unreviewed' || !verdictOf(i));
+      document.querySelector(`.tree-item[data-index="${i}"]`).parentElement.style.display = match ? '' : 'none';
+      document.querySelector(`.file-card[data-index="${i}"]`).style.display = match ? '' : 'none';
+      if (match) visible++;
+    });
+    document.getElementById('treeEmpty').style.display = visible ? 'none' : 'block';
+    document.getElementById('filesEmpty').style.display = visible ? 'none' : 'block';
+  }
+
+  // ---------- Tabs (roving tabindex + arrow keys) ----------
+  const tabs = [...document.querySelectorAll('[role="tab"]')];
+  function selectTab(tab) {
+    tabs.forEach((t) => {
+      const on = t === tab;
+      t.setAttribute('aria-selected', on);
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+    });
+  }
+  tabs.forEach((t) => {
+    t.addEventListener('click', () => selectTab(t));
+    t.addEventListener('keydown', (e) => {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      const next = tabs[(tabs.indexOf(t) + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+      selectTab(next); next.focus();
+    });
+  });
+
+  function jumpTo(id) {
+    selectTab(tabs[0]);
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.closest('details').open = true;
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  // ---------- Copy review back to the agent ----------
+  function reviewMarkdown() {
+    const lines = [`## 代码审查 · ${document.querySelector('h1 span').textContent}`, '', `**总体结论：** ${document.getElementById('overallBadge').textContent.trim()}`, '', '### 文件结论'];
+    FILES.forEach((f, i) => lines.push(`- [${VERDICTS[verdictOf(i)] || '未审查'}] \`${f.path}\` (+${f.add} −${f.del})`));
+    lines.push('', '### 发现项');
+    FINDINGS.slice().sort((a, b) => SEVERITY[a.severity].rank - SEVERITY[b.severity].rank).forEach((f, n) => {
+      lines.push(`${n + 1}. **[${SEVERITY[f.severity].label}]** \`${f.file}:${f.line}\` — ${f.title}`, `   ${f.body}`);
+      if (f.suggestion) lines.push('   ```', ...f.suggestion.split('\n').map((l) => '   ' + l), '   ```');
+    });
+    lines.push('', '请修复所有「阻断」和「重要」发现项，然后重新跑测试。标记为「要求修改」的文件需要再审一轮。');
+    return lines.join('\n');
+  }
+
+  const toast = document.getElementById('toast');
+  function showToast(msg) {
+    toast.textContent = msg; toast.classList.add('show');
+    clearTimeout(showToast.t); showToast.t = setTimeout(() => toast.classList.remove('show'), 1800);
+  }
+
+  // ---------- Wire up ----------
+  renderFiles(); renderTree(); renderFindings(); updateSummary(); applyFilter();
+
+  document.getElementById('fileCards').addEventListener('change', () => { updateSummary(); applyFilter(); });
+  document.getElementById('fileFilter').addEventListener('input', applyFilter);
+  document.getElementById('scopeFilter').addEventListener('change', applyFilter);
+  document.getElementById('treeList').addEventListener('click', (e) => {
+    const btn = e.target.closest('.tree-item');
+    if (!btn) return;
+    document.querySelectorAll('.tree-item').forEach((b) => b.classList.toggle('active', b === btn));
+    jumpTo(slug(FILES[+btn.dataset.index].path));
+  });
+  document.getElementById('findingsBody').addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-jump]');
+    if (btn) jumpTo(btn.dataset.jump);
+  });
+  document.getElementById('copyReviewBtn').addEventListener('click', () => {
+    navigator.clipboard.writeText(reviewMarkdown()).then(() => showToast('审查结论已复制，粘贴回终端交给 Agent 即可'));
+  });
+
+  // Theme toggle
+  if (window.matchMedia('(prefers-color-scheme: dark)').matches) document.documentElement.setAttribute('data-theme', 'dark');
+  document.getElementById('themeToggle').addEventListener('click', () => {
+    const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+    document.documentElement.setAttribute('data-theme', dark ? 'light' : 'dark');
+  });
+</script>
+</body>
+</html>
