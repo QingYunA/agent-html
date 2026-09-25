@@ -1,6 +1,6 @@
 ---
 name: agent-html
-description: 为 AI Agent 提供基于 shadcn/ui 极简现代美学的单文件 HTML 组件化规范与母版体系。当用户要求“生成 HTML 页面/网页”、“前端可视化大盘/看板”、“面试/分析/测试报告”、“对比矩阵/方案比对”、“review 结果做成可视化页面”、“代码审查报告”、“不要输出 markdown 墙/不要文字墙”、“把分析结果做成可交互单文件网页”等场景时，务必使用本 Skill。零构建、零 npm、严禁引入外部 CDN（无断网白屏风险），纯原生 HTML/CSS/SVG，支持暗黑模式与双击秒开。
+description: 为 AI Agent 提供基于 shadcn/ui 极简现代美学的单文件 HTML 组件化规范与母版体系。当用户要求“生成 HTML 页面/网页”、“前端可视化大盘/看板”、“面试/分析/测试报告”、“对比矩阵/方案比对”、“review 结果做成可视化页面”、“代码审查报告 / 把 diff 做成可视化审查页”、“不要输出 markdown 墙/不要文字墙”、“把分析结果做成可交互单文件网页”等场景时，务必使用本 Skill。零构建、零 npm、严禁引入外部 CDN（无断网白屏风险），纯原生 HTML/CSS/SVG，支持暗黑模式与双击秒开。
 ---
 
 # Agent HTML 设计系统与组件化规范
@@ -34,7 +34,7 @@ description: 为 AI Agent 提供基于 shadcn/ui 极简现代美学的单文件 
 | :--- | :--- | :--- |
 | **片段** | 单个组件卡片 / 一张图 / 一个表格 | 单点结论、单个对比，用户只想看一眼 |
 | **证据页** | 一页：KPI 概览 + 图表 + 关键明细表 | 2–3 个独立结论，需要摆证据但不需要完整叙事 |
-| **整页母版** | 六种通用母版之一（见「通用布局母版」一节） | 完整叙事交付：报告、复盘、评审、白皮书 |
+| **整页母版** | 七种通用母版之一（见「通用布局母版」一节） | 完整叙事交付：报告、复盘、评审、白皮书 |
 
 **默认档位是「证据页」，不是「整页母版」。** 用户说「分析一下这组数据」「帮我把这个看板做出来」但**没有**说「报告 / 白皮书 / 年报 / 复盘 / 评审」时：
 
@@ -94,9 +94,9 @@ description: 为 AI Agent 提供基于 shadcn/ui 极简现代美学的单文件 
 
 ---
 
-## 三、六大通用布局母版与渐进式披露 (Progressive Disclosure)
+## 三、七大通用布局母版与渐进式披露 (Progressive Disclosure)
 
-不要从零手写完整页面。接到需求后，首先从以下 6 种**通用布局母版**中选择最贴近的骨架。支持中英文双语母版体系，根据用户输入语言对齐：
+不要从零手写完整页面。接到需求后，首先从以下 7 种**通用布局母版**中选择最贴近的骨架。支持中英文双语母版体系，根据用户输入语言对齐：
 - **英文场景**：参考 `assets/templates/en/<name>.html`
 - **中文场景**：参考 `assets/templates/zh/<name>.html`
 
@@ -122,12 +122,13 @@ description: 为 AI Agent 提供基于 shadcn/ui 极简现代美学的单文件 
 | **Compare 对比**<br>(Side-by-Side Comparison) | ~30s | 中 | 并排对照、Delta 判定 | `assets/templates/zh/compare.html` | `assets/templates/en/compare.html` | **模型 A/B 测试、Prompt 改版前后对比、架构版本 diff、产品套餐/特性矩阵**。<br>结构：并排双栏卡片（基准 vs 挑战者）、核心裁决 Callout、量化差异对照表（Delta 胜负判定标签）、一键导出 Markdown。 |
 | **Timeline 时间线**<br>(Timeline & Postmortem) | 30s+ | 中 | 折叠诊断日志 | `assets/templates/zh/timeline.html` | `assets/templates/en/timeline.html` | **发布路线图 (Roadmap)、变更历史 (Changelog)、突发事件复盘 (Postmortem)**。<br>结构：左侧单轨垂直时间线、状态节点小圆点、精确时间戳与操作人 Tag、可展开诊断日志、一键复制时间轴为 Markdown。 |
 | **Kanban 看板**<br>(Triage & Agile Kanban) | <10s | 中 | 原生 HTML5 拖拽排序 | `assets/templates/zh/kanban.html` | `assets/templates/en/kanban.html` | **缺陷分类整理、需求优先级排序、任务状态流转**。<br>结构：4 列敏捷看板（Backlog, In Progress, Blocked, Done）、纯原生 HTML5 拖拽排序（零依赖）、一键复制分拣结果回 Agent 闭环。 |
+| **Review 代码审查**<br>(Diff Review) | 逐条读 | 高 | 行级发现项、逐文件裁决 | `assets/templates/zh/review.html` | `assets/templates/en/review.html` | **PR / 分支代码审查、补丁评审、重构前后差异说明**。<br>结构：原样粘贴 `git diff` 到 `<script type="text/plain" id="diffSource">` 即自动解析为统一 diff；发现项按「新版本行号」锚定并以行内评论呈现（blocker / major / minor / nit + 建议修改）；每个文件分段单选裁决（通过 / 评论 / 要求修改）；文件树过滤 + 空状态；Tabs 切换 diff 与发现项列表；一键复制审查结论回 Agent。 |
 
 > **用「读者时间」和「信息密度」选型，不要按行业词选型。** 母版名字里的「报告」「看板」「复盘」描述的是**版式性格**，不是使用场景限制——「时间线」可以承载个人生活数据，「对比」可以承载两个方案的取舍。选型看的是：读者愿意花几秒、内容有多密、需不需要特定的交互。
 
 > ⚠️ **中英母版必须结构同构。** zh 与 en 是同一套骨架的两个语言版本，不是两个平行维护的模板；改动其一必须同步另一个。`scripts/validate.mjs` 的 `[ZH_EN_PARITY]` 会把「中文有而英文没有的 `<nav>` / `<aside>` / `<details>`」判为阻断。
 
-> 💡 **组件字典查阅**：所有按钮变体、胶囊徽章、常用 24 个矢量图标、原生纯 SVG 图表与微交互组件的完整代码，都在 `references/components.md`。**它是组件代码的唯一正本。**
+> 💡 **组件字典查阅**：所有按钮变体、胶囊徽章、32 个矢量图标、原生纯 SVG 图表、Tabs、表单控件与交互脚本的完整代码，都在 `references/components.md`。**它是组件代码的唯一正本**——本文件不再重复任何组件代码。
 
 ---
 
@@ -283,99 +284,24 @@ body {
 
 ---
 
-## 五、高频原子 HTML 插槽字典 (Atomic HTML Snippets)
+## 五、组件索引与图表契约 (Components & Chart Contract)
 
-> 💡 **原子积木按需索取 (Progressive Disclosure)**：本节列举最核心的高频插槽。如需查阅完整 24 个研发矢量图标、复合多色段环形图、水平耗时排行榜等详细代码片段，可使用 `read` 工具查阅本 Skill 目录下的 `references/components.md`。
+组件代码只有一个正本：`references/components.md`。**按需读取对应小节，不要凭记忆手写。** 下表告诉你去哪一节找：
 
-### 1. 指标卡片 (Stat Card)
-```html
-<div class="stat-card" style="padding: 18px 20px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);">
-  <div style="display: flex; justify-content: space-between; font-size: 13px; color: var(--muted-fg);">
-    <span>可用剩余额度</span>
-    <span style="color: var(--ok); font-weight: 600;">↑ 正常</span>
-  </div>
-  <div style="font-size: 26px; font-weight: 700; margin: 6px 0 2px;">3.5 天</div>
-  <div style="font-size: 12px; color: var(--muted-fg);">本月总产生：7.5 天</div>
-</div>
-```
+| 需要 | 去 `components.md` 的哪一节 |
+| :--- | :--- |
+| 按钮、状态徽章 | §1 按钮 · §2 徽章 |
+| KPI 指标卡、迷你趋势 | §3 指标卡片 |
+| 核心结论 / 风险提示条 | §4 Callout |
+| 可搜索表格（含空状态） | §5 交互式数据表格 |
+| 趋势 / 分布 / 占比 / 对比 / 排行 / 水位 / 构成 / 交叉分布 | §6 图表 A–H（面积折线、柱状、环形、双线、排行榜、仪表、**堆叠柱**、**热力图**） |
+| 图表悬停数值 | §6-I 悬停提示（全页共用一份，给图元加 `data-tip`） |
+| 图标 | §7（32 个，`stroke="currentColor"` 自动适配暗色） |
+| 弹窗、折叠、标签页 | §8 Dialog / Details / **Tabs** |
+| 需要人工输入并带回 Agent | §9 **表单控件**（输入框、下拉、复选、开关、分段单选、校验错误态） |
+| 主题切换、表格过滤、复制 Markdown、裁决回传、ScrollSpy、页脚印章、拖拽 | §10 交互脚本 |
 
-### 2. 执行摘要提示条 (Callout / Alert)
-```html
-<div style="padding: 14px 16px; border-radius: var(--radius); border: 1px solid var(--ok-border); background: var(--ok-bg); font-size: 13px; line-height: 1.5; margin-bottom: 16px;">
-  <strong style="color: var(--ok); display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-    <span>核心评估结论</span>
-  </strong>
-  <span>系统整体稳定性与架构设计符合上线标准，建议推进下一阶段发布。</span>
-</div>
-```
-
-### 3. 可折叠审查项手风琴 (Accordion)
-```html
-<details style="border-bottom: 1px solid var(--border);">
-  <summary style="list-style: none; padding: 12px 0; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; user-select: none;">
-    <span>1. 分布式容灾与降级验证</span>
-    <span style="color: var(--muted-fg);">▾</span>
-  </summary>
-  <div style="padding-bottom: 14px; font-size: 13px; color: var(--muted-fg); line-height: 1.6;">
-    已验证跨可用区自动切流，模拟机房断网后 2.4s 内完成健康检测与流量重新路由。
-  </div>
-</details>
-```
-
-### 4. 数据表格与搜索框 (Table with Search)
-```html
-<div class="card">
-  <div style="padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
-    <input type="text" id="searchInput" placeholder="实时搜索过滤..." style="height: 32px; padding: 0 10px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--bg); color: var(--card-fg); outline: none;">
-  </div>
-  <table id="dataTable" style="width: 100%; border-collapse: collapse; font-size: 13px; text-align: left;">
-    <thead>
-      <tr style="background: var(--secondary); color: var(--muted-fg); border-bottom: 1px solid var(--border);">
-        <th style="padding: 10px 16px;">项目编号</th>
-        <th style="padding: 10px 16px;">负责人</th>
-        <th style="padding: 10px 16px;">状态</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr style="border-bottom: 1px solid var(--border);">
-        <td style="padding: 10px 16px;">TASK-001</td>
-        <td style="padding: 10px 16px;">陈云青</td>
-        <td style="padding: 10px 16px;"><span class="badge badge-success"><span class="badge-dot"></span>已完成</span></td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-```
-
-### 5. 常用纯矢量 SVG 图标字典 (24 个精选工程图标)
-所有图标均基于 `viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"`，通过继承字色自动融入暗黑模式：
-- 搜索: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>`
-- 成功: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>`
-- 警告: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`
-- 复制: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>`
-- 日历: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>`
-- 终端: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/></svg>`
-- 过滤: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>`
-- 外链: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`
-- 用户: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`
-- 折叠: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>`
-- 删除: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>`
-- 下载: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`
-- Git分支: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>`
-- Git提交: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><line x1="1.05" y1="12" x2="7" y2="12"/><line x1="17.01" y1="12" x2="22.96" y2="12"/></svg>`
-- Git PR: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7"/><line x1="6" y1="9" x2="6" y2="21"/></svg>`
-- 缺陷/Bug: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="8" height="14" x="8" y="6" rx="4"/><path d="m19 7-3 2"/><path d="m5 7 3 2"/><path d="m19 19-3-2"/><path d="m5 19 3-2"/><path d="M20 13h-4"/><path d="M4 13h4"/><path d="m10 4 1 2"/><path d="m14 4-1 2"/></svg>`
-- 服务器: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>`
-- 数据库: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>`
-- CPU算力: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M9 1v3"/><path d="M15 1v3"/><path d="M9 20v3"/><path d="M15 20v3"/><path d="M20 9h3"/><path d="M20 15h3"/><path d="M1 9h3"/><path d="M1 15h3"/></svg>`
-- 心跳/探活: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>`
-- 安全防护: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`
-- 鉴权锁定: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`
-- 刷新/重试: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 21h5v-5"/></svg>`
-- 系统设置: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`
-
-### 6. 轻量原生图表规范 (Zero-CDN Pure SVG Charts)
+### 轻量原生图表规范 (Zero-CDN Pure SVG Charts)
 
 在生成数据大盘与报表时，**严禁引入 Chart.js / ECharts / Recharts 等外部 CDN 库**。图表统一采用纯原生矢量 SVG 实现：
 
@@ -383,7 +309,7 @@ body {
 - **暗黑模式自适应**：直接使用主题变量（含 `--chart-*` 图表语义色，定义见「微 CSS 核心基座」），无须额外 JS 监听重绘；
 - **自适应视口**：统一 `viewBox` + `style="width: 100%; height: auto;"`，Retina 与打印完美保真。
 
-> 📖 **六种核心形态的完整代码在 `references/components.md` 的「原生轻量图表」一节**（面积折线 / 垂直柱状 / 复合环形 / 双线时序 / 水平排行榜 / 半环仪表）。
+> 📖 **八种形态的完整代码在 `references/components.md` §6**（面积折线 / 垂直柱状 / 复合环形 / 双线时序 / 水平排行榜 / 半环仪表 / 堆叠柱 / 热力图），悬停提示见 §6-I。
 > **代码在那边，契约在这边。改代码前先读本节。**
 
 #### 图表四件套（缺一不可，违反即返工）
@@ -426,104 +352,11 @@ body {
 
 三问定完之后，再决定用下面哪个脚本。反过来说：**如果三问的答案指向「不需要交互」，就不要因为「母版里有这个功能」而硬加。**
 
-### 1. 暗黑模式切换按钮（建议所有页面右上角均标配）
-```javascript
-const toggle = document.getElementById('themeToggle');
-const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-if (prefersDark) document.documentElement.setAttribute('data-theme', 'dark');
+脚本代码统一在 `references/components.md` §10（主题切换、表格过滤、复制为 Markdown、裁决回传、ScrollSpy、页脚印章、看板拖拽）。三条**不需要问**的底线：
 
-toggle?.addEventListener('click', () => {
-  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
-});
-```
-
-### 2. 表格前端毫秒级实时搜索过滤
-```javascript
-document.getElementById('searchInput')?.addEventListener('input', (e) => {
-  const q = e.target.value.toLowerCase().trim();
-  document.querySelectorAll('#dataTable tbody tr').forEach(tr => {
-    tr.style.display = (!q || tr.textContent.toLowerCase().includes(q)) ? '' : 'none';
-  });
-});
-```
-
-### 3. 一键导出回 Markdown 文本 (Copy as Markdown)
-页面顶部或侧边标配导出按钮，允许用户将当前 HTML 结论零损耗带走（发飞书、贴 GitHub Issue/PR 或发群）：
-```javascript
-document.getElementById('copyMarkdownBtn')?.addEventListener('click', () => {
-  const md = `# ${document.querySelector('h1').innerText}\n\n` +
-    `> 状态：${document.querySelector('.badge')?.innerText || '已归档'}\n\n` +
-    `## 核心结论\n${document.querySelector('.callout')?.innerText || ''}\n`;
-  navigator.clipboard.writeText(md).then(() => {
-    const btn = document.getElementById('copyMarkdownBtn');
-    const orig = btn.innerText;
-    btn.innerText = '已复制 Markdown!';
-    setTimeout(() => { btn.innerText = orig; }, 1800);
-  });
-});
-```
-
-### 4. 人工审查决策汇总回传 Agent (Review Verdict Copy-Back)
-工作台或审查器母版中，记录用户在页面的单项决策并生成结构化文本，方便用户一键复制粘回终端让 Agent 接着执行：
-```javascript
-document.getElementById('exportDecisionBtn')?.addEventListener('click', () => {
-  let lines = ['### 人工审查结论回传 (Review Decisions)'];
-  document.querySelectorAll('.item-row').forEach(row => {
-    const id = row.getAttribute('data-id');
-    const verdict = row.getAttribute('data-verdict') || 'PASS';
-    lines.push(`- [${verdict}] ${id}: ${row.getAttribute('data-name')}`);
-  });
-  lines.push('\n请根据上述人工裁决结果继续处理下一步任务。');
-  navigator.clipboard.writeText(lines.join('\n')).then(() => {
-    alert('审查结论已复制到剪贴板，可直接在终端中 Cmd+V 发给 Agent 继续执行！');
-  });
-});
-```
-
-### 5. 长文档悬浮目录与阅读进度监听 (Sticky TOC ScrollSpy)
-```javascript
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      const id = entry.target.getAttribute('id');
-      document.querySelectorAll('.toc-link').forEach(link => {
-        link.classList.toggle('active', link.getAttribute('href') === '#' + id);
-      });
-    }
-  });
-}, { rootMargin: '-20% 0px -70% 0px' });
-
-document.querySelectorAll('section[id]').forEach(el => observer.observe(el));
-```
-
-### 6. 页脚 Colophon 溯源元数据印章
-在每个交付的单文件 HTML 底部必须附带正式的归档印记：
-```html
-<footer style="margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--border); font-size: 12px; color: var(--muted-fg); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-  <div>Generated by <strong>Agent HTML</strong> · 零依赖单文件规范 · 100% 离线自包含</div>
-  <div>时间戳：2026-09-08 · 基准：main@HEAD · 状态：已正式归档</div>
-</footer>
-```
-
-### 7. 原生 HTML5 看板跨列拖拽逻辑 (Kanban Drag & Drop)
-零外部库，仅 ~30 行原生事件监听即可实现卡片跨列拖拽：
-```javascript
-let dragged = null;
-document.querySelectorAll('.card-item').forEach(card => {
-  card.addEventListener('dragstart', () => { dragged = card; card.classList.add('dragging'); });
-  card.addEventListener('dragend', () => { card.classList.remove('dragging'); dragged = null; });
-});
-document.querySelectorAll('.kanban-col').forEach(col => {
-  col.addEventListener('dragover', (e) => { e.preventDefault(); col.classList.add('drag-over'); });
-  col.addEventListener('dragleave', () => col.classList.remove('drag-over'));
-  col.addEventListener('drop', (e) => {
-    e.preventDefault();
-    col.classList.remove('drag-over');
-    if (dragged) col.querySelector('.cards-container').appendChild(dragged);
-  });
-});
-```
+- 每页右上角放主题切换按钮，并在 `<head>` 里先设好 `data-theme`，避免暗色用户看到浅色闪屏；
+- 页面上只要有筛选、勾选、裁决或表单输入，就**必须**有「复制结果」出口（反模式 3）；
+- 每个交付物底部带 Colophon 页脚印章（生成时间、数据来源、基准版本）。
 
 ---
 
@@ -626,23 +459,11 @@ node <skill>/scripts/smoke.mjs <file.html>  # 单个产物
 - **必须写明理由**（≥4 字符），不写理由的豁免不生效（F-004）；
 - 典型可豁免场景：恒为深色的代码块/终端表面上的按钮（F-005）。**不要用它来掩盖真正的暗黑模式缺陷。**
 
-> 为什么把白名单放在规则之前？因为第一版规则上线时，20 个文件里报出 9 处「硬编码颜色」，逐一查看后**全部合法**——6 处是 `:root` 里的 `--card: #ffffff`，3 处在 `@media print` 内。完整经过见 `references/failures.md` F-002。
+> 白名单为什么先于规则、豁免为什么只作用于一行，见 `references/failures.md` F-002 / F-003 / F-004。
 
 ### 5 · 门禁本身的有效性（维护者向）
 
-```bash
-node <repo>/scripts/test-rules.mjs   # 仅仓库开发时可用
-```
-
-该脚本为每条规则生成一份恰好含一处缺陷的合成 HTML，断言对应规则确实命中，并用反向用例断言白名单与豁免机制不误报。**改规则后必须重跑**——一个"什么都能过"的校验器等于没有校验器。
-
-三个门禁的完整组合：
-
-```bash
-npm test          # 静态 lint + 规则变异测试（无需浏览器）
-npm run test:smoke   # 渲染烟测 + 烟测自测（需要 Chrome）
-npm run test:all     # 以上全部
-```
+仓库开发时用 `npm test`（静态 lint + 规则变异测试）与 `npm run test:smoke`（渲染烟测）。**改规则后必须重跑变异测试**——一个「什么都能过」的校验器等于没有校验器。
 
 ### 6 · 人工自检清单（**没有 Node 时这是唯一的验证路径**）
 

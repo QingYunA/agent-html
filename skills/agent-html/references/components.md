@@ -10,9 +10,11 @@
 3. [指标卡片与迷你趋势 (Stat Cards & Sparklines)](#3-指标卡片与迷你趋势-stat-cards--sparklines)
 4. [执行摘要提示条 (Callouts)](#4-执行摘要提示条-callouts)
 5. [交互式数据表格 (Interactive Table with Filter)](#5-交互式数据表格-interactive-table-with-filter)
-6. [原生轻量图表 (Zero-CDN Pure SVG Charts)](#6-原生轻量图表-zero-cdn-pure-svg-charts)
-7. [常用 24 个研发工程矢量图标 (Curated SVG Icons)](#7-常用-24-个研发工程矢量图标-curated-svg-icons)
-8. [微交互组件 (Dialog, Details, Tabs)](#8-微交互组件-dialog-details-tabs)
+6. 原生轻量图表：A–F 六种基础形态 · G 堆叠柱 · H 热力图 · I 悬停提示
+7. 常用 32 个研发工程矢量图标 (Curated SVG Icons)
+8. 微交互组件：A 弹窗 · B 折叠 · C 标签页 (Dialog, Details, Tabs)
+9. 表单控件 (Form Controls)
+10. 常用交互脚本 (Interaction Scripts)
 
 ---
 
@@ -139,7 +141,7 @@
 ---
 
 
-## 6. 原生轻量图表 (Zero-CDN Pure SVG Charts - 6 大核心形态)
+## 6. 原生轻量图表 (Zero-CDN Pure SVG Charts - 8 种形态 + 悬停提示)
 
 > 💡 **设计与配色规范 (Tremor & shadcn-inspired)**：
 > 绝不引入 Chart.js / ECharts 等 CDN，统一采用纯矢量 SVG 驱动。图表语言是 **shadcn 企业看板**：白色卡片 + 1px 边框 + 语义状态色。
@@ -151,7 +153,7 @@
 > - `--chart-cyan`: `#06b6d4` (暗黑: `#22d3ee`) — 辅助对比时序、出向流量
 > - `--chart-slate`: `#64748b` (暗黑: `#94a3b8`) — 低优对比柱、中性刻度
 >
-> ⚠️ **本节的六个样例都遵守「图表四件套」**（结论式标题 / 副标题写单位契约 / 图体 / 底部全大写编码说明行）与**轻度家具**（基线加重、rim 刻度、参考导轨、峰值引线）。契约条文见 `SKILL.md` 的「轻量原生图表规范」一节。**改这些代码前先读那份契约。**
+> ⚠️ **本节的八个图表样例都遵守「图表四件套」**（结论式标题 / 副标题写单位契约 / 图体 / 底部全大写编码说明行）与**轻度家具**（基线加重、rim 刻度、参考导轨、峰值引线）。契约条文见 `SKILL.md` 的「轻量原生图表规范」一节。**改这些代码前先读那份契约。**
 >
 > 📏 **rim 刻度是本节的统一术语**：沿基线/弧线打的等距小点，用来让读者估读而不必逐个看数字。每个样例的副标题必须说明「1 个刻度 = 多少真实数量」。
 
@@ -451,7 +453,138 @@
 </div>
 ```
 
-## 7. 常用 24 个研发工程矢量图标 (Curated SVG Icons)
+### G. 堆叠柱状图 (Stacked Column)
+
+> 适用：**总量**和**构成**都要看，且类别 ≤ 4。类别更多时改用排行榜（E），不要把柱子切成彩虹。
+> 契约：柱从 0 起，**不断轴**；每段高度 ∝ 数值；柱顶写总量，段内数值放到 hover（见 I）。
+
+```html
+<div class="card" style="padding: 16px 20px;">
+  <div style="font-size: 14px; font-weight: 600;">超时是唯一在涨的错误类别，已占第 39 周的 57%</div>
+  <div style="font-size: 12px; color: var(--muted-fg); margin-top: 2px;">1 格参考线 = 20 次错误 · 柱顶 = 当周总数 · 近 5 周 · 悬停看分段数值</div>
+  <svg viewBox="0 0 400 176" style="width: 100%; max-width: 560px; height: auto; overflow: visible; margin-top: 10px;" role="img" aria-label="近 5 周错误数堆叠柱状图">
+    <!-- 家具：参考导轨（20 / 40 / 60 / 80 次）+ 加重基线 -->
+    <g stroke="var(--border)" stroke-dasharray="3 3">
+      <line x1="30" y1="120" x2="390" y2="120"/><line x1="30" y1="90" x2="390" y2="90"/>
+      <line x1="30" y1="60" x2="390" y2="60"/><line x1="30" y1="30" x2="390" y2="30"/>
+    </g>
+    <g font-size="10" fill="var(--muted-fg)" text-anchor="end">
+      <text x="24" y="123">20</text><text x="24" y="93">40</text><text x="24" y="63">60</text><text x="24" y="33">80</text>
+    </g>
+    <line x1="30" y1="150" x2="390" y2="150" stroke="var(--border)"/>
+    <!-- 数据：自下而上 鉴权失败 → 上游 5xx → 超时；1 次 = 1.5px -->
+    <rect x="40" y="138" width="40" height="12" fill="var(--chart-slate)" data-tip="W35 · 鉴权失败 8 次"/>
+    <rect x="40" y="108" width="40" height="30" fill="var(--chart-indigo)" data-tip="W35 · 上游 5xx 20 次"/>
+    <rect x="40" y="90" width="40" height="18" fill="var(--chart-rose)" data-tip="W35 · 超时 12 次"/>
+    <text x="60" y="84" text-anchor="middle" font-size="11" font-weight="600" fill="var(--card-fg)">40</text>
+    <text x="60" y="166" text-anchor="middle" font-size="11" fill="var(--muted-fg)">W35</text>
+    <rect x="112" y="139.5" width="40" height="10.5" fill="var(--chart-slate)" data-tip="W36 · 鉴权失败 7 次"/>
+    <rect x="112" y="111" width="40" height="28.5" fill="var(--chart-indigo)" data-tip="W36 · 上游 5xx 19 次"/>
+    <rect x="112" y="84" width="40" height="27" fill="var(--chart-rose)" data-tip="W36 · 超时 18 次"/>
+    <text x="132" y="78" text-anchor="middle" font-size="11" font-weight="600" fill="var(--card-fg)">44</text>
+    <text x="132" y="166" text-anchor="middle" font-size="11" fill="var(--muted-fg)">W36</text>
+    <rect x="184" y="136.5" width="40" height="13.5" fill="var(--chart-slate)" data-tip="W37 · 鉴权失败 9 次"/>
+    <rect x="184" y="105" width="40" height="31.5" fill="var(--chart-indigo)" data-tip="W37 · 上游 5xx 21 次"/>
+    <rect x="184" y="72" width="40" height="33" fill="var(--chart-rose)" data-tip="W37 · 超时 22 次"/>
+    <text x="204" y="66" text-anchor="middle" font-size="11" font-weight="600" fill="var(--card-fg)">52</text>
+    <text x="204" y="166" text-anchor="middle" font-size="11" fill="var(--muted-fg)">W37</text>
+    <rect x="256" y="138" width="40" height="12" fill="var(--chart-slate)" data-tip="W38 · 鉴权失败 8 次"/>
+    <rect x="256" y="111" width="40" height="27" fill="var(--chart-indigo)" data-tip="W38 · 上游 5xx 18 次"/>
+    <rect x="256" y="66" width="40" height="45" fill="var(--chart-rose)" data-tip="W38 · 超时 30 次"/>
+    <text x="276" y="60" text-anchor="middle" font-size="11" font-weight="600" fill="var(--card-fg)">56</text>
+    <text x="276" y="166" text-anchor="middle" font-size="11" fill="var(--muted-fg)">W38</text>
+    <rect x="328" y="136.5" width="40" height="13.5" fill="var(--chart-slate)" data-tip="W39 · 鉴权失败 9 次"/>
+    <rect x="328" y="103.5" width="40" height="33" fill="var(--chart-indigo)" data-tip="W39 · 上游 5xx 22 次"/>
+    <rect x="328" y="42" width="40" height="61.5" fill="var(--chart-rose)" data-tip="W39 · 超时 41 次"/>
+    <text x="348" y="36" text-anchor="middle" font-size="11" font-weight="600" fill="var(--card-fg)">72</text>
+    <text x="348" y="166" text-anchor="middle" font-size="11" fill="var(--muted-fg)">W39</text>
+  </svg>
+  <div style="display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--muted-fg); margin-top: 6px;">
+    <span><span style="display: inline-block; width: 8px; height: 8px; border-radius: 2px; background: var(--chart-rose);"></span> 超时</span>
+    <span><span style="display: inline-block; width: 8px; height: 8px; border-radius: 2px; background: var(--chart-indigo);"></span> 上游 5xx</span>
+    <span><span style="display: inline-block; width: 8px; height: 8px; border-radius: 2px; background: var(--chart-slate);"></span> 鉴权失败</span>
+  </div>
+  <div style="font-size: 10px; letter-spacing: .08em; color: var(--muted-fg); margin-top: 8px;">柱高 = 当周错误总数（从 0 起，不断轴）· 玫红 = 唯一在增长的类别 · 其余两类保持中性色</div>
+</div>
+```
+
+### H. 日历热力图 (Heatmap · 7 × 24)
+
+> 适用：**两个离散维度的交叉**（星期 × 小时、服务 × 错误码、文件 × 周）。168 个格子远超 50 个，按「交互三问」**必须**提供 hover。
+> 契约：颜色是**序数色阶**（越深越多），只用一个色相；分档边界写进底注。数据必须确定性生成，禁用 `Math.random()`。
+
+```html
+<div class="card" style="padding: 16px 20px;">
+  <div style="font-size: 14px; font-weight: 600;">工作日 10–12 点是构建高峰，15–17 点次之；周末每小时不超过 5 次</div>
+  <div style="font-size: 12px; color: var(--muted-fg); margin-top: 2px;">1 格 = 1 小时内的构建次数 · 近 4 周合计 · 悬停看精确值</div>
+  <div style="overflow-x: auto; margin-top: 10px;">
+    <svg id="heatmap" viewBox="0 0 520 170" style="width: 100%; min-width: 460px; height: auto;" role="img" aria-label="每周构建热力图"></svg>
+  </div>
+  <div style="display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted-fg); margin-top: 6px;">
+    <span>少</span>
+    <span style="width: 12px; height: 12px; border-radius: 3px; background: var(--secondary);"></span>
+    <span style="width: 12px; height: 12px; border-radius: 3px; background: color-mix(in srgb, var(--chart-indigo) 25%, var(--secondary));"></span>
+    <span style="width: 12px; height: 12px; border-radius: 3px; background: color-mix(in srgb, var(--chart-indigo) 50%, var(--secondary));"></span>
+    <span style="width: 12px; height: 12px; border-radius: 3px; background: color-mix(in srgb, var(--chart-indigo) 75%, var(--secondary));"></span>
+    <span style="width: 12px; height: 12px; border-radius: 3px; background: var(--chart-indigo);"></span>
+    <span>多</span>
+  </div>
+  <div style="font-size: 10px; letter-spacing: .08em; color: var(--muted-fg); margin-top: 8px;">色阶 = 构建次数 · 分档 0–3 / 4–7 / 8–11 / 12–15 / 16+ · 单一色相，越深越多</div>
+</div>
+<script>
+  (function () {
+    const svg = document.getElementById('heatmap');
+    const days = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
+    // 确定性演示数据：两个高斯峰 + 取模扰动。替换为真实数据时，保留 builds[d][h] 的形状即可
+    const builds = days.map((_, d) => Array.from({ length: 24 }, (_, h) => {
+      const peaks = d < 5 ? 14 * Math.exp(-((h - 10.5) ** 2) / 3) + 11 * Math.exp(-((h - 15.5) ** 2) / 3) : 3 * Math.exp(-((h - 14) ** 2) / 8);
+      return Math.round(peaks + (d < 5 ? 1 : 0) + ((d * 7 + h * 3) % 3));
+    }));
+    const shade = (v) => v >= 16 ? 'var(--chart-indigo)'
+      : v >= 12 ? 'color-mix(in srgb, var(--chart-indigo) 75%, var(--secondary))'
+      : v >= 8 ? 'color-mix(in srgb, var(--chart-indigo) 50%, var(--secondary))'
+      : v >= 4 ? 'color-mix(in srgb, var(--chart-indigo) 25%, var(--secondary))'
+      : 'var(--secondary)';
+    let html = '';
+    builds.forEach((row, d) => {
+      html += `<text x="34" y="${d * 20 + 14}" text-anchor="end" font-size="10" fill="var(--muted-fg)">${days[d]}</text>`;
+      row.forEach((v, h) => {
+        html += `<rect x="${40 + h * 20}" y="${d * 20}" width="17" height="17" rx="3" style="fill: ${shade(v)}" data-tip="${days[d]} ${h}:00–${h + 1}:00 · ${v} 次构建"/>`;
+      });
+    });
+    [0, 6, 12, 18, 23].forEach((h) => {
+      html += `<text x="${48 + h * 20}" y="160" text-anchor="middle" font-size="10" fill="var(--muted-fg)">${h}时</text>`;
+    });
+    svg.innerHTML = html;
+  })();
+</script>
+```
+
+### I. 悬停数值提示 (Chart Tooltip · 全页共用一份)
+
+> 给任意 SVG 图元加 `data-tip="..."` 即可获得悬停提示，G、H 两个样例都依赖它。**整页只放一份**，不要每张图各写一个。
+> 按「交互三问」：图元背后必须有一条真实记录才加 `data-tip`；装饰性的轨道、刻度、导轨一律不加。
+
+```html
+<div id="chartTip" role="tooltip" style="position: fixed; z-index: 60; pointer-events: none; opacity: 0; transition: opacity 0.12s ease; background: var(--popover); color: var(--popover-fg); border: 1px solid var(--border); border-radius: var(--radius-sm); box-shadow: var(--shadow-md); padding: 6px 9px; font-size: 12px; white-space: nowrap;"></div>
+<script>
+  (function () {
+    const tip = document.getElementById('chartTip');
+    document.addEventListener('pointermove', (e) => {
+      const el = e.target.closest?.('[data-tip]');
+      if (!el) { tip.style.opacity = 0; return; }
+      tip.textContent = el.getAttribute('data-tip');
+      const x = Math.min(e.clientX + 12, window.innerWidth - tip.offsetWidth - 8);
+      tip.style.left = x + 'px';
+      tip.style.top = (e.clientY - tip.offsetHeight - 10) + 'px';
+      tip.style.opacity = 1;
+    });
+    document.addEventListener('pointerleave', () => { tip.style.opacity = 0; });
+  })();
+</script>
+```
+
+## 7. 常用 32 个研发工程矢量图标 (Curated SVG Icons)
 
 | 图标分类 | 名称 | 纯 SVG 代码片段 |
 | :--- | :--- | :--- |
@@ -479,6 +612,14 @@
 | | 鉴权锁定 (Lock) | `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>` |
 | | 重试刷新 (Refresh) | `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 21h5v-5"/></svg>` |
 | | 系统设置 (Settings) | `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>` |
+| **审查与文档** | 新增 (Plus) | `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14"/><path d="M5 12h14"/></svg>` |
+| | 删减 (Minus) | `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/></svg>` |
+| | 文件 (File) | `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>` |
+| | 目录 (Folder) | `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>` |
+| | 查看 (Eye) | `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>` |
+| | 评论 (Comment) | `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>` |
+| | 标记 (Flag) | `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>` |
+| | 时间 (Clock) | `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>` |
 
 ---
 
@@ -507,4 +648,237 @@
     已验证跨可用区自动切流，模拟机房断网后 2.4s 内完成健康检测与流量重新路由。
   </div>
 </details>
+```
+
+### C. 标签页 (Tabs · 无障碍 + 方向键)
+
+> 适用：同一批数据的 **2–5 个平行视图**（如「文件 / 发现项」「概览 / 明细」）。视图之间有先后阅读顺序时，用分节而不是 Tabs——藏起来的内容读者不会点。
+> 打印时所有面板都要展开（`@media print` 里取消 `hidden`），否则导出的 PDF 只有第一个标签。
+
+```html
+<style>
+  .tabs { display: inline-flex; gap: 4px; padding: 4px; background: var(--secondary); border: 1px solid var(--border); border-radius: var(--radius); }
+  .tab { height: 30px; padding: 0 12px; border: none; border-radius: var(--radius-sm); background: transparent; color: var(--muted-fg); font-size: 13px; font-weight: 500; cursor: pointer; }
+  .tab[aria-selected="true"] { background: var(--card); color: var(--card-fg); box-shadow: var(--shadow-sm); }
+  .tab:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+  [role="tabpanel"][hidden] { display: none; }
+  @media print { [role="tabpanel"][hidden] { display: block !important; } .tabs { display: none; } }
+</style>
+
+<div class="tabs" role="tablist" aria-label="报告视图">
+  <button class="tab" role="tab" id="tab-overview" aria-controls="panel-overview" aria-selected="true">概览</button>
+  <button class="tab" role="tab" id="tab-detail" aria-controls="panel-detail" aria-selected="false" tabindex="-1">明细</button>
+</div>
+<section id="panel-overview" role="tabpanel" aria-labelledby="tab-overview" style="padding-top: 14px;">概览内容</section>
+<section id="panel-detail" role="tabpanel" aria-labelledby="tab-detail" style="padding-top: 14px;" hidden>明细内容</section>
+
+<script>
+  (function () {
+    const tabs = [...document.querySelectorAll('[role="tab"]')];
+    const select = (tab) => tabs.forEach((t) => {
+      const on = t === tab;
+      t.setAttribute('aria-selected', on);
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+    });
+    tabs.forEach((t) => {
+      t.addEventListener('click', () => select(t));
+      t.addEventListener('keydown', (e) => {
+        const step = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
+        if (!step) return;
+        const next = tabs[(tabs.indexOf(t) + step + tabs.length) % tabs.length];
+        select(next); next.focus();
+      });
+    });
+  })();
+</script>
+```
+
+---
+
+## 9. 表单控件 (Form Controls)
+
+> 适用：页面上需要**人工输入并带回 Agent** 的场景——审查裁决、筛选条件、配置确认、打分。**有输入就必须有「复制结果」出口**（反模式 3），否则用户填完无处可去。
+> 原则：尽量用原生控件 + `accent-color`，只有开关（Switch）需要自绘。每个控件都要有可见的 `<label>`，不要只靠 `placeholder`。
+
+```html
+<style>
+  .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; font-size: 13px; }
+  .field-label { font-weight: 500; }
+  .field-hint { font-size: 12px; color: var(--muted-fg); }
+  .field-error { font-size: 12px; color: var(--err); }
+  .control { height: 34px; padding: 0 10px; font: inherit; font-size: 13px; border-radius: var(--radius-sm); border: 1px solid var(--input); background: var(--card); color: var(--card-fg); width: 100%; }
+  textarea.control { height: auto; min-height: 76px; padding: 8px 10px; resize: vertical; line-height: 1.5; }
+  .control:focus { outline: none; border-color: var(--ring); box-shadow: 0 0 0 3px var(--secondary); }
+  .control[aria-invalid="true"] { border-color: var(--err); }
+  .check { display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; }
+  .check input { width: 16px; height: 16px; accent-color: var(--primary); }
+  /* 开关：原生 checkbox + role="switch"，读屏器会读出「开/关」 */
+  .check .switch { appearance: none; width: 34px; height: 20px; border-radius: 9999px; background: var(--border); position: relative; cursor: pointer; transition: background 0.15s; flex-shrink: 0; }
+  .check .switch::after { content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 9999px; background: var(--card); box-shadow: var(--shadow-sm); transition: transform 0.15s; }
+  .check .switch:checked { background: var(--primary); }
+  .check .switch:checked::after { transform: translateX(14px); }
+  .check .switch:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+  /* 分段单选：一组互斥选项（如 通过 / 评论 / 要求修改） */
+  .segmented { display: inline-flex; align-self: flex-start; border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; }
+  .segmented label { position: relative; font-size: 12px; font-weight: 500; padding: 5px 12px; cursor: pointer; color: var(--muted-fg); border-left: 1px solid var(--border); }
+  .segmented label:first-child { border-left: none; }
+  .segmented input { position: absolute; opacity: 0; pointer-events: none; }
+  .segmented label:has(input:checked) { background: var(--secondary); color: var(--card-fg); }
+  .segmented label:has(input:focus-visible) { outline: 2px solid var(--ring); outline-offset: -2px; }
+</style>
+
+<form id="reviewForm" class="card" style="padding: 18px 20px; max-width: 520px;" onsubmit="return false;">
+  <div class="field">
+    <label class="field-label" for="owner">负责人</label>
+    <input class="control" id="owner" name="owner" value="@lin.zhao">
+  </div>
+  <div class="field">
+    <label class="field-label" for="release">目标版本</label>
+    <input class="control" id="release" name="release" value="v2.3" aria-invalid="true" aria-describedby="releaseErr">
+    <span class="field-error" id="releaseErr">v2.3 已冻结，请选择 v2.4 或更晚</span>
+  </div>
+  <div class="field">
+    <label class="field-label" for="priority">优先级</label>
+    <select class="control" id="priority" name="priority">
+      <option>P0 · 立即处理</option><option selected>P1 · 本迭代</option><option>P2 · 排期</option>
+    </select>
+  </div>
+  <div class="field">
+    <span class="field-label" id="verdictLabel">审查结论</span>
+    <div class="segmented" role="radiogroup" aria-labelledby="verdictLabel">
+      <label><input type="radio" name="verdict" value="approve" checked>通过</label>
+      <label><input type="radio" name="verdict" value="comment">评论</label>
+      <label><input type="radio" name="verdict" value="changes">要求修改</label>
+    </div>
+  </div>
+  <div class="field">
+    <label class="check"><input type="checkbox" name="tests" checked>已在本地跑过全部测试</label>
+    <label class="check"><input type="checkbox" class="switch" role="switch" name="notify">合并后通知值班群</label>
+  </div>
+  <div class="field">
+    <label class="field-label" for="note">备注</label>
+    <textarea class="control" id="note" name="note" placeholder="给 Agent 的补充说明"></textarea>
+    <span class="field-hint">会原样附在复制结果末尾</span>
+  </div>
+  <button class="btn btn-primary" type="button" id="copyFormBtn">复制结果给 Agent</button>
+</form>
+
+<script>
+  document.getElementById('copyFormBtn').addEventListener('click', () => {
+    const data = new FormData(document.getElementById('reviewForm'));
+    const lines = ['### 人工确认结果'];
+    for (const key of ['owner', 'release', 'priority', 'verdict', 'note']) lines.push(`- ${key}: ${data.get(key) || '（空）'}`);
+    lines.push(`- tests: ${data.has('tests') ? '已跑' : '未跑'}`, `- notify: ${data.has('notify') ? '是' : '否'}`);
+    navigator.clipboard.writeText(lines.join('\n'));
+  });
+</script>
+```
+
+
+---
+
+## 10. 常用交互脚本 (Interaction Scripts)
+
+> ⚠️ 加任何脚本前，先过 `SKILL.md`「交互」一节的**三问**。这里只放代码；**要不要加**由那三问决定。
+
+### A. 暗黑模式切换按钮（建议所有页面右上角均标配）
+```javascript
+// 放在 <head> 里最早执行，避免暗色用户看到一闪而过的浅色页面
+const saved = (() => { try { return localStorage.getItem('theme'); } catch (e) { return null; } })();
+const dark = saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+
+document.getElementById('themeToggle')?.addEventListener('click', () => {
+  const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  try { localStorage.setItem('theme', next); } catch (e) {}
+});
+```
+
+### B. 表格前端毫秒级实时搜索过滤
+```javascript
+document.getElementById('searchInput')?.addEventListener('input', (e) => {
+  const q = e.target.value.toLowerCase().trim();
+  document.querySelectorAll('#dataTable tbody tr').forEach(tr => {
+    tr.style.display = (!q || tr.textContent.toLowerCase().includes(q)) ? '' : 'none';
+  });
+});
+```
+
+### C. 一键导出回 Markdown 文本 (Copy as Markdown)
+页面顶部或侧边标配导出按钮，允许用户将当前 HTML 结论零损耗带走（发飞书、贴 GitHub Issue/PR 或发群）：
+```javascript
+document.getElementById('copyMarkdownBtn')?.addEventListener('click', () => {
+  const md = `# ${document.querySelector('h1').innerText}\n\n` +
+    `> 状态：${document.querySelector('.badge')?.innerText || '已归档'}\n\n` +
+    `## 核心结论\n${document.querySelector('.callout')?.innerText || ''}\n`;
+  navigator.clipboard.writeText(md).then(() => {
+    const btn = document.getElementById('copyMarkdownBtn');
+    const orig = btn.innerText;
+    btn.innerText = '已复制 Markdown!';
+    setTimeout(() => { btn.innerText = orig; }, 1800);
+  });
+});
+```
+
+### D. 人工审查决策汇总回传 Agent (Review Verdict Copy-Back)
+工作台或审查器母版中，记录用户在页面的单项决策并生成结构化文本，方便用户一键复制粘回终端让 Agent 接着执行：
+```javascript
+document.getElementById('exportDecisionBtn')?.addEventListener('click', () => {
+  let lines = ['### 人工审查结论回传 (Review Decisions)'];
+  document.querySelectorAll('.item-row').forEach(row => {
+    const id = row.getAttribute('data-id');
+    const verdict = row.getAttribute('data-verdict') || 'PASS';
+    lines.push(`- [${verdict}] ${id}: ${row.getAttribute('data-name')}`);
+  });
+  lines.push('\n请根据上述人工裁决结果继续处理下一步任务。');
+  navigator.clipboard.writeText(lines.join('\n')).then(() => {
+    alert('审查结论已复制到剪贴板，可直接在终端中 Cmd+V 发给 Agent 继续执行！');
+  });
+});
+```
+
+### E. 长文档悬浮目录与阅读进度监听 (Sticky TOC ScrollSpy)
+```javascript
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.getAttribute('id');
+      document.querySelectorAll('.toc-link').forEach(link => {
+        link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+      });
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+
+document.querySelectorAll('section[id]').forEach(el => observer.observe(el));
+```
+
+### F. 页脚 Colophon 溯源元数据印章
+在每个交付的单文件 HTML 底部必须附带正式的归档印记：
+```html
+<footer style="margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--border); font-size: 12px; color: var(--muted-fg); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+  <div>Generated by <strong>Agent HTML</strong> · 零依赖单文件规范 · 100% 离线自包含</div>
+  <div>时间戳：2026-09-08 · 基准：main@HEAD · 状态：已正式归档</div>
+</footer>
+```
+
+### G. 原生 HTML5 看板跨列拖拽逻辑 (Kanban Drag & Drop)
+零外部库，仅 ~30 行原生事件监听即可实现卡片跨列拖拽：
+```javascript
+let dragged = null;
+document.querySelectorAll('.card-item').forEach(card => {
+  card.addEventListener('dragstart', () => { dragged = card; card.classList.add('dragging'); });
+  card.addEventListener('dragend', () => { card.classList.remove('dragging'); dragged = null; });
+});
+document.querySelectorAll('.kanban-col').forEach(col => {
+  col.addEventListener('dragover', (e) => { e.preventDefault(); col.classList.add('drag-over'); });
+  col.addEventListener('dragleave', () => col.classList.remove('drag-over'));
+  col.addEventListener('drop', (e) => {
+    e.preventDefault();
+    col.classList.remove('drag-over');
+    if (dragged) col.querySelector('.cards-container').appendChild(dragged);
+  });
+});
 ```
