@@ -52,9 +52,9 @@
 </p>
 
 <p align="center">
-  <a href="assets/promo/agent-html-promo.mp4"><img src="assets/promo/agent-html-promo.png" alt="agent-html 30 秒宣传片" width="100%"></a>
+  <img src="assets/promo/agent-html-promo.webp" alt="agent-html 30 秒宣传片：从一大段 Markdown 到 7 套单文件 HTML 模板" width="100%">
   <br>
-  <sub>🎬 <a href="assets/promo/agent-html-promo.mp4"><strong>观看 30 秒宣传片</strong></a>（英文 · 1080p MP4）</sub>
+  <sub>🎬 30 秒宣传片（英文，页面内自动播放）· <a href="assets/promo/agent-html-promo.mp4">下载 1080p MP4</a></sub>
 </p>
 
 ---

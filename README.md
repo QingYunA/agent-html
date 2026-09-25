@@ -52,9 +52,9 @@
 </p>
 
 <p align="center">
-  <a href="assets/promo/agent-html-promo.mp4"><img src="assets/promo/agent-html-promo.png" alt="agent-html 30-second promo video" width="100%"></a>
+  <img src="assets/promo/agent-html-promo.webp" alt="agent-html 30-second promo: from a wall of Markdown to 7 single-file HTML templates" width="100%">
   <br>
-  <sub>🎬 <a href="assets/promo/agent-html-promo.mp4"><strong>Watch the 30-second promo</strong></a> (1080p MP4)</sub>
+  <sub>🎬 30-second promo (plays inline) · <a href="assets/promo/agent-html-promo.mp4">download the 1080p MP4</a></sub>
 </p>
 
 ---
