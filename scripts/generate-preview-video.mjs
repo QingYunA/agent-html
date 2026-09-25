@@ -1,11 +1,10 @@
 import { execSync } from 'child_process';
 import path from 'path';
 import fs from 'fs';
+import { screenshot, closeBrowser } from './lib/shoot.mjs';
 
 // Defaults match the maintainer's macOS setup; override with env vars elsewhere, e.g.
-// CHROME_PATH=/usr/bin/chromium CHROME_FLAGS=--no-sandbox FFMPEG_PATH=/usr/bin/ffmpeg node scripts/generate-preview-video.mjs
-const CHROME = process.env.CHROME_PATH || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
-const CHROME_FLAGS = process.env.CHROME_FLAGS || '';
+// FFMPEG_PATH=/usr/bin/ffmpeg node scripts/generate-preview-video.mjs  (frames: see scripts/lib/shoot.mjs)
 const FFMPEG = process.env.FFMPEG_PATH || '/opt/homebrew/bin/ffmpeg';
 const ROOT = path.resolve('.');
 const TEMP_DIR = '/tmp/preview_frames';
@@ -19,8 +18,7 @@ const ORDER = ['report', 'dashboard', 'inspector', 'compare', 'timeline', 'kanba
 // Render at 1440x900 @ 2x (2880x1800 Retina) for crystal-clear typography and charts
 function renderFrame(lang, name, outPath) {
   const filePath = path.join(ROOT, `skills/agent-html/assets/templates/${lang}/${name}.html`);
-  const cmd = `"${CHROME}" ${CHROME_FLAGS} --headless --disable-gpu --window-size=1440,900 --force-device-scale-factor=2 --hide-scrollbars --screenshot="${outPath}" "file://${filePath}"`;
-  execSync(cmd, { stdio: 'pipe' });
+  return screenshot(`file://${filePath}`, outPath, 1440, 900);
 }
 
 for (const lang of ['zh', 'en']) {
@@ -32,7 +30,7 @@ for (const lang of ['zh', 'en']) {
   for (const name of ORDER) {
     const framePath = path.join(langDir, `${name}.png`);
     process.stdout.write(`  Rendering ${name}... `);
-    renderFrame(lang, name, framePath);
+    await renderFrame(lang, name, framePath);
     console.log('✅');
   }
 
@@ -62,4 +60,5 @@ for (const lang of ['zh', 'en']) {
   console.log(`  ✅ Generated ${gifOut}`);
 }
 
+await closeBrowser();
 console.log('🎉 All Retina preview videos and GIFs updated successfully!');

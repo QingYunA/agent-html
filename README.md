@@ -51,6 +51,12 @@
   <sub>👉 Click the preview above or visit <a href="https://agent-html-bice.vercel.app" target="_blank"><strong>agent-html-bice.vercel.app</strong></a> to test the live interactive component gallery &amp; archetype previews.</sub>
 </p>
 
+<p align="center">
+  <a href="assets/promo/agent-html-promo.mp4"><img src="assets/promo/agent-html-promo.png" alt="agent-html 30-second promo video" width="100%"></a>
+  <br>
+  <sub>🎬 <a href="assets/promo/agent-html-promo.mp4"><strong>Watch the 30-second promo</strong></a> (1080p MP4)</sub>
+</p>
+
 ---
 
 ## Installation & Quick Start

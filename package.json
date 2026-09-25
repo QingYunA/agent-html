@@ -13,7 +13,9 @@
     "test": "npm run validate && node scripts/test-rules.mjs",
     "test:all": "npm test && npm run test:smoke",
     "eval": "node scripts/run-evals.mjs",
-    "eval:score": "node scripts/run-evals.mjs --score-only"
+    "eval:score": "node scripts/run-evals.mjs --score-only",
+    "screenshots": "node scripts/capture-screenshots.mjs",
+    "promo": "node scripts/generate-promo-video.mjs"
   },
   "engines": {
     "node": ">=18.0.0"

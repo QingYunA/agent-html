@@ -51,6 +51,12 @@
   <sub>👉 点击上方图片或访问 <a href="https://agent-html-bice.vercel.app" target="_blank"><strong>agent-html-bice.vercel.app</strong></a> 体验在线交互式组件画廊与母版预览</sub>
 </p>
 
+<p align="center">
+  <a href="assets/promo/agent-html-promo.mp4"><img src="assets/promo/agent-html-promo.png" alt="agent-html 30 秒宣传片" width="100%"></a>
+  <br>
+  <sub>🎬 <a href="assets/promo/agent-html-promo.mp4"><strong>观看 30 秒宣传片</strong></a>（英文 · 1080p MP4）</sub>
+</p>
+
 ---
 
 ## 快速安装与上手
