@@ -2,7 +2,7 @@ import { execSync } from 'child_process';
 import path from 'path';
 import fs from 'fs';
 
-const CHROME = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+const CHROME = process.env.CHROME_PATH || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const ROOT = path.resolve('.');
 
 // Exact dimensions matched to the repository's screenshot standards:
@@ -12,6 +12,7 @@ const ROOT = path.resolve('.');
 // kanban:    2560 x 1680 (window 1280, 840 @2x)
 // report:    2080 x 1800 (window 1040, 900 @2x)
 // timeline:  2080 x 1720 (window 1040, 860 @2x)
+// review:    2560 x 1720 (window 1280, 860 @2x)
 // gallery:   2560 x 1680 (window 1280, 840 @2x)
 
 const TEMPLATES = [
@@ -21,6 +22,7 @@ const TEMPLATES = [
   { name: 'kanban', width: 1280, height: 840 },
   { name: 'report', width: 1040, height: 900 },
   { name: 'timeline', width: 1040, height: 860 },
+  { name: 'review', width: 1280, height: 860 },
 ];
 
 function capture(fileUrl, outPath, width, height) {
@@ -30,9 +32,12 @@ function capture(fileUrl, outPath, width, height) {
 
 console.log('📸 Starting automated screenshot capture with Headless Chrome (2x Retina)...');
 
+// Optional filter: `node scripts/capture-screenshots.mjs review` captures only the named templates (and skips the galleries)
+const ONLY = process.argv.slice(2);
+
 // 1. Capture Chinese & English templates
 for (const lang of ['zh', 'en']) {
-  for (const t of TEMPLATES) {
+  for (const t of TEMPLATES.filter((x) => !ONLY.length || ONLY.includes(x.name))) {
     const filePath = path.join(ROOT, `skills/agent-html/assets/templates/${lang}/${t.name}.html`);
     const outPath = path.join(ROOT, `assets/screenshots/${lang}/${t.name}.png`);
     const fileUrl = `file://${filePath}`;
@@ -43,6 +48,7 @@ for (const lang of ['zh', 'en']) {
 }
 
 // 2. Capture Landing Page Galleries
+if (ONLY.length) process.exit(0);
 console.log('  Rendering [zh] gallery.png... ');
 capture(`file://${path.join(ROOT, 'index.zh-CN.html')}`, path.join(ROOT, 'assets/screenshots/zh/gallery.png'), 1280, 840);
 console.log('✅ Done');
@@ -51,4 +57,4 @@ console.log('  Rendering [en] gallery.png... ');
 capture(`file://${path.join(ROOT, 'index.html')}`, path.join(ROOT, 'assets/screenshots/en/gallery.png'), 1280, 840);
 console.log('✅ Done');
 
-console.log('🎉 All 14 high-resolution screenshots generated successfully!');
+console.log(`🎉 All ${TEMPLATES.length * 2 + 2} high-resolution screenshots generated successfully!`);

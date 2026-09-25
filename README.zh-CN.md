@@ -33,7 +33,7 @@
   <a href="#快速安装与上手">快速安装</a> ·
   <a href="#解决什么痛点">痛点</a> ·
   <a href="#核心优势">核心优势</a> ·
-  <a href="#六大真实场景模板">六大模板</a> ·
+  <a href="#七大真实场景模板">七大模板</a> ·
   <a href="#常用基础组件">基础组件</a> ·
   <a href="#提示词示例">提示词</a> ·
   <a href="#star-history">Star History</a>
@@ -109,7 +109,7 @@ ln -sf ../../../.agents/skills/agent-html ~/.pi/agent/skills/agent-html
 - **依赖外部 CDN**：模型动不动就加上 `<script src="https://cdn.tailwindcss.com"></script>` 和 Google 字体。在公司内网或者没网的环境下直接白屏打不开，而且第一次打开加载慢、页面还会闪烁，时间一长 CDN 失效文件就废了。
 - **手写样式不好看**：如果不准它用 CDN，模型就会自己手写内嵌 CSS——生成粗糙的黑边框、奇怪的间距、刺眼的高饱和度颜色，而且基本都不支持暗色模式。
 
-`agent-html` 就是为了解决这个问题：整理了一套 70 多行的基础 CSS 变量，加上 6 套贴合真实开发场景的开箱即用模板。生成的 HTML 单文件双击就能秒开，干净好看，完全离线可用。
+`agent-html` 就是为了解决这个问题：整理了一套 70 多行的基础 CSS 变量，加上 7 套贴合真实开发场景的开箱即用模板。生成的 HTML 单文件双击就能秒开，干净好看，完全离线可用。
 
 ---
 
@@ -117,21 +117,23 @@ ln -sf ../../../.agents/skills/agent-html ~/.pi/agent/skills/agent-html
 
 - **真正零依赖**：不需要装 npm 包，不需要打包构建，不加载任何外部 CDN。双击 HTML 文件直接秒开，离线也能用。
 - **干净耐看的设计**：参考 shadcn/ui 的设计风格。微细边框、舒适圆角、统一的中性灰调。
-- **6 套贴合真实场景的模板**：复盘报告、API 成本看板、工作台审查、模型对比、故障时间线、Bug 看板。
+- **7 套贴合真实场景的模板**：复盘报告、API 成本看板、工作台审查、模型对比、故障时间线、Bug 看板、代码审查（diff）。
 - **原生暗色模式**：自动跟随系统切换深浅色，自带纯原生 JS 切换按钮。
 - **方便把结果复制回终端**：页面里带有一键复制 Markdown 和结论的功能，方便直接贴回终端给 Agent 继续处理。
 - **内置离线自检脚本（`scripts/validate.mjs`）**：在交给用户前，自动检查标签闭合、是否有外部 CDN 依赖和移动端视口配置。
-- **24 个纯 SVG 图标**：不用图标库字体，图标颜色自动跟随文字，断网不丢图标。
-- **纯 SVG 图表**：不需要引入任何图表库，用纯 SVG 绘制折线走势图、柱状图、环形图。
+- **32 个纯 SVG 图标**：不用图标库字体，图标颜色自动跟随文字，断网不丢图标。
+- **纯 SVG 图表**：不需要引入任何图表库，用纯 SVG 绘制折线、柱状、环形、双线、排行、仪表、堆叠柱与 7×24 热力图，并共用一个悬停数值提示。
+- **标签页与表单控件**：无障碍 Tabs、带 label 的输入框、下拉、复选框、开关、分段单选，填完能一键复制回 Agent。
+- **先判断、再动手的评测集**：12 个用例，其中包括「正确答案是不做成 HTML」的判断题。
 
 ---
 
-## 六大真实场景模板
+## 七大真实场景模板
 
-告别虚构的演示数据，`agent-html` 提供 6 套真实工程师高频使用的场景模板，每套都带有清晰的结构注释：
+告别虚构的演示数据，`agent-html` 提供 7 套真实工程师高频使用的场景模板，每套都带有清晰的结构注释：
 
 <p align="center">
-  <img src="assets/screenshots/zh/preview.gif" alt="agent-html 6 大模板预览" width="100%">
+  <img src="assets/screenshots/zh/preview.gif" alt="agent-html 模板预览" width="100%">
 </p>
 
 | 模板 | 文件路径 | 真实业务场景 | 包含的关键功能 |
@@ -142,9 +144,10 @@ ln -sf ../../../.agents/skills/agent-html ~/.pi/agent/skills/agent-html
 | **Compare 对比** | [`templates/zh/compare.html`](templates/zh/compare.html) | DeepSeek vs GPT-4o 选型对比、Prompt 效果评估 | 左右方案对照、胜出结论提示框、量化指标差异表 |
 | **Timeline 时间线** | [`templates/zh/timeline.html`](templates/zh/timeline.html) | 服务恢复时间线、版本发布日志 | 垂直时间轴、状态标记、日志折叠、一键复制 Markdown |
 | **Kanban 看板** | [`templates/zh/kanban.html`](templates/zh/kanban.html) | Bug 分拣与需求看板、任务排期 | 原生拖拽卡片、任务优先级标签、复制看板状态回终端 |
+| **Review 代码审查** | [`templates/zh/review.html`](templates/zh/review.html) | PR / 补丁代码审查 | 原样粘贴 `git diff`、行级发现项与严重度、逐文件裁决、复制审查结论回 Agent |
 
 <details>
-<summary><strong>📸 点击展开查看全部 6 大模板大图</strong></summary>
+<summary><strong>📸 点击展开查看全部 7 大模板大图</strong></summary>
 <br>
 
 #### 01. Report 报告
@@ -164,6 +167,9 @@ ln -sf ../../../.agents/skills/agent-html ~/.pi/agent/skills/agent-html
 
 #### 06. Kanban 看板
 <p align="center"><img src="assets/screenshots/zh/kanban.png" alt="Kanban 看板模板" width="100%"></p>
+
+#### 07. Review 代码审查
+<p align="center"><img src="assets/screenshots/zh/review.png" alt="Review 代码审查模板" width="100%"></p>
 
 </details>
 
@@ -207,7 +213,7 @@ ln -sf ../../../.agents/skills/agent-html ~/.pi/agent/skills/agent-html
 ### 2. 纯 SVG 原生图表 (Pure SVG Charts)
 
 <p align="center">
-  <img src="assets/arsenal/zh/charts.svg" alt="agent-html 6 大原生 SVG 图表" width="100%">
+  <img src="assets/arsenal/zh/charts.svg" alt="agent-html 原生 SVG 图表" width="100%">
 </p>
 
 不需要引入 ECharts 或 Chart.js 这类几百 KB 的外部脚本，用几十行纯 SVG 就能画出清晰耐看、高清不模糊的数据图表：
@@ -220,11 +226,13 @@ ln -sf ../../../.agents/skills/agent-html ~/.pi/agent/skills/agent-html
 | **📉 双线对比图 (Dual-Line)** | 实线与虚线对照 | 同步对比两个维度的趋势 | 上行 vs 下行流量、优化前 vs 优化后对比 |
 | **📑 耗时排行榜 (Ranking Bar)** | 胶囊进度条 + 数值条 | 节省空间，清晰直观 | 慢接口排行、微服务首字延迟 (TTFT) |
 | **⏱️ 水位仪表盘 (Capacity Gauge)** | 半圆弧行程切割 + 警戒色 | 直观展示使用百分比 | 内存/显存水位、API 调用限额 |
+| **🧱 堆叠柱状图 (Stacked Column)** | 从 0 基线堆叠的 `rect` 分段 | 总量与构成一眼看清 | 每周错误按类别、成本按服务拆分 |
+| **🟪 热力图 (Heatmap 7×24)** | `rect` 网格 + 单色相序数色阶 | 发现两个维度交叉的规律 | 星期 × 小时的构建量、服务 × 错误码 |
 
 <details>
 <summary><strong>SVG 图表代码在哪里？</strong></summary>
 
-六种图表形态的完整、正本代码只在一个地方：**[`skills/agent-html/references/components.md`](skills/agent-html/references/components.md) 第 6 节**。
+八种图表形态（以及共用的 `data-tip` 悬停提示）的完整、正本代码只在一个地方：**[`skills/agent-html/references/components.md`](skills/agent-html/references/components.md) 第 6 节**。
 
 这里**故意不再复制一份**。同一段代码存两份手抄副本迟早会漂移，而 README 里一份陈旧的副本比没有更糟——Agent 抄了它就会画出坏的图。（这个坑我们踩过，见 `skills/agent-html/references/failures.md` **F-014**。）
 
@@ -234,10 +242,10 @@ ln -sf ../../../.agents/skills/agent-html ~/.pi/agent/skills/agent-html
 
 ---
 
-### 3. 24 个纯矢量 SVG 图标 (Vector Icons)
+### 3. 32 个纯矢量 SVG 图标 (Vector Icons)
 
 <p align="center">
-  <img src="assets/arsenal/zh/icons.svg" alt="agent-html 24 个研发运维纯矢量图标" width="100%">
+  <img src="assets/arsenal/zh/icons.svg" alt="agent-html 研发运维纯矢量图标" width="100%">
 </p>
 
 使用 `stroke="currentColor"`，图标颜色自动跟随文字颜色，断网或离线环境下也不会丢图标：
@@ -249,6 +257,7 @@ ln -sf ../../../.agents/skills/agent-html ~/.pi/agent/skills/agent-html
 | **状态与判定** | `Check (成功)` · `Alert (告警)` · `Shield (安全)` · `Lock (锁定)` | 验收通过状态、告警提示、安全与权限控制 |
 | **数据与操作** | `Copy (复制)` · `Download (下载)` · `Calendar (日历)` · `Filter (筛选)` · `Refresh (刷新)` | 复制结论给 Agent、导出文件、时间范围筛选 |
 | **基础设置** | `Server (服务器)` · `Database (数据库)` · `CPU (处理器)` · `External (外链)` | 节点监控、慢 SQL 排查、集群负载、参考链接 |
+| **审查与文档** | `Plus (新增)` · `Minus (删减)` · `File (文件)` · `Folder (目录)` · `Eye (查看)` · `Comment (评论)` · `Flag (标记)` · `Clock (时间)` | diff 增删统计、文件树、审查评论、截止时间 |
 
 ```html
 <!-- 使用方法：直接嵌入 HTML，图标颜色跟随文字 -->
@@ -272,7 +281,7 @@ ln -sf ../../../.agents/skills/agent-html ~/.pi/agent/skills/agent-html
 
 ## 组件字典与设计规范参考
 
-所有原子 HTML 插槽（按钮、胶囊徽章、Callout 提示条、KPI 统计卡）、24 个 currentColor 矢量 SVG 图标、零 CDN 原生 SVG 图表和微交互脚本，均完整收录在 [skills/agent-html/references/components.md](skills/agent-html/references/components.md) 中，并可在 `index.zh-CN.html` 中实时预览。
+所有原子 HTML 插槽（按钮、胶囊徽章、Callout 提示条、KPI 统计卡）、标签页、表单控件、32 个 currentColor 矢量 SVG 图标、零 CDN 原生 SVG 图表和微交互脚本，均完整收录在 [skills/agent-html/references/components.md](skills/agent-html/references/components.md) 中，并可在 `index.zh-CN.html` 中实时预览。
 
 ---
 

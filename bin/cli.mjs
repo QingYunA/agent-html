@@ -132,8 +132,8 @@ Usage:
 Commands:
   open [--zh]               Open the local component library in your browser (default EN, --zh for CN)
   snippet <name>            Output copy-ready atomic HTML component (button, badge, metric-card, callout, table, svg-chart, modal)
-  list                      List all 6 built-in layout templates
-  template <name> [--lang]  Output raw HTML template (dashboard, report, compare, inspector, timeline, kanban)
+  list                      List all 7 built-in layout templates
+  template <name> [--lang]  Output raw HTML template (dashboard, report, compare, inspector, timeline, kanban, review)
   check <file>              Run the deterministic offline HTML linter against a file
   install                   Quickly install/symlink the skill to ~/.agents/skills/agent-html
 
@@ -146,13 +146,14 @@ Snippet names available:
   - svg-chart     Zero-dependency pure SVG area line chart
   - modal         Native HTML5 <dialog> modal with backdrop
 
-Layout Templates (6 套模板):
+Layout Templates (7 套模板):
   - report        Report 报告 (单栏文档 / 事故复盘)
   - dashboard     Dashboard 数据面板 (指标大盘 / API 消耗)
   - inspector     Inspector 审查工作台 (双栏查看 / 日志追溯)
   - compare       Compare 对比 (并排对比 / 选型矩阵)
   - timeline      Timeline 时间线 (时序编年 / 服务恢复)
   - kanban        Kanban 看板 (敏捷任务 / Bug 分拣)
+  - review        Review 代码审查 (git diff 行级审查 / 逐文件裁决)
 
 Examples:
   npx agent-html open
@@ -195,13 +196,14 @@ switch (cmd) {
 
   case 'list': {
     console.log(`
-Available 6 Layout Templates:
+Available 7 Layout Templates:
   1. report     Report 报告 (单栏文档 / 审查复盘)
   2. dashboard  Dashboard 数据面板 (指标大盘 / 过滤表格)
   3. inspector  Inspector 审查工作台 (双栏查看 / 日志审查)
   4. compare    Compare 对比 (并排横向对比 / 矩阵)
   5. timeline   Timeline 时间线 (时序编年 / 事故记录)
   6. kanban     Kanban 看板 (任务流转 / 缺陷分拣)
+  7. review     Review 代码审查 (粘贴 git diff / 行级发现项 / 逐文件裁决)
 
 Languages available:
   - English:  npx agent-html template en/<name> (or --en)
@@ -216,7 +218,7 @@ Languages available:
     const tName = args.slice(1).find(arg => !arg.startsWith('-'));
 
     if (!tName) {
-      console.error('Error: Please specify template name: dashboard, report, compare, inspector, timeline, or kanban');
+      console.error('Error: Please specify template name: dashboard, report, compare, inspector, timeline, kanban, or review');
       console.error('Example: npx agent-html template dashboard (or en/dashboard, zh/dashboard)');
       process.exit(1);
     }
