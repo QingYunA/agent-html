@@ -45,10 +45,16 @@
 
 <p align="center">
   <a href="https://agent-html-bice.vercel.app" target="_blank">
-    <img width="2326" height="1442" alt="agent-html live gallery" src="https://github.com/user-attachments/assets/cb546a47-188e-46ac-af2a-c4af09a3ca59" />
+    <img src="assets/screenshots/en/gallery.png" alt="agent-html live gallery" width="100%">
   </a>
   <br>
   <sub>👉 Click the preview above or visit <a href="https://agent-html-bice.vercel.app" target="_blank"><strong>agent-html-bice.vercel.app</strong></a> to test the live interactive component gallery &amp; archetype previews.</sub>
+</p>
+
+<p align="center">
+  <a href="assets/promo/agent-html-promo.mp4"><img src="assets/promo/agent-html-promo.png" alt="agent-html 30-second promo video" width="100%"></a>
+  <br>
+  <sub>🎬 <a href="assets/promo/agent-html-promo.mp4"><strong>Watch the 30-second promo</strong></a> (1080p MP4)</sub>
 </p>
 
 ---

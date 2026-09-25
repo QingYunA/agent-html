@@ -1,8 +1,7 @@
-import { execSync } from 'child_process';
+import { screenshot, closeBrowser } from './lib/shoot.mjs';
 import path from 'path';
 import fs from 'fs';
 
-const CHROME = process.env.CHROME_PATH || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const ROOT = path.resolve('.');
 
 // Exact dimensions matched to the repository's screenshot standards:
@@ -25,12 +24,9 @@ const TEMPLATES = [
   { name: 'review', width: 1280, height: 860 },
 ];
 
-function capture(fileUrl, outPath, width, height) {
-  const cmd = `"${CHROME}" --headless --disable-gpu --window-size=${width},${height} --force-device-scale-factor=2 --hide-scrollbars --screenshot="${outPath}" "${fileUrl}"`;
-  execSync(cmd, { stdio: 'pipe' });
-}
+const capture = (fileUrl, outPath, width, height) => screenshot(fileUrl, outPath, width, height);
 
-console.log('📸 Starting automated screenshot capture with Headless Chrome (2x Retina)...');
+console.log('📸 Starting automated screenshot capture (2x Retina)...');
 
 // Optional filter: `node scripts/capture-screenshots.mjs review` captures only the named templates (and skips the galleries)
 const ONLY = process.argv.slice(2);
@@ -42,19 +38,20 @@ for (const lang of ['zh', 'en']) {
     const outPath = path.join(ROOT, `assets/screenshots/${lang}/${t.name}.png`);
     const fileUrl = `file://${filePath}`;
     process.stdout.write(`  Rendering [${lang}] ${t.name}... `);
-    capture(fileUrl, outPath, t.width, t.height);
+    await capture(fileUrl, outPath, t.width, t.height);
     console.log('✅ Done');
   }
 }
 
 // 2. Capture Landing Page Galleries
-if (ONLY.length) process.exit(0);
+if (ONLY.length) { await closeBrowser(); process.exit(0); }
 console.log('  Rendering [zh] gallery.png... ');
-capture(`file://${path.join(ROOT, 'index.zh-CN.html')}`, path.join(ROOT, 'assets/screenshots/zh/gallery.png'), 1280, 840);
+await capture(`file://${path.join(ROOT, 'index.zh-CN.html')}`, path.join(ROOT, 'assets/screenshots/zh/gallery.png'), 1280, 840);
 console.log('✅ Done');
 
 console.log('  Rendering [en] gallery.png... ');
-capture(`file://${path.join(ROOT, 'index.html')}`, path.join(ROOT, 'assets/screenshots/en/gallery.png'), 1280, 840);
+await capture(`file://${path.join(ROOT, 'index.html')}`, path.join(ROOT, 'assets/screenshots/en/gallery.png'), 1280, 840);
 console.log('✅ Done');
 
+await closeBrowser();
 console.log(`🎉 All ${TEMPLATES.length * 2 + 2} high-resolution screenshots generated successfully!`);
