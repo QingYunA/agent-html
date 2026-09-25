@@ -13,6 +13,8 @@
  * Output:
  *   assets/promo/agent-html-promo.mp4   1920x1080 · 30 fps · H.264 CRF 18
  *   assets/promo/agent-html-promo.png   poster frame
+ *   assets/promo/agent-html-promo.webp  1280px animated WebP that autoplays inline in the README
+ *                                       (needs python3 + Pillow; see scripts/promo/to-webp.py)
  */
 
 import { mkdtempSync, mkdirSync, rmSync, existsSync } from 'node:fs';
@@ -80,7 +82,20 @@ try {
 const mp4 = join(OUT_DIR, 'agent-html-promo.mp4');
 execFileSync(FFMPEG, ['-y', '-loglevel', 'error', '-framerate', String(FPS), '-i', join(frames, 'f%04d.png'),
   '-c:v', 'libx264', '-preset', 'slow', '-crf', '18', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', mp4], { stdio: 'inherit' });
-rmSync(frames, { recursive: true, force: true });
 console.log(`✅ ${mp4}`);
 console.log(`✅ ${join(OUT_DIR, 'agent-html-promo.png')}`);
+
+// 4. Animated WebP for the README: GitHub strips <video> for files stored in the repo,
+//    but an animated image autoplays inline. 1280px · 15 fps, every frame a keyframe.
+const small = join(frames, 'webp');
+mkdirSync(small, { recursive: true });
+execFileSync(FFMPEG, ['-y', '-loglevel', 'error', '-i', mp4, '-vf', 'fps=15,scale=1280:-1:flags=lanczos', join(small, '%04d.png')], { stdio: 'inherit' });
+const webp = join(OUT_DIR, 'agent-html-promo.webp');
+try {
+  execFileSync(process.env.PYTHON || 'python3', [join(ROOT, 'scripts/promo/to-webp.py'), small, webp, '15'], { stdio: 'inherit' });
+  console.log(`✅ ${webp}`);
+} catch {
+  console.warn('⚠️  Skipped the README WebP: needs python3 with Pillow (pip install pillow).');
+}
+rmSync(frames, { recursive: true, force: true });
 if (!existsSync(mp4)) process.exit(1);
