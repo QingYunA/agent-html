@@ -16,7 +16,7 @@ Arrangement (1 bar = 2s):
                    pops for the feature cards, snare roll into the cut
   24-30s CTA       impact, big C chord, groove thins out, fade        C  F  C
 
-Usage: python3 scripts/promo/soundtrack.py cues.json out.wav
+Usage: python3 scripts/promo/soundtrack.py cues.json out.wav [--sfx-only]
 Needs: numpy, scipy
 """
 import json
@@ -35,6 +35,8 @@ rng = np.random.default_rng(7)
 
 cues = json.load(open(sys.argv[1]))
 out_path = sys.argv[2]
+# --sfx-only: a licensed track supplies the music; keep only the light UI sounds on top of it
+SFX_ONLY = '--sfx-only' in sys.argv[3:]
 
 
 def midi(n):
@@ -235,9 +237,9 @@ def impact():
     return sub + noise
 
 
-for a, b in cues['risers']:
+for a, b in ([] if SFX_ONLY else cues['risers']):
     place(fx, riser(b - a), a, 0.22)
-for t0 in cues['impacts']:
+for t0 in ([] if SFX_ONLY else cues['impacts']):
     place(fx, impact(), t0, 0.42 if t0 != 24 else 0.6)
 
 for k, t0 in enumerate(cues['ticks']):          # template change: a soft glassy tick
@@ -275,7 +277,7 @@ def reverb(x, seconds=1.8, mix=0.25):
 
 
 music = reverb(pad * 1.0 + arp * 1.0, 2.2, 0.35) + bass + reverb(drums, 0.8, 0.08)
-mix = music * 0.9 + reverb(fx, 1.6, 0.3)
+mix = reverb(fx, 1.6, 0.3) if SFX_ONLY else music * 0.9 + reverb(fx, 1.6, 0.3)
 mix = filt(mix, 'highpass', 35)
 # tame the sub region a little so small speakers do not choke on it
 mix = mix - 0.25 * filt(mix, 'lowpass', 90)

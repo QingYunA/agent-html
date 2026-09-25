@@ -15,6 +15,10 @@
  *   node scripts/generate-promo-video.mjs            # both languages
  *   node scripts/generate-promo-video.mjs --lang zh  # one language
  *   node scripts/generate-promo-video.mjs --dump-zh-chars chars.txt   # input for build-zh-font.py
+ *   node scripts/generate-promo-video.mjs --music track.mp3 [--music-start 12.5]
+ *       Cut to a licensed track instead of the synthesised cue: scripts/promo/beatsync.py finds its
+ *       beat grid, the storyboard snaps scene cuts to downbeats and template changes to beats
+ *       (window.applySync), and only light UI sounds are layered on top of the music.
  *
  * Output per language (suffix "" for en, "-zh" for zh):
  *   assets/promo/agent-html-promo{suffix}.mp4    1920x1080 · 30 fps · H.264 CRF 18 · AAC 192k, -16 LUFS
@@ -22,7 +26,7 @@
  *   assets/promo/agent-html-promo{suffix}.webp   1280px animated WebP that autoplays inline in the README
  */
 
-import { mkdtempSync, mkdirSync, rmSync, existsSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, rmSync, existsSync, writeFileSync, readFileSync } from 'node:fs';
 import { execFileSync, execSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
@@ -35,12 +39,15 @@ const PYTHON = process.env.PYTHON || 'python3';
 const FPS = 30;
 const DURATION = 30;
 const POSTER_T = 13.2; // mid-way through the template showcase
-const OUT_DIR = join(ROOT, 'assets', 'promo');
+const OUT_DIR_DEFAULT = join(ROOT, 'assets', 'promo');
 const STORYBOARD = pathToFileURL(join(ROOT, 'scripts/promo/promo.html')).href;
 
 const args = process.argv.slice(2);
 const argValue = (name) => { const i = args.indexOf(name); return i >= 0 ? args[i + 1] : null; };
 const LANGS = argValue('--lang') ? [argValue('--lang')] : ['en', 'zh'];
+const MUSIC = argValue('--music') ? resolve(argValue('--music')) : null;
+const MUSIC_START = argValue('--music-start');
+const OUT_DIR = argValue('--out') ? resolve(argValue('--out')) : OUT_DIR_DEFAULT; // e.g. try a track without touching assets/
 
 async function loadPlaywright() {
   try {
@@ -95,6 +102,14 @@ try {
       await window.setDarkShot(src);
       await Promise.all([...document.images].map((img) => img.complete ? null : new Promise((r) => { img.onload = img.onerror = r; })));
     }, pathToFileURL(darkPath).href);
+    let sync = null;
+    if (MUSIC) {
+      const syncPath = join(work, 'beats.json');
+      execFileSync(PYTHON, [join(ROOT, 'scripts/promo/beatsync.py'), MUSIC, syncPath, ...(MUSIC_START ? ['--start', MUSIC_START] : [])], { stdio: 'inherit' });
+      sync = JSON.parse(readFileSync(syncPath, 'utf8'));
+      const anchors = await page.evaluate((s) => window.applySync(s), sync);
+      console.log('  cuts on the beat:', anchors.map(([r, n]) => `${n}→${r.toFixed(2)}s`).join('  '));
+    }
     const cues = await page.evaluate(() => window.CUES);
     writeFileSync(join(work, 'cues.json'), JSON.stringify(cues));
 
@@ -109,16 +124,29 @@ try {
     await page.screenshot({ path: join(OUT_DIR, `agent-html-promo${suffix}.png`) });
     await page.close();
 
-    // 3. Soundtrack (same music for every language; cues come from this storyboard)
+    // 3. Soundtrack: a licensed track + light UI sounds, or the synthesised cue
     const wav = join(work, 'music.wav');
-    execFileSync(PYTHON, [join(ROOT, 'scripts/promo/soundtrack.py'), join(work, 'cues.json'), wav], { stdio: 'inherit' });
+    const audioInputs = [];
+    let audioFilter;
+    if (MUSIC) {
+      const sfx = join(work, 'sfx.wav');
+      execFileSync(FFMPEG, ['-y', '-loglevel', 'error', '-ss', String(sync.start), '-t', String(DURATION), '-i', MUSIC,
+        '-af', `afade=t=in:d=0.03,afade=t=out:st=${DURATION - 2.5}:d=2.5`, '-ac', '2', '-ar', '44100', wav], { stdio: 'inherit' });
+      execFileSync(PYTHON, [join(ROOT, 'scripts/promo/soundtrack.py'), join(work, 'cues.json'), sfx, '--sfx-only'], { stdio: 'inherit' });
+      audioInputs.push('-i', wav, '-i', sfx);
+      audioFilter = '[1:a]volume=1.0[m];[2:a]volume=0.28[s];[m][s]amix=inputs=2:normalize=0,loudnorm=I=-16:TP=-1.5:LRA=11[a]';
+    } else {
+      execFileSync(PYTHON, [join(ROOT, 'scripts/promo/soundtrack.py'), join(work, 'cues.json'), wav], { stdio: 'inherit' });
+      audioInputs.push('-i', wav);
+      audioFilter = '[1:a]loudnorm=I=-16:TP=-1.5:LRA=11[a]';
+    }
 
     // 4. Encode picture + sound
     const mp4 = join(OUT_DIR, `agent-html-promo${suffix}.mp4`);
-    execFileSync(FFMPEG, ['-y', '-loglevel', 'error', '-framerate', String(FPS), '-i', join(work, 'f%04d.png'), '-i', wav,
+    execFileSync(FFMPEG, ['-y', '-loglevel', 'error', '-framerate', String(FPS), '-i', join(work, 'f%04d.png'), ...audioInputs,
+      '-filter_complex', audioFilter, '-map', '0:v', '-map', '[a]',
       '-c:v', 'libx264', '-preset', 'slow', '-crf', '18', '-pix_fmt', 'yuv420p',
-      '-af', 'loudnorm=I=-16:TP=-1.5:LRA=11', '-c:a', 'aac', '-b:a', '192k', '-ar', '48000',
-      '-shortest', '-movflags', '+faststart', mp4], { stdio: 'inherit' });
+      '-c:a', 'aac', '-b:a', '192k', '-ar', '48000', '-t', String(DURATION), '-movflags', '+faststart', mp4], { stdio: 'inherit' });
     console.log(`  ✅ ${mp4}`);
 
     // 5. Animated WebP for the README: GitHub strips <video> for files stored in the repo,

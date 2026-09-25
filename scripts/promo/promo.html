@@ -285,7 +285,8 @@
   const TYPE = [5.0, 6.4];             // typing window for the install command
 
   // ---------- sound cues, read by the generator to build the soundtrack ----------
-  window.CUES = {
+  // Authored in storyboard time; window.applySync() maps them onto a real track's beat grid.
+  const NOMINAL_CUES = {
     bpm: 120,
     impacts: [4, 8, 24],                                   // scene cuts that hit hard
     risers: [[3.0, 4], [7.0, 8], [19.0, 20], [23.0, 24]],  // noise swells into each cut
@@ -294,6 +295,58 @@
     whoosh: 20.8,                                          // light → dark wipe
     pops: [22.0, 22.5, 23.0, 23.5],                        // feature cards
     stamp: 3.0,                                            // "blank page" stamp
+  };
+
+  window.CUES = NOMINAL_CUES;
+
+  // ---------- beat sync: warp storyboard time onto a real track ----------
+  // Anchors pair real time (seconds into the music) with storyboard time. Cuts snap to the
+  // nearest downbeat, template changes and feature cards to the nearest beat; everything
+  // in between is stretched linearly, so every animation and cue moves with them.
+  let ANCHORS = [[0, 0], [30, 30]];
+  const interp = (x, pts, from, to) => {
+    for (let i = 1; i < pts.length; i++) {
+      const [a, b] = [pts[i - 1], pts[i]];
+      if (x <= b[from] || i === pts.length - 1) {
+        const k = (x - a[from]) / ((b[from] - a[from]) || 1);
+        return a[to] + k * (b[to] - a[to]);
+      }
+    }
+    return x;
+  };
+  const toStory = (t) => interp(t, ANCHORS, 0, 1);
+  const toReal = (n) => interp(n, ANCHORS, 1, 0);
+  const mapCues = (c) => ({
+    ...c,
+    impacts: c.impacts.map(toReal), risers: c.risers.map(([a, b]) => [toReal(a), toReal(b)]),
+    ticks: c.ticks.map(toReal), typing: c.typing.map(toReal), whoosh: toReal(c.whoosh),
+    pops: c.pops.map(toReal), stamp: toReal(c.stamp),
+  });
+
+  window.applySync = (sync) => {
+    const nearest = (list, x, maxDist) => {
+      let best = x, d = Infinity;
+      for (const v of list) if (Math.abs(v - x) < d) { d = Math.abs(v - x); best = v; }
+      return d <= maxDist ? best : x;
+    };
+    const beat = 60 / sync.bpm, bar = beat * 4;
+    const pts = [[0, 0]];
+    const push = (real, story) => { if (real > pts[pts.length - 1][0] + 0.2) pts.push([real, story]); };
+    const cut = (n) => nearest(sync.bars, n, bar * 0.6);   // snap each scene cut to the nearest "one"
+    const [c4, c8, c20, c24] = [4, 8, 20, 24].map(cut);
+    push(c4, 4); push(c8, 8);
+    // template changes: spread proportionally across the section, then snap to beats
+    for (let k = 1; k < 7; k++) {
+      const n = S3_START + k * SLIDE;
+      push(nearest(sync.beats, c8 + (n - 8) * (c20 - c8) / 12, beat * 0.6), n);
+    }
+    push(c20, 20);
+    NOMINAL_CUES.pops.forEach((n) => push(nearest(sync.beats, c20 + (n - 20) * (c24 - c20) / 4, beat * 0.6), n));
+    push(c24, 24);
+    pts.push([Math.max(30, pts[pts.length - 1][0] + 1), 30]);
+    ANCHORS = pts;
+    window.CUES = { ...mapCues(NOMINAL_CUES), bpm: sync.bpm };
+    return ANCHORS;
   };
 
   const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -312,7 +365,8 @@
   $('lightShot').src = `../../assets/screenshots/${LANG}/dashboard.png`;
   $('url4').textContent = `templates/${LANG}/dashboard.html`;
 
-  function render(t) {
+  function render(realT) {
+    const t = toStory(realT);
     // ---- Scene 1: two captions in sequence (A fully leaves before B arrives) ----
     $('s1').style.opacity = win(t, S.s1[0], S.s1[1], 0.01, 0.35);
     const aIn = easeOut(prog(t, 0.15, 0.55)), aOut = easeInOut(prog(t, 1.75, 1.95));
