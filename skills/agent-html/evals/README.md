@@ -63,10 +63,13 @@ iteration-1/
 | `check` | 判定方式 | 需要的字段 |
 |---|---|---|
 | `no_cdn` | 不含任何 `http(s)://` 的 script/link/@import 外部引用 | — |
-| `has` | 正则匹配数 ≥ `min`（默认 1） | `pattern`, `min?` |
-| `count` | 同上，语义上强调数量 | `pattern`, `min` |
+| `has` | 正则匹配数 ≥ `min`（默认 1）；给了 `max` 时还要 ≤ `max` | `pattern`, `min?`, `max?` |
+| `count` | 同上，语义上强调数量 | `pattern`, `min?`, `max?` |
 | `absent` | 正则**不得**命中 | `pattern` |
 | `validate_clean` | 跑 `scripts/validate.mjs`，要求 0 项阻断 | — |
+| `artifact` | 产出了 HTML 文件（判断型用例：「这里值得做成 HTML」） | — |
+| `no_artifact` | **没有**产出 HTML 文件（判断型用例：「这里不该做成 HTML」） | — |
+| `reply_has` | agent 的终端回复（`agent-output.txt`）匹配正则 | `pattern`, `min?` |
 | `smoke_clean` | 跑 `scripts/smoke.mjs`，要求渲染通过（无 Chrome 时跳过，不计失败） | — |
 
 **正则必须能在加载时编译通过**——运行器在调 agent 之前会先预校验全部 pattern，写错了立刻报，不浪费 agent 调用。
@@ -128,8 +131,33 @@ iteration-1/
 
 ---
 
+## 两种用例
+
+| 模式 | 包装语 | 测的是什么 |
+| :--- | :--- | :--- |
+| 默认 | 「把产物写成单个 HTML 文件，保存到 …」 | 做出来的 HTML **质量**：结构、门禁、交互出口 |
+| `"mode": "judgment"` | 「由你判断交付形式；不该做成 HTML 就不要建文件，直接回复」 | SKILL.md 第零节的**判断**：要不要 HTML、做多大 |
+
+只有默认模式的话，评测集永远测不到最重要的那一层——每条 prompt 都对应一个母版、每次都强制写 HTML，
+测出来的只是「会不会照抄母版」。判断型用例两臂拿到的是**同一句**包装语，差异只来自有没有读技能。
+
+判断型用例的计分规则：
+
+- `defaults`（离线、viewport、暗色……）只在**真的产出了 HTML** 时才计分；
+- 用例带 `no_artifact` 条目时，`defaults` 一律不计——不该做成 HTML 却做了，做得再精致也是判断失误，不能让这些条目替错误答案挣分。
+
 ## 当前覆盖
 
-6 个用例，对应 6 个通用母版：dashboard / report / inspector / compare / timeline / kanban。
+12 个用例：
 
-每例含 7 条通用条目 + 5–8 条母版专有条目，其中 1–2 条标为 `level: human`。
+| # | 用例 | 测什么 |
+| :--- | :--- | :--- |
+| 1–6 | dashboard / report / inspector / compare / timeline / kanban | 六个母版各自的结构与交互 |
+| 7 | review-diff | Review 母版：diff 行级视图、逐文件裁决、复制审查结论 |
+| 8 | judgment-shell-command | 判断：一条 shell 命令**不该**做成 HTML |
+| 9 | judgment-short-answer | 判断：两句话的问答**不该**做成 HTML |
+| 10 | granularity-evidence-page | 粒度：「分析一下」应交付证据页，而不是带目录的整页报告 |
+| 11 | generalize-hiring-compare-en | 泛化：非运维场景 + 英文，不得被母版的运维示例数据污染、不得混入中文 |
+| 12 | form-release-checklist | 表单控件：带 label 的复选框、输入框、复制结果回 Agent |
+
+每例含通用条目（判断型用例按上面的规则计分）+ 2–6 条专有条目，多数用例有 1–2 条 `level: human`。

@@ -1,7 +1,6 @@
 {
   "skill_name": "agent-html",
-  "$note": "expectations 是 { text, check?, pattern?, min?, level? } 的数组。text 是人读的判定语句（schema 兼容）；带 check 的由 scripts/run-evals.mjs 机器判定，不带的留给人工。defaults 会与每个 eval 自己的 expectations 合并，避免六份重复。判定词汇表见 evals/README.md。",
-
+  "$note": "expectations 是 { text, check?, pattern?, min?, level? } 的数组。text 是人读的判定语句（schema 兼容）；带 check 的由 scripts/run-evals.mjs 机器判定，不带的留给人工。defaults 会与每个 eval 自己的 expectations 合并，避免逐条重复。判定词汇表见 evals/README.md。 mode: \"judgment\" 的用例不预设交付形式，由 agent 自己判断要不要做成 HTML；此时 defaults 只在真的产出 HTML 时才计分。",
   "defaults": [
     {
       "text": "产物是单个自包含 HTML，不含任何 http(s):// 的外部 script / link / @import 引用",
@@ -37,7 +36,6 @@
       "check": "validate_clean"
     }
   ],
-
   "evals": [
     {
       "id": 1,
@@ -98,7 +96,6 @@
         }
       ]
     },
-
     {
       "id": 2,
       "name": "report-architecture-review",
@@ -147,7 +144,6 @@
         }
       ]
     },
-
     {
       "id": 3,
       "name": "inspector-master-detail",
@@ -195,7 +191,6 @@
         }
       ]
     },
-
     {
       "id": 4,
       "name": "compare-side-by-side",
@@ -243,7 +238,6 @@
         }
       ]
     },
-
     {
       "id": 5,
       "name": "timeline-postmortem",
@@ -287,7 +281,6 @@
         }
       ]
     },
-
     {
       "id": 6,
       "name": "kanban-triage",
@@ -326,6 +319,189 @@
         },
         {
           "text": "【人眼】四列宽度协调，卡片多时列内滚动而不是把页面撑爆",
+          "level": "human"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "review-diff",
+      "prompt": "帮我审一下这个 PR，把审查结果做成可视化页面，我要逐个文件给结论，最后把意见复制回来给你改：\n\n```diff\ndiff --git a/src/cache.js b/src/cache.js\n--- a/src/cache.js\n+++ b/src/cache.js\n@@ -1,6 +1,12 @@\n const store = new Map();\n-export function get(key) {\n-  return store.get(key);\n+const TTL = 60_000;\n+\n+export function get(key) {\n+  const hit = store.get(key);\n+  if (!hit) return undefined;\n+  if (Date.now() - hit.at > TTL) return undefined;\n+  return hit.value;\n }\n-export function set(key, value) { store.set(key, value); }\n+export function set(key, value) { store.set(key, { value, at: Date.now() }); }\n```",
+      "expected_output": "Review 母版：diff 被解析为带行号的统一视图，发现项锚定在具体行（例如过期条目从不删除），每个文件有裁决控件，并能一键复制审查结论回 Agent。",
+      "files": [],
+      "expectations": [
+        {
+          "text": "diff 以带 +/- 标记的行级视图呈现，而不是整段贴在 <pre> 里",
+          "check": "has",
+          "pattern": "diff-?add|class=[\"'][^\"']*\\badd\\b|diffSource"
+        },
+        {
+          "text": "有逐文件裁决控件（单选 / 分段控件）",
+          "check": "has",
+          "pattern": "type=[\"']radio[\"']|type=\\\\?[\"']radio"
+        },
+        {
+          "text": "发现项带严重度分级",
+          "check": "has",
+          "pattern": "blocker|major|minor|nit|阻断|重要|次要"
+        },
+        {
+          "text": "能把审查结论复制回 Agent",
+          "check": "has",
+          "pattern": "clipboard"
+        },
+        {
+          "text": "【人眼】发现项指出了真实问题：过期条目只返回 undefined 却从不删除，store 会无限增长",
+          "level": "human"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "judgment-shell-command",
+      "mode": "judgment",
+      "prompt": "给我一条命令，把当前目录下所有 .log 文件打包成 logs.tar.gz。",
+      "expected_output": "不产出 HTML，直接在终端回复一条 tar 命令。这是「坚决不用 HTML」的典型场景：用户要立刻复制执行。",
+      "files": [],
+      "expectations": [
+        {
+          "text": "没有把一条命令做成 HTML 页面",
+          "check": "no_artifact"
+        },
+        {
+          "text": "回复里直接给出了 tar 命令",
+          "check": "reply_has",
+          "pattern": "tar\\s+-?c"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "name": "judgment-short-answer",
+      "mode": "judgment",
+      "prompt": "Promise.all 和 Promise.allSettled 有什么区别？一两句话说清就行。",
+      "expected_output": "不产出 HTML，两句话回答：all 遇到第一个 reject 就整体失败；allSettled 等全部结束并返回每一项的状态。",
+      "files": [],
+      "expectations": [
+        {
+          "text": "没有为一个两句话的问答生成 HTML",
+          "check": "no_artifact"
+        },
+        {
+          "text": "回复点出了 allSettled 返回每一项状态",
+          "check": "reply_has",
+          "pattern": "allSettled"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "name": "granularity-evidence-page",
+      "mode": "judgment",
+      "prompt": "分析一下这组注册数据，看看各渠道的趋势：\n\n```csv\ndate,channel,signups\n2026-09-01,organic,42\n2026-09-01,ads,54\n2026-09-01,referral,9\n2026-09-02,organic,44\n2026-09-02,ads,53\n2026-09-02,referral,10\n2026-09-03,organic,46\n2026-09-03,ads,52\n2026-09-03,referral,8\n2026-09-04,organic,48\n2026-09-04,ads,51\n2026-09-04,referral,9\n2026-09-05,organic,50\n2026-09-05,ads,50\n2026-09-05,referral,10\n2026-09-06,organic,52\n2026-09-06,ads,49\n2026-09-06,referral,8\n2026-09-07,organic,54\n2026-09-07,ads,48\n2026-09-07,referral,9\n2026-09-08,organic,56\n2026-09-08,ads,47\n2026-09-08,referral,10\n2026-09-09,organic,58\n2026-09-09,ads,46\n2026-09-09,referral,8\n2026-09-10,organic,60\n2026-09-10,ads,45\n2026-09-10,referral,9\n2026-09-11,organic,62\n2026-09-11,ads,44\n2026-09-11,referral,10\n2026-09-12,organic,64\n2026-09-12,ads,43\n2026-09-12,referral,8\n2026-09-13,organic,66\n2026-09-13,ads,42\n2026-09-13,referral,9\n2026-09-14,organic,68\n2026-09-14,ads,41\n2026-09-14,referral,10\n```",
+      "expected_output": "用户说的是「分析一下」而不是「出一份报告」，应交付「证据页」：结论式标题 + 一两张图 + 关键数字，而不是带悬浮目录和多章节手风琴的整页报告。",
+      "files": [],
+      "expectations": [
+        {
+          "text": "判断为值得可视化，产出了 HTML",
+          "check": "artifact"
+        },
+        {
+          "text": "用了图表（原生 SVG）",
+          "check": "has",
+          "pattern": "<svg"
+        },
+        {
+          "text": "粒度是证据页而不是整页报告：没有悬浮目录 / ScrollSpy",
+          "check": "absent",
+          "pattern": "toc-link|sticky-toc|scrollspy|目录"
+        },
+        {
+          "text": "粒度是证据页：折叠章节不超过 2 个",
+          "check": "count",
+          "pattern": "<details",
+          "max": 2
+        },
+        {
+          "text": "【人眼】图表标题写的是结论（如「广告渠道两周下滑 25%」），不是「注册趋势图」",
+          "level": "human"
+        },
+        {
+          "text": "【人眼】数字与 CSV 一致：organic 上升、ads 下降、referral 在 8–10 之间波动",
+          "level": "human"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "name": "generalize-hiring-compare-en",
+      "prompt": "Turn these interview scores into a page I can share with the hiring committee. Candidate A: system design 4/5, coding 5/5, communication 3/5. Candidate B: system design 5/5, coding 4/5, communication 5/5. Candidate C: system design 3/5, coding 4/5, communication 4/5. We can hire one.",
+      "expected_output": "英文 Compare 页：三位候选人并排、各维度对比、明确的推荐结论。关键是**不被母版里的运维示例污染**——不该出现 TPS、延迟、节点这类词，也不该混入中文。",
+      "files": [],
+      "expectations": [
+        {
+          "text": "页面语言为英文",
+          "check": "has",
+          "pattern": "<html[^>]*lang=[\"']en"
+        },
+        {
+          "text": "语言纯度：不混入中文",
+          "check": "absent",
+          "pattern": "[\\u4e00-\\u9fff]"
+        },
+        {
+          "text": "没有被母版的运维示例数据污染",
+          "check": "absent",
+          "pattern": "\\bTPS\\b|\\bQPS\\b|latency|throughput|P95|cluster"
+        },
+        {
+          "text": "三位候选人都出现",
+          "check": "count",
+          "pattern": "Candidate [ABC]",
+          "min": 3
+        },
+        {
+          "text": "给出了明确推荐（hire / recommend）",
+          "check": "has",
+          "pattern": "recommend|hire"
+        },
+        {
+          "text": "【人眼】推荐与数据一致：B 总分 14 最高，且没有编造未提供的维度",
+          "level": "human"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "name": "form-release-checklist",
+      "prompt": "帮我做一个发布前检查清单页面：数据库迁移已备份、灰度开关已配置、回滚脚本已演练、监控告警已确认、变更单已审批。我逐项勾选、填上负责人和备注后，要能把结果复制回来给你继续执行发布。",
+      "expected_output": "带表单控件的单页：5 个带 label 的复选项、负责人输入框、备注文本框、复制结果按钮；未全部勾选时应有明确提示。",
+      "files": [],
+      "expectations": [
+        {
+          "text": "5 个检查项都是真正的复选框",
+          "check": "count",
+          "pattern": "type=[\"']checkbox[\"']",
+          "min": 5
+        },
+        {
+          "text": "控件有可见 label，而不是只靠 placeholder",
+          "check": "count",
+          "pattern": "<label",
+          "min": 5
+        },
+        {
+          "text": "有负责人输入与备注输入",
+          "check": "has",
+          "pattern": "<textarea|type=[\"']text[\"']"
+        },
+        {
+          "text": "能把勾选结果复制回 Agent",
+          "check": "has",
+          "pattern": "clipboard"
+        },
+        {
+          "text": "【人眼】未全部勾选时，复制出的结果或界面明确标出了未完成项",
           "level": "human"
         }
       ]
