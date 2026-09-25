@@ -1104,6 +1104,39 @@
       .js .reveal { opacity: 1; transform: none; }
     }
     .contrast-grid { margin-bottom: 0; }
+    /* ---------- New components: tabs, form controls, chart tooltip ---------- */
+    .demo-split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; margin-top: 14px; }
+    .demo-tabs { display: inline-flex; gap: 4px; padding: 4px; background: var(--secondary); border: 1px solid var(--border); border-radius: var(--radius); }
+    .demo-tab { height: 30px; padding: 0 12px; border: none; border-radius: var(--radius-sm); background: transparent; color: var(--muted-fg); font-size: 13px; font-weight: 500; cursor: pointer; }
+    .demo-tab[aria-selected="true"] { background: var(--card); color: var(--card-fg); box-shadow: var(--shadow-sm); }
+    .demo-panel { margin-top: 10px; padding: 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--secondary); font-size: 13px; line-height: 1.55; min-height: 64px; }
+    .demo-panel[hidden] { display: none; }
+    .field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 11px; font-size: 12px; }
+    .field-label { font-weight: 600; }
+    .field-error { color: var(--err); }
+    .control { height: 32px; padding: 0 10px; font: inherit; font-size: 13px; border-radius: var(--radius-sm); border: 1px solid var(--input); background: var(--card); color: var(--card-fg); width: 100%; }
+    .control:focus { outline: none; border-color: var(--ring); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 14%, transparent); }
+    .control[aria-invalid="true"] { border-color: var(--err); }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .check { display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; margin-bottom: 6px; }
+    .check input { width: 16px; height: 16px; accent-color: var(--primary); }
+    .check .switch { appearance: none; -webkit-appearance: none; width: 34px; height: 20px; border-radius: 9999px; background: var(--border); position: relative; cursor: pointer; transition: background 0.15s; flex-shrink: 0; }
+    .check .switch::after { content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 9999px; background: var(--card); box-shadow: var(--shadow-sm); transition: transform 0.15s; }
+    .check .switch:checked { background: var(--primary); }
+    .check .switch:checked::after { transform: translateX(14px); }
+    .seg { display: inline-flex; align-self: flex-start; border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; background: var(--card); }
+    .seg label { position: relative; font-size: 12px; font-weight: 500; padding: 5px 11px; cursor: pointer; color: var(--muted-fg); border-left: 1px solid var(--border); }
+    .seg label:first-child { border-left: none; }
+    .seg input { position: absolute; opacity: 0; pointer-events: none; }
+    .seg label:has(input:focus-visible) { outline: 2px solid var(--ring); outline-offset: -2px; }
+    .seg label:has(input[value="approve"]:checked) { background: var(--ok-bg); color: var(--ok); }
+    .seg label:has(input[value="comment"]:checked) { background: var(--info-bg); color: var(--info); }
+    .seg label:has(input[value="changes"]:checked) { background: var(--err-bg); color: var(--err); }
+    #chartTip { position: fixed; z-index: 70; pointer-events: none; opacity: 0; transition: opacity 0.12s ease; background: var(--popover); color: var(--popover-fg); border: 1px solid var(--border); border-radius: var(--radius-sm); box-shadow: var(--shadow-md); padding: 6px 9px; font-size: 12px; white-space: nowrap; }
+    [data-tip] { cursor: default; }
+    @media (max-width: 900px) { .demo-split { grid-template-columns: minmax(0, 1fr); } }
+    .chart-wide { grid-column: span 2; }
+    @media (max-width: 760px) { .chart-wide { grid-column: auto; } }
   </style>
 </head>
 <body>
@@ -1163,7 +1196,7 @@
         </div>
 
         <a href="#components" class="btn btn-primary btn-lg">进入组件库</a>
-        <a href="#archetypes" class="btn btn-outline btn-lg">查看 6 大场景模板</a>
+        <a href="#archetypes" class="btn btn-outline btn-lg">查看 7 大场景模板</a>
       </div>
 
       <div class="hero-visual">
@@ -1173,7 +1206,7 @@
             <div class="window-url">file:///~/reports/dashboard.html</div>
             <div class="window-spacer"></div>
           </div>
-          <video autoplay muted loop playsinline preload="metadata" poster="assets/screenshots/zh/dashboard.png" aria-label="6 套模板预览演示">
+          <video autoplay muted loop playsinline preload="metadata" poster="assets/screenshots/zh/dashboard.png" aria-label="模板预览演示">
             <source src="assets/screenshots/zh/preview.mp4" type="video/mp4">
           </video>
         </div>
@@ -1194,8 +1227,8 @@
       </div>
       <div class="metric-item">
         <div class="metric-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg></div>
-        <div class="metric-val">6 套模板</div>
-        <div class="metric-label">报告、大盘、工作台、对比、时间线、看板</div>
+        <div class="metric-val">7 套模板</div>
+        <div class="metric-label">报告、大盘、工作台、对比、时间线、看板、代码审查</div>
       </div>
       <div class="metric-item">
         <div class="metric-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.8L20 10l-5 3.6L16.8 20 12 16.4 7.2 20 9 13.6 4 10l6.1-1.2Z"/></svg></div>
@@ -1293,7 +1326,7 @@
           </div>
         </div>
 
-        <!-- 3. Pure SVG Charts (6 Core Formats) -->
+        <!-- 3. Pure SVG Charts (8 Formats) -->
         <div class="arsenal-box span-2">
           <div class="arsenal-title">
             <span>纯原生 SVG 图表</span>
@@ -1439,6 +1472,28 @@
                 </svg>
               </div>
             </div>
+            <!-- Chart 7: Stacked Column -->
+            <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
+              <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-bottom: 8px;">
+                <span style="font-weight: 600;">超时是唯一在涨的错误类别</span>
+                <span class="badge badge-danger" style="font-size: 10px; height: 18px;">占第 39 周 57%</span>
+              </div>
+              <svg viewBox="0 0 400 95" style="width: 100%; height: 85px; overflow: visible;">
+                <line x1="20" y1="82" x2="400" y2="82" stroke="var(--border)"/>
+                <rect x="30" y="74.4" width="44" height="7.6" fill="var(--chart-slate)" data-tip="W35 · 鉴权 8"/><rect x="30" y="55.4" width="44" height="19.0" fill="var(--chart-indigo)" data-tip="W35 · 上游 5xx 20"/><rect x="30" y="44.0" width="44" height="11.4" fill="var(--chart-rose)" data-tip="W35 · 超时 12"/><text x="52" y="40.0" text-anchor="middle" font-size="12" font-weight="600" fill="var(--card-fg)">40</text><text x="52" y="94" text-anchor="middle" font-size="11" fill="var(--muted-fg)">W35</text><rect x="106" y="75.35" width="44" height="6.65" fill="var(--chart-slate)" data-tip="W36 · 鉴权 7"/><rect x="106" y="57.3" width="44" height="18.05" fill="var(--chart-indigo)" data-tip="W36 · 上游 5xx 19"/><rect x="106" y="40.2" width="44" height="17.1" fill="var(--chart-rose)" data-tip="W36 · 超时 18"/><text x="128" y="36.2" text-anchor="middle" font-size="12" font-weight="600" fill="var(--card-fg)">44</text><text x="128" y="94" text-anchor="middle" font-size="11" fill="var(--muted-fg)">W36</text><rect x="182" y="73.45" width="44" height="8.55" fill="var(--chart-slate)" data-tip="W37 · 鉴权 9"/><rect x="182" y="53.5" width="44" height="19.95" fill="var(--chart-indigo)" data-tip="W37 · 上游 5xx 21"/><rect x="182" y="32.6" width="44" height="20.9" fill="var(--chart-rose)" data-tip="W37 · 超时 22"/><text x="204" y="28.6" text-anchor="middle" font-size="12" font-weight="600" fill="var(--card-fg)">52</text><text x="204" y="94" text-anchor="middle" font-size="11" fill="var(--muted-fg)">W37</text><rect x="258" y="74.4" width="44" height="7.6" fill="var(--chart-slate)" data-tip="W38 · 鉴权 8"/><rect x="258" y="57.3" width="44" height="17.1" fill="var(--chart-indigo)" data-tip="W38 · 上游 5xx 18"/><rect x="258" y="28.8" width="44" height="28.5" fill="var(--chart-rose)" data-tip="W38 · 超时 30"/><text x="280" y="24.8" text-anchor="middle" font-size="12" font-weight="600" fill="var(--card-fg)">56</text><text x="280" y="94" text-anchor="middle" font-size="11" fill="var(--muted-fg)">W38</text><rect x="334" y="73.45" width="44" height="8.55" fill="var(--chart-slate)" data-tip="W39 · 鉴权 9"/><rect x="334" y="52.55" width="44" height="20.9" fill="var(--chart-indigo)" data-tip="W39 · 上游 5xx 22"/><rect x="334" y="13.6" width="44" height="38.95" fill="var(--chart-rose)" data-tip="W39 · 超时 41"/><text x="356" y="9.6" text-anchor="middle" font-size="12" font-weight="600" fill="var(--card-fg)">72</text><text x="356" y="94" text-anchor="middle" font-size="11" fill="var(--muted-fg)">W39</text>
+              </svg>
+              <div style="display: flex; gap: 10px; font-size: 10px; margin-top: 6px;"><span style="color: var(--chart-rose);">■ 超时</span><span style="color: var(--chart-indigo);">■ 上游 5xx</span><span style="color: var(--chart-slate);">■ 鉴权</span></div>
+            </div>
+
+            <!-- Chart 8: 7x24 Heatmap (rendered by script, hover for values) -->
+            <div class="chart-wide" style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
+              <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-bottom: 8px;">
+                <span style="font-weight: 600;">工作日 10–12 点构建最多</span>
+                <span class="badge" style="font-size: 10px; height: 18px;">悬停看数值</span>
+              </div>
+              <svg id="heatDemo" viewBox="0 0 410 104" style="width: 100%; height: auto;" role="img" aria-label="工作日 10–12 点构建最多"></svg>
+            </div>
+
           </div>
         </div>
 
@@ -1495,12 +1550,38 @@
             <div id="demoEmptyState" style="display: none; padding: 28px 16px; text-align: center; font-size: 13px; color: var(--muted-fg);">暂无匹配记录</div>
           </div>
         </div>
+
+        <!-- 5. Tabs & Form Controls -->
+        <div class="arsenal-box span-2">
+          <div class="arsenal-title">
+            <span>标签页与表单控件</span>
+            <span class="badge badge-success"><span class="badge-dot"></span>新增 · 可复制回 Agent</span>
+          </div>
+          <div class="arsenal-desc">支持方向键切换的无障碍标签页，以及带 label 的原生表单控件。审查人填完的内容可以一键复制回 Agent。</div>
+          <div class="demo-split">
+            <div>
+              <div class="demo-tabs" role="tablist" aria-label="标签页与表单控件"><button class="demo-tab" role="tab" id="dtab-0" aria-controls="dpanel-0" aria-selected="true">概览</button><button class="demo-tab" role="tab" id="dtab-1" aria-controls="dpanel-1" aria-selected="false" tabindex="-1">发现项</button><button class="demo-tab" role="tab" id="dtab-2" aria-controls="dpanel-2" aria-selected="false" tabindex="-1">设置</button></div>
+              <div class="demo-panel" role="tabpanel" id="dpanel-0" aria-labelledby="dtab-0">变更 3 个文件 · +44 −7 行 · 1 个阻断、1 个重要、2 个次要。</div><div class="demo-panel" role="tabpanel" id="dpanel-1" aria-labelledby="dtab-1" hidden>阻断 · src/middleware/rateLimit.ts:8 —— 代理之后所有客户端共用一个桶。</div><div class="demo-panel" role="tabpanel" id="dpanel-2" aria-labelledby="dtab-2" hidden>Tabs 使用 role="tablist"、roving tabindex 与 ←/→ 方向键；打印时所有面板自动展开。</div>
+            </div>
+            <form id="demoForm" onsubmit="return false;">
+              <div class="field-row">
+                <div class="field"><label class="field-label" for="dOwner">负责人</label><input class="control" id="dOwner" name="owner" value="@lin.zhao"></div>
+                <div class="field"><label class="field-label" for="dPrio">优先级</label><select class="control" id="dPrio" name="priority"><option>P0 · 立即处理</option><option selected>P1 · 本迭代</option><option>P2 · 排期</option></select></div>
+              </div>
+              <div class="field"><label class="field-label" for="dRelease">目标版本</label><input class="control" id="dRelease" name="release" value="v2.3" aria-invalid="true" aria-describedby="dReleaseErr"><span class="field-error" id="dReleaseErr">v2.3 已冻结，请选择 v2.4 或更晚</span></div>
+              <div class="field"><span class="field-label" id="dVerdictLabel">审查结论</span><div class="seg" role="radiogroup" aria-labelledby="dVerdictLabel"><label><input type="radio" name="dverdict" value="approve">通过</label><label><input type="radio" name="dverdict" value="comment" checked>评论</label><label><input type="radio" name="dverdict" value="changes">要求修改</label></div></div>
+              <label class="check"><input type="checkbox" name="tests" checked>已在本地跑过全部测试</label>
+              <label class="check"><input type="checkbox" class="switch" role="switch" name="notify">合并后通知值班群</label>
+              <button class="btn btn-primary btn-sm" type="button" id="demoFormCopy" style="margin-top: 6px;">复制结果给 Agent</button>
+            </form>
+          </div>
+        </div>
       </div>
 
-      <!-- Curated SVG Icon Grid (24 Icons) -->
+      <!-- Curated SVG Icon Grid (32 Icons) -->
       <div class="arsenal-box">
         <div class="arsenal-title">
-          <span>24 个常用矢量图标</span>
+          <span>32 个常用矢量图标</span>
           <span style="font-size: 12px; color: var(--muted-fg);">点击任意图标直接复制 SVG 代码</span>
         </div>
         <div class="arsenal-desc">颜色随文字颜色自动变化，自动支持深浅色模式，零字体依赖。</div>
@@ -1602,6 +1683,38 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
             <span>设置 (Settings)</span>
           </div>
+          <div class="icon-tile" data-name="新增 (Plus)" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+            <span>新增 (Plus)</span>
+          </div>
+          <div class="icon-tile" data-name="删减 (Minus)" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/></svg>
+            <span>删减 (Minus)</span>
+          </div>
+          <div class="icon-tile" data-name="文件 (File)" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span>文件 (File)</span>
+          </div>
+          <div class="icon-tile" data-name="目录 (Folder)" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>
+            <span>目录 (Folder)</span>
+          </div>
+          <div class="icon-tile" data-name="查看 (Eye)" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+            <span>查看 (Eye)</span>
+          </div>
+          <div class="icon-tile" data-name="评论 (Comment)" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <span>评论 (Comment)</span>
+          </div>
+          <div class="icon-tile" data-name="标记 (Flag)" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+            <span>标记 (Flag)</span>
+          </div>
+          <div class="icon-tile" data-name="时间 (Clock)" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span>时间 (Clock)</span>
+          </div>
         </div>
       </div>
     </section>
@@ -1611,7 +1724,7 @@
     <section id="archetypes">
       <div class="section-header">
         <div class="section-tag">场景模板</div>
-        <h2 class="section-title">6 套常用场景模板</h2>
+        <h2 class="section-title">7 套常用场景模板</h2>
         <p class="section-desc">直接套用现成页面结构，干净省心，不用从头设计。</p>
       </div>
 
@@ -1641,6 +1754,10 @@
           <button class="archetype-tab-btn" data-archetype="kanban" role="tab" aria-selected="false" aria-controls="pane-kanban" tabindex="-1">
             <span class="tab-num">母版 06</span>
             <span class="tab-name">Kanban 看板</span>
+          </button>
+          <button class="archetype-tab-btn" data-archetype="review" role="tab" aria-selected="false" aria-controls="pane-review" tabindex="-1">
+            <span class="tab-num">母版 07</span>
+            <span class="tab-name">Review 代码审查</span>
           </button>
         </div>
 
@@ -1793,6 +1910,31 @@
             <img src="assets/screenshots/zh/kanban.png" loading="lazy" decoding="async" alt="中文看板母版预览">
           </div>
         </div>
+
+        <!-- Archetype 7: Review -->
+        <div class="archetype-content" id="pane-review" role="tabpanel">
+          <div class="archetype-info-row">
+            <div class="archetype-info-left">
+              <h3>Review 代码审查</h3>
+              <p>原样粘贴 <code>git diff</code> 即可渲染为带行号的统一 diff。发现项按行锚定，带严重度与建议修改；每个文件单独给出裁决，一键把完整审查结论复制回 Agent。</p>
+            </div>
+            <div class="archetype-actions">
+              <a href="templates/zh/review.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+                <span>在线预览全屏</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('zh/review')">复制源码</button>
+            </div>
+          </div>
+          <div class="archetype-preview-frame">
+            <div class="window-bar">
+              <div class="window-dots"><i></i><i></i><i></i></div>
+              <div class="window-url">templates/zh/review.html</div>
+              <div class="window-spacer"></div>
+            </div>
+            <img src="assets/screenshots/zh/review.png" loading="lazy" decoding="async" alt="中文代码审查母版预览">
+          </div>
+        </div>
       </div>
     </section>
 
@@ -1914,6 +2056,22 @@
             <button class="btn btn-outline btn-sm" onclick="copyText(this, '把 Agent 的这次运行日志做成左右双栏的工作台页面，左边是日志会话列表与搜索，右边查看工具调用的具体数据与审查结论。')">复制指令</button>
           </div>
         </div>
+
+        <div class="prompt-card">
+          <div class="prompt-text">“帮我审一下这个 PR 的 diff，做成可视化审查页：每个文件给一个结论，问题标到具体行上，最后能把意见复制回来给你改。”</div>
+          <div class="prompt-footer">
+            <span>推荐模板：Review 代码审查</span>
+            <button class="btn btn-outline btn-sm" onclick="copyText(this, '帮我审一下这个 PR 的 diff，做成可视化审查页：每个文件给一个结论，问题标到具体行上，最后能把意见复制回来给你改。')">复制指令</button>
+          </div>
+        </div>
+
+        <div class="prompt-card">
+          <div class="prompt-text">“做一个发布前检查清单页面：备份、灰度开关、回滚演练、告警、变更单。我逐项勾选、填负责人和备注后，能把结果复制回来给你继续发布。”</div>
+          <div class="prompt-footer">
+            <span>推荐组件：表单控件</span>
+            <button class="btn btn-outline btn-sm" onclick="copyText(this, '做一个发布前检查清单页面：备份、灰度开关、回滚演练、告警、变更单。我逐项勾选、填负责人和备注后，能把结果复制回来给你继续发布。')">复制指令</button>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -1946,6 +2104,7 @@ npx agent-html check dashboard.html</code></pre>
         <a href="templates/zh/compare.html" target="_blank">Compare 对比</a>
         <a href="templates/zh/timeline.html" target="_blank">Timeline 时间线</a>
         <a href="templates/zh/kanban.html" target="_blank">Kanban 看板</a>
+        <a href="templates/zh/review.html" target="_blank">Review 代码审查</a>
         <a href="https://linux.do" target="_blank">LINUX DO</a>
         <a href="https://github.com/QingYunA/agent-html" target="_blank">GitHub</a>
       </div>
@@ -1969,6 +2128,7 @@ npx agent-html check dashboard.html</code></pre>
     <span id="toastMsg">已复制到剪贴板！</span>
   </div>
 
+  <div id="chartTip" role="tooltip"></div>
   <button id="toTop" type="button" aria-label="回到顶部" title="回到顶部">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
   </button>
@@ -2151,6 +2311,65 @@ npx agent-html check dashboard.html</code></pre>
       next.click();
       next.scrollIntoView({ block: 'nearest', inline: 'nearest' });
     });
+
+    // ---------- New components demo: heatmap, shared tooltip, tabs, form copy-back ----------
+    (function () {
+      const svg = document.getElementById('heatDemo');
+      if (svg) {
+        const days = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
+        const shade = (v) => v >= 16 ? 'var(--chart-indigo)'
+          : v >= 12 ? 'color-mix(in srgb, var(--chart-indigo) 75%, var(--secondary))'
+          : v >= 8 ? 'color-mix(in srgb, var(--chart-indigo) 50%, var(--secondary))'
+          : v >= 4 ? 'color-mix(in srgb, var(--chart-indigo) 25%, var(--secondary))' : 'var(--secondary)';
+        let html = '';
+        days.forEach((day, d) => {
+          html += `<text x="26" y="${d * 13 + 10}" text-anchor="end" font-size="9" fill="var(--muted-fg)">${day}</text>`;
+          for (let h = 0; h < 24; h++) {
+            // Deterministic demo data (no Math.random): two weekday peaks, a quiet weekend
+            const peaks = d < 5 ? 14 * Math.exp(-((h - 10.5) ** 2) / 3) + 11 * Math.exp(-((h - 15.5) ** 2) / 3) : 3 * Math.exp(-((h - 14) ** 2) / 8);
+            const v = Math.round(peaks + (d < 5 ? 1 : 0) + ((d * 7 + h * 3) % 3));
+            html += `<rect x="${32 + h * 15.5}" y="${d * 13}" width="13" height="11" rx="2" style="fill: ${shade(v)}" data-tip="${day} ${h}:00 · ${v} 次构建"/>`;
+          }
+        });
+        [0, 6, 12, 18, 23].forEach((h) => { html += `<text x="${38 + h * 15.5}" y="102" text-anchor="middle" font-size="9" fill="var(--muted-fg)">${h}时</text>`; });
+        svg.innerHTML = html;
+      }
+
+      const tip = document.getElementById('chartTip');
+      document.addEventListener('pointermove', (e) => {
+        const el = e.target.closest?.('[data-tip]');
+        if (!el) { tip.style.opacity = 0; return; }
+        tip.textContent = el.getAttribute('data-tip');
+        tip.style.left = Math.min(e.clientX + 12, window.innerWidth - tip.offsetWidth - 8) + 'px';
+        tip.style.top = (e.clientY - tip.offsetHeight - 10) + 'px';
+        tip.style.opacity = 1;
+      });
+
+      const dtabs = [...document.querySelectorAll('.demo-tab')];
+      const selectTab = (tab) => dtabs.forEach((x) => {
+        const on = x === tab;
+        x.setAttribute('aria-selected', on);
+        x.tabIndex = on ? 0 : -1;
+        document.getElementById(x.getAttribute('aria-controls')).hidden = !on;
+      });
+      dtabs.forEach((x) => {
+        x.addEventListener('click', () => selectTab(x));
+        x.addEventListener('keydown', (e) => {
+          const step = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
+          if (!step) return;
+          const next = dtabs[(dtabs.indexOf(x) + step + dtabs.length) % dtabs.length];
+          selectTab(next); next.focus();
+        });
+      });
+
+      document.getElementById('demoFormCopy')?.addEventListener('click', () => {
+        const data = new FormData(document.getElementById('demoForm'));
+        const lines = ['### 审查表单'];
+        for (const key of ['owner', 'release', 'priority', 'verdict']) lines.push(`- ${key}: ${data.get(key === 'verdict' ? 'dverdict' : key)}`);
+        lines.push(`- tests: ${data.has('tests')}`, `- notify: ${data.has('notify')}`);
+        navigator.clipboard.writeText(lines.join('\n')).then(() => showToast('表单结果已复制到剪贴板！'));
+      });
+    })();
   </script>
 </body>
 </html>

@@ -1104,6 +1104,39 @@
       .js .reveal { opacity: 1; transform: none; }
     }
     .contrast-grid { margin-bottom: 0; }
+    /* ---------- New components: tabs, form controls, chart tooltip ---------- */
+    .demo-split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; margin-top: 14px; }
+    .demo-tabs { display: inline-flex; gap: 4px; padding: 4px; background: var(--secondary); border: 1px solid var(--border); border-radius: var(--radius); }
+    .demo-tab { height: 30px; padding: 0 12px; border: none; border-radius: var(--radius-sm); background: transparent; color: var(--muted-fg); font-size: 13px; font-weight: 500; cursor: pointer; }
+    .demo-tab[aria-selected="true"] { background: var(--card); color: var(--card-fg); box-shadow: var(--shadow-sm); }
+    .demo-panel { margin-top: 10px; padding: 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--secondary); font-size: 13px; line-height: 1.55; min-height: 64px; }
+    .demo-panel[hidden] { display: none; }
+    .field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 11px; font-size: 12px; }
+    .field-label { font-weight: 600; }
+    .field-error { color: var(--err); }
+    .control { height: 32px; padding: 0 10px; font: inherit; font-size: 13px; border-radius: var(--radius-sm); border: 1px solid var(--input); background: var(--card); color: var(--card-fg); width: 100%; }
+    .control:focus { outline: none; border-color: var(--ring); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 14%, transparent); }
+    .control[aria-invalid="true"] { border-color: var(--err); }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .check { display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; margin-bottom: 6px; }
+    .check input { width: 16px; height: 16px; accent-color: var(--primary); }
+    .check .switch { appearance: none; -webkit-appearance: none; width: 34px; height: 20px; border-radius: 9999px; background: var(--border); position: relative; cursor: pointer; transition: background 0.15s; flex-shrink: 0; }
+    .check .switch::after { content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 9999px; background: var(--card); box-shadow: var(--shadow-sm); transition: transform 0.15s; }
+    .check .switch:checked { background: var(--primary); }
+    .check .switch:checked::after { transform: translateX(14px); }
+    .seg { display: inline-flex; align-self: flex-start; border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; background: var(--card); }
+    .seg label { position: relative; font-size: 12px; font-weight: 500; padding: 5px 11px; cursor: pointer; color: var(--muted-fg); border-left: 1px solid var(--border); }
+    .seg label:first-child { border-left: none; }
+    .seg input { position: absolute; opacity: 0; pointer-events: none; }
+    .seg label:has(input:focus-visible) { outline: 2px solid var(--ring); outline-offset: -2px; }
+    .seg label:has(input[value="approve"]:checked) { background: var(--ok-bg); color: var(--ok); }
+    .seg label:has(input[value="comment"]:checked) { background: var(--info-bg); color: var(--info); }
+    .seg label:has(input[value="changes"]:checked) { background: var(--err-bg); color: var(--err); }
+    #chartTip { position: fixed; z-index: 70; pointer-events: none; opacity: 0; transition: opacity 0.12s ease; background: var(--popover); color: var(--popover-fg); border: 1px solid var(--border); border-radius: var(--radius-sm); box-shadow: var(--shadow-md); padding: 6px 9px; font-size: 12px; white-space: nowrap; }
+    [data-tip] { cursor: default; }
+    @media (max-width: 900px) { .demo-split { grid-template-columns: minmax(0, 1fr); } }
+    .chart-wide { grid-column: span 2; }
+    @media (max-width: 760px) { .chart-wide { grid-column: auto; } }
   </style>
 </head>
 <body>
@@ -1162,7 +1195,7 @@
           </button>
         </div>
 
-        <a href="#archetypes" class="btn btn-primary btn-lg">Explore 6 Templates</a>
+        <a href="#archetypes" class="btn btn-primary btn-lg">Explore 7 Templates</a>
         <a href="#components" class="btn btn-outline btn-lg">Browse Components</a>
       </div>
 
@@ -1194,8 +1227,8 @@
       </div>
       <div class="metric-item">
         <div class="metric-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg></div>
-        <div class="metric-val">6 Templates</div>
-        <div class="metric-label">Common layouts: reports, dashboards, timelines, and kanban</div>
+        <div class="metric-val">7 Templates</div>
+        <div class="metric-label">Reports, dashboards, timelines, kanban, and code review</div>
       </div>
       <div class="metric-item">
         <div class="metric-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.8L20 10l-5 3.6L16.8 20 12 16.4 7.2 20 9 13.6 4 10l6.1-1.2Z"/></svg></div>
@@ -1296,10 +1329,10 @@
           </div>
         </div>
 
-        <!-- 2. Pure SVG Charts (6 Core Formats) -->
+        <!-- 2. Pure SVG Charts (8 Formats) -->
         <div class="arsenal-box span-2">
           <div class="arsenal-title">
-            <span>Zero-CDN Pure SVG Charts (6 Core Formats)</span>
+            <span>Zero-CDN Pure SVG Charts (8 Formats)</span>
             <span class="badge badge-info">Zero Libraries · Calibrated Palette</span>
           </div>
           <div class="arsenal-desc">Lightweight vector data curves rendered with native SVG. 100% offline, zero JS libraries, Retina sharp, automatic dark mode adaptation.</div>
@@ -1444,6 +1477,28 @@
                 </svg>
               </div>
             </div>
+            <!-- Chart 7: Stacked Column -->
+            <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
+              <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-bottom: 8px;">
+                <span style="font-weight: 600;">Timeouts: the only growing error class</span>
+                <span class="badge badge-danger" style="font-size: 10px; height: 18px;">57% of W39</span>
+              </div>
+              <svg viewBox="0 0 400 95" style="width: 100%; height: 85px; overflow: visible;">
+                <line x1="20" y1="82" x2="400" y2="82" stroke="var(--border)"/>
+                <rect x="30" y="74.4" width="44" height="7.6" fill="var(--chart-slate)" data-tip="W35 · Auth 8"/><rect x="30" y="55.4" width="44" height="19.0" fill="var(--chart-indigo)" data-tip="W35 · Upstream 5xx 20"/><rect x="30" y="44.0" width="44" height="11.4" fill="var(--chart-rose)" data-tip="W35 · Timeout 12"/><text x="52" y="40.0" text-anchor="middle" font-size="12" font-weight="600" fill="var(--card-fg)">40</text><text x="52" y="94" text-anchor="middle" font-size="11" fill="var(--muted-fg)">W35</text><rect x="106" y="75.35" width="44" height="6.65" fill="var(--chart-slate)" data-tip="W36 · Auth 7"/><rect x="106" y="57.3" width="44" height="18.05" fill="var(--chart-indigo)" data-tip="W36 · Upstream 5xx 19"/><rect x="106" y="40.2" width="44" height="17.1" fill="var(--chart-rose)" data-tip="W36 · Timeout 18"/><text x="128" y="36.2" text-anchor="middle" font-size="12" font-weight="600" fill="var(--card-fg)">44</text><text x="128" y="94" text-anchor="middle" font-size="11" fill="var(--muted-fg)">W36</text><rect x="182" y="73.45" width="44" height="8.55" fill="var(--chart-slate)" data-tip="W37 · Auth 9"/><rect x="182" y="53.5" width="44" height="19.95" fill="var(--chart-indigo)" data-tip="W37 · Upstream 5xx 21"/><rect x="182" y="32.6" width="44" height="20.9" fill="var(--chart-rose)" data-tip="W37 · Timeout 22"/><text x="204" y="28.6" text-anchor="middle" font-size="12" font-weight="600" fill="var(--card-fg)">52</text><text x="204" y="94" text-anchor="middle" font-size="11" fill="var(--muted-fg)">W37</text><rect x="258" y="74.4" width="44" height="7.6" fill="var(--chart-slate)" data-tip="W38 · Auth 8"/><rect x="258" y="57.3" width="44" height="17.1" fill="var(--chart-indigo)" data-tip="W38 · Upstream 5xx 18"/><rect x="258" y="28.8" width="44" height="28.5" fill="var(--chart-rose)" data-tip="W38 · Timeout 30"/><text x="280" y="24.8" text-anchor="middle" font-size="12" font-weight="600" fill="var(--card-fg)">56</text><text x="280" y="94" text-anchor="middle" font-size="11" fill="var(--muted-fg)">W38</text><rect x="334" y="73.45" width="44" height="8.55" fill="var(--chart-slate)" data-tip="W39 · Auth 9"/><rect x="334" y="52.55" width="44" height="20.9" fill="var(--chart-indigo)" data-tip="W39 · Upstream 5xx 22"/><rect x="334" y="13.6" width="44" height="38.95" fill="var(--chart-rose)" data-tip="W39 · Timeout 41"/><text x="356" y="9.6" text-anchor="middle" font-size="12" font-weight="600" fill="var(--card-fg)">72</text><text x="356" y="94" text-anchor="middle" font-size="11" fill="var(--muted-fg)">W39</text>
+              </svg>
+              <div style="display: flex; gap: 10px; font-size: 10px; margin-top: 6px;"><span style="color: var(--chart-rose);">■ Timeout</span><span style="color: var(--chart-indigo);">■ Upstream 5xx</span><span style="color: var(--chart-slate);">■ Auth</span></div>
+            </div>
+
+            <!-- Chart 8: 7x24 Heatmap (rendered by script, hover for values) -->
+            <div class="chart-wide" style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
+              <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-bottom: 8px;">
+                <span style="font-weight: 600;">Builds peak weekdays 10–12</span>
+                <span class="badge" style="font-size: 10px; height: 18px;">hover a cell</span>
+              </div>
+              <svg id="heatDemo" viewBox="0 0 410 104" style="width: 100%; height: auto;" role="img" aria-label="Builds peak weekdays 10–12"></svg>
+            </div>
+
           </div>
         </div>
 
@@ -1500,12 +1555,38 @@
             <div id="demoEmptyState" style="display: none; padding: 28px 16px; text-align: center; font-size: 13px; color: var(--muted-fg);">No matching records</div>
           </div>
         </div>
+
+        <!-- 5. Tabs & Form Controls -->
+        <div class="arsenal-box span-2">
+          <div class="arsenal-title">
+            <span>Tabs & Form Controls</span>
+            <span class="badge badge-success"><span class="badge-dot"></span>New · Copy back to agent</span>
+          </div>
+          <div class="arsenal-desc">Accessible tabs (arrow keys) and native, labelled form controls. Whatever a reviewer fills in can be copied straight back to the agent.</div>
+          <div class="demo-split">
+            <div>
+              <div class="demo-tabs" role="tablist" aria-label="Tabs & Form Controls"><button class="demo-tab" role="tab" id="dtab-0" aria-controls="dpanel-0" aria-selected="true">Overview</button><button class="demo-tab" role="tab" id="dtab-1" aria-controls="dpanel-1" aria-selected="false" tabindex="-1">Findings</button><button class="demo-tab" role="tab" id="dtab-2" aria-controls="dpanel-2" aria-selected="false" tabindex="-1">Settings</button></div>
+              <div class="demo-panel" role="tabpanel" id="dpanel-0" aria-labelledby="dtab-0">3 files changed · +44 −7 lines · 1 blocker, 1 major, 2 minor.</div><div class="demo-panel" role="tabpanel" id="dpanel-1" aria-labelledby="dtab-1" hidden>Blocker · src/middleware/rateLimit.ts:8 — every client shares one bucket behind the proxy.</div><div class="demo-panel" role="tabpanel" id="dpanel-2" aria-labelledby="dtab-2" hidden>Tabs use role="tablist", roving tabindex and ←/→ keys. Print styles expand every panel.</div>
+            </div>
+            <form id="demoForm" onsubmit="return false;">
+              <div class="field-row">
+                <div class="field"><label class="field-label" for="dOwner">Owner</label><input class="control" id="dOwner" name="owner" value="@lin.zhao"></div>
+                <div class="field"><label class="field-label" for="dPrio">Priority</label><select class="control" id="dPrio" name="priority"><option>P0 · Now</option><option selected>P1 · This sprint</option><option>P2 · Backlog</option></select></div>
+              </div>
+              <div class="field"><label class="field-label" for="dRelease">Target release</label><input class="control" id="dRelease" name="release" value="v2.3" aria-invalid="true" aria-describedby="dReleaseErr"><span class="field-error" id="dReleaseErr">v2.3 is frozen, pick v2.4 or later</span></div>
+              <div class="field"><span class="field-label" id="dVerdictLabel">Verdict</span><div class="seg" role="radiogroup" aria-labelledby="dVerdictLabel"><label><input type="radio" name="dverdict" value="approve">Approve</label><label><input type="radio" name="dverdict" value="comment" checked>Comment</label><label><input type="radio" name="dverdict" value="changes">Request changes</label></div></div>
+              <label class="check"><input type="checkbox" name="tests" checked>All tests pass locally</label>
+              <label class="check"><input type="checkbox" class="switch" role="switch" name="notify">Notify on-call after merge</label>
+              <button class="btn btn-primary btn-sm" type="button" id="demoFormCopy" style="margin-top: 6px;">Copy result to agent</button>
+            </form>
+          </div>
+        </div>
       </div>
 
-      <!-- Curated SVG Icon Grid (24 Icons) -->
+      <!-- Curated SVG Icon Grid (32 Icons) -->
       <div class="arsenal-box">
         <div class="arsenal-title">
-          <span>24 Curated Engineering & DevOps Vector Icons</span>
+          <span>32 Curated Engineering & DevOps Vector Icons</span>
           <span style="font-size: 12px; color: var(--muted-fg);">Click any icon to copy its SVG code</span>
         </div>
         <div class="arsenal-desc">Vector icons designed with <code>stroke="currentColor"</code> that automatically inherit font color. Zero web fonts, 100% offline.</div>
@@ -1607,6 +1688,38 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
             <span>Settings</span>
           </div>
+          <div class="icon-tile" data-name="Plus" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+            <span>Plus</span>
+          </div>
+          <div class="icon-tile" data-name="Minus" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/></svg>
+            <span>Minus</span>
+          </div>
+          <div class="icon-tile" data-name="File" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span>File</span>
+          </div>
+          <div class="icon-tile" data-name="Folder" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>
+            <span>Folder</span>
+          </div>
+          <div class="icon-tile" data-name="Eye" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+            <span>Eye</span>
+          </div>
+          <div class="icon-tile" data-name="Comment" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <span>Comment</span>
+          </div>
+          <div class="icon-tile" data-name="Flag" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+            <span>Flag</span>
+          </div>
+          <div class="icon-tile" data-name="Clock" onclick="copySvgCode(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span>Clock</span>
+          </div>
         </div>
       </div>
     </section>
@@ -1616,7 +1729,7 @@
     <section id="archetypes">
       <div class="section-header">
         <div class="section-tag">Layout Templates</div>
-        <h2 class="section-title">6 Common Layout Templates</h2>
+        <h2 class="section-title">7 Common Layout Templates</h2>
         <p class="section-desc">Pick a layout that fits your output instead of letting models invent messy ad-hoc structures.</p>
       </div>
 
@@ -1646,6 +1759,10 @@
           <button class="archetype-tab-btn" data-archetype="kanban" role="tab" aria-selected="false" aria-controls="pane-kanban" tabindex="-1">
             <span class="tab-num">Archetype 06</span>
             <span class="tab-name">Kanban</span>
+          </button>
+          <button class="archetype-tab-btn" data-archetype="review" role="tab" aria-selected="false" aria-controls="pane-review" tabindex="-1">
+            <span class="tab-num">Archetype 07</span>
+            <span class="tab-name">Review</span>
           </button>
         </div>
 
@@ -1798,6 +1915,31 @@
             <img src="assets/screenshots/en/kanban.png" loading="lazy" decoding="async" alt="Kanban Archetype Preview">
           </div>
         </div>
+
+        <!-- Archetype 7: Review -->
+        <div class="archetype-content" id="pane-review" role="tabpanel">
+          <div class="archetype-info-row">
+            <div class="archetype-info-left">
+              <h3>Diff-Based Code Review & Per-File Verdicts</h3>
+              <p>Paste raw <code>git diff</code> output and it renders as a line-numbered unified diff. Findings are pinned to exact lines with severity and suggested changes, each file gets a verdict, and one click copies the whole review back to the agent.</p>
+            </div>
+            <div class="archetype-actions">
+              <a href="templates/en/review.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+                <span>Open Live Demo</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+              <button class="btn btn-outline btn-sm" onclick="copyTemplateSource('en/review')">Copy HTML</button>
+            </div>
+          </div>
+          <div class="archetype-preview-frame">
+            <div class="window-bar">
+              <div class="window-dots"><i></i><i></i><i></i></div>
+              <div class="window-url">templates/en/review.html</div>
+              <div class="window-spacer"></div>
+            </div>
+            <img src="assets/screenshots/en/review.png" loading="lazy" decoding="async" alt="Review Archetype Preview">
+          </div>
+        </div>
       </div>
     </section>
 
@@ -1919,6 +2061,22 @@
             <button class="btn btn-outline btn-sm" onclick="copyText(this, 'Create a master-detail trace log viewer for this JSONL debugging session. Left sidebar filters cases, right detail pane displays formatted payloads with a copy button.')">Copy</button>
           </div>
         </div>
+
+        <div class="prompt-card">
+          <div class="prompt-text">"Review this PR diff and turn it into a visual review page. I want a verdict per file and line-level findings I can copy back to you to fix."</div>
+          <div class="prompt-footer">
+            <span>Triggers: Archetype 07 (Review)</span>
+            <button class="btn btn-outline btn-sm" onclick="copyText(this, 'Review this PR diff and turn it into a visual review page. I want a verdict per file and line-level findings I can copy back to you to fix.')">Copy</button>
+          </div>
+        </div>
+
+        <div class="prompt-card">
+          <div class="prompt-text">"Make me a pre-release checklist page: backups, feature flags, rollback drill, alerts, change ticket. Let me tick items, add an owner and notes, then copy the result back to you."</div>
+          <div class="prompt-footer">
+            <span>Triggers: Form Controls</span>
+            <button class="btn btn-outline btn-sm" onclick="copyText(this, 'Make me a pre-release checklist page: backups, feature flags, rollback drill, alerts, change ticket. Let me tick items, add an owner and notes, then copy the result back to you.')">Copy</button>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -1951,6 +2109,7 @@ npx agent-html check dashboard.html</code></pre>
         <a href="templates/en/compare.html" target="_blank">Compare</a>
         <a href="templates/en/timeline.html" target="_blank">Timeline</a>
         <a href="templates/en/kanban.html" target="_blank">Kanban</a>
+        <a href="templates/en/review.html" target="_blank">Review</a>
         <a href="https://linux.do" target="_blank">LINUX DO</a>
         <a href="https://github.com/QingYunA/agent-html" target="_blank">GitHub</a>
       </div>
@@ -1974,6 +2133,7 @@ npx agent-html check dashboard.html</code></pre>
     <span id="toastMsg">Copied to clipboard!</span>
   </div>
 
+  <div id="chartTip" role="tooltip"></div>
   <button id="toTop" type="button" aria-label="Back to top" title="Back to top">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
   </button>
@@ -2156,6 +2316,65 @@ npx agent-html check dashboard.html</code></pre>
       next.click();
       next.scrollIntoView({ block: 'nearest', inline: 'nearest' });
     });
+
+    // ---------- New components demo: heatmap, shared tooltip, tabs, form copy-back ----------
+    (function () {
+      const svg = document.getElementById('heatDemo');
+      if (svg) {
+        const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        const shade = (v) => v >= 16 ? 'var(--chart-indigo)'
+          : v >= 12 ? 'color-mix(in srgb, var(--chart-indigo) 75%, var(--secondary))'
+          : v >= 8 ? 'color-mix(in srgb, var(--chart-indigo) 50%, var(--secondary))'
+          : v >= 4 ? 'color-mix(in srgb, var(--chart-indigo) 25%, var(--secondary))' : 'var(--secondary)';
+        let html = '';
+        days.forEach((day, d) => {
+          html += `<text x="26" y="${d * 13 + 10}" text-anchor="end" font-size="9" fill="var(--muted-fg)">${day}</text>`;
+          for (let h = 0; h < 24; h++) {
+            // Deterministic demo data (no Math.random): two weekday peaks, a quiet weekend
+            const peaks = d < 5 ? 14 * Math.exp(-((h - 10.5) ** 2) / 3) + 11 * Math.exp(-((h - 15.5) ** 2) / 3) : 3 * Math.exp(-((h - 14) ** 2) / 8);
+            const v = Math.round(peaks + (d < 5 ? 1 : 0) + ((d * 7 + h * 3) % 3));
+            html += `<rect x="${32 + h * 15.5}" y="${d * 13}" width="13" height="11" rx="2" style="fill: ${shade(v)}" data-tip="${day} ${h}:00 · ${v} builds"/>`;
+          }
+        });
+        [0, 6, 12, 18, 23].forEach((h) => { html += `<text x="${38 + h * 15.5}" y="102" text-anchor="middle" font-size="9" fill="var(--muted-fg)">${h}h</text>`; });
+        svg.innerHTML = html;
+      }
+
+      const tip = document.getElementById('chartTip');
+      document.addEventListener('pointermove', (e) => {
+        const el = e.target.closest?.('[data-tip]');
+        if (!el) { tip.style.opacity = 0; return; }
+        tip.textContent = el.getAttribute('data-tip');
+        tip.style.left = Math.min(e.clientX + 12, window.innerWidth - tip.offsetWidth - 8) + 'px';
+        tip.style.top = (e.clientY - tip.offsetHeight - 10) + 'px';
+        tip.style.opacity = 1;
+      });
+
+      const dtabs = [...document.querySelectorAll('.demo-tab')];
+      const selectTab = (tab) => dtabs.forEach((x) => {
+        const on = x === tab;
+        x.setAttribute('aria-selected', on);
+        x.tabIndex = on ? 0 : -1;
+        document.getElementById(x.getAttribute('aria-controls')).hidden = !on;
+      });
+      dtabs.forEach((x) => {
+        x.addEventListener('click', () => selectTab(x));
+        x.addEventListener('keydown', (e) => {
+          const step = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
+          if (!step) return;
+          const next = dtabs[(dtabs.indexOf(x) + step + dtabs.length) % dtabs.length];
+          selectTab(next); next.focus();
+        });
+      });
+
+      document.getElementById('demoFormCopy')?.addEventListener('click', () => {
+        const data = new FormData(document.getElementById('demoForm'));
+        const lines = ['### Review form'];
+        for (const key of ['owner', 'release', 'priority', 'verdict']) lines.push(`- ${key}: ${data.get(key === 'verdict' ? 'dverdict' : key)}`);
+        lines.push(`- tests: ${data.has('tests')}`, `- notify: ${data.has('notify')}`);
+        navigator.clipboard.writeText(lines.join('\n')).then(() => showToast('Form result copied to clipboard!'));
+      });
+    })();
   </script>
 </body>
 </html>
