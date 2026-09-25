@@ -2,8 +2,8 @@
 /**
  * scripts/generate-promo-video.mjs
  *
- * Renders the 30-second promo video (English and Chinese) from scripts/promo/promo.html.
- * The storyboard is a pure function of time, so this steps t at 30 fps,
+ * Renders the 26-second promo video (English and Chinese) from scripts/promo/promo.html.
+ * The storyboard is a pure function of time, so this steps t at 30 fps over window.LENGTH seconds,
  * screenshots every frame with headless Chromium, synthesises the soundtrack from
  * the storyboard's sound cues (scripts/promo/soundtrack.py) and muxes both with ffmpeg.
  *
@@ -37,8 +37,7 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const FFMPEG = process.env.FFMPEG_PATH || '/opt/homebrew/bin/ffmpeg';
 const PYTHON = process.env.PYTHON || 'python3';
 const FPS = 30;
-const DURATION = 30;
-const POSTER_T = 13.2; // mid-way through the template showcase
+const POSTER_T = 9.2; // video time, mid-way through the template showcase
 const OUT_DIR_DEFAULT = join(ROOT, 'assets', 'promo');
 const STORYBOARD = pathToFileURL(join(ROOT, 'scripts/promo/promo.html')).href;
 
@@ -72,11 +71,11 @@ try {
   // Every character the zh storyboard can render, for scripts/promo/build-zh-font.py
   if (argValue('--dump-zh-chars')) {
     const page = await openStoryboard('zh');
-    const text = await page.evaluate((duration) => {
+    const text = await page.evaluate(() => {
       let s = document.body.innerText;
-      for (let t = 0; t < duration; t += 0.1) { window.render(t); s += document.body.innerText; }
+      for (let t = 0; t < window.LENGTH; t += 0.1) { window.render(t); s += document.body.innerText; }
       return [...new Set(s)].join('');
-    }, DURATION);
+    });
     writeFileSync(argValue('--dump-zh-chars'), text, 'utf8');
     console.log(`✅ ${text.length} unique characters → ${argValue('--dump-zh-chars')}`);
     process.exit(0);
@@ -102,6 +101,7 @@ try {
       await window.setDarkShot(src);
       await Promise.all([...document.images].map((img) => img.complete ? null : new Promise((r) => { img.onload = img.onerror = r; })));
     }, pathToFileURL(darkPath).href);
+    const { LENGTH: DURATION, OPEN } = await page.evaluate(() => ({ LENGTH: window.LENGTH, OPEN: window.OPEN }));
     let sync = null;
     if (MUSIC) {
       const syncPath = join(work, 'beats.json');
@@ -110,7 +110,9 @@ try {
       const anchors = await page.evaluate((s) => window.applySync(s), sync);
       console.log('  cuts on the beat:', anchors.map(([r, n]) => `${n}→${r.toFixed(2)}s`).join('  '));
     }
-    const cues = await page.evaluate(() => window.CUES);
+    // With music the cues are in video time; the synthesised cue is arranged in story time
+    // (0-30s) and trimmed to the part the video shows.
+    const cues = await page.evaluate((music) => (music ? window.CUES : window.NOMINAL_CUES), Boolean(MUSIC));
     writeFileSync(join(work, 'cues.json'), JSON.stringify(cues));
 
     const total = FPS * DURATION;
@@ -137,8 +139,8 @@ try {
       audioFilter = '[1:a]volume=1.0[m];[2:a]volume=0.28[s];[m][s]amix=inputs=2:normalize=0,loudnorm=I=-16:TP=-1.5:LRA=11[a]';
     } else {
       execFileSync(PYTHON, [join(ROOT, 'scripts/promo/soundtrack.py'), join(work, 'cues.json'), wav], { stdio: 'inherit' });
-      audioInputs.push('-i', wav);
-      audioFilter = '[1:a]loudnorm=I=-16:TP=-1.5:LRA=11[a]';
+      audioInputs.push('-ss', String(OPEN), '-i', wav);
+      audioFilter = '[1:a]afade=t=in:d=0.03,loudnorm=I=-16:TP=-1.5:LRA=11[a]';
     }
 
     // 4. Encode picture + sound

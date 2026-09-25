@@ -6,8 +6,9 @@ royalty-free, deterministic and re-renders identically. Sound effects are
 placed from the storyboard's window.CUES (the generator dumps them to JSON),
 which keeps every hit locked to the picture.
 
-Arrangement (1 bar = 2s):
-  0-4s   problem   dark filtered pad + sub pulse                Am  F
+Arrangement in story time (1 bar = 2s). The video opens at 4s, so the
+generator trims the first bar pair off this render:
+  0-4s   (lead-in) dark filtered pad + sub pulse                Am  F
   4-8s   brand     pad opens up, plucked arpeggio, half-time kick,  C  G
                    keyboard clicks while the install command types
   8-20s  templates full groove: kick, clap, hats, pumping bass     Am F C G Am F
@@ -261,10 +262,6 @@ for k, t0 in enumerate(cues['pops']):           # feature cards
     x = tt(0.12)
     f = 700 * 1.12 ** k + 400 * np.exp(-x / 0.02)
     place(fx, np.sin(2 * np.pi * np.cumsum(f) / SR) * np.exp(-x / 0.035), t0, 0.12, (-0.5, -0.5, 0.5, 0.5)[k % 4])
-
-x = tt(0.3)                                      # the "blank page" stamp
-thud = np.sin(2 * np.pi * np.cumsum(90 + 60 * np.exp(-x / 0.02)) / SR) * np.exp(-x / 0.09)
-place(fx, thud + filt(rng.standard_normal(len(x)), 'lowpass', 1500) * np.exp(-x / 0.03) * 0.4, cues['stamp'], 0.4)
 
 # ---------------------------------------------------------------- space + master
 def reverb(x, seconds=1.8, mix=0.25):
