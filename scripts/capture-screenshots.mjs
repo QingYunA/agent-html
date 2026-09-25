@@ -3,6 +3,7 @@ import path from 'path';
 import fs from 'fs';
 
 const CHROME = process.env.CHROME_PATH || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+const CHROME_FLAGS = process.env.CHROME_FLAGS || ''; // e.g. --no-sandbox when running as root in a container
 const ROOT = path.resolve('.');
 
 // Exact dimensions matched to the repository's screenshot standards:
@@ -26,7 +27,7 @@ const TEMPLATES = [
 ];
 
 function capture(fileUrl, outPath, width, height) {
-  const cmd = `"${CHROME}" --headless --disable-gpu --window-size=${width},${height} --force-device-scale-factor=2 --hide-scrollbars --screenshot="${outPath}" "${fileUrl}"`;
+  const cmd = `"${CHROME}" ${CHROME_FLAGS} --headless --disable-gpu --window-size=${width},${height} --force-device-scale-factor=2 --hide-scrollbars --screenshot="${outPath}" "${fileUrl}"`;
   execSync(cmd, { stdio: 'pipe' });
 }
 
