@@ -7,10 +7,17 @@
 <!--
   Storyboard for the 30-second promo video. It is NOT a normal animated page:
   every visual is a pure function of time `t` (seconds), set by render(t).
-  scripts/generate-promo-video.mjs steps t at 30 fps, screenshots each frame
-  and encodes them with ffmpeg, so the output is deterministic.
-  Preview in a browser with ?t=12.5 to see a single moment.
+  Story time is authored on 4–34s: the video opens straight on the landing page
+  (OPEN = 4), so video time 0 is story time 4.
+  scripts/generate-promo-video.mjs steps t at 30 fps, screenshots each frame,
+  warps story time onto a music track's beat grid, lays UI sounds from
+  window.CUES over the music and muxes everything with ffmpeg.
+
+  Preview in a browser: promo.html?lang=zh&t=8.5   (t is video time)
+  Timing sits on a 120 BPM grid (1 beat = 0.5s, 1 bar = 2s): scenes follow 8-bar
+  musical phrases and every template change lands on a bar's "one".
 -->
+<link rel="stylesheet" href="fonts/noto-sans-sc-subset.css">
 <style>
   @font-face { font-family: "Inter"; font-weight: 400; src: url("fonts/inter-latin-400-normal.woff2") format("woff2"); }
   @font-face { font-family: "Inter"; font-weight: 500; src: url("fonts/inter-latin-500-normal.woff2") format("woff2"); }
@@ -23,14 +30,16 @@
   :root {
     --bg: #fafafa; --card: #ffffff; --fg: #09090b; --muted: #71717a; --border: #e4e4e7; --secondary: #f4f4f5;
     --indigo: #6366f1; --violet: #8b5cf6; --cyan: #06b6d4; --ok: #16a34a; --err: #ef4444; --amber: #f59e0b;
-    --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+    /* Latin glyphs come from Inter; CJK falls through to the vendored Noto Sans SC subset */
+    --sans: "Inter", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --mono: "JetBrains Mono", "Noto Sans SC", ui-monospace, SFMono-Regular, Menlo, monospace;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); }
   body { font-family: var(--sans); color: var(--fg); -webkit-font-smoothing: antialiased; }
   .stage { position: relative; width: 1920px; height: 1080px; overflow: hidden; }
   .scene { position: absolute; inset: 0; opacity: 0; will-change: opacity, transform; }
+  :lang(zh) .tlist { top: 330px; gap: 2px; }
 
   /* Light backdrop shared by scenes 2–5 */
   .backdrop { position: absolute; inset: 0; }
@@ -39,26 +48,13 @@
   .glow { position: absolute; left: 50%; top: -260px; width: 1600px; height: 900px; transform: translateX(-50%); filter: blur(30px);
     background: radial-gradient(closest-side at 30% 55%, rgba(99,102,241,.22), transparent), radial-gradient(closest-side at 70% 45%, rgba(139,92,246,.18), transparent), radial-gradient(closest-side at 50% 80%, rgba(6,182,212,.14), transparent); }
 
-  /* Scene 1 — the problem (dark) */
-  #s1 { background: #09090b; }
-  .caption { position: absolute; left: 0; right: 0; text-align: center; font-weight: 700; letter-spacing: -0.03em; }
-  #s1 .caption { top: 110px; font-size: 64px; color: #fafafa; }
-  #s1 .caption .dim { color: #71717a; }
-  .term { position: absolute; left: 360px; top: 250px; width: 1200px; height: 660px; border-radius: 18px; background: #121215; border: 1px solid #27272a; box-shadow: 0 40px 80px -30px rgba(0,0,0,.7); overflow: hidden; }
-  .term-bar { height: 46px; display: flex; align-items: center; gap: 9px; padding: 0 18px; border-bottom: 1px solid #27272a; }
   .dot { width: 13px; height: 13px; border-radius: 99px; }
-  .term-body { padding: 26px 32px; font-family: var(--mono); font-size: 22px; line-height: 1.6; color: #a1a1aa; white-space: pre; }
-  .term-body .prompt { color: #fafafa; }
-  .term-body .h { color: #fafafa; font-weight: 500; }
-  .term-body .bad { color: #f87171; }
-  .term-body .badbg { background: rgba(239,68,68,.14); color: #fca5a5; border-radius: 6px; padding: 2px 6px; }
-  .stamp { position: absolute; right: 60px; bottom: 50px; font-family: var(--sans); font-size: 28px; font-weight: 700; color: #f87171; border: 2px solid #f87171; border-radius: 12px; padding: 10px 18px; transform: rotate(-4deg); }
 
   /* Scene 2 — brand + install */
   .brand { position: absolute; left: 0; right: 0; top: 170px; display: flex; align-items: center; justify-content: center; gap: 22px; }
   .brand img { width: 84px; height: 84px; border-radius: 20px; box-shadow: 0 10px 30px -10px rgba(0,0,0,.35); }
   .brand span { font-size: 54px; font-weight: 800; letter-spacing: -0.04em; }
-  .headline { position: absolute; left: 0; right: 0; top: 330px; text-align: center; font-size: 104px; font-weight: 800; letter-spacing: -0.05em; line-height: 1.05; }
+  .headline { position: absolute; left: 0; right: 0; top: 330px; text-align: center; font-size: 104px; font-weight: 800; letter-spacing: -0.05em; line-height: 1.08; }
   .grad { background: linear-gradient(92deg, var(--indigo), var(--violet) 45%, var(--cyan)); -webkit-background-clip: text; background-clip: text; color: transparent; }
   .sub { position: absolute; left: 0; right: 0; text-align: center; font-size: 34px; color: var(--muted); font-weight: 500; }
   .pill { position: absolute; left: 50%; transform: translateX(-50%); display: inline-flex; align-items: center; gap: 16px; height: 88px; padding: 0 16px 0 34px; background: var(--card);
@@ -71,10 +67,10 @@
   .chip .ck { color: var(--ok); }
 
   /* Scene 3 — templates */
-  .s3-title { position: absolute; left: 110px; top: 90px; width: 540px; font-size: 64px; font-weight: 800; letter-spacing: -0.045em; line-height: 1.08; }
-  .s3-title small { display: block; font-size: 26px; line-height: 1.35; font-weight: 500; letter-spacing: -0.01em; color: var(--muted); margin-top: 14px; }
+  .s3-title { position: absolute; left: 110px; top: 90px; width: 540px; font-size: 64px; font-weight: 800; letter-spacing: -0.045em; line-height: 1.1; }
+  .s3-title small { display: block; font-size: 26px; line-height: 1.4; font-weight: 500; letter-spacing: -0.01em; color: var(--muted); margin-top: 14px; }
   .tlist { position: absolute; left: 110px; top: 360px; width: 520px; display: flex; flex-direction: column; gap: 6px; }
-  .titem { display: flex; align-items: center; gap: 18px; padding: 10px 20px; border-radius: 16px; border: 1px solid transparent; transition: none; }
+  .titem { display: flex; align-items: center; gap: 18px; padding: 10px 20px; border-radius: 16px; border: 1px solid transparent; }
   .titem .num { font-family: var(--mono); font-size: 20px; color: #a1a1aa; width: 34px; }
   .titem .nm { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; color: #a1a1aa; }
   .titem .ds { font-size: 18px; color: #a1a1aa; margin-top: 2px; }
@@ -99,15 +95,15 @@
   #win4 .wview { height: 588px; }
   .darklayer { position: absolute; inset: 0; }
   .wipe-line { position: absolute; top: 0; bottom: 0; width: 3px; background: linear-gradient(var(--indigo), var(--cyan)); box-shadow: 0 0 24px rgba(99,102,241,.8); }
-  .tag { position: absolute; font-size: 22px; font-weight: 700; padding: 10px 18px; border-radius: 12px; color: #fff; background: #18181b; }
+  .tag { position: absolute; font-size: 22px; font-weight: 700; padding: 10px 18px; border-radius: 12px; color: #fafafa; background: #18181b; }
   .feat { position: absolute; width: 380px; padding: 24px 26px; background: var(--card); border: 1px solid var(--border); border-radius: 20px; box-shadow: 0 24px 50px -24px rgba(0,0,0,.35); }
   .feat .fi { width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center; background: var(--secondary); border: 1px solid var(--border); margin-bottom: 14px; }
   .feat .fi svg { width: 26px; height: 26px; }
   .feat b { display: block; font-size: 28px; letter-spacing: -0.02em; }
-  .feat span { display: block; font-size: 20px; color: var(--muted); margin-top: 6px; line-height: 1.4; }
+  .feat span { display: block; font-size: 20px; color: var(--muted); margin-top: 6px; line-height: 1.45; }
 
   /* Scene 5 — CTA */
-  .cta-line { position: absolute; left: 0; right: 0; top: 330px; text-align: center; font-size: 96px; font-weight: 800; letter-spacing: -0.05em; line-height: 1.06; }
+  .cta-line { position: absolute; left: 0; right: 0; top: 330px; text-align: center; font-size: 96px; font-weight: 800; letter-spacing: -0.05em; line-height: 1.1; }
   .links { position: absolute; left: 0; right: 0; top: 850px; display: flex; justify-content: center; gap: 40px; font-size: 28px; font-weight: 600; color: var(--muted); }
   .links b { color: var(--fg); }
 </style>
@@ -115,37 +111,26 @@
 <body>
 <div class="stage">
 
-  <!-- ============ Scene 1 · The problem ============ -->
-  <section class="scene" id="s1">
-    <div class="caption" id="cap1a">Your agent just answered with <span class="dim">a wall of Markdown.</span></div>
-    <div class="caption" id="cap1b" style="opacity:0">Or HTML that <span style="color:#f87171">breaks offline.</span></div>
-    <div class="term" id="term">
-      <div class="term-bar"><i class="dot" style="background:#f43f5e"></i><i class="dot" style="background:#f59e0b"></i><i class="dot" style="background:#10b981"></i></div>
-      <div class="term-body" id="termBody"></div>
-      <div class="stamp" id="stamp" style="opacity:0">✕ blank page offline</div>
-    </div>
-  </section>
-
   <!-- ============ Scene 2 · Brand + install ============ -->
   <section class="scene" id="s2">
     <div class="backdrop"><div class="glow"></div></div>
     <div class="brand" id="brand"><img src="../../assets/logo.svg" alt=""><span>agent-html</span></div>
-    <div class="headline" id="head2">Clean, single-file HTML<br>for your <span class="grad">coding agents.</span></div>
-    <div class="sub" id="sub2" style="top:590px">Zero npm · zero CDN · opens offline with a double-click</div>
-    <div class="pill" id="pill2" style="top:690px"><span class="pfx">$</span><span id="typed"></span><i class="caret" id="caret"></i><span class="copy">Copy</span></div>
+    <div class="headline" id="head2" data-t="head2"></div>
+    <div class="sub" id="sub2" style="top:590px" data-t="sub2"></div>
+    <div class="pill" id="pill2" style="top:690px"><span class="pfx">$</span><span id="typed"></span><i class="caret" id="caret"></i><span class="copy" data-t="copy"></span></div>
     <div class="agents" id="agents">
       <span class="chip"><span class="ck">✓</span>Claude Code</span>
       <span class="chip"><span class="ck">✓</span>Cursor</span>
       <span class="chip"><span class="ck">✓</span>Codex</span>
       <span class="chip"><span class="ck">✓</span>Pi</span>
-      <span class="chip"><span class="ck">✓</span>70+ agents via skills.sh</span>
+      <span class="chip"><span class="ck">✓</span><span data-t="more"></span></span>
     </div>
   </section>
 
   <!-- ============ Scene 3 · Seven templates ============ -->
   <section class="scene" id="s3">
     <div class="backdrop"><div class="glow" style="left:70%"></div></div>
-    <div class="s3-title" id="s3title">7 templates.<br>Zero guesswork.<small>Pick a layout instead of letting the model improvise one.</small></div>
+    <div class="s3-title" id="s3title" data-t="s3title"></div>
     <div class="tlist" id="tlist"></div>
     <div class="window" id="win3">
       <div class="wbar"><div class="wdots"><i class="dot" style="background:#f43f5e"></i><i class="dot" style="background:#f59e0b"></i><i class="dot" style="background:#10b981"></i></div><div class="wurl" id="url3"></div><div style="width:60px"></div></div>
@@ -156,34 +141,83 @@
   <!-- ============ Scene 4 · Features ============ -->
   <section class="scene" id="s4">
     <div class="backdrop"><div class="glow"></div></div>
-    <div class="s4-title" id="s4title">Built for the loop between you <span class="grad">and your agent.</span></div>
+    <div class="s4-title" id="s4title" data-t="s4title"></div>
     <div class="window" id="win4">
-      <div class="wbar"><div class="wdots"><i class="dot" style="background:#f43f5e"></i><i class="dot" style="background:#f59e0b"></i><i class="dot" style="background:#10b981"></i></div><div class="wurl">templates/en/dashboard.html</div><div style="width:60px"></div></div>
+      <div class="wbar"><div class="wdots"><i class="dot" style="background:#f43f5e"></i><i class="dot" style="background:#f59e0b"></i><i class="dot" style="background:#10b981"></i></div><div class="wurl" id="url4"></div><div style="width:60px"></div></div>
       <div class="wview" id="view4">
-        <img class="shot" src="../../assets/screenshots/en/dashboard.png" alt="">
+        <img class="shot" id="lightShot" alt="">
         <div class="darklayer" id="dark4"><img class="shot" id="darkShot" alt=""></div>
         <div class="wipe-line" id="wipe"></div>
       </div>
     </div>
-    <div class="tag" id="tagLight" style="left:470px; top:880px">☀ Light</div>
-    <div class="tag" id="tagDark" style="left:1244px; top:880px; background: linear-gradient(92deg, var(--indigo), var(--violet));">☾ Dark, built in</div>
-    <div class="feat" id="f1" style="left:60px; top:250px"><div class="fi"><svg viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="M12 22V12"/></svg></div><b>0 npm · 0 CDN</b><span>One file. Opens offline, in any browser, forever.</span></div>
-    <div class="feat" id="f2" style="left:60px; top:560px"><div class="fi"><svg viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg></div><b>Copy back to your agent</b><span>Verdicts, triage and forms export as Markdown.</span></div>
-    <div class="feat" id="f3" style="left:1480px; top:250px"><div class="fi"><svg viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg></div><b>8 pure-SVG charts</b><span>Plus 32 icons, tabs and form controls. No chart libraries.</span></div>
-    <div class="feat" id="f4" style="left:1480px; top:560px"><div class="fi"><svg viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></div><b>Lint-gated output</b><span>An offline validator checks every page before you see it.</span></div>
+    <div class="tag" id="tagLight" style="left:470px; top:880px" data-t="tagLight"></div>
+    <div class="tag" id="tagDark" style="left:1244px; top:880px; background: linear-gradient(92deg, var(--indigo), var(--violet));" data-t="tagDark"></div>
+    <div class="feat" id="f1" style="left:60px; top:250px"><div class="fi"><svg viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="M12 22V12"/></svg></div><b data-t="f1b"></b><span data-t="f1s"></span></div>
+    <div class="feat" id="f2" style="left:60px; top:560px"><div class="fi"><svg viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg></div><b data-t="f2b"></b><span data-t="f2s"></span></div>
+    <div class="feat" id="f3" style="left:1480px; top:250px"><div class="fi"><svg viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg></div><b data-t="f3b"></b><span data-t="f3s"></span></div>
+    <div class="feat" id="f4" style="left:1480px; top:560px"><div class="fi"><svg viewBox="0 0 24 24" fill="none" stroke="#18181b" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></div><b data-t="f4b"></b><span data-t="f4s"></span></div>
   </section>
 
   <!-- ============ Scene 5 · Call to action ============ -->
   <section class="scene" id="s5">
     <div class="backdrop"><div class="glow"></div></div>
     <div class="brand" id="brand5"><img src="../../assets/logo.svg" alt=""><span>agent-html</span></div>
-    <div class="cta-line" id="cta5">Stop shipping<br><span class="grad">walls of Markdown.</span></div>
-    <div class="pill" id="pill5" style="top:640px"><span class="pfx">$</span><span>npx skills add QingYunA/agent-html</span><span class="copy">Copy</span></div>
+    <div class="cta-line" id="cta5" data-t="cta5"></div>
+    <div class="pill" id="pill5" style="top:640px"><span class="pfx">$</span><span>npx skills add QingYunA/agent-html</span><span class="copy" data-t="copy"></span></div>
     <div class="links" id="links5"><span>▶ <b>agent-html-bice.vercel.app</b></span><span>★ <b>github.com/QingYunA/agent-html</b></span></div>
   </section>
 </div>
 
 <script>
+  // ---------- copy (en / zh) ----------
+  const LANG = new URLSearchParams(location.search).get('lang') === 'zh' ? 'zh' : 'en';
+  document.documentElement.lang = LANG === 'zh' ? 'zh-CN' : 'en';
+  const T = {
+    en: {
+      head2: 'Clean, single-file HTML<br>for your <span class="grad">coding agents.</span>',
+      sub2: 'Zero npm · zero CDN · opens offline with a double-click', copy: 'Copy', more: '70+ agents via skills.sh',
+      s3title: '7 templates.<br>Zero guesswork.<small>Pick a layout instead of letting the model improvise one.</small>',
+      s4title: 'Built for the loop between you <span class="grad">and your agent.</span>',
+      tagLight: '☀ Light', tagDark: '☾ Dark, built in',
+      f1b: '0 npm · 0 CDN', f1s: 'One file. Opens offline, in any browser, forever.',
+      f2b: 'Copy back to your agent', f2s: 'Verdicts, triage and forms export as Markdown.',
+      f3b: '8 pure-SVG charts', f3s: 'Plus 32 icons, tabs and form controls. No chart libraries.',
+      f4b: 'Lint-gated output', f4s: 'An offline validator checks every page before you see it.',
+      cta5: 'Agent output,<br><span class="grad">readable at a glance.</span>',
+      templates: [
+        ['report', 'Report', 'Reviews, RFCs and postmortems'],
+        ['dashboard', 'Dashboard', 'KPIs, SVG charts, filterable tables'],
+        ['inspector', 'Inspector', 'Master-detail trace & log viewer'],
+        ['compare', 'Compare', 'A/B evals with a clear verdict'],
+        ['timeline', 'Timeline', 'Incidents, releases, changelogs'],
+        ['kanban', 'Kanban', 'Drag-and-drop triage board'],
+        ['review', 'Review', 'git diff → line-level findings'],
+      ],
+    },
+    zh: {
+      head2: '让 AI 生成<br><span class="grad">干净、好看</span>的单文件 HTML',
+      sub2: '零 npm · 零 CDN · 双击即开，断网也能用', copy: '复制', more: '70+ 款 Agent（skills.sh）',
+      s3title: '7 套模板，<br>不再瞎排版。<small>直接套用现成版式，不让模型自由发挥。</small>',
+      s4title: '为你和 Agent 之间的 <span class="grad">闭环协作</span> 而生',
+      tagLight: '☀ 浅色', tagDark: '☾ 深色，内置',
+      f1b: '0 npm · 0 CDN', f1s: '一个文件，离线打开，任何浏览器都能看。',
+      f2b: '结果一键复制回 Agent', f2s: '审查结论、分拣结果、表单都能导出为 Markdown。',
+      f3b: '8 种纯 SVG 图表', f3s: '外加 32 个图标、标签页与表单控件，不用任何图表库。',
+      f4b: '自带质量门禁', f4s: '离线校验器会在你看到之前先检查每一页。',
+      cta5: 'Agent 的结果，<br><span class="grad">一眼看懂。</span>',
+      templates: [
+        ['report', '报告 Report', '评审、复盘、技术方案'],
+        ['dashboard', '数据面板 Dashboard', '指标卡、SVG 图表、可筛选表格'],
+        ['inspector', '审查工作台 Inspector', '日志与 Trace 双栏查看'],
+        ['compare', '对比 Compare', 'A/B 评测，结论一目了然'],
+        ['timeline', '时间线 Timeline', '事故复盘、版本记录'],
+        ['kanban', '看板 Kanban', '拖拽分拣任务与缺陷'],
+        ['review', '代码审查 Review', 'git diff → 逐行标出问题'],
+      ],
+    },
+  }[LANG];
+  document.querySelectorAll('[data-t]').forEach((el) => { el.innerHTML = T[el.dataset.t]; });
+
   // ---------- timeline helpers ----------
   const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
   const easeOut = (x) => 1 - Math.pow(1 - clamp(x), 3);
@@ -194,128 +228,145 @@
   const $ = (id) => document.getElementById(id);
   const set = (el, o, y = 0, s = 1) => { el.style.opacity = o; el.style.transform = `translateY(${y}px) scale(${s})`; };
   const setX = (el, o, y = 0, s = 1) => { el.style.opacity = o; el.style.transform = `translateX(-50%) translateY(${y}px) scale(${s})`; };
+  const rise = (el, t, a, b, dy = 20) => { const p = easeOut(prog(t, a, b)); set(el, p, dy * (1 - p)); return p; };
 
-  // Scene boundaries (seconds). Total 30s.
-  const S = { s1: [0, 4.2], s2: [4.0, 8.4], s3: [8.2, 20.0], s4: [19.8, 25.4], s5: [25.2, 30.5] };
+  // Scene windows (story seconds) on the 120 BPM grid: landing 2 bars, templates one
+  // 8-bar phrase, features 2 bars, CTA 3 bars. Cuts at 8, 24 and 28.
+  const OPEN = 4, END = 34;            // the video shows story time OPEN..END
+  window.OPEN = OPEN;
+  window.LENGTH = END - OPEN;         // video length in seconds, read by the generator
+  const S = { s2: [4, 8.04], s3: [7.96, 24.04], s4: [23.96, 28.04], s5: [27.96, 34.5] };  // hard cuts on the beat
+  const SLIDE = 2, S3_START = 8;       // one template per bar
+  const CMD = 'npx skills add QingYunA/agent-html';
+  const TYPE = [5.0, 6.4];             // typing window for the install command
 
-  // ---------- scene 1 data ----------
-  const WALL = [
-    ['prompt', '› summarize the load test results'],
-    ['h', '## Load Test Summary'], ['', 'The load test was executed against the staging cluster'],
-    ['', 'over a period of 45 minutes with a ramp of 50 users/s.'], ['h', '### Results'],
-    ['', '- P50 latency: 142ms (previous: 151ms)'], ['', '- P95 latency: 488ms (previous: 402ms)'],
-    ['', '- P99 latency: 1.2s (previous: 910ms)'], ['', '- Error rate: 0.8% (mostly 504 from upstream)'],
-    ['h', '### Observations'], ['', 'It is worth noting that the P95 regression appears to'],
-    ['', 'correlate with the connection pool being exhausted …'],
-  ];
-  const CDN = [
-    ['prompt', '› make it an html page'],
-    ['', '<!DOCTYPE html>'], ['', '<html>'], ['', '  <head>'],
-    ['badbg', '    <script src="https://cdn.tailwindcss.com"><\/script>'],
-    ['badbg', '    <link href="https://fonts.googleapis.com/css2?…">'],
-    ['', '  </head>'], ['', '  <body class="bg-gradient-to-r from-pink-500 …">'],
-  ];
-  const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  const lines = (arr, n) => arr.slice(0, n).map(([c, s]) => c ? `<span class="${c}">${esc(s)}</span>` : esc(s)).join('\n');
+  // ---------- UI sound cues, read by the generator and laid over the music ----------
+  // Authored in storyboard time; window.applySync() maps them onto a real track's beat grid.
+  const NOMINAL_CUES = {
+    ticks: T.templates.slice(1).map((_, i) => S3_START + (i + 1) * SLIDE), // template changes
+    typing: Array.from({ length: CMD.length }, (_, i) => TYPE[0] + (i / CMD.length) * (TYPE[1] - TYPE[0])),
+    whoosh: 24.8,                                          // light → dark wipe
+    pops: [26.0, 26.5, 27.0, 27.5],                        // feature cards
+  };
 
-  // ---------- scene 3 data ----------
-  const TEMPLATES = [
-    ['report', 'Report', 'Reviews, RFCs and postmortems'],
-    ['dashboard', 'Dashboard', 'KPIs, SVG charts, filterable tables'],
-    ['inspector', 'Inspector', 'Master-detail trace & log viewer'],
-    ['compare', 'Compare', 'A/B evals with a clear verdict'],
-    ['timeline', 'Timeline', 'Incidents, releases, changelogs'],
-    ['kanban', 'Kanban', 'Drag-and-drop triage board'],
-    ['review', 'Review', 'git diff → line-level findings'],
-  ];
-  const SLIDE = 1.6, S3_START = 8.6;
-  $('tlist').innerHTML = TEMPLATES.map(([k, n, d], i) =>
+
+  // ---------- beat sync: warp storyboard time onto a real track ----------
+  // Anchors pair real time (seconds into the music) with storyboard time; everything in
+  // between is stretched linearly, so every animation and cue moves with them.
+  let ANCHORS = [[0, OPEN], [END - OPEN, END]];
+  const interp = (x, pts, from, to) => {
+    for (let i = 1; i < pts.length; i++) {
+      const [a, b] = [pts[i - 1], pts[i]];
+      if (x <= b[from] || i === pts.length - 1) {
+        const k = (x - a[from]) / ((b[from] - a[from]) || 1);
+        return a[to] + k * (b[to] - a[to]);
+      }
+    }
+    return x;
+  };
+  const toStory = (t) => interp(t, ANCHORS, 0, 1);
+  const toReal = (n) => interp(n, ANCHORS, 1, 0);
+  const mapCues = (c) => ({
+    ...c,
+    ticks: c.ticks.map(toReal), typing: c.typing.map(toReal), whoosh: toReal(c.whoosh),
+    pops: c.pops.map(toReal),
+  });
+
+  window.applySync = (sync) => {
+    // The drop: the downbeat nearest to where story time 8 would fall at the nominal tempo.
+    const bar = (60 / sync.bpm) * 4;
+    const c8 = sync.bars.reduce((a, b) => (Math.abs(b - (8 - OPEN)) < Math.abs(a - (8 - OPEN)) ? b : a));
+    if (Math.abs(c8 - (8 - OPEN)) > bar * 0.6) throw new Error('no downbeat near the templates cut');
+    const i8 = sync.beats.findIndex((b) => Math.abs(b - c8) < 1e-3);
+    // From the drop on, pin every story beat (0.5 s) to the track's next tracked beat, counting
+    // beats instead of seconds so a track that is faster, slower or drifting keeps every cut
+    // on its bar. Story time 28 (the CTA) is 40 beats after 8.
+    const pts = [[0, OPEN]];
+    for (let k = 0; k <= 40 && i8 + k < sync.beats.length; k++) pts.push([sync.beats[i8 + k], 8 + k / 2]);
+    pts.push([Math.max(END - OPEN, pts[pts.length - 1][0] + 1), END]);
+    ANCHORS = pts;
+    window.CUES = mapCues(NOMINAL_CUES);
+    return ANCHORS;
+  };
+
+  $('tlist').innerHTML = T.templates.map(([k, n, d], i) =>
     `<div class="titem" id="ti-${k}"><span class="num">0${i + 1}</span><div><div class="nm">${n}${k === 'review' ? '<span class="new">NEW</span>' : ''}</div><div class="ds">${d}</div></div></div>`).join('');
-  $('view3').innerHTML = TEMPLATES.map(([k]) => `<img class="shot" id="shot-${k}" src="../../assets/screenshots/en/${k}.png" alt="">`).join('');
+  $('view3').innerHTML = T.templates.map(([k]) => `<img class="shot" id="shot-${k}" src="../../assets/screenshots/${LANG}/${k}.png" alt="">`).join('');
+  $('lightShot').src = `../../assets/screenshots/${LANG}/dashboard.png`;
+  $('url4').textContent = `templates/${LANG}/dashboard.html`;
 
-  function render(t) {
-    // ---- Scene 1 ----
-    const o1 = win(t, S.s1[0], S.s1[1], 0.01, 0.5);
-    $('s1').style.opacity = o1;
-    const swap = prog(t, 2.35, 2.65);
-    $('cap1a').style.opacity = (1 - swap) * easeOut(prog(t, 0.15, 0.6));
-    $('cap1b').style.opacity = swap;
-    const nWall = Math.floor(clamp((t - 0.35) / 1.7) * WALL.length);
-    const nCdn = Math.floor(clamp((t - 2.5) / 0.8) * CDN.length);
-    $('termBody').innerHTML = t < 2.45 ? lines(WALL, nWall) : lines(CDN, nCdn);
-    set($('term'), 1, 20 * (1 - easeOut(prog(t, 0, 0.6))));
-    const st = easeOut(prog(t, 3.2, 3.45));
-    $('stamp').style.opacity = st;
-    $('stamp').style.transform = `rotate(-4deg) scale(${1.3 - 0.3 * st})`;
-
+  function render(realT) {
+    const t = toStory(realT);
     // ---- Scene 2 ----
-    $('s2').style.opacity = win(t, S.s2[0], S.s2[1], 0.35, 0.4);
-    set($('brand'), easeOut(prog(t, 4.15, 4.6)), 20 * (1 - easeOut(prog(t, 4.15, 4.6))), 0.9 + 0.1 * easeOut(prog(t, 4.15, 4.6)));
-    set($('head2'), easeOut(prog(t, 4.4, 5.0)), 30 * (1 - easeOut(prog(t, 4.4, 5.0))));
-    set($('sub2'), easeOut(prog(t, 4.8, 5.3)), 16 * (1 - easeOut(prog(t, 4.8, 5.3))));
-    setX($('pill2'), easeOut(prog(t, 5.1, 5.5)), 20 * (1 - easeOut(prog(t, 5.1, 5.5))));
-    const cmd = 'npx skills add QingYunA/agent-html';
-    $('typed').textContent = cmd.slice(0, Math.round(prog(t, 5.4, 6.7) * cmd.length));
-    $('caret').style.opacity = (t < 6.7 || Math.floor(t * 2.5) % 2 === 0) ? 1 : 0;
+    $('s2').style.opacity = win(t, S.s2[0], S.s2[1], 0.01, 0.1);
+    const bp = easeOut(prog(t, 4.0, 4.45));
+    set($('brand'), bp, 20 * (1 - bp), 0.9 + 0.1 * bp);
+    rise($('head2'), t, 4.2, 4.8, 30);
+    rise($('sub2'), t, 4.5, 5.0, 16);
+    const pp = easeOut(prog(t, 4.7, 5.1));
+    setX($('pill2'), pp, 20 * (1 - pp));
+    $('typed').textContent = CMD.slice(0, Math.round(prog(t, TYPE[0], TYPE[1]) * CMD.length));
+    $('caret').style.opacity = (t < TYPE[1] || Math.floor(t * 2) % 2 === 0) ? 1 : 0;
     const chips = $('agents').children;
     for (let i = 0; i < chips.length; i++) {
-      const p = easeOut(prog(t, 6.8 + i * 0.12, 7.2 + i * 0.12));
+      const p = easeOut(prog(t, 6.5 + i * 0.12, 6.9 + i * 0.12));
       chips[i].style.opacity = p;
       chips[i].style.transform = `translateY(${14 * (1 - p)}px)`;
     }
 
     // ---- Scene 3 ----
-    $('s3').style.opacity = win(t, S.s3[0], S.s3[1], 0.4, 0.4);
-    set($('s3title'), easeOut(prog(t, 8.3, 8.9)), 24 * (1 - easeOut(prog(t, 8.3, 8.9))));
-    set($('win3'), easeOut(prog(t, 8.4, 9.0)), 40 * (1 - easeOut(prog(t, 8.4, 9.0))));
-    const idx = clamp(Math.floor((t - S3_START) / SLIDE), 0, TEMPLATES.length - 1);
-    TEMPLATES.forEach(([k], i) => {
+    $('s3').style.opacity = win(t, S.s3[0], S.s3[1], 0.1, 0.1);
+    rise($('s3title'), t, 7.98, 8.38, 24);
+    const wp = easeOut(prog(t, 8.0, 8.45));
+    set($('win3'), wp, 40 * (1 - wp));
+    const idx = clamp(Math.floor((t - S3_START) / SLIDE), 0, T.templates.length - 1);
+    T.templates.forEach(([k], i) => {
       const item = $('ti-' + k);
-      item.classList.toggle('on', i === idx && t >= S3_START - 0.2);
-      const ip = easeOut(prog(t, 8.5 + i * 0.07, 8.9 + i * 0.07));
+      item.classList.toggle('on', i === idx && t >= S3_START);
+      const ip = easeOut(prog(t, 8.05 + i * 0.05, 8.4 + i * 0.05));
       item.style.opacity = ip;
       item.style.transform = `translateX(${-20 * (1 - ip)}px)`;
-      // crossfade each screenshot in over 0.35s, with a slow push-in while it is on screen
-      // Every screenshot is at least as tall as the viewport, so a slide can simply fade in above
-      // the previous one (higher z-index); older slides are hidden once fully covered.
+      // Every screenshot fills the viewport, so a slide simply fades in above the previous one.
       const start = S3_START + i * SLIDE;
-      const shotIn = i === 0 ? 1 : easeInOut(prog(t, start - 0.2, start + 0.15));
+      const shotIn = i === 0 ? 1 : easeInOut(prog(t, start - 0.04, start + 0.14));
       const shot = $('shot-' + k);
       shot.style.opacity = i <= idx + 1 && i >= idx - 1 ? shotIn : 0;
-      const push = prog(t, start - 0.2, start + SLIDE + 0.2);
-      shot.style.transform = `scale(${1.0 + 0.05 * push})`;
+      shot.style.transform = `scale(${1.0 + 0.05 * prog(t, start - 0.2, start + SLIDE + 0.2)})`;
       shot.style.zIndex = i;
     });
-    $('url3').textContent = `templates/en/${TEMPLATES[idx][0]}.html`;
+    $('url3').textContent = `templates/${LANG}/${T.templates[idx][0]}.html`;
 
     // ---- Scene 4 ----
-    $('s4').style.opacity = win(t, S.s4[0], S.s4[1], 0.4, 0.4);
-    set($('s4title'), easeOut(prog(t, 19.9, 20.5)), 20 * (1 - easeOut(prog(t, 19.9, 20.5))));
-    set($('win4'), easeOut(prog(t, 20.0, 20.6)), 36 * (1 - easeOut(prog(t, 20.0, 20.6))), 0.96 + 0.04 * easeOut(prog(t, 20.0, 20.6)));
-    const wipe = easeInOut(prog(t, 20.9, 22.1));
+    $('s4').style.opacity = win(t, S.s4[0], S.s4[1], 0.1, 0.1);
+    rise($('s4title'), t, 23.98, 24.38, 20);
+    const w4 = easeOut(prog(t, 24.0, 24.45));
+    set($('win4'), w4, 36 * (1 - w4), 0.96 + 0.04 * w4);
+    const wipe = easeInOut(prog(t, 24.8, 25.8));
     $('dark4').style.clipPath = `inset(0 0 0 ${(1 - wipe) * 100}%)`;
     $('wipe').style.left = `calc(${(1 - wipe) * 100}% - 1px)`;
     $('wipe').style.opacity = wipe > 0 && wipe < 1 ? 1 : 0;
-    $('tagLight').style.opacity = easeOut(prog(t, 20.4, 20.8)) * (1 - easeOut(prog(t, 21.9, 22.2)));
-    $('tagDark').style.opacity = easeOut(prog(t, 21.9, 22.3));
+    $('tagLight').style.opacity = easeOut(prog(t, 24.3, 24.7)) * (1 - easeOut(prog(t, 25.6, 25.9)));
+    $('tagDark').style.opacity = easeOut(prog(t, 25.6, 26.0));
     ['f1', 'f2', 'f3', 'f4'].forEach((id, i) => {
-      const p = easeOut(prog(t, 22.3 + i * 0.28, 22.8 + i * 0.28));
+      const p = easeOut(prog(t, NOMINAL_CUES.pops[i], NOMINAL_CUES.pops[i] + 0.45));
       set($(id), p, 24 * (1 - p), 0.94 + 0.06 * p);
     });
 
     // ---- Scene 5 ----
-    $('s5').style.opacity = win(t, S.s5[0], S.s5[1], 0.45, 0.01);
-    set($('brand5'), easeOut(prog(t, 25.4, 25.9)), 20 * (1 - easeOut(prog(t, 25.4, 25.9))));
-    set($('cta5'), easeOut(prog(t, 25.6, 26.3)), 30 * (1 - easeOut(prog(t, 25.6, 26.3))));
-    setX($('pill5'), easeOut(prog(t, 26.2, 26.7)), 20 * (1 - easeOut(prog(t, 26.2, 26.7))));
-    set($('links5'), easeOut(prog(t, 26.6, 27.1)), 14 * (1 - easeOut(prog(t, 26.6, 27.1))));
+    $('s5').style.opacity = win(t, S.s5[0], S.s5[1], 0.1, 0.01);
+    const b5 = easeOut(prog(t, 27.98, 28.38));
+    set($('brand5'), b5, 20 * (1 - b5), 0.92 + 0.08 * b5);
+    rise($('cta5'), t, 28.05, 28.55, 30);
+    const p5 = easeOut(prog(t, 29.0, 29.5));
+    setX($('pill5'), p5, 20 * (1 - p5));
+    rise($('links5'), t, 29.5, 30.0, 14);
   }
 
   window.render = render;
   // Dark screenshot for the scene-4 wipe is injected by the generator (it renders the template in dark mode).
   window.setDarkShot = (src) => new Promise((res) => { const img = $('darkShot'); img.onload = res; img.onerror = res; img.src = src; });
   const q = new URLSearchParams(location.search);
-  render(q.has('t') ? parseFloat(q.get('t')) : 12);
+  render(q.has('t') ? parseFloat(q.get('t')) : 8);
 </script>
 </body>
 </html>

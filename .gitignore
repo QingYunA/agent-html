@@ -9,3 +9,6 @@ docs/
 
 # 技能评测运行产物
 agent-html-workspace/
+
+# 宣传片用的授权音乐只在本地使用（曲库授权通常不允许单独分发音频文件）
+scripts/promo/music/
