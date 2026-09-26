@@ -3,18 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=1920, initial-scale=1.0">
-<title>agent-html · 26s promo storyboard</title>
+<title>agent-html · 30s promo storyboard</title>
 <!--
-  Storyboard for the 26-second promo video. It is NOT a normal animated page:
+  Storyboard for the 30-second promo video. It is NOT a normal animated page:
   every visual is a pure function of time `t` (seconds), set by render(t).
-  Story time is authored on 4–30s: the video opens straight on the landing page
+  Story time is authored on 4–34s: the video opens straight on the landing page
   (OPEN = 4), so video time 0 is story time 4.
   scripts/generate-promo-video.mjs steps t at 30 fps, screenshots each frame,
-  synthesises the soundtrack from window.CUES and muxes both with ffmpeg,
-  so the output is deterministic.
+  warps story time onto a music track's beat grid, lays UI sounds from
+  window.CUES over the music and muxes everything with ffmpeg.
 
   Preview in a browser: promo.html?lang=zh&t=8.5   (t is video time)
-  Timing sits on a 120 BPM grid (1 beat = 0.5s, 1 bar = 2s) so cuts land on the music.
+  Timing sits on a 120 BPM grid (1 beat = 0.5s, 1 bar = 2s): scenes follow 8-bar
+  musical phrases and every template change lands on a bar's "one".
 -->
 <link rel="stylesheet" href="fonts/noto-sans-sc-subset.css">
 <style>
@@ -182,7 +183,7 @@
       f2b: 'Copy back to your agent', f2s: 'Verdicts, triage and forms export as Markdown.',
       f3b: '8 pure-SVG charts', f3s: 'Plus 32 icons, tabs and form controls. No chart libraries.',
       f4b: 'Lint-gated output', f4s: 'An offline validator checks every page before you see it.',
-      cta5: 'Stop shipping<br><span class="grad">walls of Markdown.</span>',
+      cta5: 'Agent output,<br><span class="grad">readable at a glance.</span>',
       templates: [
         ['report', 'Report', 'Reviews, RFCs and postmortems'],
         ['dashboard', 'Dashboard', 'KPIs, SVG charts, filterable tables'],
@@ -203,7 +204,7 @@
       f2b: '结果一键复制回 Agent', f2s: '审查结论、分拣结果、表单都能导出为 Markdown。',
       f3b: '8 种纯 SVG 图表', f3s: '外加 32 个图标、标签页与表单控件，不用任何图表库。',
       f4b: '自带质量门禁', f4s: '离线校验器会在你看到之前先检查每一页。',
-      cta5: '别再让 Agent<br>甩给你 <span class="grad">一堵 Markdown 墙。</span>',
+      cta5: 'Agent 的结果，<br><span class="grad">一眼看懂。</span>',
       templates: [
         ['report', '报告 Report', '评审、复盘、技术方案'],
         ['dashboard', '数据面板 Dashboard', '指标卡、SVG 图表、可筛选表格'],
@@ -229,33 +230,29 @@
   const setX = (el, o, y = 0, s = 1) => { el.style.opacity = o; el.style.transform = `translateX(-50%) translateY(${y}px) scale(${s})`; };
   const rise = (el, t, a, b, dy = 20) => { const p = easeOut(prog(t, a, b)); set(el, p, dy * (1 - p)); return p; };
 
-  // Scene windows (story seconds) on the 120 BPM grid: cuts at 8, 20 and 24.
-  const OPEN = 4, END = 30;            // the video shows story time OPEN..END
+  // Scene windows (story seconds) on the 120 BPM grid: landing 2 bars, templates one
+  // 8-bar phrase, features 2 bars, CTA 3 bars. Cuts at 8, 24 and 28.
+  const OPEN = 4, END = 34;            // the video shows story time OPEN..END
   window.OPEN = OPEN;
   window.LENGTH = END - OPEN;         // video length in seconds, read by the generator
-  const S = { s2: [4, 8.05], s3: [7.95, 20.05], s4: [19.95, 24.05], s5: [23.95, 30.5] };
-  const SLIDE = 1.5, S3_START = 8.5;   // one template every 3 beats
+  const S = { s2: [4, 8.04], s3: [7.96, 24.04], s4: [23.96, 28.04], s5: [27.96, 34.5] };  // hard cuts on the beat
+  const SLIDE = 2, S3_START = 8;       // one template per bar
   const CMD = 'npx skills add QingYunA/agent-html';
   const TYPE = [5.0, 6.4];             // typing window for the install command
 
-  // ---------- sound cues, read by the generator to build the soundtrack ----------
+  // ---------- UI sound cues, read by the generator and laid over the music ----------
   // Authored in storyboard time; window.applySync() maps them onto a real track's beat grid.
   const NOMINAL_CUES = {
-    bpm: 120,
-    impacts: [8, 24],                                      // scene cuts that hit hard
-    risers: [[7.0, 8], [19.0, 20], [23.0, 24]],            // noise swells into each cut
     ticks: T.templates.slice(1).map((_, i) => S3_START + (i + 1) * SLIDE), // template changes
     typing: Array.from({ length: CMD.length }, (_, i) => TYPE[0] + (i / CMD.length) * (TYPE[1] - TYPE[0])),
-    whoosh: 20.8,                                          // light → dark wipe
-    pops: [22.0, 22.5, 23.0, 23.5],                        // feature cards
+    whoosh: 24.8,                                          // light → dark wipe
+    pops: [26.0, 26.5, 27.0, 27.5],                        // feature cards
   };
 
-  window.NOMINAL_CUES = NOMINAL_CUES;
 
   // ---------- beat sync: warp storyboard time onto a real track ----------
-  // Anchors pair real time (seconds into the music) with storyboard time. Cuts snap to the
-  // nearest downbeat, template changes and feature cards to the nearest beat; everything
-  // in between is stretched linearly, so every animation and cue moves with them.
+  // Anchors pair real time (seconds into the music) with storyboard time; everything in
+  // between is stretched linearly, so every animation and cue moves with them.
   let ANCHORS = [[0, OPEN], [END - OPEN, END]];
   const interp = (x, pts, from, to) => {
     for (let i = 1; i < pts.length; i++) {
@@ -271,35 +268,24 @@
   const toReal = (n) => interp(n, ANCHORS, 1, 0);
   const mapCues = (c) => ({
     ...c,
-    impacts: c.impacts.map(toReal), risers: c.risers.map(([a, b]) => [toReal(a), toReal(b)]),
     ticks: c.ticks.map(toReal), typing: c.typing.map(toReal), whoosh: toReal(c.whoosh),
     pops: c.pops.map(toReal),
   });
-  window.CUES = mapCues(NOMINAL_CUES);
 
   window.applySync = (sync) => {
-    const nearest = (list, x, maxDist) => {
-      let best = x, d = Infinity;
-      for (const v of list) if (Math.abs(v - x) < d) { d = Math.abs(v - x); best = v; }
-      return d <= maxDist ? best : x;
-    };
-    const beat = 60 / sync.bpm, bar = beat * 4;
+    // The drop: the downbeat nearest to where story time 8 would fall at the nominal tempo.
+    const bar = (60 / sync.bpm) * 4;
+    const c8 = sync.bars.reduce((a, b) => (Math.abs(b - (8 - OPEN)) < Math.abs(a - (8 - OPEN)) ? b : a));
+    if (Math.abs(c8 - (8 - OPEN)) > bar * 0.6) throw new Error('no downbeat near the templates cut');
+    const i8 = sync.beats.findIndex((b) => Math.abs(b - c8) < 1e-3);
+    // From the drop on, pin every story beat (0.5 s) to the track's next tracked beat, counting
+    // beats instead of seconds so a track that is faster, slower or drifting keeps every cut
+    // on its bar. Story time 28 (the CTA) is 40 beats after 8.
     const pts = [[0, OPEN]];
-    const push = (real, story) => { if (real > pts[pts.length - 1][0] + 0.2) pts.push([real, story]); };
-    const cut = (n) => nearest(sync.bars, n - OPEN, bar * 0.6);   // snap each scene cut to the nearest "one"
-    const [c8, c20, c24] = [8, 20, 24].map(cut);
-    push(c8, 8);
-    // template changes: spread proportionally across the section, then snap to beats
-    for (let k = 1; k < 7; k++) {
-      const n = S3_START + k * SLIDE;
-      push(nearest(sync.beats, c8 + (n - 8) * (c20 - c8) / 12, beat * 0.6), n);
-    }
-    push(c20, 20);
-    NOMINAL_CUES.pops.forEach((n) => push(nearest(sync.beats, c20 + (n - 20) * (c24 - c20) / 4, beat * 0.6), n));
-    push(c24, 24);
+    for (let k = 0; k <= 40 && i8 + k < sync.beats.length; k++) pts.push([sync.beats[i8 + k], 8 + k / 2]);
     pts.push([Math.max(END - OPEN, pts[pts.length - 1][0] + 1), END]);
     ANCHORS = pts;
-    window.CUES = { ...mapCues(NOMINAL_CUES), bpm: sync.bpm };
+    window.CUES = mapCues(NOMINAL_CUES);
     return ANCHORS;
   };
 
@@ -312,7 +298,7 @@
   function render(realT) {
     const t = toStory(realT);
     // ---- Scene 2 ----
-    $('s2').style.opacity = win(t, S.s2[0], S.s2[1], 0.01, 0.35);
+    $('s2').style.opacity = win(t, S.s2[0], S.s2[1], 0.01, 0.1);
     const bp = easeOut(prog(t, 4.0, 4.45));
     set($('brand'), bp, 20 * (1 - bp), 0.9 + 0.1 * bp);
     rise($('head2'), t, 4.2, 4.8, 30);
@@ -329,20 +315,20 @@
     }
 
     // ---- Scene 3 ----
-    $('s3').style.opacity = win(t, S.s3[0], S.s3[1], 0.35, 0.35);
-    rise($('s3title'), t, 8.05, 8.6, 24);
-    const wp = easeOut(prog(t, 8.1, 8.7));
+    $('s3').style.opacity = win(t, S.s3[0], S.s3[1], 0.1, 0.1);
+    rise($('s3title'), t, 7.98, 8.38, 24);
+    const wp = easeOut(prog(t, 8.0, 8.45));
     set($('win3'), wp, 40 * (1 - wp));
     const idx = clamp(Math.floor((t - S3_START) / SLIDE), 0, T.templates.length - 1);
     T.templates.forEach(([k], i) => {
       const item = $('ti-' + k);
-      item.classList.toggle('on', i === idx && t >= S3_START - 0.2);
-      const ip = easeOut(prog(t, 8.3 + i * 0.07, 8.7 + i * 0.07));
+      item.classList.toggle('on', i === idx && t >= S3_START);
+      const ip = easeOut(prog(t, 8.05 + i * 0.05, 8.4 + i * 0.05));
       item.style.opacity = ip;
       item.style.transform = `translateX(${-20 * (1 - ip)}px)`;
       // Every screenshot fills the viewport, so a slide simply fades in above the previous one.
       const start = S3_START + i * SLIDE;
-      const shotIn = i === 0 ? 1 : easeInOut(prog(t, start - 0.2, start + 0.15));
+      const shotIn = i === 0 ? 1 : easeInOut(prog(t, start - 0.04, start + 0.14));
       const shot = $('shot-' + k);
       shot.style.opacity = i <= idx + 1 && i >= idx - 1 ? shotIn : 0;
       shot.style.transform = `scale(${1.0 + 0.05 * prog(t, start - 0.2, start + SLIDE + 0.2)})`;
@@ -351,29 +337,29 @@
     $('url3').textContent = `templates/${LANG}/${T.templates[idx][0]}.html`;
 
     // ---- Scene 4 ----
-    $('s4').style.opacity = win(t, S.s4[0], S.s4[1], 0.35, 0.35);
-    rise($('s4title'), t, 20.0, 20.5, 20);
-    const w4 = easeOut(prog(t, 20.05, 20.6));
+    $('s4').style.opacity = win(t, S.s4[0], S.s4[1], 0.1, 0.1);
+    rise($('s4title'), t, 23.98, 24.38, 20);
+    const w4 = easeOut(prog(t, 24.0, 24.45));
     set($('win4'), w4, 36 * (1 - w4), 0.96 + 0.04 * w4);
-    const wipe = easeInOut(prog(t, 20.8, 21.8));
+    const wipe = easeInOut(prog(t, 24.8, 25.8));
     $('dark4').style.clipPath = `inset(0 0 0 ${(1 - wipe) * 100}%)`;
     $('wipe').style.left = `calc(${(1 - wipe) * 100}% - 1px)`;
     $('wipe').style.opacity = wipe > 0 && wipe < 1 ? 1 : 0;
-    $('tagLight').style.opacity = easeOut(prog(t, 20.3, 20.7)) * (1 - easeOut(prog(t, 21.6, 21.9)));
-    $('tagDark').style.opacity = easeOut(prog(t, 21.6, 22.0));
+    $('tagLight').style.opacity = easeOut(prog(t, 24.3, 24.7)) * (1 - easeOut(prog(t, 25.6, 25.9)));
+    $('tagDark').style.opacity = easeOut(prog(t, 25.6, 26.0));
     ['f1', 'f2', 'f3', 'f4'].forEach((id, i) => {
-      const p = easeOut(prog(t, CUES.pops[i], CUES.pops[i] + 0.45));
+      const p = easeOut(prog(t, NOMINAL_CUES.pops[i], NOMINAL_CUES.pops[i] + 0.45));
       set($(id), p, 24 * (1 - p), 0.94 + 0.06 * p);
     });
 
     // ---- Scene 5 ----
-    $('s5').style.opacity = win(t, S.s5[0], S.s5[1], 0.3, 0.01);
-    const b5 = easeOut(prog(t, 24.0, 24.5));
+    $('s5').style.opacity = win(t, S.s5[0], S.s5[1], 0.1, 0.01);
+    const b5 = easeOut(prog(t, 27.98, 28.38));
     set($('brand5'), b5, 20 * (1 - b5), 0.92 + 0.08 * b5);
-    rise($('cta5'), t, 24.2, 24.9, 30);
-    const p5 = easeOut(prog(t, 25.0, 25.5));
+    rise($('cta5'), t, 28.05, 28.55, 30);
+    const p5 = easeOut(prog(t, 29.0, 29.5));
     setX($('pill5'), p5, 20 * (1 - p5));
-    rise($('links5'), t, 25.5, 26.0, 14);
+    rise($('links5'), t, 29.5, 30.0, 14);
   }
 
   window.render = render;

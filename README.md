@@ -52,9 +52,9 @@
 </p>
 
 <p align="center">
-  <img src="assets/promo/agent-html-promo.webp" alt="agent-html 26-second promo: 7 single-file HTML templates for coding agents" width="100%">
+  <img src="assets/promo/agent-html-promo.webp" alt="agent-html 30-second promo: 7 single-file HTML templates for coding agents" width="100%">
   <br>
-  <sub>🎬 26-second promo (plays inline, muted) · <a href="assets/promo/agent-html-promo.mp4">1080p MP4 with soundtrack</a></sub>
+  <sub>🎬 30-second promo (plays inline, muted) · <a href="assets/promo/agent-html-promo.mp4">1080p MP4 with soundtrack</a></sub>
 </p>
 
 ---

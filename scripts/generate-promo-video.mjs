@@ -2,23 +2,21 @@
 /**
  * scripts/generate-promo-video.mjs
  *
- * Renders the 26-second promo video (English and Chinese) from scripts/promo/promo.html.
- * The storyboard is a pure function of time, so this steps t at 30 fps over window.LENGTH seconds,
- * screenshots every frame with headless Chromium, synthesises the soundtrack from
- * the storyboard's sound cues (scripts/promo/soundtrack.py) and muxes both with ffmpeg.
+ * Renders the 30-second promo video (English and Chinese) from scripts/promo/promo.html, cut to a
+ * music track. scripts/promo/beatsync.py finds the track's beat grid; the storyboard snaps scene
+ * cuts and template changes to downbeats (window.applySync). Then this steps t at 30 fps over
+ * window.LENGTH seconds, screenshots every frame with headless Chromium, lays light UI sounds
+ * (scripts/promo/sfx.py) over the music and muxes everything with ffmpeg.
  *
  * Maintainer tool (not part of the skill). Needs:
  *   - Playwright (local or global install)
  *   - ffmpeg with libx264 + aac (FFMPEG_PATH, default /opt/homebrew/bin/ffmpeg)
- *   - python3 with numpy + scipy (soundtrack) and Pillow (README WebP)
+ *   - python3 with librosa (beat grid), numpy + scipy (UI sounds) and Pillow (README WebP)
  *
- *   node scripts/generate-promo-video.mjs            # both languages
- *   node scripts/generate-promo-video.mjs --lang zh  # one language
+ *   node scripts/generate-promo-video.mjs --music track.mp3 [--music-start 12.5] [--lang zh]
+ *       --music-start is where in the track the video begins; put the track's drop 2 bars
+ *       later so it lands on the templates cut. Tracks live in scripts/promo/music/ (gitignored).
  *   node scripts/generate-promo-video.mjs --dump-zh-chars chars.txt   # input for build-zh-font.py
- *   node scripts/generate-promo-video.mjs --music track.mp3 [--music-start 12.5]
- *       Cut to a licensed track instead of the synthesised cue: scripts/promo/beatsync.py finds its
- *       beat grid, the storyboard snaps scene cuts to downbeats and template changes to beats
- *       (window.applySync), and only light UI sounds are layered on top of the music.
  *
  * Output per language (suffix "" for en, "-zh" for zh):
  *   assets/promo/agent-html-promo{suffix}.mp4    1920x1080 · 30 fps · H.264 CRF 18 · AAC 192k, -16 LUFS
@@ -37,7 +35,7 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const FFMPEG = process.env.FFMPEG_PATH || '/opt/homebrew/bin/ffmpeg';
 const PYTHON = process.env.PYTHON || 'python3';
 const FPS = 30;
-const POSTER_T = 9.2; // video time, mid-way through the template showcase
+const POSTER_T = 11.2; // video time, mid-way through the template showcase
 const OUT_DIR_DEFAULT = join(ROOT, 'assets', 'promo');
 const STORYBOARD = pathToFileURL(join(ROOT, 'scripts/promo/promo.html')).href;
 
@@ -81,6 +79,10 @@ try {
     process.exit(0);
   }
 
+  if (!MUSIC) {
+    console.error('Pass a music track: --music scripts/promo/music/track.mp3 [--music-start SECONDS]');
+    process.exit(1);
+  }
   mkdirSync(OUT_DIR, { recursive: true });
   for (const lang of LANGS) {
     const suffix = lang === 'en' ? '' : `-${lang}`;
@@ -101,18 +103,13 @@ try {
       await window.setDarkShot(src);
       await Promise.all([...document.images].map((img) => img.complete ? null : new Promise((r) => { img.onload = img.onerror = r; })));
     }, pathToFileURL(darkPath).href);
-    const { LENGTH: DURATION, OPEN } = await page.evaluate(() => ({ LENGTH: window.LENGTH, OPEN: window.OPEN }));
-    let sync = null;
-    if (MUSIC) {
-      const syncPath = join(work, 'beats.json');
-      execFileSync(PYTHON, [join(ROOT, 'scripts/promo/beatsync.py'), MUSIC, syncPath, ...(MUSIC_START ? ['--start', MUSIC_START] : [])], { stdio: 'inherit' });
-      sync = JSON.parse(readFileSync(syncPath, 'utf8'));
-      const anchors = await page.evaluate((s) => window.applySync(s), sync);
-      console.log('  cuts on the beat:', anchors.map(([r, n]) => `${n}→${r.toFixed(2)}s`).join('  '));
-    }
-    // With music the cues are in video time; the synthesised cue is arranged in story time
-    // (0-30s) and trimmed to the part the video shows.
-    const cues = await page.evaluate((music) => (music ? window.CUES : window.NOMINAL_CUES), Boolean(MUSIC));
+    const DURATION = await page.evaluate(() => window.LENGTH);
+    const syncPath = join(work, 'beats.json');
+    execFileSync(PYTHON, [join(ROOT, 'scripts/promo/beatsync.py'), MUSIC, syncPath, ...(MUSIC_START ? ['--start', MUSIC_START] : [])], { stdio: 'inherit' });
+    const sync = JSON.parse(readFileSync(syncPath, 'utf8'));
+    const anchors = await page.evaluate((s) => window.applySync(s), sync);
+    console.log('  bars (story→video):', anchors.filter(([, n]) => n % 2 === 0).map(([r, n]) => `${n}→${r.toFixed(2)}s`).join('  '));
+    const cues = await page.evaluate(() => window.CUES);
     writeFileSync(join(work, 'cues.json'), JSON.stringify(cues));
 
     const total = FPS * DURATION;
@@ -126,22 +123,14 @@ try {
     await page.screenshot({ path: join(OUT_DIR, `agent-html-promo${suffix}.png`) });
     await page.close();
 
-    // 3. Soundtrack: a licensed track + light UI sounds, or the synthesised cue
+    // 3. Soundtrack: the music track + light UI sounds
     const wav = join(work, 'music.wav');
-    const audioInputs = [];
-    let audioFilter;
-    if (MUSIC) {
-      const sfx = join(work, 'sfx.wav');
-      execFileSync(FFMPEG, ['-y', '-loglevel', 'error', '-ss', String(sync.start), '-t', String(DURATION), '-i', MUSIC,
-        '-af', `afade=t=in:d=0.03,afade=t=out:st=${DURATION - 2.5}:d=2.5`, '-ac', '2', '-ar', '44100', wav], { stdio: 'inherit' });
-      execFileSync(PYTHON, [join(ROOT, 'scripts/promo/soundtrack.py'), join(work, 'cues.json'), sfx, '--sfx-only'], { stdio: 'inherit' });
-      audioInputs.push('-i', wav, '-i', sfx);
-      audioFilter = '[1:a]volume=1.0[m];[2:a]volume=0.28[s];[m][s]amix=inputs=2:normalize=0,loudnorm=I=-16:TP=-1.5:LRA=11[a]';
-    } else {
-      execFileSync(PYTHON, [join(ROOT, 'scripts/promo/soundtrack.py'), join(work, 'cues.json'), wav], { stdio: 'inherit' });
-      audioInputs.push('-ss', String(OPEN), '-i', wav);
-      audioFilter = '[1:a]afade=t=in:d=0.03,loudnorm=I=-16:TP=-1.5:LRA=11[a]';
-    }
+    const sfx = join(work, 'sfx.wav');
+    execFileSync(FFMPEG, ['-y', '-loglevel', 'error', '-ss', String(sync.start), '-t', String(DURATION), '-i', MUSIC,
+      '-af', `afade=t=in:d=0.03,afade=t=out:st=${DURATION - 2.5}:d=2.5`, '-ac', '2', '-ar', '44100', wav], { stdio: 'inherit' });
+    execFileSync(PYTHON, [join(ROOT, 'scripts/promo/sfx.py'), join(work, 'cues.json'), sfx, String(DURATION)], { stdio: 'inherit' });
+    const audioInputs = ['-i', wav, '-i', sfx];
+    const audioFilter = '[1:a]volume=1.0[m];[2:a]volume=0.28[s];[m][s]amix=inputs=2:normalize=0,loudnorm=I=-16:TP=-1.5:LRA=11[a]';
 
     // 4. Encode picture + sound
     const mp4 = join(OUT_DIR, `agent-html-promo${suffix}.mp4`);
