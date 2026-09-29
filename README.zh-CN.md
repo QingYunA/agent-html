@@ -27,6 +27,7 @@
   <img src="https://img.shields.io/badge/theme-light%20%26%20dark-blue?style=flat" alt="Themes">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-18181b?style=flat" alt="License"></a>
   <a href="https://github.com/QingYunA/agent-html/stargazers"><img src="https://img.shields.io/github/stars/QingYunA/agent-html?style=flat&logo=github&color=18181b" alt="Stars"></a>
+  <a href="https://www.buymeacoffee.com/sorlia7zt" target="_blank"><img src="https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=flat&logo=buy-me-a-coffee&logoColor=black" alt="Buy Me A Coffee"></a>
 </p>
 
 <p>
@@ -36,7 +37,8 @@
   <a href="#七大真实场景模板">七大模板</a> ·
   <a href="#常用基础组件">基础组件</a> ·
   <a href="#提示词示例">提示词</a> ·
-  <a href="#star-history">Star History</a>
+  <a href="#star-history">Star History</a> ·
+  <a href="#支持与赞助">支持赞助</a>
 </p>
 
 </div>
@@ -311,7 +313,20 @@ ln -sf ../../../.agents/skills/agent-html ~/.pi/agent/skills/agent-html
 
 ---
 
+## 支持与赞助
+
+如果 `agent-html` 对你的开发或工作有所帮助，欢迎请作者喝杯咖啡，支持持续迭代与维护！
+
+<p align="center">
+  <a href="https://www.buymeacoffee.com/sorlia7zt" target="_blank">
+    <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="46" />
+  </a>
+</p>
+
+---
+
 ## 开源协议
 
 [MIT License](LICENSE) © 2026 QingYunA
+
 

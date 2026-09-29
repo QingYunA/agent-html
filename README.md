@@ -27,6 +27,7 @@
   <img src="https://img.shields.io/badge/theme-light%20%26%20dark-blue?style=flat" alt="Themes">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-18181b?style=flat" alt="License"></a>
   <a href="https://github.com/QingYunA/agent-html/stargazers"><img src="https://img.shields.io/github/stars/QingYunA/agent-html?style=flat&logo=github&color=18181b" alt="Stars"></a>
+  <a href="https://www.buymeacoffee.com/sorlia7zt" target="_blank"><img src="https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=flat&logo=buy-me-a-coffee&logoColor=black" alt="Buy Me A Coffee"></a>
 </p>
 
 <p>
@@ -36,7 +37,8 @@
   <a href="#the-7-archetypes">The 7 Archetypes</a> ·
   <a href="#atomic-capabilities--component-arsenal">Component Library</a> ·
   <a href="#prompt-triggers">Prompt Triggers</a> ·
-  <a href="#star-history">Star History</a>
+  <a href="#star-history">Star History</a> ·
+  <a href="#support">Support</a>
 </p>
 
 </div>
@@ -309,7 +311,20 @@ Join the discussion and share your feedback on [LINUX DO](https://linux.do).
 
 ---
 
+## Support
+
+If you find `agent-html` helpful, consider buying me a coffee to support continued maintenance and development!
+
+<p align="center">
+  <a href="https://www.buymeacoffee.com/sorlia7zt" target="_blank">
+    <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="46" />
+  </a>
+</p>
+
+---
+
 ## License
 
 [MIT](LICENSE) © 2026 QingYunA
+
 
